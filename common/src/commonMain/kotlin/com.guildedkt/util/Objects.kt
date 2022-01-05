@@ -11,6 +11,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 typealias GenericId = String
+typealias Dictionary<K, V> = Map<K, V>
 
 @Serializable(UniqueIdSerializer::class)
 data class UniqueId(val raw: String)

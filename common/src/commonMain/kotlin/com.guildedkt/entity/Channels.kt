@@ -13,6 +13,41 @@ data class RawChannel(
     val name: String,
     val contentType: RawChannelContentType,
     val archivedAt: Timestamp?,
+    val parentChannelId: UniqueId?,
+    val autoArchiveAt: Timestamp?,
+    val deletedAt: Timestamp?,
+    val archivedBy: GenericId?,
+    val description: String?,
+    val createdByWebhookId: UniqueId?,
+    val archivedByWebhookId: UniqueId?,
+    val teamId: GenericId?,
+    val channelCategoryId: UniqueId?,
+    val addedAt: Timestamp?,
+    val channelId: UniqueId?,
+    val isRoleSynced: Boolean?,
+    val roles: List<RawRole>?,
+    val userPermissions: List<RawUser>?,
+    @GuildedUnknown val tournamentRoles: List<Unit>? = null,
+    val isPublic: Boolean,
+    @GuildedUnknown val priority: Int = 0,
+    val groupId: GenericId?,
+    @GuildedUnknown val settings: Unit? = null,
+    @GuildedUnknown val groupType: String = "",
+    val rolesById: Dictionary<GenericId, RawRole>,
+    @GuildedUnknown val tournamentsRolesById: Unit? = null,
+    @LibraryUnsupported val createdByInfo: Unit? = null
+)
+
+@Serializable
+data class RawPrivateChannel(
+    val id: UniqueId,
+    val type: RawChannelType,
+    val createdAt: Timestamp,
+    val createdBy: GenericId,
+    val updatedAt: Timestamp,
+    val name: String,
+    val contentType: RawChannelContentType,
+    val archivedAt: Timestamp?,
     val autoArchiveAt: Timestamp?,
     val archivedBy: GenericId?,
     val parentChannelId: UniqueId?,
@@ -21,7 +56,7 @@ data class RawChannel(
     val archivedByWebhookId: UniqueId?,
     val dmType: String = "Default",
     val ownerId: GenericId,
-    // val voiceParticipants: List<RawUser>
+    val voiceParticipants: List<RawUser>
 )
 
 @Serializable(RawChannelType.Serializer::class)

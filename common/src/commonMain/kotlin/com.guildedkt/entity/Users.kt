@@ -1,9 +1,6 @@
 package com.guildedkt.entity
 
-import com.guildedkt.util.GenericId
-import com.guildedkt.util.Timestamp
-import com.guildedkt.util.TransientStatus
-import kotlinx.serialization.SerialName
+import com.guildedkt.util.*
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,17 +19,41 @@ data class RawUser(
     val joinDate: Timestamp,
     val steamId: String?,
     val userStatus: RawUserStatus,
-//    val userPresenceStatus: RawUserPresenceStatus,
-//    val aboutInfo: RawUserAboutInfo,
+    val userPresenceStatus: RawUserPresenceStatus,
+    val userTransientStatus: TransientStatus,
+    @GuildedUnknown
+    val moderationStatus: Unit? = null,
+    val aboutInfo: RawUserAboutInfo,
     val lastOnline: Timestamp,
     val stonks: Int?,
-//    val flairInfos: List<RawUserFlair>
+    val flairInfos: List<RawUserFlair>
 )
 
 @Serializable
 data class RawUserStatus(
-    // TODO: Support
+    @LibraryUnsupported
     val content: String? = null,
     val customReactionId: Int?,
     val customReaction: RawEmoji
 )
+
+@Serializable
+data class RawUserAboutInfo(
+    val bio: String?,
+    val tagLine: String?
+)
+
+@Serializable
+data class RawUserFlair(
+    val flair: String,
+    val amount: Int
+)
+
+@Serializable(RawUserPresenceStatus.Serializer::class)
+enum class RawUserPresenceStatus(val id: Int) {
+    Online(1), Idle(2), Busy(3), Offline(4);
+
+    companion object Serializer: IntIdEnumSerializer<RawUserPresenceStatus>(
+        IntSerializationStrategy(values().associateBy { it.id })
+    )
+}
