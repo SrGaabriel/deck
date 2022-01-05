@@ -1,6 +1,7 @@
 package com.guildedkt.entity
 
 import com.guildedkt.util.GenericId
+import com.guildedkt.util.GuildedUnknown
 import com.guildedkt.util.Timestamp
 import kotlinx.serialization.Serializable
 
@@ -18,4 +19,21 @@ data class RawEmoji(
     val isDeleted: Boolean,
     val discordEmojiId: Long?,
     val discordSyncedAt: Timestamp?
+)
+
+@Serializable
+@GuildedUnknown
+data class RawReaction(
+    val id: Int,
+    val customReaction: RawCustomReaction,
+    val customReactionId: Int
+)
+
+@Serializable
+data class RawCustomReaction(
+    val id: Int,
+    val name: String,
+    val png: String,
+    val webp: String,
+    val apgn: String
 )
