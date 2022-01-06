@@ -2,13 +2,15 @@ package com.guildedkt.entity
 
 import com.guildedkt.util.GenericId
 import com.guildedkt.util.GuildedUnknown
+import com.guildedkt.util.IntGenericId
+import com.guildedkt.util.LongGenericId
 import com.guildedkt.util.Timestamp
 import kotlinx.serialization.Serializable
 
 @Serializable
 @GuildedUnknown
 data class RawRole(
-    val id: Long,
+    val id: IntGenericId,
     val color: String,
     val isBase: Boolean,
     val isDisplayedSeparately: Boolean,
@@ -16,7 +18,7 @@ data class RawRole(
     val isSelfAssignable: Boolean,
     val name: String,
     val createdAt: Timestamp,
-    val discordRoleId: Long? = null,
+    val discordRoleId: LongGenericId? = null,
     val discordSyncedAt: Timestamp? = null,
     val priority: Int,
     val botScope: Boolean? = null,
