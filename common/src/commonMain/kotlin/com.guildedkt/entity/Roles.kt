@@ -1,10 +1,6 @@
 package com.guildedkt.entity
 
-import com.guildedkt.util.GenericId
-import com.guildedkt.util.GuildedUnknown
-import com.guildedkt.util.IntGenericId
-import com.guildedkt.util.LongGenericId
-import com.guildedkt.util.Timestamp
+import com.guildedkt.util.*
 import kotlinx.serialization.Serializable
 
 @Serializable

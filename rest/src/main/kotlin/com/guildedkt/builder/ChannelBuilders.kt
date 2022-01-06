@@ -7,22 +7,22 @@ import java.util.*
 
 class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
     var uniqueId: UUID = UUID.randomUUID()
-    var text: String = ""
-    var image: String? = null
     var private: Boolean = false
     var silent: Boolean = false
 
-    fun content(contentBuilder: ContentBuilder.() -> Unit) = ContentBuilder().apply(contentBuilder).let {
-        this.text = it.text
-        this.image = it.image
-    }
+    val content: ContentBuilder = ContentBuilder()
+
+    var text: String
+        @Deprecated("Only returns content in the first non-empty node.")
+        get() = content.nodes.firstOrNull { it.text != null }?.text ?: ""
+        set(value) = content.setText(value)
+    var images: List<String>
+        get() = content.nodes.mapNotNull { it.image }
+        set(value) = content.setImages(value)
 
     override fun toRequest() = SendMessageRequest(
         messageId = uniqueId.mapToModel(),
-        content = ContentBuilder().apply {
-            text = this@SendMessageRequestBuilder.text
-            image = this@SendMessageRequestBuilder.image
-        }.toContent(),
+        content = content.build(),
         isPrivate = private,
         isSilent = silent
     )
