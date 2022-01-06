@@ -1,12 +1,14 @@
 package com.guildedkt.entity
 
 import com.guildedkt.util.GenericId
+import com.guildedkt.util.IntGenericId
+import com.guildedkt.util.LongGenericId
 import com.guildedkt.util.Timestamp
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class RawEmoji(
-    val id: Int,
+    val id: IntGenericId,
     val name: String,
     val createdBy: GenericId,
     val createdAt: Timestamp,
@@ -16,6 +18,6 @@ data class RawEmoji(
     val aliases: List<String>,
     val teamId: GenericId,
     val isDeleted: Boolean,
-    val discordEmojiId: Long?,
+    val discordEmojiId: LongGenericId?,
     val discordSyncedAt: Timestamp?
 )

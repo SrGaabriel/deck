@@ -33,7 +33,7 @@ data class RawUser(
 data class RawUserStatus(
     @LibraryUnsupported
     val content: String? = null,
-    val customReactionId: Int?,
+    val customReactionId: IntGenericId?,
     val customReaction: RawEmoji
 )
 

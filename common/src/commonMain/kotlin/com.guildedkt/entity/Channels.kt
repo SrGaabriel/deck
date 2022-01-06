@@ -33,7 +33,7 @@ data class RawChannel(
     val groupId: GenericId?,
     @GuildedUnknown val settings: Unit? = null,
     @GuildedUnknown val groupType: String = "",
-    val rolesById: Dictionary<GenericId, RawRole>,
+    val rolesById: Dictionary<IntGenericId, RawRole>,
     @GuildedUnknown val tournamentsRolesById: Unit? = null,
     @LibraryUnsupported val createdByInfo: Unit? = null
 )

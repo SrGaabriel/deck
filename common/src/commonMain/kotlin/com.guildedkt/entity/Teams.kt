@@ -1,7 +1,9 @@
 package com.guildedkt.entity
 
 import com.guildedkt.util.GenericId
+import com.guildedkt.util.IntGenericId
 import com.guildedkt.util.Timestamp
+import com.guildedkt.util.TransientStatus
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -32,7 +34,7 @@ data class RawTeamMember(
     val userTransientStatus: RawUser,
     // val aliases: List<*>,
     val lastOnline: Timestamp,
-    val roleIds: List<Int>,
+    val roleIds: List<IntGenericId>,
     val subscriptionType: Int?,
     // val socialLinks: List<RawSocialLink>,
     val teamXp: Int
@@ -53,6 +55,6 @@ data class RawInvite(
     val teamId: GenericId,
     val invitedBy: GenericId,
     val userBy: GenericId?,
-    val gameId: Int?,
+    val gameId: TransientStatus?,
     val useCount: Int
 )
