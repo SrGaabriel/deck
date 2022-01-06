@@ -1,7 +1,6 @@
 package com.guildedkt.entity
 
 import com.guildedkt.util.GenericId
-import com.guildedkt.util.GuildedUnknown
 import com.guildedkt.util.Timestamp
 import kotlinx.serialization.Serializable
 
@@ -22,7 +21,6 @@ data class RawEmoji(
 )
 
 @Serializable
-@GuildedUnknown
 data class RawReaction(
     val id: Int,
     val customReaction: RawCustomReaction,
