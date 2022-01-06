@@ -21,3 +21,19 @@ data class RawEmoji(
     val discordEmojiId: LongGenericId?,
     val discordSyncedAt: Timestamp?
 )
+
+@Serializable
+data class RawReaction(
+    val id: Int,
+    val customReaction: RawCustomReaction,
+    val customReactionId: Int
+)
+
+@Serializable
+data class RawCustomReaction(
+    val id: Int,
+    val name: String,
+    val png: String,
+    val webp: String,
+    val apgn: String
+)

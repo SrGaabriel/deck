@@ -1,6 +1,5 @@
 package com.guildedkt.util
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -16,12 +15,14 @@ class StringSerializationStrategy<E: Enum<E>>(values: Map<String, E>)
     : IdentifiableEnumSerializationStrategy<E, String>(values)
 
 open class IdentifiableEnumSerializationStrategy<E: Enum<E>, ID>(private val values: Map<ID, E>) {
-    fun getValueByIdentifier(id: ID): E = values[id] ?: throw SerializationException("Received value is not registered in wrapper enum.")
+    fun getValueByIdentifier(id: ID): E =
+        values[id] ?: throw SerializationException("Received value is not registered in wrapper enum.")
 
-    fun getIdentifierFromValue(value: E): ID = values.filter { it.value == value }.firstNotNullOf { it.key }
+    fun getIdentifierFromValue(value: E): ID =
+        values.filter { it.value == value }.firstNotNullOf { it.key }
 }
 
-open class StringIdEnumSerializer<T: Enum<T>>(val strategy: IdentifiableEnumSerializationStrategy<T, String>): KSerializer<T> {
+open class StringIdEnumSerializer<T: Enum<T>>(private val strategy: IdentifiableEnumSerializationStrategy<T, String>): KSerializer<T> {
     override fun deserialize(decoder: Decoder): T =
         strategy.getValueByIdentifier(decoder.decodeString())
 
