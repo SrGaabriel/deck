@@ -51,14 +51,15 @@ data class RawMessageContentNode(
 @Serializable
 data class RawMessageContentData(
     val src: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val href: OptionalProperty<String> = OptionalProperty.NotPresent,
     val reaction: OptionalProperty<RawReaction> = OptionalProperty.NotPresent
 )
 
 @Serializable
 data class RawMessageContentNodeLeaves(
-    @SerialName("object") val leavesObject: String = "leaf",
+    @SerialName("object") val leavesObject: String,
     val text: String,
-    @GuildedUnknown val marks: List<Unit> = emptyList()
+    @GuildedUnknown val marks: List<Unit>
 )
 
 @Serializable

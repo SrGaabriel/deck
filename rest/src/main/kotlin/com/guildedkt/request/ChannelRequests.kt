@@ -15,7 +15,6 @@ data class SendMessageRequest(
     val isPrivate: Boolean?
 )
 
-// wtf guilded
 @Serializable
 data class SendMessageResponse(
     val message: RawPartialMessage,

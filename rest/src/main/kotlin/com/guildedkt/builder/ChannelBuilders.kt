@@ -3,6 +3,7 @@ package com.guildedkt.builder
 import com.guildedkt.mapToModel
 import com.guildedkt.request.SendMessageRequest
 import com.guildedkt.util.ContentBuilder
+import com.guildedkt.util.ContentWrapper
 import java.util.*
 
 class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
@@ -10,19 +11,19 @@ class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
     var private: Boolean = false
     var silent: Boolean = false
 
-    val content: ContentBuilder = ContentBuilder()
+    val content: ContentWrapper = ContentWrapper()
+    val contentBuilder: ContentBuilder by content::builder
 
-    var text: String
-        @Deprecated("Only returns content in the first non-empty node.")
-        get() = content.nodes.firstOrNull { it.text != null }?.text ?: ""
-        set(value) = content.setText(value)
-    var images: List<String>
-        get() = content.nodes.mapNotNull { it.image }
-        set(value) = content.setImages(value)
+    @Deprecated("Use content instead", ReplaceWith("content"))
+    val messageText: String
+        get() = contentBuilder.nodes.firstOrNull { it.text != null }?.text ?: ""
+    @Deprecated("Use content instead", ReplaceWith("content"))
+    val messageImages: List<String>
+        get() = contentBuilder.nodes.mapNotNull { it.image }
 
     override fun toRequest() = SendMessageRequest(
         messageId = uniqueId.mapToModel(),
-        content = content.build(),
+        content = contentBuilder.build(),
         isPrivate = private,
         isSilent = silent
     )

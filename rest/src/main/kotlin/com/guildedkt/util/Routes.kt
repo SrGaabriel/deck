@@ -30,4 +30,4 @@ suspend fun RestClient.authenticate(authentication: Authentication) {
 }
 
 suspend fun RestClient.authenticate(builder: AuthenticationBuilder.() -> Unit) =
-    authenticate(AuthenticationBuilder().apply(builder).toSerializableAuthentication())
+    authenticate(AuthenticationBuilder().apply(builder).toSerializableAuthentication()).let { this }
