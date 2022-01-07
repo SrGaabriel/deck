@@ -5,7 +5,7 @@
 an example of the Rest API:
 
 ```kotlin
-suspended fun main() {
+suspend fun main() {
     val restClient = RestClient().authenticate {
         email = "email"
         password = "password"
