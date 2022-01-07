@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization") version Dependencies.KotlinVersion
+    `maven-publish`
 }
 
 repositories {
@@ -13,4 +14,12 @@ dependencies {
     implementation("io.ktor:ktor-client-core:${Dependencies.KtorVersion}")
     implementation("io.ktor:ktor-client-cio:${Dependencies.KtorVersion}")
     implementation("io.ktor:ktor-client-serialization:${Dependencies.KtorVersion}")
+}
+
+publishing {
+    publications {
+        register("mavenJava", MavenPublication::class) {
+            from(components["java"])
+        }
+    }
 }
