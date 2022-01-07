@@ -15,7 +15,6 @@ import com.guildedkt.request.UserDMResponse
 import com.guildedkt.request.UserResponse
 import com.guildedkt.util.GenericId
 import com.guildedkt.util.Route
-import com.guildedkt.util.sendRequest
 import io.ktor.http.HttpMethod
 
 class UserRoute(client: RestClient) : Route(client) {
