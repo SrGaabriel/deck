@@ -45,7 +45,7 @@ data class RawPrivateChannel(
     val createdAt: Timestamp,
     val createdBy: GenericId,
     val updatedAt: Timestamp,
-    val name: String,
+    val name: String?,
     val contentType: RawChannelContentType,
     val archivedAt: Timestamp?,
     val autoArchiveAt: Timestamp?,
@@ -56,7 +56,8 @@ data class RawPrivateChannel(
     val archivedByWebhookId: UniqueId?,
     val dmType: String = "Default",
     val ownerId: GenericId,
-    val voiceParticipants: List<RawUser>
+    val voiceParticipants: List<RawUser>,
+    val users: List<RawUser>
 )
 
 @Serializable(RawChannelType.Serializer::class)

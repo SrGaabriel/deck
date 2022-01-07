@@ -3,7 +3,9 @@ package com.guildedkt.entity
 import com.guildedkt.util.GenericId
 import com.guildedkt.util.IntGenericId
 import com.guildedkt.util.Timestamp
-import com.guildedkt.util.TransientStatus
+import com.guildedkt.util.GameStatus
+import com.guildedkt.util.OptionalProperty
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,12 +13,12 @@ data class RawTeam(
     val id: GenericId,
     val name: String,
     val subdomain: String?,
-    val bio: String?,
+    val bio: OptionalProperty<String?> = OptionalProperty.NotPresent,
     val profilePicture: String?,
     val ownerId: GenericId,
-    val members: List<RawTeamMember>,
+    val members: OptionalProperty<List<RawTeamMember>> = OptionalProperty.NotPresent,
     // val bots: List<*>,
-    val webhooks: List<RawWebhook>,
+    val webhooks: OptionalProperty<List<RawWebhook>> = OptionalProperty.NotPresent,
 )
 
 @Serializable
@@ -31,7 +33,7 @@ data class RawTeamMember(
     val joinDate: Timestamp,
     val userStatus: RawUserStatus,
     val userPresenceStatus: RawUserPresenceStatus,
-    val userTransientStatus: RawUser,
+    val userTransientStatus: RawTransientStatus,
     // val aliases: List<*>,
     val lastOnline: Timestamp,
     val roleIds: List<IntGenericId>,
@@ -55,6 +57,6 @@ data class RawInvite(
     val teamId: GenericId,
     val invitedBy: GenericId,
     val userBy: GenericId?,
-    val gameId: TransientStatus?,
+    @SerialName("gameId") val game: GameStatus?,
     val useCount: Int
 )
