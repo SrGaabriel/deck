@@ -3,7 +3,8 @@ package com.guildedkt.entity
 import com.guildedkt.util.GenericId
 import com.guildedkt.util.IntGenericId
 import com.guildedkt.util.Timestamp
-import com.guildedkt.util.TransientStatus
+import com.guildedkt.util.GameStatus
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -16,7 +17,7 @@ data class RawGroup(
     val avatar: String?,
     val banner: String?,
     val teamId: GenericId,
-    val gameId: TransientStatus?,
+    @SerialName("gameId") val game: GameStatus?,
     // val additionalGameInfo: *,
     val visibilityTeamRoleId: IntGenericId,
     val visibilityTeamRoleIds: List<IntGenericId>,

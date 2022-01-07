@@ -3,8 +3,8 @@ package com.guildedkt.util
 import kotlinx.serialization.Serializable
 
 @Suppress("unused")
-@Serializable(TransientStatus.Serializer::class)
-enum class TransientStatus(val id: Int) {
+@Serializable(GameStatus.Serializer::class)
+enum class GameStatus(val id: Int) {
     Overwatch(10100),
     LeagueOfLegends(10200),
     CounterStrike(10300),
@@ -576,7 +576,7 @@ enum class TransientStatus(val id: Int) {
     KnockoutCity(476074),
     FarmingSimulator19(477074);
 
-    companion object Serializer: IntIdEnumSerializer<TransientStatus>(
+    companion object Serializer: IntIdEnumSerializer<GameStatus>(
         IntSerializationStrategy(values().associateBy { it.id })
     )
 }

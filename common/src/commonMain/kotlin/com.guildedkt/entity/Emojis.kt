@@ -24,9 +24,9 @@ data class RawEmoji(
 
 @Serializable
 data class RawReaction(
-    val id: Int,
+    val id: IntGenericId,
     val customReaction: RawCustomReaction,
-    val customReactionId: Int
+    val customReactionId: IntGenericId
 )
 
 @Serializable
