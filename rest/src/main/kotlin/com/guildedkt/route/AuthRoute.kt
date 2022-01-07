@@ -3,7 +3,6 @@ package com.guildedkt.route
 import com.guildedkt.RestClient
 import com.guildedkt.util.Authentication
 import com.guildedkt.util.Route
-import com.guildedkt.util.sendRequest
 import io.ktor.client.statement.*
 import io.ktor.http.*
 

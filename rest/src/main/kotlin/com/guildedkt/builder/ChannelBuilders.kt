@@ -4,10 +4,11 @@ import com.guildedkt.mapToModel
 import com.guildedkt.request.SendMessageRequest
 import com.guildedkt.util.ContentBuilder
 import com.guildedkt.util.ContentWrapper
+import com.guildedkt.util.UniqueId
 import java.util.*
 
 class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
-    var uniqueId: UUID = UUID.randomUUID()
+    var uniqueId: UniqueId = UUID.randomUUID().mapToModel()
     var private: Boolean = false
     var silent: Boolean = false
 
@@ -22,7 +23,7 @@ class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
         get() = contentBuilder.nodes.mapNotNull { it.image }
 
     override fun toRequest() = SendMessageRequest(
-        messageId = uniqueId.mapToModel(),
+        messageId = uniqueId,
         content = contentBuilder.build(),
         isPrivate = private,
         isSilent = silent

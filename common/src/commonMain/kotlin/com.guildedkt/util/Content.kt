@@ -26,8 +26,6 @@ class ContentBuilder {
     )
 }
 
-class NodeRegistry
-
 class ContentWrapper(val builder: ContentBuilder = ContentBuilder()) {
     val add = NodeRegistry()
 
@@ -64,10 +62,12 @@ class ContentWrapper(val builder: ContentBuilder = ContentBuilder()) {
     infix fun LinkedText.whereLink(link: String) {
         builder.addNode(Node.Text(text = beforeLink))
         builder.addNode(Node.Link(link = link))
-        builder.addNode(Node.Text(text = afterLink ?: ""))
+        builder.addNode(Node.Text(text = afterLink))
     }
 
     fun toContent() = builder.build()
+
+    class NodeRegistry
 }
 
 class LinkedText {

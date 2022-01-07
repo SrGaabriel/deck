@@ -6,7 +6,6 @@ import com.guildedkt.request.SendMessageRequest
 import com.guildedkt.request.SendMessageResponse
 import com.guildedkt.util.Route
 import com.guildedkt.util.UniqueId
-import com.guildedkt.util.sendRequest
 import io.ktor.http.*
 
 class ChannelRoute(client: RestClient): Route(client) {
