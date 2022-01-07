@@ -15,34 +15,26 @@ data class Request<S, G>(
 )
 
 class RequestService(val client: HttpClient) {
-    suspend inline fun <reified S, reified G> sendRequest(request: Request<S, G>): G {
-        val statement = sendRequestWithDefaultSettings(request)
-        val response = statement.execute()
-        return when {
-            statement is G -> statement
-            Unit is G -> Unit
-            !response.status.isSuccess() -> throw response.receive<RawGuildedRequestException>().toException()
-            else -> response.receive()
-        }
-    }
+    suspend inline fun <reified S, reified G> sendRequest(request: Request<S, G>): G =
+        sendRequestWithDefaultSettings(request) { response -> throw response.receive<RawGuildedRequestException>().toException() }!!
 
-    suspend inline fun <reified S, reified G> sendNullableRequest(request: Request<S, G>): G? {
-        val statement = sendRequestWithDefaultSettings(request)
-        val response = statement.execute()
-        return when {
-            statement is G -> statement
-            Unit is G -> Unit
-            !response.status.isSuccess() -> null
-            else -> response.receive()
-        }
-    }
+    suspend inline fun <reified S, reified G> sendNullableRequest(request: Request<S, G>): G? =
+        sendRequestWithDefaultSettings(request) { null }
 
-    suspend inline fun <reified S, reified G> sendRequestWithDefaultSettings(request: Request<S, G>): HttpStatement = client.request(request.url) {
+    suspend inline fun <reified S, reified G> sendRequestWithDefaultSettings(request: Request<S, G>, onFailure: (HttpResponse) -> G?): G? = client.request<HttpStatement>(request.url) {
         this.body = request.body ?: EmptyContent
         this.method = request.method
 
         header(HttpHeaders.ContentType, ContentType.Application.Json)
         if (request.authentication != null)
             header(HttpHeaders.Cookie, "hmac_signed_session=${request.authentication}")
+    }.let { statement ->
+        val response = statement.execute()
+        return@let when {
+            statement is G -> statement
+            Unit is G -> Unit
+            !response.status.isSuccess() -> onFailure(response)
+            else -> response.receive()
+        }
     }
 }
