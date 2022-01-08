@@ -28,3 +28,9 @@ jobs:
       with:
        name: Common
        path: common/build/libs/
+
+    - uses: actions/upload-artifact@v2
+      name: Upload Rest
+      with:
+       name: Rest
+       path: rest/build/libs/
