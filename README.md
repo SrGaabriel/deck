@@ -1,11 +1,9 @@
-<img align="right" src="./.github/logo.png" style="border-radius: 32px; display: block;text-align:center;margin: 0 auto" alt="Guilded KT" width=128px height=128px/>
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SrGaabriel/deck/Build)
+![GitHub issues](https://img.shields.io/github/issues/SrGaabriel/deck)
+![GitHub Repo stars](https://img.shields.io/github/stars/SrGaabriel/deck)
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SrGaabriel/guilded-kt/Build)
-![GitHub issues](https://img.shields.io/github/issues/SrGaabriel/guilded-kt)
-![GitHub Repo stars](https://img.shields.io/github/stars/SrGaabriel/guilded-kt)
-
-# ⏰ guilded-kt [WIP]
- A powerful yet simple-to-use guilded wrapper made entirely in Kotlin with supporting multiplatform. Take a look at
+# 🎲 deck [WIP]
+ Deck is a powerful yet simple-to-use guilded wrapper made entirely in Kotlin with supporting multiplatform. Take a look at
 an example of the Rest API:
 
 ```kotlin

@@ -1,7 +1,6 @@
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization") version Dependencies.KotlinVersion
-    `maven-publish`
 }
 
 repositories {

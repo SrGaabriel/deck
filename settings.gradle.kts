@@ -1,3 +1,3 @@
-rootProject.name = "guilded-kt"
+rootProject.name = "deck"
 include(":common")
 include(":rest")

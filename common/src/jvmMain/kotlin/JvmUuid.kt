@@ -1,6 +1,5 @@
-package com.guildedkt
+package com.deck.common.util
 
-import com.guildedkt.util.UniqueId
 import java.util.*
 
 fun UniqueId.mapToBuiltin(): UUID =
