@@ -14,24 +14,28 @@ data class Request<S, G>(
     val authentication: String? = null
 )
 
-class RequestService(val client: HttpClient) {
+class RequestService(val client: HttpClient, val ratelimiter: Ratelimiter = Ratelimiter(client)) {
     suspend inline fun <reified S, reified G> sendRequest(request: Request<S, G>): G =
-        sendRequestWithDefaultSettings(request) { response -> throw response.receive<RawGuildedRequestException>().toException() }!!
+        sendRequestWithDefaultSettings(request) { response ->
+            throw response.receive<RawGuildedRequestException>().toException()
+        }!!
 
     suspend inline fun <reified S, reified G> sendNullableRequest(request: Request<S, G>): G? =
-        sendRequestWithDefaultSettings(request) { null }
+        sendRequestWithDefaultSettings(request) {
+            null
+        }
 
-    suspend inline fun <reified S, reified G> sendRequestWithDefaultSettings(request: Request<S, G>, onFailure: (HttpResponse) -> G?): G? = client.request<HttpStatement>(request.url) {
+    suspend inline fun <reified S, reified G> sendRequestWithDefaultSettings(request: Request<S, G>, onFailure: (HttpResponse) -> G?): G? = ratelimiter.scheduleRequest(request.url) {
         this.body = request.body ?: EmptyContent
         this.method = request.method
 
         header(HttpHeaders.ContentType, ContentType.Application.Json)
         if (request.authentication != null)
             header(HttpHeaders.Cookie, "hmac_signed_session=${request.authentication}")
-    }.let { statement ->
-        val response = statement.execute()
+    }.let { response ->
+        // TODO: Workaround, change later
         return@let when {
-            statement is G -> statement
+            response is G -> response
             Unit is G -> Unit
             !response.status.isSuccess() -> onFailure(response)
             else -> response.receive()

@@ -64,6 +64,6 @@ data class RawMessageContentNodeLeaves(
 
 @Serializable
 data class RawSlowmode(
-    val channelCooldown: Int,
-    val cooldownRemaining: Int
+    val channelCooldown: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val cooldownRemaining: OptionalProperty<Int> = OptionalProperty.NotPresent
 )

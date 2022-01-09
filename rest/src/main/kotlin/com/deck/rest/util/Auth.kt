@@ -14,8 +14,8 @@ import com.deck.rest.route.AuthRoute
  * @param authRoute authentication route
  */
 suspend fun RestClient.authenticate(authentication: Authentication, authRoute: AuthRoute = AuthRoute(this)) {
-    val statement = authRoute.login(authentication)
-    val cookie = statement.execute().headers["Set-Cookie"]
+    val response = authRoute.login(authentication)
+    val cookie = response.headers["Set-Cookie"]
         ?: error("The authorization credentials seem to be wrong or invalid.")
     token = Authentication.extractDataFromCookie(cookie, 0)
 }

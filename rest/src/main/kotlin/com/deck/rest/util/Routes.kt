@@ -13,7 +13,7 @@ abstract class Route(val client: RestClient) {
     /**
      * This will fire a request and throw an [GuildedRequestException] in case of failure.
      *
-     * @param R Response type (Special types: [Unit], [HttpStatement])
+     * @param R Response type (Special types: [Unit], [HttpResponse])
      * @param B Body type
      * TODO: Change sorting
      *
@@ -35,7 +35,7 @@ abstract class Route(val client: RestClient) {
     /**
      * This will fire a request and return null in case of failure.
      *
-     * @param R Response type (Special types: [Unit], [HttpStatement])
+     * @param R Response type (Special types: [Unit], [HttpResponse])
      * @param B Body type
      * TODO: Change sorting
      *
