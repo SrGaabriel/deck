@@ -3,8 +3,45 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/SrGaabriel/deck)
 
 # 🎲 deck [WIP]
- Deck is a powerful yet simple-to-use guilded wrapper made entirely in Kotlin with supporting multiplatform. Take a look at
-an example of the Rest API:
+ Deck is a powerful yet simple-to-use guilded wrapper made entirely in Kotlin with support to multiplatform. 
+
+## Implementating
+
+In case you're using gradle, you just need to add this to your `build.gradle.kts`:
+
+```kotlin
+repositories {
+    maven("https://jitpack.io")
+}
+
+dependencies {
+    implementation("com.github.SrGaabriel:guilded-kt:-SNAPSHOT")
+}
+```
+
+Or with maven:
+
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.github.SrGaabriel</groupId>
+        <artifactId>guilded-kt</artifactId>
+        <version>-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+```
+
+## Example
+
+This is a working example of deck's REST api:
 
 ```kotlin
 suspend fun main() {
