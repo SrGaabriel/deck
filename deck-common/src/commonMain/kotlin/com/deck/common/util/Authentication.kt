@@ -15,6 +15,20 @@ data class Authentication(
     }
 }
 
+@Serializable
+data class AuthenticationResult(
+    val token: String,
+    val midSession: String
+) {
+    companion object {
+        @JvmStatic
+        fun fromCookie(cookie: String) = AuthenticationResult(
+            Authentication.extractDataFromCookie(cookie, 0),
+            Authentication.extractDataFromCookie(cookie, 1)
+        )
+    }
+}
+
 @DeckDSL
 class AuthenticationBuilder {
     lateinit var email: String

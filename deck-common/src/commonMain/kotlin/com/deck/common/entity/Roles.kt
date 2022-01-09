@@ -1,6 +1,9 @@
 package com.deck.common.entity
 
-import com.deck.common.util.*
+import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
+import com.deck.common.util.LongGenericId
+import com.deck.common.util.Timestamp
 import kotlinx.serialization.Serializable
 
 @Serializable

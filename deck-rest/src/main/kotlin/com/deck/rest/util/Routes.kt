@@ -30,7 +30,7 @@ abstract class Route(val client: RestClient) {
         method: HttpMethod,
         body: B? = null,
         authenticated: Boolean = true
-    ) = client.requestService.sendRequest(Request<B, R>(method, Constants.GuildedApi + endpoint, body, if (authenticated) client.token else null))
+    ) = client.requestService.sendRequest(Request<B, R>(method, Constants.GuildedRestApi + endpoint, body, if (authenticated) client.token else null))
 
     /**
      * This will fire a request and return null in case of failure.
@@ -50,7 +50,7 @@ abstract class Route(val client: RestClient) {
         method: HttpMethod,
         body: B? = null,
         authenticated: Boolean = true
-    ) = client.requestService.sendNullableRequest(Request<B, R>(method, Constants.GuildedApi + endpoint, body, if (authenticated) client.token else null))
+    ) = client.requestService.sendNullableRequest(Request<B, R>(method, Constants.GuildedRestApi + endpoint, body, if (authenticated) client.token else null))
 }
 
 internal fun RestClient.defaultHttpClient() = HttpClient(CIO.create()) {

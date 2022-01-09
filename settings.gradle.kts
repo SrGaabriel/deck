@@ -1,3 +1,4 @@
 rootProject.name = "deck"
-include(":common")
-include(":rest")
+include(":deck-common")
+include(":deck-rest")
+include(":deck-gateway")

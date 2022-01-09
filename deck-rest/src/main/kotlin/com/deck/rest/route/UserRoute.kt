@@ -9,7 +9,7 @@ import com.deck.rest.builder.ModifySelfUserBuilder
 import com.deck.rest.builder.SetUserTransientStatusBuilder
 import com.deck.rest.request.*
 import com.deck.rest.util.Route
-import io.ktor.http.HttpMethod
+import io.ktor.http.*
 
 class UserRoute(client: RestClient) : Route(client) {
     suspend fun getSelf() = sendRequest<SelfUserResponse, Unit>(
