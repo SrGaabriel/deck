@@ -27,10 +27,16 @@ jobs:
       name: Upload Common
       with:
        name: Common
-       path: common/build/libs/
+       path: dock-common/build/libs/
 
     - uses: actions/upload-artifact@v2
       name: Upload Rest
       with:
        name: Rest
-       path: rest/build/libs/
+       path: dock-rest/build/libs/
+
+    - uses: actions/upload-artifact@v2
+      name: Upload Gateway
+      with:
+        name: Gateway
+        path: dock-gateway/build/libs/
