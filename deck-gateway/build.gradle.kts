@@ -14,5 +14,6 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:${Dependencies.KtorVersion}")
     implementation("io.ktor:ktor-client-websockets:${Dependencies.KtorVersion}")
     implementation("io.ktor:ktor-client-serialization:${Dependencies.KtorVersion}")
+    implementation("io.github.microutils:kotlin-logging-jvm:${Dependencies.KotlinLoggingVersion}")
     implementation("ch.qos.logback:logback-classic:1.2.3")
 }
