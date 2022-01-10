@@ -12,9 +12,19 @@ annotation class DeckUnknown
  * This implies that the annotated value isn't supported yet by the library,
  * meaning that it's known but was not adapted and isn't ready for use.
  */
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.PROPERTY)
+@RequiresOptIn(level = RequiresOptIn.Level.WARNING)
 annotation class DeckUnsupported
+
+/**
+ * Marks a feature as experimental, meaning they might contain errors
+ * and shouldn't be used with a large bot unless you know what you're doing.
+ */
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.PROPERTY, AnnotationTarget.FIELD, AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
+@RequiresOptIn(level = RequiresOptIn.Level.WARNING)
+annotation class DeckExperimental
 
 @DslMarker
 annotation class DeckDSL

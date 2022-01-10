@@ -1,8 +1,6 @@
 package com.deck.gateway.util
 
-import com.deck.common.util.Constants
-import com.deck.common.util.DeckUnknown
-import com.deck.common.util.GenericId
+import com.deck.common.util.*
 import com.deck.gateway.GatewayOrchestrator
 import com.deck.gateway.event.DefaultEventDecoder
 import com.deck.gateway.event.EventDecoder
@@ -15,6 +13,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ticker
 import kotlinx.coroutines.flow.*
+import mu.KLoggable
+import mu.KLogger
 
 /**
  * Base gateway interface
@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.*
 interface Gateway {
     val gatewayId: Int
     val scope: CoroutineScope
+    val hello: GatewayHelloEvent
     val parameters: GatewayParameters
     val eventSharedFlow: SharedFlow<GatewayEvent>
     val webSocketSession: DefaultWebSocketSession
@@ -65,26 +66,26 @@ class DefaultGateway(
     override val scope: CoroutineScope,
     override val parameters: GatewayParameters,
     override val eventSharedFlow: MutableSharedFlow<GatewayEvent>,
-    private val client: HttpClient
-): Gateway {
+    private val client: HttpClient,
+    private val eventDecoder: EventDecoder = DefaultEventDecoder(gatewayId)
+): Gateway, KLoggable {
+    override lateinit var hello: GatewayHelloEvent
     override lateinit var webSocketSession: DefaultWebSocketSession
-
-    private var eventDecoder: EventDecoder = DefaultEventDecoder(gatewayId)
 
     private lateinit var listeningJob: Job
     private lateinit var heartbeatJob: Job
 
+    override val logger: KLogger = logger("Gateway $gatewayId Logger")
+
     /**
-     * Creates the websocket session and invokes [startHeartbeat] and [startListening],
-     * which also prevents the application from stopping but doesn't block the main thread.
+     * Simply creates the websocket session with the specified
+     * [parameters], nothing more nothing less.
      *
-     * @see startHeartbeat
-     * @see startListening
+     * @see [startHeartbeat]
+     * @see [startListening]
      */
     override suspend fun connect() {
         webSocketSession = client.webSocketSession(host = Constants.GuildedGateway, path = parameters.buildPath())
-        startListening()
-        startHeartbeat()
     }
 
     /**
@@ -94,8 +95,9 @@ class DefaultGateway(
     override suspend fun startListening(): Job = scope.launch {
         webSocketSession.incoming.receiveAsFlow().filterIsInstance<Frame.Text>().collect {
             if (it.data.contentEquals(Constants.GatewayPongContent.toByteArray())) return@collect
-            val json = eventDecoder.decodePayloadFromString(it.readText()) ?: return@collect
-            val event = eventDecoder.decodeEventFromPayload(json) ?: return@collect
+            val payload = eventDecoder.decodePayloadFromString(it.readText()) ?: return@collect
+            val event = eventDecoder.decodeEventFromPayload(payload) ?: return@collect
+            logger.info { "[DECK Gateway #${gatewayId}] Received $event" }
             eventSharedFlow.emit(event)
         }
     }.also { listeningJob = it }
@@ -106,8 +108,10 @@ class DefaultGateway(
      */
     @OptIn(ObsoleteCoroutinesApi::class)
     override suspend fun startHeartbeat(): Job = scope.launch {
-        val helloPayload = await<GatewayHelloEvent>() ?: error("Gateway hello payload wasn't sent in time in gateway $gatewayId.")
+        val helloPayload = await<GatewayHelloEvent>(8000) ?: error("Gateway hello payload wasn't sent in time in gateway $gatewayId.")
+        hello = helloPayload
         val tickerChannel = ticker(helloPayload.pingInterval, helloPayload.pingTimeout)
+        logger.info { "[DECK Gateway #${gatewayId}] Created ticker channel, now starting to send heartbeats to guilded." }
         tickerChannel.consumeAsFlow().collect {
             webSocketSession.send(Constants.GatewayPingContent)
         }
@@ -117,25 +121,51 @@ class DefaultGateway(
         val code = if (expectingReconnect) CloseReason.Codes.SERVICE_RESTART else CloseReason.Codes.GOING_AWAY
         heartbeatJob.cancel("Shutdown")
         listeningJob.cancel("Shutdown")
+        logger.info { "[DECK Gateway #${gatewayId}] Disconnecting..." }
         webSocketSession.close(reason = CloseReason(code, "Shutdown"))
     }
 }
 
+/**
+ * Instead of starting listening and sending heartbeats in [Gateway.connect],
+ * we assign another function to bear this responsibility, since we don't want it handling multiple tasks.
+ *
+ * Calls [Gateway.connect], [Gateway.startListening], [Gateway.startHeartbeat] in order.
+ */
+suspend fun Gateway.start() {
+    connect()
+    startListening()
+    startHeartbeat()
+}
+
+/**
+ * Dispatches an event, to specify the gateway you want to dispatch
+ * your event, change the [GatewayEvent.gatewayId] property.
+ */
+@DeckExperimental
+suspend fun GatewayOrchestrator.dispatchEvent(
+    event: GatewayEvent
+) = _globalEventsFlow.emit(event)
+
+@DeckDSL
 inline fun <reified T : GatewayEvent> GatewayOrchestrator.on(
     scope: CoroutineScope = this,
     noinline callback: suspend T.() -> Unit
 ): Job = on(null, scope, globalEventsFlow, callback)
 
+@DeckDSL
 suspend inline fun <reified T : GatewayEvent> GatewayOrchestrator.await(
     timeout: Long = 4000,
     scope: CoroutineScope = this,
 ): T? = await(null, scope, globalEventsFlow, timeout)
 
+@DeckDSL
 inline fun <reified T : GatewayEvent> Gateway.on(
     scope: CoroutineScope = this.scope,
     noinline callback: suspend T.() -> Unit
 ): Job = on(gatewayId, scope, eventSharedFlow, callback)
 
+@DeckDSL
 suspend inline fun <reified T : GatewayEvent> Gateway.await(
     timeout: Long = 4000,
     scope: CoroutineScope = this.scope,
