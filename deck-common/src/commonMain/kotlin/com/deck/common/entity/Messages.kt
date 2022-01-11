@@ -21,9 +21,8 @@ data class RawMessage(
     val type: String
 )
 
-// Received when sending messages
 @Serializable
-data class RawPartialMessage(
+data class RawPartialSentMessage(
     val id: UniqueId,
     val createdAt: Timestamp,
     val content: RawMessageContent,
@@ -66,4 +65,13 @@ data class RawMessageContentNodeLeaves(
 data class RawSlowmode(
     val channelCooldown: OptionalProperty<Int> = OptionalProperty.NotPresent,
     val cooldownRemaining: OptionalProperty<Int> = OptionalProperty.NotPresent
+)
+
+@Serializable
+data class RawMessageMentionedUserInfo(
+    val isDirectlyMentioned: Boolean,
+    val mentionedByName: Boolean,
+    val mentionedByRole: Boolean,
+    val mentionedByEveryone: Boolean,
+    val mentionedByHere: Boolean
 )

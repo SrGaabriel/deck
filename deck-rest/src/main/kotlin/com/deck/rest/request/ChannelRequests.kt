@@ -1,7 +1,7 @@
 package com.deck.rest.request
 
 import com.deck.common.entity.RawMessageContent
-import com.deck.common.entity.RawPartialMessage
+import com.deck.common.entity.RawPartialSentMessage
 import com.deck.common.entity.RawSlowmode
 import com.deck.common.util.UniqueId
 import kotlinx.serialization.Serializable
@@ -17,6 +17,6 @@ data class SendMessageRequest(
 
 @Serializable
 data class SendMessageResponse(
-    val message: RawPartialMessage,
+    val message: RawPartialSentMessage,
     val slowmode: RawSlowmode
 )

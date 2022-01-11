@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.SrGaabriel:guilded-kt:-SNAPSHOT")
+    implementation("com.github.SrGaabriel:deck:-SNAPSHOT")
 }
 ```
 
@@ -33,7 +33,7 @@ Or with maven:
 <dependencies>
     <dependency>
         <groupId>com.github.SrGaabriel</groupId>
-        <artifactId>guilded-kt</artifactId>
+        <artifactId>deck</artifactId>
         <version>-SNAPSHOT</version>
     </dependency>
 </dependencies>

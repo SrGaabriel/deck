@@ -40,6 +40,11 @@ data class CreateDMChannelRequest(
 )
 
 @Serializable
+data class SetSelfPresenceRequest(
+    val status: RawUserPresenceStatus
+)
+
+@Serializable
 data class SetUserTransientStatusRequest(
     val id: Int,
     val gameId: Int?,

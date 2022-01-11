@@ -2,6 +2,7 @@ package com.deck.rest.route
 
 import com.deck.common.entity.RawTransientStatus
 import com.deck.common.entity.RawUserPost
+import com.deck.common.entity.RawUserPresenceStatus
 import com.deck.common.util.GenericId
 import com.deck.rest.RestClient
 import com.deck.rest.builder.CreateDMChannelBuilder
@@ -41,24 +42,28 @@ class UserRoute(client: RestClient) : Route(client) {
         method = HttpMethod.Get
     )
 
-    suspend fun createDMChannel(selfId: GenericId, builder: CreateDMChannelBuilder.() -> Unit) =
-        sendRequest<UserDMResponse, CreateDMChannelRequest>(
-            endpoint = "/users/$selfId/channels",
-            method = HttpMethod.Post,
-            body = CreateDMChannelBuilder().apply(builder).toRequest()
-        )
+    suspend fun createDMChannel(selfId: GenericId, builder: CreateDMChannelBuilder.() -> Unit) = sendRequest<UserDMResponse, CreateDMChannelRequest>(
+        endpoint = "/users/$selfId/channels",
+        method = HttpMethod.Post,
+        body = CreateDMChannelBuilder().apply(builder).toRequest()
+    )
 
     suspend fun getUserPosts(id: GenericId) = sendRequest<List<RawUserPost>, Unit>(
         endpoint = "/users/$id/posts",
         method = HttpMethod.Get,
     )
 
-    suspend fun setSelfTransientStatus(builder: SetUserTransientStatusBuilder.() -> Unit) =
-        sendRequest<RawTransientStatus, SetUserTransientStatusRequest>(
-            endpoint = "/users/me/status/transient",
-            method = HttpMethod.Post,
-            body = SetUserTransientStatusBuilder().apply(builder).toRequest()
-        )
+    suspend fun setSelfPresence(status: RawUserPresenceStatus) = sendRequest<Unit, SetSelfPresenceRequest>(
+        endpoint = "/users/me/presence",
+        method = HttpMethod.Post,
+        body = SetSelfPresenceRequest(status)
+    )
+
+    suspend fun setSelfTransientStatus(builder: SetUserTransientStatusBuilder.() -> Unit) = sendRequest<RawTransientStatus, SetUserTransientStatusRequest>(
+        endpoint = "/users/me/status/transient",
+        method = HttpMethod.Post,
+        body = SetUserTransientStatusBuilder().apply(builder).toRequest()
+    )
 
     suspend fun deleteSelfTransientStatus() = sendRequest<Unit, Unit>(
         endpoint = "/users/me/status/transient",

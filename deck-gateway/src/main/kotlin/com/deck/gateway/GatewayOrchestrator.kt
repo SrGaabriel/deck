@@ -22,15 +22,12 @@ class GatewayOrchestrator(val authentication: AuthenticationResult): CoroutineSc
     }
 
     val gateways = mutableListOf<Gateway>()
+    val globalEventsFlow = MutableSharedFlow<GatewayEvent>()
 
-    internal val _globalEventsFlow = MutableSharedFlow<GatewayEvent>()
-    val globalEventsFlow = _globalEventsFlow.asSharedFlow()
-
-    // We'll use a different counter since we don't want a previously closed gateway and a new one having same IDs, since this could lead to unexpected errors
+    // We'll use a different counter since we don't want a previously closed gateway and a new one having same IDs
     var gatewayCurrentId = 0
-
     fun openGateway(parameters: GatewayParameters = GatewayParameters(guildedClientId = authentication.midSession)): Gateway =
-        DefaultGateway(gatewayCurrentId.also { gatewayCurrentId++ },this, parameters, client = httpClient, eventSharedFlow = _globalEventsFlow).also { gateways.add(it) }
+        DefaultGateway(authentication.token, gatewayCurrentId.also { gatewayCurrentId++ },this, parameters, client = httpClient, eventSharedFlow = globalEventsFlow).also { gateways.add(it) }
 
     fun openTeamGateway(teamId: GenericId) =
         openGateway(GatewayParameters(teamId = teamId, guildedClientId = authentication.midSession))

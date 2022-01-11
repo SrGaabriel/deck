@@ -2,12 +2,11 @@ package com.deck.gateway.util
 
 import com.deck.common.util.*
 import com.deck.gateway.GatewayOrchestrator
-import com.deck.gateway.event.DefaultEventDecoder
-import com.deck.gateway.event.EventDecoder
-import com.deck.gateway.event.GatewayEvent
-import com.deck.gateway.event.GatewayHelloEvent
+import com.deck.gateway.event.*
 import io.ktor.client.*
 import io.ktor.client.features.websocket.*
+import io.ktor.client.request.*
+import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -33,6 +32,8 @@ interface Gateway {
 
     suspend fun startListening(): Job
 
+    suspend fun sendCommand(command: GatewayCommand)
+
     suspend fun disconnect(expectingReconnect: Boolean = false)
 }
 
@@ -55,19 +56,21 @@ data class GatewayParameters(
 ) {
     fun buildPath() = "socket.io/?jwt=$jwt&EIO=$eioVersion&transport=$transport&guildedClientId=$guildedClientId".let {
         if (teamId != null) "$it&teamId=$teamId" else it
-    }
+    }.also { println(it) }
 }
 
 /**
  * Default implementation of [Gateway]
  */
 class DefaultGateway(
+    val token: String,
     override val gatewayId: Int,
     override val scope: CoroutineScope,
     override val parameters: GatewayParameters,
     override val eventSharedFlow: MutableSharedFlow<GatewayEvent>,
     private val client: HttpClient,
-    private val eventDecoder: EventDecoder = DefaultEventDecoder(gatewayId)
+    private val eventDecoder: EventDecoder = DefaultEventDecoder(gatewayId),
+    private val commandEncoder: CommandEncoder = DefaultCommandEncoder()
 ): Gateway, KLoggable {
     override lateinit var hello: GatewayHelloEvent
     override lateinit var webSocketSession: DefaultWebSocketSession
@@ -85,7 +88,9 @@ class DefaultGateway(
      * @see [startListening]
      */
     override suspend fun connect() {
-        webSocketSession = client.webSocketSession(host = Constants.GuildedGateway, path = parameters.buildPath())
+        webSocketSession = client.webSocketSession(host = Constants.GuildedGateway, path = parameters.buildPath()) {
+            header(HttpHeaders.Cookie, "hmac_signed_session=$token")
+        }
     }
 
     /**
@@ -117,6 +122,12 @@ class DefaultGateway(
         }
     }.also { heartbeatJob = it }
 
+    override suspend fun sendCommand(command: GatewayCommand) = scope.launch {
+        val encoded = commandEncoder.encodeCommandToString(command)
+        webSocketSession.send(Frame.Text(encoded))
+        logger.info { "[DECK Gateway #${gatewayId}] Sent command ${encoded}" }
+    }.let {}
+
     override suspend fun disconnect(expectingReconnect: Boolean) {
         val code = if (expectingReconnect) CloseReason.Codes.SERVICE_RESTART else CloseReason.Codes.GOING_AWAY
         heartbeatJob.cancel("Shutdown")
@@ -137,15 +148,6 @@ suspend fun Gateway.start() {
     startListening()
     startHeartbeat()
 }
-
-/**
- * Dispatches an event, to specify the gateway you want to dispatch
- * your event, change the [GatewayEvent.gatewayId] property.
- */
-@DeckExperimental
-suspend fun GatewayOrchestrator.dispatchEvent(
-    event: GatewayEvent
-) = _globalEventsFlow.emit(event)
 
 @DeckDSL
 inline fun <reified T : GatewayEvent> GatewayOrchestrator.on(

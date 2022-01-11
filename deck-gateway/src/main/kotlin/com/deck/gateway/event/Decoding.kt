@@ -20,13 +20,15 @@ interface EventDecoder {
 }
 
 class DefaultEventDecoder(val gatewayId: Int): EventDecoder {
-    override fun decodeEventFromPayload(payload: Payload): GatewayEvent? = when (payload.type) {
+    override fun decodeEventFromPayload(payload: Payload): GatewayEvent? = runCatching { when (payload.type) {
         "Hello" -> forgivingJson.decodeFromString<GatewayHelloEvent>(payload.json)
         "TeamXpAdded" -> forgivingJson.decodeFromString<GatewayTeamXpAddedEvent>(payload.json)
+        "ChatChannelTyping" -> forgivingJson.decodeFromString<GatewayChannelTypingEvent>(payload.json)
+        "ChatMessageCreated" -> forgivingJson.decodeFromString<GatewayChatMessageCreateEvent>(payload.json)
         "TeamChannelCreated" -> forgivingJson.decodeFromString<GatewayTeamChannelCreated>(payload.json)
         "TeamChannelDeleted" -> forgivingJson.decodeFromString<GatewayTeamChannelDeleted>(payload.json)
         else -> println("Unsupported Event Received: ${payload.json}").let { null }
-    }?.also {
+    }}.onFailure { it.printStackTrace() }.getOrNull()?.also {
         // TODO: Workaround, fix
         it.gatewayId = this.gatewayId
     }

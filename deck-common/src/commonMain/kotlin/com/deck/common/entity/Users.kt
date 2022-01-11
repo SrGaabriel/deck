@@ -36,7 +36,8 @@ data class RawUserStatus(
     val content: String? = null,
     val customReactionId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
     @DeckUnknown
-    val customReaction: OptionalProperty<RawEmoji?> = OptionalProperty.NotPresent
+    val customReaction: OptionalProperty<RawEmoji?> = OptionalProperty.NotPresent,
+    val expireInMs: Long
 )
 
 @Serializable

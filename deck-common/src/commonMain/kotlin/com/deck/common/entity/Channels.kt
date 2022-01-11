@@ -29,7 +29,7 @@ data class RawChannel(
     val userPermissions: List<RawUser>?,
     @DeckUnknown val tournamentRoles: List<Unit>? = null,
     val isPublic: Boolean,
-    @DeckUnknown val priority: Int = 0,
+    @DeckUnknown val priority: Int?,
     val groupId: GenericId?,
     @DeckUnknown val settings: Unit? = null,
     @DeckUnknown val groupType: String = "",
@@ -71,7 +71,16 @@ enum class RawChannelType(val serialName: String) {
 
 @Serializable(RawChannelContentType.Serializer::class)
 enum class RawChannelContentType(val serialName: String) {
-    Chat("chat"), Voice("voice"), Forum("forum"), Documentation("doc");
+    Chat("chat"),
+    Streaming("stream"),
+    Voice("voice"),
+    Calendar("event"),
+    Scheduling("scheduling"),
+    Announcements("announcements"),
+    Forum("forum"),
+    List("list"),
+    Documentation("doc"),
+    Media("media");
 
     companion object Serializer: StringIdEnumSerializer<RawChannelContentType>(
         StringSerializationStrategy(values().associateBy { it.serialName })
