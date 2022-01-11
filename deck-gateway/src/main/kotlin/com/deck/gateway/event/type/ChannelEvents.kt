@@ -1,0 +1,1 @@
+package com.deck.gateway.event.type

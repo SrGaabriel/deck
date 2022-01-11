@@ -3,6 +3,7 @@ package com.deck.gateway.util
 import com.deck.common.util.*
 import com.deck.gateway.GatewayOrchestrator
 import com.deck.gateway.event.*
+import com.deck.gateway.event.type.GatewayHelloEvent
 import io.ktor.client.*
 import io.ktor.client.features.websocket.*
 import io.ktor.client.request.*
@@ -113,9 +114,8 @@ class DefaultGateway(
      */
     @OptIn(ObsoleteCoroutinesApi::class)
     override suspend fun startHeartbeat(): Job = scope.launch {
-        val helloPayload = await<GatewayHelloEvent>(8000) ?: error("Gateway hello payload wasn't sent in time in gateway $gatewayId.")
-        hello = helloPayload
-        val tickerChannel = ticker(helloPayload.pingInterval, helloPayload.pingTimeout)
+        hello = await(8000) ?: error("Gateway hello payload wasn't sent in time in gateway $gatewayId.")
+        val tickerChannel = ticker(hello.pingInterval, hello.pingTimeout)
         logger.info { "[DECK Gateway #${gatewayId}] Created ticker channel, now starting to send heartbeats to guilded." }
         tickerChannel.consumeAsFlow().collect {
             webSocketSession.send(Constants.GatewayPingContent)

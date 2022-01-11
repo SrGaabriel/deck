@@ -1,72 +1,47 @@
 package com.deck.gateway.event
 
-import com.deck.common.entity.RawChannel
-import com.deck.common.entity.RawChannelContentType
-import com.deck.common.entity.RawChannelType
-import com.deck.common.entity.RawMessageMentionedUserInfo
-import com.deck.common.util.*
-import com.deck.gateway.entity.RawPartialReceivedMessage
-import com.deck.gateway.entity.RawPartialRepliedMessage
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.deck.gateway.event.type.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 abstract class GatewayEvent {
     var gatewayId: Int = 0
 }
 
-@Serializable
-data class GatewayHelloEvent(
-    @SerialName("sid") val sessionId: String,
-    @DeckUnknown val upgrades: List<Unit>,
-    val pingInterval: Long,
-    val pingTimeout: Long
-): GatewayEvent()
+data class Payload(val type: String, val json: String) {
+    val isValid = type != json && json.contains("{")
+}
 
-@Serializable
-data class GatewayChatMessageCreateEvent(
-    val type: String,
-    val guildedClientId: UniqueId,
-    val channelId: UniqueId,
-    val channelCategoryId: OptionalProperty<UniqueId?> = OptionalProperty.NotPresent,
-    val channelType: RawChannelType,
-    val teamId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
-    val contentType: RawChannelContentType,
-    val message: RawPartialReceivedMessage,
-    val repliedToMessages: List<RawPartialRepliedMessage>,
-    val createdAt: Timestamp,
-    val contentId: UniqueId,
-    val createdBy: GenericId,
-    val mentionedUserInfo: OptionalProperty<RawMessageMentionedUserInfo> = OptionalProperty.NotPresent
-): GatewayEvent()
+private val forgivingJson = Json { ignoreUnknownKeys = true }
 
-@Serializable
-data class GatewayChannelTypingEvent(
-    val type: String,
-    val channelId: UniqueId,
-    val userId: GenericId
-): GatewayEvent()
+interface EventDecoder {
+    fun decodeEventFromPayload(payload: Payload): GatewayEvent?
 
-@Serializable
-data class GatewayTeamXpAddedEvent(
-    val type: String,
-    val userIds: List<GenericId>,
-    val amount: Int,
-    val teamId: GenericId
-): GatewayEvent()
+    fun decodePayloadFromString(string: String): Payload?
+}
 
-@Serializable
-data class GatewayTeamChannelCreated(
-    val type: String,
-    val channel: RawChannel,
-    val name: String,
-    val guildedClientId: String,
-    val teamId: GenericId
-): GatewayEvent()
+class DefaultEventDecoder(val gatewayId: Int): EventDecoder {
+    override fun decodeEventFromPayload(payload: Payload): GatewayEvent? = runCatching { when (payload.type) {
+        "Hello" -> forgivingJson.decodeFromString<GatewayHelloEvent>(payload.json)
+        "TeamXpAdded" -> forgivingJson.decodeFromString<GatewayTeamXpAddedEvent>(payload.json)
+        "ChatChannelTyping" -> forgivingJson.decodeFromString<GatewayChannelTypingEvent>(payload.json)
+        "ChatMessageCreated" -> forgivingJson.decodeFromString<GatewayChatMessageCreateEvent>(payload.json)
+        "ChatMessageDeleted" -> forgivingJson.decodeFromString<GatewayChatMessageDeleteEvent>(payload.json)
+        "TeamChannelCreated" -> forgivingJson.decodeFromString<GatewayTeamChannelCreated>(payload.json)
+        "TeamChannelDeleted" -> forgivingJson.decodeFromString<GatewayTeamChannelDeleted>(payload.json)
+        else -> println("Unsupported Event Received: ${payload.json}").let { null }
+    }}.onFailure { it.printStackTrace() }.getOrNull()?.also {
+        // TODO: Workaround, fix
+        it.gatewayId = this.gatewayId
+    }
 
-@Serializable
-data class GatewayTeamChannelDeleted(
-    val type: String,
-    val channelId: UniqueId,
-    val guildedClientId: UniqueId,
-    val teamId: UniqueId
-): GatewayEvent()
+    override fun decodePayloadFromString(string: String): Payload? {
+        if (string.startsWith("0{")) // Handle payload event (structure different from the others)
+            return Payload("Hello", string.substring(1))
+        val payload = Payload(
+            type = string.substringAfter('"').substringBefore('"'),
+            json = string.substringAfter(',').substringBeforeLast(']')
+        )
+        return if (payload.isValid) payload else null
+    }
+}
