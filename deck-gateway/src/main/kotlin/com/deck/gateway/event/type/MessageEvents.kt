@@ -3,10 +3,7 @@ package com.deck.gateway.event.type
 import com.deck.common.entity.RawChannelContentType
 import com.deck.common.entity.RawChannelType
 import com.deck.common.entity.RawMessageMentionedUserInfo
-import com.deck.common.util.GenericId
-import com.deck.common.util.OptionalProperty
-import com.deck.common.util.Timestamp
-import com.deck.common.util.UniqueId
+import com.deck.common.util.*
 import com.deck.gateway.entity.RawPartialDeletedMessage
 import com.deck.gateway.entity.RawPartialReceivedMessage
 import com.deck.gateway.entity.RawPartialRepliedMessage
@@ -24,7 +21,7 @@ data class GatewayChatMessageCreateEvent(
     val type: String,
     val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val channelId: UniqueId,
-    val channelCategoryId: OptionalProperty<UniqueId?> = OptionalProperty.NotPresent,
+    val channelCategoryId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
     val channelType: RawChannelType,
     val teamId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     val contentType: RawChannelContentType,

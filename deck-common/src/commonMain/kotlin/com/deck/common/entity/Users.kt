@@ -68,6 +68,17 @@ data class RawFriend(
     val createdAt: Timestamp
 )
 
+/** @param channelId is missing when listing user permissions in a category */
+@Serializable
+data class RawUserPermission(
+    val userId: GenericId,
+    val channelId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
+    val createdAt: Timestamp,
+    val updatedAt: Timestamp?,
+    val denyPermissions: RawRolePermissions,
+    val allowPermissions: RawRolePermissions
+)
+
 @Serializable
 data class RawUserPost(
     val id: IntGenericId,

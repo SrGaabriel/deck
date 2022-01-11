@@ -21,19 +21,19 @@ data class RawChannel(
     val createdByWebhookId: UniqueId?,
     val archivedByWebhookId: UniqueId?,
     val teamId: GenericId?,
-    val channelCategoryId: UniqueId?,
+    val channelCategoryId: IntGenericId?,
     val addedAt: Timestamp?,
     val channelId: UniqueId?,
     val isRoleSynced: Boolean?,
     val roles: List<RawRole>?,
-    val userPermissions: List<RawUser>?,
+    val userPermissions: List<RawUserPermission>?,
     @DeckUnknown val tournamentRoles: List<Unit>? = null,
     val isPublic: Boolean,
     @DeckUnknown val priority: Int?,
     val groupId: GenericId?,
     @DeckUnknown val settings: Unit? = null,
     @DeckUnknown val groupType: String = "",
-    val rolesById: Dictionary<IntGenericId, RawRole>,
+    val rolesById: Dictionary<String, RawRole>,
     @DeckUnknown val tournamentsRolesById: Unit? = null,
     @DeckUnsupported val createdByInfo: Unit? = null
 )
@@ -58,6 +58,21 @@ data class RawPrivateChannel(
     val ownerId: GenericId,
     val voiceParticipants: List<RawUser>,
     val users: List<RawUser>
+)
+
+@Serializable
+data class RawChannelCategory(
+    val id: IntGenericId,
+    val name: String,
+    val priority: Int?,
+    val roles: List<RawRolePermissionsOverwritten>?,
+    val rolesById: Dictionary<String, RawRolePermissionsOverwritten>,
+    val teamId: GenericId,
+    val createdAt: Timestamp,
+    val updatedAt: Timestamp?,
+    val groupId: GenericId,
+    val channelCategoryId: IntGenericId?,
+    val userPermissions: List<RawUserPermission>?
 )
 
 @Serializable(RawChannelType.Serializer::class)

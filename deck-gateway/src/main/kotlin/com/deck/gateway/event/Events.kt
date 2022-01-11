@@ -30,12 +30,16 @@ class DefaultEventDecoder(private val gatewayId: Int): EventDecoder {
         "ChatChannelTyping" -> forgivingJson.decodeFromString<GatewayChannelTypingEvent>(payload.json)
         "ChatMessageCreated" -> forgivingJson.decodeFromString<GatewayChatMessageCreateEvent>(payload.json)
         "ChatMessageDeleted" -> forgivingJson.decodeFromString<GatewayChatMessageDeleteEvent>(payload.json)
-        "TeamChannelCreated" -> forgivingJson.decodeFromString<GatewayTeamChannelCreated>(payload.json)
-        "TeamChannelDeleted" -> forgivingJson.decodeFromString<GatewayTeamChannelDeleted>(payload.json)
+        "TeamChannelCreated" -> forgivingJson.decodeFromString<GatewayTeamChannelCreatedEvent>(payload.json)
+        "TeamChannelDeleted" -> forgivingJson.decodeFromString<GatewayTeamChannelDeletedEvent>(payload.json)
         "TeamGroupArchived" -> forgivingJson.decodeFromString<GatewayTeamGroupArchivedEvent>(payload.json)
         "TeamGroupRestored" -> forgivingJson.decodeFromString<GatewayTeamGroupRestoredEvent>(payload.json)
         "TeamMemberUpdated" -> forgivingJson.decodeFromString<GatewayTeamMemberUpdatedEvent>(payload.json)
-        "teamRolesUpdated" -> forgivingJson.decodeFromString<GatewayTeamRolesUpdated>(payload.json)
+        "teamRolesUpdated" -> forgivingJson.decodeFromString<GatewayTeamRolesUpdatedEvent>(payload.json)
+        "TeamChannelCategoryCreated" -> forgivingJson.decodeFromString<GatewayTeamChannelCategoryCreatedEvent>(payload.json)
+        "TeamChannelCategoryUpdated" -> forgivingJson.decodeFromString<GatewayTeamChannelCategoryUpdatedEvent>(payload.json)
+        "TeamChannelCategoryGroupMoved" -> forgivingJson.decodeFromString<GatewayTeamChannelCategoryGroupMovedEvent>(payload.json)
+        "TeamChannelCategoryDeleted" -> forgivingJson.decodeFromString<GatewayTeamChannelCategoryDeletedEvent>(payload.json)
         "TEAM_GROUP_CREATED" -> forgivingJson.decodeFromString<GatewayTeamGroupCreatedEvent>(payload.json)
         "TEAM_GROUP_UPDATED" -> forgivingJson.decodeFromString<GatewayTeamGroupUpdatedEvent>(payload.json)
         "CHANNEL_BADGED" -> forgivingJson.decodeFromString<GatewayChannelBadgedEvent>(payload.json)
@@ -52,6 +56,6 @@ class DefaultEventDecoder(private val gatewayId: Int): EventDecoder {
             type = string.substringAfter('"').substringBefore('"'),
             json = string.substringAfter(',').substringBeforeLast(']')
         )
-        return if (payload.isValid) payload.also { println(it.json) } else null
+        return if (payload.isValid) payload else null
     }
 }

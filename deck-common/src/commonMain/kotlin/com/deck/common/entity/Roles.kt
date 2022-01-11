@@ -48,6 +48,17 @@ data class RawRolePermissions(
 )
 
 @Serializable
+data class RawRolePermissionsOverwritten(
+    val teamId: GenericId,
+    val createdAt: Timestamp,
+    val updatedAt: Timestamp?,
+    val teamRoleId: IntGenericId,
+    val denyPermissions: RawRolePermissions,
+    val allowPermissions: RawRolePermissions,
+    val channelCategoryId: IntGenericId
+)
+
+@Serializable
 data class RawRoleBotScope(
     val userId: GenericId?
 )
