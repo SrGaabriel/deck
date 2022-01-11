@@ -1,7 +1,6 @@
-package com.deck.gateway.util
+package com.deck.gateway
 
 import com.deck.common.util.*
-import com.deck.gateway.GatewayOrchestrator
 import com.deck.gateway.event.*
 import com.deck.gateway.event.type.GatewayHelloEvent
 import io.ktor.client.*

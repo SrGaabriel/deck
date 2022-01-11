@@ -1,5 +1,8 @@
+@file:OptIn(DeckExperimental::class)
+
 package com.deck.gateway.event
 
+import com.deck.common.util.DeckExperimental
 import com.deck.gateway.event.type.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -20,7 +23,7 @@ interface EventDecoder {
     fun decodePayloadFromString(string: String): Payload?
 }
 
-class DefaultEventDecoder(val gatewayId: Int): EventDecoder {
+class DefaultEventDecoder(private val gatewayId: Int): EventDecoder {
     override fun decodeEventFromPayload(payload: Payload): GatewayEvent? = runCatching { when (payload.type) {
         "Hello" -> forgivingJson.decodeFromString<GatewayHelloEvent>(payload.json)
         "TeamXpAdded" -> forgivingJson.decodeFromString<GatewayTeamXpAddedEvent>(payload.json)
@@ -29,6 +32,13 @@ class DefaultEventDecoder(val gatewayId: Int): EventDecoder {
         "ChatMessageDeleted" -> forgivingJson.decodeFromString<GatewayChatMessageDeleteEvent>(payload.json)
         "TeamChannelCreated" -> forgivingJson.decodeFromString<GatewayTeamChannelCreated>(payload.json)
         "TeamChannelDeleted" -> forgivingJson.decodeFromString<GatewayTeamChannelDeleted>(payload.json)
+        "TeamGroupArchived" -> forgivingJson.decodeFromString<GatewayTeamGroupArchivedEvent>(payload.json)
+        "TeamGroupRestored" -> forgivingJson.decodeFromString<GatewayTeamGroupRestoredEvent>(payload.json)
+        "TeamMemberUpdated" -> forgivingJson.decodeFromString<GatewayTeamMemberUpdatedEvent>(payload.json)
+        "teamRolesUpdated" -> forgivingJson.decodeFromString<GatewayTeamRolesUpdated>(payload.json)
+        "TEAM_GROUP_CREATED" -> forgivingJson.decodeFromString<GatewayTeamGroupCreatedEvent>(payload.json)
+        "TEAM_GROUP_UPDATED" -> forgivingJson.decodeFromString<GatewayTeamGroupUpdatedEvent>(payload.json)
+        "CHANNEL_BADGED" -> forgivingJson.decodeFromString<GatewayChannelBadgedEvent>(payload.json)
         else -> println("Unsupported Event Received: ${payload.json}").let { null }
     }}.onFailure { it.printStackTrace() }.getOrNull()?.also {
         // TODO: Workaround, fix
@@ -42,6 +52,6 @@ class DefaultEventDecoder(val gatewayId: Int): EventDecoder {
             type = string.substringAfter('"').substringBefore('"'),
             json = string.substringAfter(',').substringBeforeLast(']')
         )
-        return if (payload.isValid) payload else null
+        return if (payload.isValid) payload.also { println(it.json) } else null
     }
 }

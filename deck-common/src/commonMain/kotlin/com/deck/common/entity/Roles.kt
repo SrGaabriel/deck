@@ -16,10 +16,10 @@ data class RawRole(
     val isSelfAssignable: Boolean,
     val name: String,
     val createdAt: Timestamp,
-    val discordRoleId: LongGenericId? = null,
-    val discordSyncedAt: Timestamp? = null,
+    val discordRoleId: LongGenericId?,
+    val discordSyncedAt: Timestamp?,
     val priority: Int,
-    val botScope: Boolean? = null,
+    val botScope: RawRoleBotScope?,
     val teamId: GenericId,
     val updatedAt: Timestamp,
     val permissions: RawRolePermissions
@@ -27,22 +27,27 @@ data class RawRole(
 
 @Serializable
 data class RawRolePermissions(
-    val announcements: Int,
-    val bots: Int,
-    val brackets: Int,
-    val calendar: Int,
-    val chat: Int,
-    val customization: Int,
-    val docs: Int,
-    val forms: Int,
-    val forums: Int,
-    val general: Int,
-    val lists: Int,
-    val matchmaking: Int,
-    val media: Int,
-    val recruitment: Int,
-    val scheduling: Int,
-    val streams: Int,
-    val voice: Int,
-    val xp: Int
+    val announcements: Int = 0,
+    val bots: Int = 0,
+    val brackets: Int = 0,
+    val calendar: Int = 0,
+    val chat: Int = 0,
+    val customization: Int = 0,
+    val docs: Int = 0,
+    val forms: Int = 0,
+    val forums: Int = 0,
+    val general: Int = 0,
+    val lists: Int = 0,
+    val matchmaking: Int = 0,
+    val media: Int = 0,
+    val recruitment: Int = 0,
+    val scheduling: Int = 0,
+    val streams: Int = 0,
+    val voice: Int = 0,
+    val xp: Int = 0
+)
+
+@Serializable
+data class RawRoleBotScope(
+    val userId: GenericId?
 )

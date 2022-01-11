@@ -37,13 +37,6 @@ data class GatewayChatMessageCreateEvent(
 ): GatewayEvent()
 
 @Serializable
-data class GatewayChannelTypingEvent(
-    val type: String,
-    val channelId: UniqueId,
-    val userId: GenericId
-): GatewayEvent()
-
-@Serializable
 data class GatewayChatMessageDeleteEvent(
     val type: String,
     val channelId: UniqueId,

@@ -3,16 +3,12 @@ package com.deck.gateway
 import com.deck.common.util.AuthenticationResult
 import com.deck.common.util.GenericId
 import com.deck.gateway.event.GatewayEvent
-import com.deck.gateway.util.DefaultGateway
-import com.deck.gateway.util.Gateway
-import com.deck.gateway.util.GatewayParameters
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.websocket.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlin.coroutines.CoroutineContext
 
 class GatewayOrchestrator(val authentication: AuthenticationResult): CoroutineScope {
