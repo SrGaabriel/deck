@@ -6,6 +6,18 @@ import com.deck.common.util.Timestamp
 import com.deck.common.util.UniqueId
 import kotlinx.serialization.Serializable
 
+@Serializable
+data class RawTeamInfo(
+    val name: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val avatar: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val banner: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val description: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val subdomain: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val isPublic: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
+    val timezone: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val additionalGameInfo: OptionalProperty<Map<String, Map<String, String>>>
+)
+
 /**
  * All parameters are missing except for [enabled] when bot is enabled/disabled.
  * All parameters are missing except for [teamId], [deletedAt] and [userId] when bot is deleted.

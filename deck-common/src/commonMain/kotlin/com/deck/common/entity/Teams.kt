@@ -86,3 +86,24 @@ data class RawInvite(
     @SerialName("gameId") val game: GameStatus?,
     val useCount: Int
 )
+
+// This object is gateway exclusive, to be moved to gateway module later
+@Serializable
+data class RawTeamPaymentInfo(
+    val subscriptionsEnabled: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
+    val onboardingStripeAccountOnboardedAt: OptionalProperty<Timestamp> = OptionalProperty.NotPresent,
+)
+
+@Serializable
+data class RawTeamSubscriptionPlan(
+    val id: UniqueId,
+    val name: String,
+    val cost: Int,
+    val description: String,
+    val teamPaymentInfoId: UniqueId,
+    val teamRoleId: IntGenericId,
+    val subscriptionTier: String,
+    val stripePriceId: String,
+    val createdAt: Timestamp,
+    val deletedAt: Timestamp?
+)

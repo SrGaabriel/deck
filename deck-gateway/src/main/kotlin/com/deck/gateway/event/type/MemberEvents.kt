@@ -55,3 +55,19 @@ data class GatewayTeamMemberUpdatedEvent(
     val updatedBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     val userInfo: RawTeamMemberUserInfo
 ): GatewayEvent()
+
+@Serializable
+@SerialName("TeamMutedMembersUpdated")
+data class GatewayTeamMutedMembersUpdated(
+    val isMuted: Boolean,
+    val peerId: GenericId,
+    val teamId: GenericId
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamDeafenedMembersUpdated")
+data class GatewayTeamDeafenedMembersUpdatedEvent(
+    val isDeafened: Boolean,
+    val peerId: GenericId,
+    val teamId: GenericId
+): GatewayEvent()

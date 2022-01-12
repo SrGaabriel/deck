@@ -20,7 +20,7 @@ data class RawPartialTeamChannel(
     val autoArchiveAt: OptionalProperty<Timestamp?> = OptionalProperty.NotPresent,
     val deletedAt: OptionalProperty<Timestamp?> = OptionalProperty.NotPresent,
     val archivedBy: OptionalProperty<GenericId?> = OptionalProperty.NotPresent,
-    val description: String,
+    val description: String?,
     val createdByWebhookId: OptionalProperty<UniqueId?> = OptionalProperty.NotPresent,
     val archivedByWebhookId: OptionalProperty<UniqueId?> = OptionalProperty.NotPresent,
     val teamId: OptionalProperty<GenericId?> = OptionalProperty.NotPresent,

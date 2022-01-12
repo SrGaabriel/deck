@@ -1,8 +1,10 @@
 package com.deck.common.entity
 
 import com.deck.common.util.*
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 /** @param description is null only when creating channels */
 @Serializable
@@ -50,7 +52,7 @@ data class RawPrivateChannel(
     val updatedAt: Timestamp,
     val name: String?,
     val description: String?,
-    val lastMessage: RawPartialRepliedMessage,
+    val lastMessage: RawPartialDeletedMessage,
     val contentType: RawChannelContentType,
     val archivedAt: Timestamp?,
     val autoArchiveAt: Timestamp?,
@@ -81,8 +83,11 @@ data class RawChannelCategory(
 )
 
 @Serializable
+@OptIn(ExperimentalSerializationApi::class)
 enum class RawChannelType {
-    @SerialName("Team") Team,
+    @SerialName("Team")
+    @JsonNames("team")
+    Team,
     @SerialName("DM") Private;
 }
 

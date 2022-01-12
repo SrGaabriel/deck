@@ -1,16 +1,21 @@
 package com.deck.gateway.event.type
 
-import com.deck.common.entity.RawBot
-import com.deck.common.entity.RawChannelContentType
-import com.deck.common.entity.RawChannelType
-import com.deck.common.entity.RawRole
+import com.deck.common.entity.*
 import com.deck.common.util.*
 import com.deck.gateway.com.deck.gateway.entity.RawPartialBot
+import com.deck.gateway.com.deck.gateway.entity.RawTeamInfo
 import com.deck.gateway.entity.RawTeamMemberRoleId
 import com.deck.gateway.entity.RawUserIdObject
 import com.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
+@Serializable
+@SerialName("TeamUpdated")
+data class GatewayTeamUpdatedEvent(
+    val teamInfo: RawTeamInfo,
+    val teamId: GenericId
+): GatewayEvent()
 
 @Serializable
 @SerialName("TeamXpAdded")
@@ -64,6 +69,14 @@ data class GatewayTeamChannelStreamEndedEvent(
 ): GatewayEvent()
 
 @Serializable
+@SerialName("TeamMessagesDeleted")
+data class GatewayTeamMessagesDeletedEvent(
+    val deletedContent: List<RawPartialDeletedMessage>,
+    val bannedUserId: GenericId,
+    val teamId: GenericId
+): GatewayEvent()
+
+@Serializable
 @SerialName("TeamBotCreated")
 data class GatewayTeamBotCreatedEvent(
     val userId: GenericId,
@@ -78,5 +91,44 @@ data class GatewayTeamBotUpdatedEvent(
     val userId: GenericId,
     val bot: RawPartialBot,
     val guildedClientId: UniqueId,
+    val teamId: GenericId
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamPaymentInfoUpdated")
+data class GatewayTeamPaymentInfoUpdatedEvent(
+    val guildedClientId: UniqueId,
+    val teamId: GenericId,
+    val teamPaymentInfo: RawTeamPaymentInfo
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamServerSubscriptionPlanCreated")
+data class GatewayTeamServerSubscriptionPlanCreatedEvent(
+    val guildedClientId: UniqueId,
+    val teamId: GenericId,
+    val serverSubscriptionPlan: RawTeamSubscriptionPlan
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamServerSubscriptionPlanUpdated")
+data class GatewayTeamServerSubscriptionPlanUpdatedEvent(
+    val guildedClientId: UniqueId,
+    val teamId: GenericId,
+    val serverSubscriptionPlan: RawTeamSubscriptionPlan
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamServerSubscriptionPlanDeleted")
+data class GatewayTeamServerSubscriptionPlanDeletedEvent(
+    val guildedClientId: UniqueId,
+    val teamId: GenericId,
+    val serverSubscriptionPlanId: UniqueId
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamGameAdded")
+data class GatewayTeamGameAddedEvent(
+    @SerialName("gameId") val game: GameStatus,
     val teamId: GenericId
 ): GatewayEvent()

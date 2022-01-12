@@ -19,8 +19,21 @@ data class RawPartialReceivedMessage(
     val repliesTo: UniqueId?,
     val type: String,
     val createdAt: Timestamp,
+    val editedAt: OptionalProperty<Timestamp?> = OptionalProperty.NotPresent,
     val isSilent: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     val isPrivate: OptionalProperty<Boolean> = OptionalProperty.NotPresent
+)
+
+@Serializable
+data class RawPartialEditedMessage(
+    val id: UniqueId,
+    val createdBy: GenericId,
+    val content: RawMessageContent,
+    val repliesToIds: List<UniqueId>?,
+    val type: String,
+    val createdAt: Timestamp,
+    val editedAt: Timestamp,
+    val isPrivate: Boolean
 )
 
 @Serializable

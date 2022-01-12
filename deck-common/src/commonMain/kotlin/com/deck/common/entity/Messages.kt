@@ -48,6 +48,15 @@ data class RawPartialRepliedMessage(
 )
 
 @Serializable
+data class RawPartialDeletedMessage(
+    val id: UniqueId,
+    val contentType: RawChannelContentType,
+    val isReply: Boolean,
+    val channelId: UniqueId,
+    val createdAt: Timestamp
+)
+
+@Serializable
 data class RawMessageContent(
     @SerialName("object") val contentObject: String,
     val document: RawMessageContentNode

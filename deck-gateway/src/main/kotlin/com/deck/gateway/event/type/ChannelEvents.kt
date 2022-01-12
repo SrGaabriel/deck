@@ -56,7 +56,7 @@ data class GatewayChannelTypingEvent(
 @SerialName("CHANNEL_BADGED")
 data class GatewayChannelBadgedEvent(
     val contentType: RawChannelContentType,
-    val teamId: GenericId,
+    val teamId: GenericId?,
     val channelId: UniqueId,
     val contentId: String,
     val createdAt: Timestamp
@@ -85,6 +85,13 @@ data class GatewayTeamChannelCategoryUpdatedEvent(
 data class GatewayTeamChannelCategoryDeletedEvent(
     val channelCategoryId: IntGenericId,
     val channels: List<RawTeamCategoryChannel>,
+    val teamId: GenericId
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamChannelCategoriesDeleted")
+data class GatewayTeamChannelCategoriesDeletedEvent(
+    val channelCategoryIds: List<IntGenericId>,
     val teamId: GenericId
 ): GatewayEvent()
 
@@ -177,4 +184,26 @@ data class GatewayTemporalChannelUsersAddedEvent(
     val contentType: RawChannelContentType,
     val channel: RawChannel,
     val silenceNotification: Boolean
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamChannelPrioritiesUpdated")
+data class GatewayTeamChannelPrioritiesUpdatedEvent(
+    val orderedChannelIds: List<UniqueId>
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamChannelCategoryPrioritiesUpdated")
+data class GatewayTeamChannelCategoryPrioritiesUpdatedEvent(
+    val orderedChannelCategoryIds: List<IntGenericId>
+): GatewayEvent()
+
+@Serializable
+@SerialName("CHANNEL_SEEN")
+data class GatewaySelfChannelSeenEvent(
+    val channelId: UniqueId,
+    val teamId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+    val clearAllBadges: Boolean,
+    val contentType: RawChannelContentType,
+    val guildedClientId: UniqueId
 ): GatewayEvent()
