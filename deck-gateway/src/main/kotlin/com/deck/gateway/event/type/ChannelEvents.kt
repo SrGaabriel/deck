@@ -35,6 +35,14 @@ data class GatewayTeamChannelDeletedEvent(
     val teamId: UniqueId
 ): GatewayEvent()
 
+// When wrapping, remember that this event can be called even if only one channel was deleted.
+@Serializable
+@SerialName("TeamChannelsDeleted")
+data class GatewayTeamChannelsDeletedEvent(
+    val channelIds: List<UniqueId>,
+    val teamId: GenericId
+): GatewayEvent()
+
 @Serializable
 @SerialName("ChatChannelTyping")
 data class GatewayChannelTypingEvent(
@@ -145,4 +153,28 @@ data class GatewayChatChannelBroadcastCallResponseEvent(
     val userId: GenericId,
     val callType: RawChannelContentType,
     val response: RawBroadcastCallResponse
+): GatewayEvent()
+
+@Serializable
+@SerialName("TemporalChannelCreated")
+data class GatewayTemporalChannelCreatedEvent(
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val channel: RawChannel,
+    val silenceNotification: Boolean
+): GatewayEvent()
+
+@Serializable
+@SerialName("TemporalChannelUsersAdded")
+data class GatewayTemporalChannelUsersAddedEvent(
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val channel: RawChannel,
+    val silenceNotification: Boolean
 ): GatewayEvent()

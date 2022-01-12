@@ -2,8 +2,8 @@ package com.deck.gateway.event.type
 
 import com.deck.common.entity.*
 import com.deck.common.util.*
+import com.deck.gateway.entity.RawMessageIdObject
 import com.deck.gateway.entity.RawPartialDeletedMessage
-import com.deck.gateway.entity.RawPartialReactedMessage
 import com.deck.gateway.entity.RawPartialReceivedMessage
 import com.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
@@ -54,7 +54,7 @@ data class GatewayChatMessageReactionAddedEvent(
     val teamId: GenericId,
     val contentType: RawChannelContentType,
     val reaction: RawReaction,
-    val message: RawPartialReactedMessage
+    val message: RawMessageIdObject
 ): GatewayEvent()
 
 @Serializable
@@ -67,5 +67,32 @@ data class GatewayChatMessageReactionDeletedEvent(
     val teamId: GenericId,
     val contentType: RawChannelContentType,
     val reaction: RawReaction,
-    val message: RawPartialReactedMessage
+    val message: RawMessageIdObject
+): GatewayEvent()
+
+@Serializable
+@SerialName("ChatPinnedMessageCreated")
+data class GatewayChatPinnedMessageCreatedEvent(
+    val guildedClientId: UniqueId,
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val updatedBy: GenericId,
+    val message: RawMessageIdObject,
+    val userId: GenericId
+): GatewayEvent()
+
+@Serializable
+@SerialName("ChatPinnedMessageDeleted")
+data class GatewayChatPinnedMessageDeletedEvent(
+    val guildedClientId: UniqueId,
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val updatedBy: GenericId,
+    val message: RawMessageIdObject,
 ): GatewayEvent()

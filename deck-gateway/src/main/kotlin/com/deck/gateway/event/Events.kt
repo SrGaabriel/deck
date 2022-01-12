@@ -29,6 +29,7 @@ private val serializationModule by lazy {
             subclass(GatewayTeamChannelCreatedEvent::class)
             subclass(GatewayTeamChannelUpdatedEvent::class)
             subclass(GatewayTeamChannelDeletedEvent::class)
+            subclass(GatewayTeamChannelsDeletedEvent::class)
             subclass(GatewayTeamGroupArchivedEvent::class)
             subclass(GatewayTeamGroupRestoredEvent::class)
             subclass(GatewayTeamMemberJoinedEvent::class)
@@ -56,6 +57,14 @@ private val serializationModule by lazy {
             subclass(GatewayChatChannelBroadcastCallResponseEvent::class)
             subclass(GatewayPrivateChatChannelCreatedEvent::class)
             subclass(GatewayChatChannelUpdatedEvent::class)
+            subclass(GatewayTeamReactionsUpdatedEvent::class)
+            subclass(GatewayTeamReactionRemovedEvent::class)
+            subclass(GatewayTemporalChannelCreatedEvent::class)
+            subclass(GatewayTemporalChannelUsersAddedEvent::class)
+            subclass(GatewayChatPinnedMessageCreatedEvent::class)
+            subclass(GatewayChatPinnedMessageDeletedEvent::class)
+            subclass(GatewayTeamBotCreatedEvent::class)
+            subclass(GatewayTeamBotUpdatedEvent::class)
         }
     }
 }

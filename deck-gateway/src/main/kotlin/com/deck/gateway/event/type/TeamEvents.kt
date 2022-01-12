@@ -1,9 +1,11 @@
 package com.deck.gateway.event.type
 
+import com.deck.common.entity.RawBot
 import com.deck.common.entity.RawChannelContentType
 import com.deck.common.entity.RawChannelType
 import com.deck.common.entity.RawRole
 import com.deck.common.util.*
+import com.deck.gateway.com.deck.gateway.entity.RawPartialBot
 import com.deck.gateway.entity.RawTeamMemberRoleId
 import com.deck.gateway.entity.RawUserIdObject
 import com.deck.gateway.event.GatewayEvent
@@ -30,7 +32,7 @@ data class GatewayTeamXpSetEvent(
 ): GatewayEvent()
 
 @Serializable
-@SerialName("TeamRolesUpdated")
+@SerialName("teamRolesUpdated")
 data class GatewayTeamRolesUpdatedEvent(
     val teamId: GenericId,
     val rolesById: Dictionary<String, RawRole>?,
@@ -59,4 +61,22 @@ data class GatewayTeamChannelStreamEndedEvent(
     val contentType: RawChannelContentType,
     val groupId: GenericId,
     // val userStreams: List<*>
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamBotCreated")
+data class GatewayTeamBotCreatedEvent(
+    val userId: GenericId,
+    val bot: RawBot,
+    val guildedClientId: UniqueId,
+    val teamId: GenericId
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamBotUpdated")
+data class GatewayTeamBotUpdatedEvent(
+    val userId: GenericId,
+    val bot: RawPartialBot,
+    val guildedClientId: UniqueId,
+    val teamId: GenericId
 ): GatewayEvent()

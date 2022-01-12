@@ -31,6 +31,6 @@ data class RawPartialDeletedMessage(
 )
 
 @Serializable
-data class RawPartialReactedMessage(
+data class RawMessageIdObject(
     val id: UniqueId
 )

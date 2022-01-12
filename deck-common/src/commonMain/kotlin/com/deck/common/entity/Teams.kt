@@ -39,6 +39,36 @@ data class RawTeamMember(
 )
 
 @Serializable
+data class RawBot(
+    val id: UniqueId,
+    val name: String,
+    val enabled: Boolean,
+    val flows: List<RawBotFlow>,
+    val teamId: GenericId,
+    val createdBy: GenericId,
+    val createdAt: Timestamp,
+    val deletedAt: Timestamp?,
+    val userId: GenericId,
+    val iconUrl: String?
+)
+
+@Serializable
+data class RawBotFlow(
+    val id: UniqueId,
+    val enabled: Boolean,
+    val error: Boolean,
+    val botId: UniqueId,
+    val teamId: GenericId,
+    val createdBy: GenericId,
+    val createdAt: Timestamp,
+    val deletedAt: Timestamp?,
+    val triggerType: String,
+    // val triggerMeta: RawBotFlowMeta,
+    val actionType: String,
+    // val actionMeta: RawBotFlowMeta
+)
+
+@Serializable
 data class RawBan(
     val reason: String,
     val userId: GenericId,
