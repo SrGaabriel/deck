@@ -1,5 +1,6 @@
 package com.deck.gateway.event.type
 
+import com.deck.common.util.DeckExperimental
 import com.deck.common.util.GenericId
 import com.deck.common.util.OptionalProperty
 import com.deck.common.util.UniqueId
@@ -8,6 +9,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@DeckExperimental
 @SerialName("UserStreamsVisibilityUpdated")
 data class GatewayUserStreamsVisibilityUpdatedEvent(
     val teamId: GenericId,

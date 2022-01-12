@@ -4,7 +4,7 @@ import com.deck.common.entity.RawChannelContentType
 import com.deck.common.entity.RawChannelType
 import com.deck.common.entity.RawRole
 import com.deck.common.util.*
-import com.deck.gateway.entity.PartialUserStreamRemoved
+import com.deck.gateway.entity.RawPartialUserStreamRemoved
 import com.deck.gateway.entity.RawTeamMemberRoleId
 import com.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
@@ -46,7 +46,7 @@ data class GatewayTeamChannelStreamRemovedEvent(
     val channelType: RawChannelType,
     val teamId: GenericId,
     val contentType: RawChannelContentType,
-    val user: PartialUserStreamRemoved
+    val user: RawPartialUserStreamRemoved
 ): GatewayEvent()
 
 @Serializable

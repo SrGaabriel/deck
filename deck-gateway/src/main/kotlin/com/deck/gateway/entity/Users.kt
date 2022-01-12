@@ -4,6 +4,6 @@ import com.deck.common.util.GenericId
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PartialUserStreamRemoved(
+data class RawPartialUserStreamRemoved(
     val id: GenericId
 )
