@@ -18,6 +18,7 @@ abstract class GatewayEvent {
     var gatewayId = -1
 }
 
+@OptIn(DeckExperimental::class)
 private val serializationModule by lazy {
     SerializersModule {
         polymorphic(GatewayEvent::class) {
@@ -65,16 +66,18 @@ class DefaultEventDecoder(private val gatewayId: Int): EventDecoder {
      * Events with a case in when are specifically the ones which don't have
      * come with a **type** parameter.
      */
-    override fun decodeEventFromPayload(payload: Payload): GatewayEvent = when (payload.type) {
-        "Hello" -> forgivingJson.decodeFromString<GatewayHelloEvent>(payload.json)
-        "TeamXpSet" -> forgivingJson.decodeFromString<GatewayTeamXpSetEvent>(payload.json)
-        else -> forgivingJson.decodeFromString(payload.json)
-    }.also {
-        it.gatewayId = gatewayId
-    }
+    override fun decodeEventFromPayload(payload: Payload): GatewayEvent? = runCatching {
+        when (payload.type) {
+            "Hello" -> forgivingJson.decodeFromString<GatewayHelloEvent>(payload.json)
+            "TeamXpSet" -> forgivingJson.decodeFromString<GatewayTeamXpSetEvent>(payload.json)
+            else -> forgivingJson.decodeFromString(payload.json)
+        }.also {
+            it.gatewayId = gatewayId
+        }
+    }.onFailure { it.printStackTrace() }.getOrNull()
 
     override fun decodePayloadFromString(string: String): Payload? {
-        if (string.startsWith("0{")) // Handle payload event (structure different from the others)
+        if (string.startsWith("0{")) // Handle payload event (different opcode)
             return Payload("Hello", string.substring(1))
         val payload = Payload(
             type = string.substringAfter('"').substringBefore('"'),

@@ -63,7 +63,8 @@ data class GatewayParameters(
  * Default implementation of [Gateway]
  */
 class DefaultGateway(
-    val token: String,
+    private val token: String,
+    private val debugPayloads: Boolean,
     override val gatewayId: Int,
     override val scope: CoroutineScope,
     override val parameters: GatewayParameters,
@@ -101,8 +102,9 @@ class DefaultGateway(
         webSocketSession.incoming.receiveAsFlow().filterIsInstance<Frame.Text>().collect {
             if (it.data.contentEquals(Constants.GatewayPongContent.toByteArray())) return@collect
             val payload = eventDecoder.decodePayloadFromString(it.readText()) ?: return@collect
-            val event = eventDecoder.decodeEventFromPayload(payload) ?: return@collect
-            logger.info { "[DECK Gateway #${gatewayId}] Received $event" }
+            val event = eventDecoder.decodeEventFromPayload(payload)
+                ?: return@collect logger.info { "[DECK Gateway #${gatewayId}] Failed to parse event with body ${payload.json}" }
+            logger.info { "[DECK Gateway #${gatewayId}] Received event ${payload.type}".let { log -> if (debugPayloads) "$log with JSON ${payload.json}" else it } }
             eventSharedFlow.emit(event)
         }
     }.also { listeningJob = it }

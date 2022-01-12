@@ -11,19 +11,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlin.coroutines.CoroutineContext
 
-class GatewayOrchestrator(val authentication: AuthenticationResult): CoroutineScope {
+class GatewayOrchestrator(private val authentication: AuthenticationResult): CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.Default
     private val httpClient = HttpClient(CIO.create()) {
         install(WebSockets)
     }
 
+    // When enabled prints payloads json
+    var debugPayloads: Boolean = false
     val gateways = mutableListOf<Gateway>()
     val globalEventsFlow = MutableSharedFlow<GatewayEvent>()
 
     // We'll use a different counter since we don't want a previously closed gateway and a new one having same IDs
     var gatewayCurrentId = 0
     fun openGateway(parameters: GatewayParameters = GatewayParameters(guildedClientId = authentication.midSession)): Gateway =
-        DefaultGateway(authentication.token, gatewayCurrentId.also { gatewayCurrentId++ },this, parameters, client = httpClient, eventSharedFlow = globalEventsFlow).also { gateways.add(it) }
+        DefaultGateway(authentication.token, debugPayloads, gatewayCurrentId.also { gatewayCurrentId++ },this, parameters, client = httpClient, eventSharedFlow = globalEventsFlow).also { gateways.add(it) }
 
     fun openTeamGateway(teamId: GenericId) =
         openGateway(GatewayParameters(teamId = teamId, guildedClientId = authentication.midSession))
