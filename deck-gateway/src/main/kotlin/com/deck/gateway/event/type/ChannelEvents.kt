@@ -14,7 +14,7 @@ data class GatewayTeamChannelCreatedEvent(
     val type: String,
     val channel: RawChannel,
     val name: String,
-    val guildedClientId: String,
+    val guildedClientId: UniqueId,
     val teamId: GenericId
 ): GatewayEvent()
 
@@ -49,7 +49,7 @@ data class GatewayChannelBadgedEvent(
 data class GatewayTeamChannelCategoryCreatedEvent(
     val type: String,
     val category: RawChannelCategory,
-    val guildedClientId: String,
+    val guildedClientId: UniqueId,
     val teamId: GenericId
 ): GatewayEvent()
 
@@ -59,7 +59,7 @@ data class GatewayTeamChannelCategoryUpdatedEvent(
     val type: String,
     val isRoleUpdate: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     val category: RawChannelCategory,
-    val guildedClientId: String,
+    val guildedClientId: UniqueId,
     val teamId: GenericId
 ): GatewayEvent()
 

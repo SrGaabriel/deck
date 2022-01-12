@@ -15,6 +15,18 @@ data class GatewayTeamXpAddedEvent(
 ): GatewayEvent()
 
 @Serializable
+/**
+ * Parameters [amount] and [guildedClientId] are absent when member leaves the guild
+ */
+data class GatewayTeamXpSetEvent(
+    val type: String,
+    val userIds: List<GenericId>,
+    val amount: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val teamId: GenericId,
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent
+): GatewayEvent()
+
+@Serializable
 data class GatewayTeamRolesUpdatedEvent(
     val type: String,
     val teamId: GenericId,
