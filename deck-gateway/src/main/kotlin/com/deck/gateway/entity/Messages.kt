@@ -44,3 +44,8 @@ data class RawPartialDeletedMessage(
     val deletedAt: Timestamp,
     val createdAt: Timestamp
 )
+
+@Serializable
+data class RawPartialReactedMessage(
+    val id: UniqueId
+)

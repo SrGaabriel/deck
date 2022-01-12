@@ -1,7 +1,10 @@
 package com.deck.gateway.event.type
 
+import com.deck.common.entity.RawChannelContentType
+import com.deck.common.entity.RawChannelType
 import com.deck.common.entity.RawRole
 import com.deck.common.util.*
+import com.deck.gateway.entity.RawPartialUserStreamRemoved
 import com.deck.gateway.entity.RawTeamMemberRoleId
 import com.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
@@ -33,4 +36,27 @@ data class GatewayTeamRolesUpdatedEvent(
     val rolesById: Dictionary<String, RawRole>?,
     val isDelete: Boolean,
     val memberRoleIds: OptionalProperty<List<RawTeamMemberRoleId>> = OptionalProperty.NotPresent
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamChannelStreamRemoved")
+data class GatewayTeamChannelStreamRemovedEvent(
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val user: RawPartialUserStreamRemoved
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamChannelStreamEnded")
+data class GatewayTeamChannelStreamEndedEvent(
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val groupId: GenericId,
+    // val userStreams: List<*>
 ): GatewayEvent()

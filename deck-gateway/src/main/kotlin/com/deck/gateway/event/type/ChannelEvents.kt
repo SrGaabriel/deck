@@ -43,7 +43,7 @@ data class GatewayChannelBadgedEvent(
     val teamId: GenericId,
     val channelId: UniqueId,
     val contentId: String,
-    val createdAt: Long
+    val createdAt: Timestamp
 ): GatewayEvent()
 
 @Serializable
