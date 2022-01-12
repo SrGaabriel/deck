@@ -10,6 +10,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     api(project(":deck-common"))
+    api(project(":deck-rest"))
     implementation("io.ktor:ktor-client-core:${Dependencies.KtorVersion}")
     implementation("io.ktor:ktor-client-cio:${Dependencies.KtorVersion}")
     implementation("io.ktor:ktor-client-websockets:${Dependencies.KtorVersion}")

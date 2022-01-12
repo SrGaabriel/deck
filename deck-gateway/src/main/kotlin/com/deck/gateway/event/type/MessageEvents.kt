@@ -3,8 +3,10 @@ package com.deck.gateway.event.type
 import com.deck.common.entity.RawChannelContentType
 import com.deck.common.entity.RawChannelType
 import com.deck.common.entity.RawMessageMentionedUserInfo
+import com.deck.common.entity.RawReaction
 import com.deck.common.util.*
 import com.deck.gateway.entity.RawPartialDeletedMessage
+import com.deck.gateway.entity.RawPartialReactedMessage
 import com.deck.gateway.entity.RawPartialReceivedMessage
 import com.deck.gateway.entity.RawPartialRepliedMessage
 import com.deck.gateway.event.GatewayEvent
@@ -44,4 +46,30 @@ data class GatewayChatMessageDeleteEvent(
     val contentType: RawChannelContentType,
     val message: RawPartialDeletedMessage,
     val newLastMessage: RawPartialRepliedMessage?
+): GatewayEvent()
+
+@Serializable
+@SerialName("ChatMessageReactionAdded")
+data class GatewayChatMessageReactionAddedEvent(
+    val guildedClientId: UniqueId,
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val reaction: RawReaction,
+    val message: RawPartialReactedMessage
+): GatewayEvent()
+
+@Serializable
+@SerialName("ChatMessageReactionDeleted")
+data class GatewayChatMessageReactionDeletedEvent(
+    val guildedClientId: UniqueId,
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val reaction: RawReaction,
+    val message: RawPartialReactedMessage
 ): GatewayEvent()
