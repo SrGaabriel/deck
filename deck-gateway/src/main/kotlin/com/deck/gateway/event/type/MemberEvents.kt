@@ -6,40 +6,41 @@ import com.deck.common.util.*
 import com.deck.gateway.com.deck.gateway.entity.RawPartialApplication
 import com.deck.gateway.entity.RawTeamMemberUserInfo
 import com.deck.gateway.event.GatewayEvent
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName("TeamMemberJoined")
 data class GatewayTeamMemberJoinedEvent(
-    val type: String,
     val user: RawTeamMember,
     val teamId: GenericId
 ): GatewayEvent()
 
 @Serializable
+@SerialName("TeamMemberRemoved")
 data class GatewayTeamMemberRemovedEvent(
-    val type: String,
     val userId: GenericId,
     val teamId: GenericId
 ): GatewayEvent()
 
 @Serializable
+@SerialName("TeamApplicationCreated")
 data class GatewayTeamApplicationCreatedEvent(
-    val type: String,
     val teamId: GenericId,
     val application: RawApplication
 ): GatewayEvent()
 
 @Serializable
+@SerialName("TeamApplicationUpdated")
 data class GatewayTeamApplicationUpdatedEvent(
-    val type: String,
     val teamId: GenericId,
     val applicationId: IntGenericId,
     val application: RawPartialApplication
 ): GatewayEvent()
 
 @Serializable
+@SerialName("TeamApplicationRemoved")
 data class GatewayTeamApplicationRemovedEvent(
-    val type: String,
     val teamId: GenericId,
     val applicationId: IntGenericId
 ): GatewayEvent()
@@ -47,8 +48,8 @@ data class GatewayTeamApplicationRemovedEvent(
 /** Incredibly enough, [guildedClientId] and [updatedBy] are missing when webhooks update other members */
 @Serializable
 @DeckExperimental
+@SerialName("TeamMemberUpdated")
 data class GatewayTeamMemberUpdatedEvent(
-    val type: String,
     val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val userId: GenericId,
     val updatedBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,

@@ -4,18 +4,55 @@ package com.deck.gateway.event
 
 import com.deck.common.util.DeckExperimental
 import com.deck.gateway.event.type.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 
+@Serializable
 abstract class GatewayEvent {
-    var gatewayId: Int = 0
+    @Transient
+    var gatewayId = -1
 }
 
-data class Payload(val type: String, val json: String) {
-    val isValid = type != json && json.contains("{")
+private val serializationModule by lazy {
+    SerializersModule {
+        polymorphic(GatewayEvent::class) {
+            subclass(GatewayTeamXpAddedEvent::class)
+            subclass(GatewayChannelTypingEvent::class)
+            subclass(GatewayChatMessageCreatedEvent::class)
+            subclass(GatewayChatMessageDeleteEvent::class)
+            subclass(GatewayTeamChannelCreatedEvent::class)
+            subclass(GatewayTeamChannelDeletedEvent::class)
+            subclass(GatewayTeamGroupArchivedEvent::class)
+            subclass(GatewayTeamGroupRestoredEvent::class)
+            subclass(GatewayTeamMemberJoinedEvent::class)
+            subclass(GatewayTeamMemberUpdatedEvent::class)
+            subclass(GatewayTeamMemberRemovedEvent::class)
+            subclass(GatewayTeamRolesUpdatedEvent::class)
+            subclass(GatewayTeamApplicationCreatedEvent::class)
+            subclass(GatewayTeamApplicationUpdatedEvent::class)
+            subclass(GatewayTeamApplicationRemovedEvent::class)
+            subclass(GatewayTeamChannelCategoryCreatedEvent::class)
+            subclass(GatewayTeamChannelCategoryUpdatedEvent::class)
+            subclass(GatewayTeamChannelCategoryDeletedEvent::class)
+            subclass(GatewayTeamChannelCategoryGroupMovedEvent::class)
+            subclass(GatewayTeamGroupCreatedEvent::class)
+            subclass(GatewayTeamGroupUpdatedEvent::class)
+            subclass(GatewayChannelBadgedEvent::class)
+        }
+    }
 }
 
-private val forgivingJson = Json { ignoreUnknownKeys = true }
+private val forgivingJson by lazy {
+    Json {
+        ignoreUnknownKeys = true
+        serializersModule = serializationModule
+    }
+}
 
 interface EventDecoder {
     fun decodeEventFromPayload(payload: Payload): GatewayEvent?
@@ -24,35 +61,16 @@ interface EventDecoder {
 }
 
 class DefaultEventDecoder(private val gatewayId: Int): EventDecoder {
-    override fun decodeEventFromPayload(payload: Payload): GatewayEvent? = runCatching { when (payload.type) {
+    /**
+     * Events with a case in when are specifically the ones which don't have
+     * come with a **type** parameter.
+     */
+    override fun decodeEventFromPayload(payload: Payload): GatewayEvent = when (payload.type) {
         "Hello" -> forgivingJson.decodeFromString<GatewayHelloEvent>(payload.json)
-        "TeamXpAdded" -> forgivingJson.decodeFromString<GatewayTeamXpAddedEvent>(payload.json)
         "TeamXpSet" -> forgivingJson.decodeFromString<GatewayTeamXpSetEvent>(payload.json)
-        "ChatChannelTyping" -> forgivingJson.decodeFromString<GatewayChannelTypingEvent>(payload.json)
-        "ChatMessageCreated" -> forgivingJson.decodeFromString<GatewayChatMessageCreateEvent>(payload.json)
-        "ChatMessageDeleted" -> forgivingJson.decodeFromString<GatewayChatMessageDeleteEvent>(payload.json)
-        "TeamChannelCreated" -> forgivingJson.decodeFromString<GatewayTeamChannelCreatedEvent>(payload.json)
-        "TeamChannelDeleted" -> forgivingJson.decodeFromString<GatewayTeamChannelDeletedEvent>(payload.json)
-        "TeamGroupArchived" -> forgivingJson.decodeFromString<GatewayTeamGroupArchivedEvent>(payload.json)
-        "TeamGroupRestored" -> forgivingJson.decodeFromString<GatewayTeamGroupRestoredEvent>(payload.json)
-        "TeamMemberJoined" -> forgivingJson.decodeFromString<GatewayTeamMemberJoinedEvent>(payload.json)
-        "TeamMemberUpdated" -> forgivingJson.decodeFromString<GatewayTeamMemberUpdatedEvent>(payload.json)
-        "TeamMemberRemoved" -> forgivingJson.decodeFromString<GatewayTeamMemberRemovedEvent>(payload.json)
-        "teamRolesUpdated" -> forgivingJson.decodeFromString<GatewayTeamRolesUpdatedEvent>(payload.json)
-        "TeamApplicationCreated" -> forgivingJson.decodeFromString<GatewayTeamApplicationCreatedEvent>(payload.json)
-        "TeamApplicationUpdated" -> forgivingJson.decodeFromString<GatewayTeamApplicationUpdatedEvent>(payload.json)
-        "TeamApplicationRemoved" -> forgivingJson.decodeFromString<GatewayTeamApplicationRemovedEvent>(payload.json)
-        "TeamChannelCategoryCreated" -> forgivingJson.decodeFromString<GatewayTeamChannelCategoryCreatedEvent>(payload.json)
-        "TeamChannelCategoryUpdated" -> forgivingJson.decodeFromString<GatewayTeamChannelCategoryUpdatedEvent>(payload.json)
-        "TeamChannelCategoryGroupMoved" -> forgivingJson.decodeFromString<GatewayTeamChannelCategoryGroupMovedEvent>(payload.json)
-        "TeamChannelCategoryDeleted" -> forgivingJson.decodeFromString<GatewayTeamChannelCategoryDeletedEvent>(payload.json)
-        "TEAM_GROUP_CREATED" -> forgivingJson.decodeFromString<GatewayTeamGroupCreatedEvent>(payload.json)
-        "TEAM_GROUP_UPDATED" -> forgivingJson.decodeFromString<GatewayTeamGroupUpdatedEvent>(payload.json)
-        "CHANNEL_BADGED" -> forgivingJson.decodeFromString<GatewayChannelBadgedEvent>(payload.json)
-        else -> println("Unsupported Event Received: ${payload.json}").let { null }
-    }}.onFailure { it.printStackTrace() }.getOrNull()?.also {
-        // TODO: Workaround, fix
-        it.gatewayId = this.gatewayId
+        else -> forgivingJson.decodeFromString(payload.json)
+    }.also {
+        it.gatewayId = gatewayId
     }
 
     override fun decodePayloadFromString(string: String): Payload? {
@@ -64,4 +82,8 @@ class DefaultEventDecoder(private val gatewayId: Int): EventDecoder {
         )
         return if (payload.isValid) payload else null
     }
+}
+
+data class Payload(val type: String, val json: String) {
+    val isValid = type != json && json.contains("{")
 }

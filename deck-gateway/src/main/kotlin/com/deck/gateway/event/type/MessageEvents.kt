@@ -8,6 +8,7 @@ import com.deck.gateway.entity.RawPartialDeletedMessage
 import com.deck.gateway.entity.RawPartialReceivedMessage
 import com.deck.gateway.entity.RawPartialRepliedMessage
 import com.deck.gateway.event.GatewayEvent
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -17,8 +18,8 @@ import kotlinx.serialization.Serializable
  * @param mentionedUserInfo absent when no one was mentioned.
  */
 @Serializable
-data class GatewayChatMessageCreateEvent(
-    val type: String,
+@SerialName("ChatMessageCreated")
+data class GatewayChatMessageCreatedEvent(
     val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val channelId: UniqueId,
     val channelCategoryId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
@@ -34,8 +35,8 @@ data class GatewayChatMessageCreateEvent(
 ): GatewayEvent()
 
 @Serializable
+@SerialName("ChatMessageDeleted")
 data class GatewayChatMessageDeleteEvent(
-    val type: String,
     val channelId: UniqueId,
     val channelCategoryId: UniqueId?,
     val channelType: RawChannelType,

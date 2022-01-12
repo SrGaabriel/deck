@@ -7,11 +7,12 @@ import com.deck.common.util.*
 import com.deck.gateway.com.deck.gateway.entity.RawTeamCategoryChannel
 import com.deck.gateway.com.deck.gateway.entity.RawTeamCategoryChannelId
 import com.deck.gateway.event.GatewayEvent
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName("TeamChannelCreated")
 data class GatewayTeamChannelCreatedEvent(
-    val type: String,
     val channel: RawChannel,
     val name: String,
     val guildedClientId: UniqueId,
@@ -19,16 +20,16 @@ data class GatewayTeamChannelCreatedEvent(
 ): GatewayEvent()
 
 @Serializable
+@SerialName("TeamChannelDeleted")
 data class GatewayTeamChannelDeletedEvent(
-    val type: String,
     val channelId: UniqueId,
     val guildedClientId: UniqueId,
     val teamId: UniqueId
 ): GatewayEvent()
 
 @Serializable
+@SerialName("ChatChannelTyping")
 data class GatewayChannelTypingEvent(
-    val type: String,
     val channelId: UniqueId,
     val userId: GenericId
 ): GatewayEvent()
@@ -36,8 +37,8 @@ data class GatewayChannelTypingEvent(
 // Probably when a channel you aren't reading is pinged
 @Serializable
 @DeckExperimental
+@SerialName("CHANNEL_BADGED")
 data class GatewayChannelBadgedEvent(
-    val type: String,
     val contentType: RawChannelContentType,
     val teamId: GenericId,
     val channelId: UniqueId,
@@ -46,8 +47,8 @@ data class GatewayChannelBadgedEvent(
 ): GatewayEvent()
 
 @Serializable
+@SerialName("TeamChannelCategoryCreated")
 data class GatewayTeamChannelCategoryCreatedEvent(
-    val type: String,
     val category: RawChannelCategory,
     val guildedClientId: UniqueId,
     val teamId: GenericId
@@ -55,8 +56,8 @@ data class GatewayTeamChannelCategoryCreatedEvent(
 
 /** Ironically, the boolean [isRoleUpdate] is missing when it's not a role update... */
 @Serializable
+@SerialName("TeamChannelCategoryUpdated")
 data class GatewayTeamChannelCategoryUpdatedEvent(
-    val type: String,
     val isRoleUpdate: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     val category: RawChannelCategory,
     val guildedClientId: UniqueId,
@@ -64,18 +65,18 @@ data class GatewayTeamChannelCategoryUpdatedEvent(
 ): GatewayEvent()
 
 @Serializable
-data class GatewayTeamChannelCategoryGroupMovedEvent(
-    val type: String,
-    val groupId: GenericId,
+@SerialName("TeamChannelCategoryDeleted")
+data class GatewayTeamChannelCategoryDeletedEvent(
     val channelCategoryId: IntGenericId,
-    val channels: List<RawTeamCategoryChannelId>,
+    val channels: List<RawTeamCategoryChannel>,
     val teamId: GenericId
 ): GatewayEvent()
 
 @Serializable
-data class GatewayTeamChannelCategoryDeletedEvent(
-    val type: String,
+@SerialName("TeamChannelCategoryGroupMoved")
+data class GatewayTeamChannelCategoryGroupMovedEvent(
+    val groupId: GenericId,
     val channelCategoryId: IntGenericId,
-    val channels: List<RawTeamCategoryChannel>,
+    val channels: List<RawTeamCategoryChannelId>,
     val teamId: GenericId
 ): GatewayEvent()
