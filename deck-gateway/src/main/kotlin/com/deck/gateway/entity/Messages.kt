@@ -24,21 +24,6 @@ data class RawPartialReceivedMessage(
 )
 
 @Serializable
-data class RawPartialRepliedMessage(
-    val id: UniqueId,
-    val content: RawMessageContent,
-    val type: String,
-    val createdBy: GenericId,
-    val createdAt: Timestamp,
-    val editedAt: Timestamp?,
-    val deletedAt: Timestamp?,
-    val channelId: UniqueId,
-    val webhookId: GenericId?,
-    val isSilent: Boolean,
-    val isPrivate: Boolean
-)
-
-@Serializable
 data class RawPartialDeletedMessage(
     val id: UniqueId,
     val deletedAt: Timestamp,

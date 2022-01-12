@@ -1,8 +1,10 @@
 package com.deck.common.entity
 
 import com.deck.common.util.*
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/** @param description is null only when creating channels */
 @Serializable
 data class RawChannel(
     val id: UniqueId,
@@ -31,13 +33,14 @@ data class RawChannel(
     val isPublic: Boolean,
     @DeckUnknown val priority: Int?,
     val groupId: GenericId?,
-    @DeckUnknown val settings: Unit? = null,
+    @DeckUnknown val settings: Unit?,
     @DeckUnknown val groupType: String = "",
     val rolesById: Dictionary<String, RawRole>,
-    @DeckUnknown val tournamentsRolesById: Unit? = null,
-    @DeckUnsupported val createdByInfo: Unit? = null
+    @DeckUnknown val tournamentsRolesById: OptionalProperty<Unit?> = OptionalProperty.NotPresent,
+    @DeckUnsupported val createdByInfo: OptionalProperty<Unit?> = OptionalProperty.NotPresent
 )
 
+/** @param voiceParticipants is not present on DMChatChannelCreated events */
 @Serializable
 data class RawPrivateChannel(
     val id: UniqueId,
@@ -46,6 +49,8 @@ data class RawPrivateChannel(
     val createdBy: GenericId,
     val updatedAt: Timestamp,
     val name: String?,
+    val description: String?,
+    val lastMessage: RawPartialRepliedMessage,
     val contentType: RawChannelContentType,
     val archivedAt: Timestamp?,
     val autoArchiveAt: Timestamp?,
@@ -56,7 +61,7 @@ data class RawPrivateChannel(
     val archivedByWebhookId: UniqueId?,
     val dmType: String = "Default",
     val ownerId: GenericId,
-    val voiceParticipants: List<RawUser>,
+    val voiceParticipants: OptionalProperty<List<RawUser>> = OptionalProperty.NotPresent,
     val users: List<RawUser>
 )
 
@@ -75,29 +80,22 @@ data class RawChannelCategory(
     val userPermissions: List<RawUserPermission>?
 )
 
-@Serializable(RawChannelType.Serializer::class)
-enum class RawChannelType(val serialName: String) {
-    Team("Team"), Private("DM");
-
-    companion object Serializer: StringIdEnumSerializer<RawChannelType>(
-        StringSerializationStrategy(values().associateBy { it.serialName })
-    )
+@Serializable
+enum class RawChannelType {
+    @SerialName("Team") Team,
+    @SerialName("DM") Private;
 }
 
-@Serializable(RawChannelContentType.Serializer::class)
-enum class RawChannelContentType(val serialName: String) {
-    Chat("chat"),
-    Streaming("stream"),
-    Voice("voice"),
-    Calendar("event"),
-    Scheduling("scheduling"),
-    Announcements("announcements"),
-    Forum("forum"),
-    List("list"),
-    Documentation("doc"),
-    Media("media");
-
-    companion object Serializer: StringIdEnumSerializer<RawChannelContentType>(
-        StringSerializationStrategy(values().associateBy { it.serialName })
-    )
+@Serializable
+enum class RawChannelContentType {
+    @SerialName("chat") Chat,
+    @SerialName("stream") Streaming,
+    @SerialName("voice") Voice,
+    @SerialName("event") Calendar,
+    @SerialName("scheduling") Scheduling,
+    @SerialName("announcements") Announcements,
+    @SerialName("forum") Forum,
+    @SerialName("list") List,
+    @SerialName("doc") Documentation,
+    @SerialName("media") Media;
 }

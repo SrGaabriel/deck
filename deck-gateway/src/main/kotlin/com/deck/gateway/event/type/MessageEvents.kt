@@ -1,14 +1,10 @@
 package com.deck.gateway.event.type
 
-import com.deck.common.entity.RawChannelContentType
-import com.deck.common.entity.RawChannelType
-import com.deck.common.entity.RawMessageMentionedUserInfo
-import com.deck.common.entity.RawReaction
+import com.deck.common.entity.*
 import com.deck.common.util.*
 import com.deck.gateway.entity.RawPartialDeletedMessage
 import com.deck.gateway.entity.RawPartialReactedMessage
 import com.deck.gateway.entity.RawPartialReceivedMessage
-import com.deck.gateway.entity.RawPartialRepliedMessage
 import com.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

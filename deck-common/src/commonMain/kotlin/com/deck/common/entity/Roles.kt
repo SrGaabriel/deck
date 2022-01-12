@@ -1,9 +1,6 @@
 package com.deck.common.entity
 
-import com.deck.common.util.GenericId
-import com.deck.common.util.IntGenericId
-import com.deck.common.util.LongGenericId
-import com.deck.common.util.Timestamp
+import com.deck.common.util.*
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -21,7 +18,7 @@ data class RawRole(
     val priority: Int,
     val botScope: RawRoleBotScope?,
     val teamId: GenericId,
-    val updatedAt: Timestamp,
+    val updatedAt: Timestamp?,
     val permissions: RawRolePermissions
 )
 
@@ -47,6 +44,7 @@ data class RawRolePermissions(
     val xp: Int = 0
 )
 
+/** @param channelCategoryId is missing when the channel doesn't have an ID */
 @Serializable
 data class RawRolePermissionsOverwritten(
     val teamId: GenericId,
@@ -55,7 +53,7 @@ data class RawRolePermissionsOverwritten(
     val teamRoleId: IntGenericId,
     val denyPermissions: RawRolePermissions,
     val allowPermissions: RawRolePermissions,
-    val channelCategoryId: IntGenericId
+    val channelCategoryId: OptionalProperty<IntGenericId> = OptionalProperty.NotPresent
 )
 
 @Serializable

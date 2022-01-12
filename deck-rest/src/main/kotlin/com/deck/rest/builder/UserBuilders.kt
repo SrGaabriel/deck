@@ -4,7 +4,7 @@ import com.deck.common.entity.RawUserAboutInfo
 import com.deck.common.util.Constants
 import com.deck.common.util.GameStatus
 import com.deck.common.util.GenericId
-import com.deck.common.util.PresenceType
+import com.deck.common.util.RawUserPresenceType
 import com.deck.rest.request.CreateDMChannelRequest
 import com.deck.rest.request.ModifySelfUserRequest
 import com.deck.rest.request.SetUserTransientStatusRequest
@@ -34,11 +34,11 @@ class CreateDMChannelBuilder : RequestBuilder<CreateDMChannelRequest> {
 class SetUserTransientStatusBuilder : RequestBuilder<SetUserTransientStatusRequest> {
     var id: Int = Constants.DefaultGenericIntId
     var game: GameStatus? = null
-    var type: PresenceType? = null
+    var type: RawUserPresenceType = RawUserPresenceType.Game
 
     override fun toRequest() = SetUserTransientStatusRequest(
         id,
         game?.id,
-        type!!.rawName
+        type
     )
 }

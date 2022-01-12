@@ -7,11 +7,6 @@ import com.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-// The parameters are the same, so why not just make update a typealias?
-typealias GatewayTeamGroupUpdatedEvent = GatewayTeamGroupCreatedEvent
-// Again, both events have the same parameters
-typealias GatewayTeamGroupRestoredEvent = GatewayTeamGroupArchivedEvent
-
 @Serializable
 @SerialName("TeamGroupCreated")
 data class GatewayTeamGroupCreatedEvent(
@@ -23,6 +18,22 @@ data class GatewayTeamGroupCreatedEvent(
 @Serializable
 @SerialName("TeamGroupArchived")
 data class GatewayTeamGroupArchivedEvent(
+    val teamId: GenericId,
+    val groupId: GenericId,
+    val guildedClientId: UniqueId
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamGroupUpdated")
+data class GatewayTeamGroupUpdatedEvent(
+    val group: RawGroup,
+    val teamId: GenericId,
+    val guildedClientId: UniqueId
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamGroupRestored")
+data class GatewayTeamGroupRestoredEvent(
     val teamId: GenericId,
     val groupId: GenericId,
     val guildedClientId: UniqueId

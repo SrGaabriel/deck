@@ -3,6 +3,7 @@ package com.deck.rest.request
 import com.deck.common.entity.*
 import com.deck.common.util.GenericId
 import com.deck.common.util.OptionalProperty
+import com.deck.common.util.RawUserPresenceType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -48,7 +49,7 @@ data class SetSelfPresenceRequest(
 data class SetUserTransientStatusRequest(
     val id: Int,
     val gameId: Int?,
-    val type: String
+    val type: RawUserPresenceType
 )
 
 @Serializable

@@ -20,7 +20,7 @@ data class RawUser(
     val joinDate: OptionalProperty<Timestamp> = OptionalProperty.NotPresent,
     val steamId: OptionalProperty<String?> = OptionalProperty.NotPresent,
     val userStatus: RawUserStatus,
-    val userPresenceStatus: RawUserPresenceStatus,
+    val userPresenceStatus: OptionalProperty<RawUserPresenceStatus> = OptionalProperty.NotPresent,
     val userTransientStatus: OptionalProperty<RawTransientStatus?> = OptionalProperty.NotPresent,
     @DeckUnknown
     val moderationStatus: Unit? = null,
@@ -44,7 +44,7 @@ data class RawUserStatus(
 data class RawTransientStatus(
     val id : IntGenericId,
     @SerialName("gameId") val game: GameStatus,
-    val type: PresenceType,
+    val type: RawUserPresenceType,
     val startedAt: Timestamp,
     val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent
 )

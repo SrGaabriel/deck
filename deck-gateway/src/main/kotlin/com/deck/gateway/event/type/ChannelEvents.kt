@@ -1,11 +1,9 @@
 package com.deck.gateway.event.type
 
-import com.deck.common.entity.RawChannel
-import com.deck.common.entity.RawChannelCategory
-import com.deck.common.entity.RawChannelContentType
+import com.deck.common.entity.*
 import com.deck.common.util.*
-import com.deck.gateway.com.deck.gateway.entity.RawTeamCategoryChannel
-import com.deck.gateway.com.deck.gateway.entity.RawTeamCategoryChannelId
+import com.deck.gateway.com.deck.gateway.entity.*
+import com.deck.gateway.entity.RawUserIdObject
 import com.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -17,6 +15,16 @@ data class GatewayTeamChannelCreatedEvent(
     val name: String,
     val guildedClientId: UniqueId,
     val teamId: GenericId
+): GatewayEvent()
+
+/** Again, the [isRoleUpdate] parameter is missing when it's not a role update */
+@Serializable
+@SerialName("TeamChannelUpdated")
+data class GatewayTeamChannelUpdatedEvent(
+    val channel: RawPartialTeamChannel,
+    val teamId: GenericId,
+    val isRoleUpdate: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
+    val guildedClientId: UniqueId
 ): GatewayEvent()
 
 @Serializable
@@ -79,4 +87,62 @@ data class GatewayTeamChannelCategoryGroupMovedEvent(
     val channelCategoryId: IntGenericId,
     val channels: List<RawTeamCategoryChannelId>,
     val teamId: GenericId
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamChannelVoiceParticipantAdded")
+data class GatewayTeamChannelVoiceParticipantAddedEvent(
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId?,
+    val contentType: RawChannelContentType,
+    val user: RawUserIdObject
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamChannelVoiceParticipantRemoved")
+data class GatewayTeamChannelVoiceParticipantRemovedEvent(
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId?,
+    val contentType: RawChannelContentType,
+    val user: RawUserIdObject
+): GatewayEvent()
+
+@Serializable
+@SerialName("DMChatChannelCreated")
+data class GatewayPrivateChatChannelCreatedEvent(
+    val channelId: UniqueId,
+    val channel: RawPrivateChannel
+): GatewayEvent()
+
+@Serializable
+@SerialName("ChatChannelUpdated")
+data class GatewayChatChannelUpdatedEvent(
+    val channelId: UniqueId,
+    val channelType: RawChannelType,
+    val contentType: RawChannelContentType,
+    val channel: OptionalProperty<RawPartialPrivateChannel> = OptionalProperty.NotPresent,
+    val removedInfo: OptionalProperty<RawPrivateChannelRemovedInfo> = OptionalProperty.NotPresent
+): GatewayEvent()
+
+@Serializable
+@SerialName("ChatChannelBroadcastCall")
+data class GatewayChatChannelBroadcastCallEvent(
+    val channelId: UniqueId,
+    val participants: List<RawUserIdObject>,
+    val callStartTime: Timestamp,
+    val callerName: String,
+    val callType: RawChannelContentType
+): GatewayEvent()
+
+@Serializable
+@SerialName("ChatChannelBroadcastCallResponse")
+data class GatewayChatChannelBroadcastCallResponseEvent(
+    val channelId: UniqueId,
+    val userId: GenericId,
+    val callType: RawChannelContentType,
+    val response: RawBroadcastCallResponse
 ): GatewayEvent()
