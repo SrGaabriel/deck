@@ -98,9 +98,23 @@ enum class RawChannelContentType {
     @SerialName("voice") Voice,
     @SerialName("event") Calendar,
     @SerialName("scheduling") Scheduling,
-    @SerialName("announcements") Announcements,
+    @SerialName("announcement") Announcements,
     @SerialName("forum") Forum,
     @SerialName("list") List,
     @SerialName("doc") Documentation,
     @SerialName("media") Media;
 }
+
+/** Parameters [gameId] and [teamId] are absent when reply is sent in a forum. */
+@Serializable
+data class RawChannelContentReply @OptIn(ExperimentalSerializationApi::class) constructor(
+    val id: IntGenericId,
+    val message: RawMessageContent,
+    val createdAt: Timestamp,
+    val editedAt: Timestamp?,
+    val gameId: OptionalProperty<Int?> = OptionalProperty.NotPresent,
+    val teamId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+    @JsonNames("contentId", "repliesTo")
+    val contentId: IntGenericId,
+    val createdBy: GenericId
+)

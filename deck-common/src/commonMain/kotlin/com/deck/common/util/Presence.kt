@@ -583,7 +583,5 @@ enum class GameStatus(val id: Int) {
     KnockoutCity(476074),
     FarmingSimulator19(477074);
 
-    companion object Serializer: IntIdEnumSerializer<GameStatus>(
-        IntSerializationStrategy(values().associateBy { it.id })
-    )
+    companion object Serializer: IntIdEnumSerializer<GameStatus>(IntSerializationStrategy(values().associateBy { it.id }))
 }

@@ -7,6 +7,7 @@ import com.deck.gateway.entity.RawUserIdObject
 import com.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 @Serializable
 @SerialName("TeamChannelCreated")
@@ -206,4 +207,148 @@ data class GatewaySelfChannelSeenEvent(
     val clearAllBadges: Boolean,
     val contentType: RawChannelContentType,
     val guildedClientId: UniqueId
+): GatewayEvent()
+
+@Serializable
+@SerialName("TEAM_CHANNEL_CONTENT_CREATED")
+data class GatewayTeamChannelContentCreatedEvent(
+    val guildedClientId: UniqueId,
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val createdAt: Timestamp,
+    val contentId: JsonElement,
+    val createdBy: GenericId,
+    val event: OptionalProperty<RawChannelEvent> = OptionalProperty.NotPresent,
+    val isRepeating: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
+    val listItem: OptionalProperty<RawChannelListItem> = OptionalProperty.NotPresent,
+    val thread: OptionalProperty<RawChannelForumThread> = OptionalProperty.NotPresent,
+    val availability: OptionalProperty<RawChannelScheduleAvailability> = OptionalProperty.NotPresent,
+    @SerialName("doc") val document: OptionalProperty<RawChannelDocument> = OptionalProperty.NotPresent,
+    val media: OptionalProperty<RawChannelMedia> = OptionalProperty.NotPresent
+): GatewayEvent()
+
+/** Parameters [guildedClientId], [updatedBy] and [contentId] aren't present when editing reply or simple boolean properties (for example, the reply lock in forums) */
+@Serializable
+@SerialName("TEAM_CHANNEL_CONTENT_UPDATED")
+data class GatewayTeamChannelContentUpdatedEvent(
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val updatedBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+    val contentId: OptionalProperty<JsonElement> = OptionalProperty.NotPresent,
+    @Deprecated("Useless") val event: OptionalProperty<List<Unit>> = OptionalProperty.NotPresent,
+    val isRepeating: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
+    val listItem: OptionalProperty<RawChannelListItem> = OptionalProperty.NotPresent,
+    val thread: OptionalProperty<RawPartialChannelForumThread> = OptionalProperty.NotPresent,
+    val availability: OptionalProperty<RawChannelScheduleAvailability> = OptionalProperty.NotPresent,
+    @SerialName("doc") val document: OptionalProperty<RawChannelDocument> = OptionalProperty.NotPresent,
+    val media: OptionalProperty<RawChannelMedia> = OptionalProperty.NotPresent,
+    val reply: OptionalProperty<RawChannelReplyProperties> = OptionalProperty.NotPresent,
+    val createdAt: OptionalProperty<Timestamp> = OptionalProperty.NotPresent
+): GatewayEvent()
+
+/**
+ * @param createdAt is missing when forum topics are deleted (there could be more scenarios though)
+ * @param guildedClientId is missing when docs are deleted (there could be more scenarios though)
+ */
+@Serializable
+@SerialName("TEAM_CHANNEL_CONTENT_DELETED")
+data class GatewayTeamChannelContentDeletedEvent(
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val createdAt: OptionalProperty<Timestamp> = OptionalProperty.NotPresent,
+    val deletedBy: GenericId,
+    val contentId: JsonElement
+): GatewayEvent()
+
+@Serializable
+@SerialName("TEAM_CHANNEL_ARCHIVED")
+data class GatewayTeamChannelArchivedEvent(
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val archivedBy: GenericId,
+    val silenceNotification: Boolean
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamEventRemoved")
+data class GatewayTeamEventRemovedEvent(
+    val familyId: UniqueId,
+    val guildedClientId: UniqueId,
+    val teamId: GenericId
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamChannelAvailabilitiesUpdated")
+data class GatewayTeamChannelAvailabilitiesUpdatedEvent(
+    val channelId: UniqueId,
+    val availabilities: List<RawChannelScheduleAvailability>,
+    val teamId: GenericId
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamChannelAvailabilitiesRemoved")
+data class GatewayTeamChannelAvailabilitiesRemovedEvent(
+    val channelId: UniqueId,
+    val availabilityId: IntGenericId,
+    val teamId: GenericId
+): GatewayEvent()
+
+@Serializable
+@SerialName("TEAM_CHANNEL_CONTENT_REPLY_CREATED")
+data class GatewayTeamChannelContentReplyCreatedEvent(
+    val guildedClientId: UniqueId,
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val contentId: GenericId,
+    val createdAt: Timestamp,
+    val createdBy: GenericId,
+    val reply: RawChannelContentReply,
+    val silenceNotification: Boolean
+): GatewayEvent()
+
+@Serializable
+@SerialName("TEAM_CHANNEL_CONTENT_REPLY_UPDATED")
+data class GatewayTeamChannelContentReplyUpdatedEvent(
+    val guildedClientId: UniqueId,
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val updatedBy: GenericId,
+    val contentId: GenericId,
+    val isContentReply: Boolean,
+    val createdBy: GenericId,
+    val message: RawMessageContent
+): GatewayEvent()
+
+@Serializable
+@SerialName("TEAM_CHANNEL_CONTENT_REPLY_DELETED")
+data class GatewayTeamChannelContentReplyDeletedEvent(
+    val channelId: UniqueId,
+    val channelCategoryId: IntGenericId?,
+    val channelType: RawChannelType,
+    val teamId: GenericId,
+    val contentType: RawChannelContentType,
+    val createdAt: Timestamp,
+    val deletedBy: GenericId,
+    val contentId: GenericId,
+    val contentReplyId: IntGenericId
 ): GatewayEvent()

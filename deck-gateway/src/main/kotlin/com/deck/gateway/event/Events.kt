@@ -84,6 +84,16 @@ private val serializationModule by lazy {
             subclass(GatewayTeamChannelCategoryPrioritiesUpdatedEvent::class)
             subclass(GatewayTeamGameAddedEvent::class)
             subclass(GatewayTeamUserGroupPrioritiesUpdated::class)
+            subclass(GatewayTeamChannelContentCreatedEvent::class)
+            subclass(GatewayTeamChannelContentUpdatedEvent::class)
+            subclass(GatewayTeamChannelContentDeletedEvent::class)
+            subclass(GatewayTeamEventRemovedEvent::class)
+            subclass(GatewayTeamChannelArchivedEvent::class)
+            subclass(GatewayTeamChannelAvailabilitiesUpdatedEvent::class)
+            subclass(GatewayTeamChannelAvailabilitiesRemovedEvent::class)
+            subclass(GatewayTeamChannelContentReplyCreatedEvent::class)
+            subclass(GatewayTeamChannelContentReplyUpdatedEvent::class)
+            subclass(GatewayTeamChannelContentReplyDeletedEvent::class)
         }
     }
 }

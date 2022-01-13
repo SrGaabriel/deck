@@ -19,7 +19,7 @@ open class IdentifiableEnumSerializationStrategy<E: Enum<E>, ID>(private val val
         values.filter { it.value == value }.firstNotNullOf { it.key }
 }
 
-open class IntIdEnumSerializer<T: Enum<T>>(val strategy: IdentifiableEnumSerializationStrategy<T, Int>): KSerializer<T> {
+open class IntIdEnumSerializer<T: Enum<T>>(private val strategy: IdentifiableEnumSerializationStrategy<T, Int>): KSerializer<T> {
     override fun deserialize(decoder: Decoder): T =
         strategy.getValueByIdentifier(decoder.decodeInt())
 
