@@ -3,6 +3,11 @@ plugins {
 
 }
 
+subprojects {
+    group = "com.deck"
+    version = Dependencies.Version
+}
+
 repositories {
     mavenCentral()
 }
