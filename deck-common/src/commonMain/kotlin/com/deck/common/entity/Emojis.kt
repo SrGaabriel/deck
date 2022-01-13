@@ -32,5 +32,5 @@ data class RawCustomReaction(
     val name: String,
     val png: String,
     val webp: String?,
-    val apgn: OptionalProperty<String> = OptionalProperty.NotPresent
+    val apgn: OptionalProperty<String?> = OptionalProperty.NotPresent
 )

@@ -1,6 +1,9 @@
 package com.deck.common.entity
 
-import com.deck.common.util.*
+import com.deck.common.util.GameStatus
+import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
+import com.deck.common.util.Timestamp
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -19,7 +22,7 @@ data class RawGroup(
     val visibilityTeamRoleId: IntGenericId?,
     val visibilityTeamRoleIds: List<IntGenericId>,
     val additionalVisibilityTeamRoleIds: List<IntGenericId>?,
-    val membershipTeamRoleId: IntGenericId,
+    val membershipTeamRoleId: IntGenericId?,
     val membershipTeamRoleIds: List<IntGenericId>,
     val additionalMembershipTeamRoleIds: List<IntGenericId>?,
     val isBase: Boolean,

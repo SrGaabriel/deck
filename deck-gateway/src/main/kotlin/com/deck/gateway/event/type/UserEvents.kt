@@ -1,5 +1,6 @@
 package com.deck.gateway.event.type
 
+import com.deck.common.entity.RawUserPresenceStatus
 import com.deck.common.util.DeckExperimental
 import com.deck.common.util.GenericId
 import com.deck.common.util.OptionalProperty
@@ -39,4 +40,10 @@ data class GatewayUserTeamSectionSeen(
     val itemId: UniqueId,
     val teamId: GenericId,
     val guildedClientId: UniqueId
+): GatewayEvent()
+
+@Serializable
+@SerialName("USER_PRESENCE_MANUALLY_SET")
+data class GatewayUserPresenceManuallySetEvent(
+    val status: RawUserPresenceStatus
 ): GatewayEvent()

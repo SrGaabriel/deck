@@ -5,7 +5,6 @@ import com.deck.common.util.*
 import com.deck.gateway.com.deck.gateway.entity.RawPartialBot
 import com.deck.gateway.com.deck.gateway.entity.RawTeamInfo
 import com.deck.gateway.entity.RawTeamMemberRoleId
-import com.deck.gateway.entity.RawUserIdObject
 import com.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -43,29 +42,6 @@ data class GatewayTeamRolesUpdatedEvent(
     val rolesById: Dictionary<String, RawRole>?,
     val isDelete: Boolean,
     val memberRoleIds: OptionalProperty<List<RawTeamMemberRoleId>> = OptionalProperty.NotPresent
-): GatewayEvent()
-
-@Serializable
-@SerialName("TeamChannelStreamRemoved")
-data class GatewayTeamChannelStreamRemovedEvent(
-    val channelId: UniqueId,
-    val channelCategoryId: IntGenericId?,
-    val channelType: RawChannelType,
-    val teamId: GenericId,
-    val contentType: RawChannelContentType,
-    val user: RawUserIdObject
-): GatewayEvent()
-
-@Serializable
-@SerialName("TeamChannelStreamEnded")
-data class GatewayTeamChannelStreamEndedEvent(
-    val channelId: UniqueId,
-    val channelCategoryId: IntGenericId?,
-    val channelType: RawChannelType,
-    val teamId: GenericId,
-    val contentType: RawChannelContentType,
-    val groupId: GenericId,
-    // val userStreams: List<*>
 ): GatewayEvent()
 
 @Serializable
@@ -131,4 +107,26 @@ data class GatewayTeamServerSubscriptionPlanDeletedEvent(
 data class GatewayTeamGameAddedEvent(
     @SerialName("gameId") val game: GameStatus,
     val teamId: GenericId
+): GatewayEvent()
+
+@Serializable
+@SerialName("teamContentReactionsAdded")
+data class GatewayTeamContentReactionsAddedEvent(
+    val contentType: String, // warning: this isn't the channel's content type
+    val contentId: IntGenericId,
+    val userId: GenericId,
+    val customReactionId: IntGenericId,
+    val teamId: GenericId,
+    val customReaction: RawCustomReaction
+): GatewayEvent()
+
+@Serializable
+@SerialName("teamContentReactionsRemoved")
+data class GatewayTeamContentReactionsRemovedEvent(
+    val contentType: String, // warning: this isn't the channel's content type
+    val contentId: IntGenericId,
+    val userId: GenericId,
+    val customReactionId: IntGenericId,
+    val teamId: GenericId,
+    val customReaction: RawCustomReaction
 ): GatewayEvent()
