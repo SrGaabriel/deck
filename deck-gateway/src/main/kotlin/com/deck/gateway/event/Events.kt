@@ -133,7 +133,7 @@ class DefaultEventDecoder(private val gatewayId: Int): EventDecoder {
     }.onFailure { it.printStackTrace() }.getOrNull()
 
     override fun decodePayloadFromString(string: String): Payload? {
-        if (string.startsWith("0{")) // Handle payload event (different opcode)
+        if (string.startsWith("0{")) // Handle hello event (different structure)
             return Payload("Hello", string.substring(1))
         val payload = Payload(
             type = string.substringAfter('"').substringBefore('"'),

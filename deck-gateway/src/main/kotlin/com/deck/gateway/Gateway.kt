@@ -1,6 +1,9 @@
 package com.deck.gateway
 
-import com.deck.common.util.*
+import com.deck.common.util.Constants
+import com.deck.common.util.DeckDSL
+import com.deck.common.util.DeckUnknown
+import com.deck.common.util.GenericId
 import com.deck.gateway.event.*
 import com.deck.gateway.event.type.GatewayHelloEvent
 import io.ktor.client.*
@@ -99,12 +102,12 @@ class DefaultGateway(
      * if they're Pong (response to heartbeats) payloads.
      */
     override suspend fun startListening(): Job = scope.launch {
-        webSocketSession.incoming.receiveAsFlow().filterIsInstance<Frame.Text>().collect {
-            if (it.data.contentEquals(Constants.GatewayPongContent.toByteArray())) return@collect
-            val payload = eventDecoder.decodePayloadFromString(it.readText()) ?: return@collect
+        webSocketSession.incoming.receiveAsFlow().filterIsInstance<Frame.Text>().collect { frame ->
+            if (frame.data.contentEquals(Constants.GatewayPongContent.toByteArray())) return@collect
+            val payload = eventDecoder.decodePayloadFromString(frame.readText()) ?: return@collect
             val event = eventDecoder.decodeEventFromPayload(payload)
                 ?: return@collect logger.info { "[DECK Gateway #${gatewayId}] Failed to parse event with body ${payload.json}" }
-            logger.info { "[DECK Gateway #${gatewayId}] Received event ${payload.type}".let { log -> if (debugPayloads) "$log with JSON ${payload.json}" else it } }
+            logger.info { "[DECK Gateway #${gatewayId}] Received event ${payload.type}".let { log -> if (debugPayloads) "$log with JSON ${payload.json}" else log } }
             eventSharedFlow.emit(event)
         }
     }.also { listeningJob = it }
@@ -126,7 +129,7 @@ class DefaultGateway(
     override suspend fun sendCommand(command: GatewayCommand) = scope.launch {
         val encoded = commandEncoder.encodeCommandToString(command)
         webSocketSession.send(Frame.Text(encoded))
-        logger.info { "[DECK Gateway #${gatewayId}] Sent command ${encoded}" }
+        logger.info { "[DECK Gateway #${gatewayId}] Sent command $encoded" }
     }.let {}
 
     override suspend fun disconnect(expectingReconnect: Boolean) {

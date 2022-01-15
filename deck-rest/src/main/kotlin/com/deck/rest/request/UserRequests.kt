@@ -11,7 +11,7 @@ data class SelfUserResponse(
     val updateMessage: String?,
     val user: RawUser,
     val teams: List<RawTeam>,
-    val customReactions: List<GenericId>,
+    val customReactions: List<RawCustomReaction>,
     val customEmojis: OptionalProperty<List<GenericId>> = OptionalProperty.NotPresent,
     val landingUrl: Boolean,
     val friends: List<RawFriend>
