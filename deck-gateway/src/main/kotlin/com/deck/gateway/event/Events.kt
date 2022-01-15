@@ -15,7 +15,7 @@ import kotlinx.serialization.modules.subclass
 @Serializable
 abstract class GatewayEvent {
     @Transient
-    var gatewayId = -1
+    open var gatewayId = -1
 }
 
 @OptIn(DeckExperimental::class)

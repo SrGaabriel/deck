@@ -5,8 +5,10 @@ import com.deck.common.util.GenericId
 import com.deck.gateway.Gateway
 import com.deck.gateway.GatewayOrchestrator
 import com.deck.gateway.start
+import com.deck.gateway.util.EventSupplier
+import com.deck.gateway.util.EventSupplierData
 
-interface GatewayModule {
+interface GatewayModule: EventSupplier {
     val orchestrator: GatewayOrchestrator
     val globalGateway: Gateway
 
@@ -26,6 +28,8 @@ class DefaultGatewayModule: GatewayModule {
 
     override var auth: AuthenticationResult by orchestrator::authentication
     override var logPayloadsJson: Boolean by orchestrator::debugPayloads
+
+    override val eventSupplierData: EventSupplierData by orchestrator::eventSupplierData
 
     override suspend fun start() {
         globalGateway = orchestrator.openGateway()

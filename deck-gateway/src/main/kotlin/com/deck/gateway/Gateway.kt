@@ -1,18 +1,19 @@
 package com.deck.gateway
 
 import com.deck.common.util.Constants
-import com.deck.common.util.DeckDSL
 import com.deck.common.util.DeckUnknown
 import com.deck.common.util.GenericId
 import com.deck.gateway.event.*
 import com.deck.gateway.event.type.GatewayHelloEvent
+import com.deck.gateway.util.EventSupplier
+import com.deck.gateway.util.EventSupplierData
+import com.deck.gateway.util.await
 import io.ktor.client.*
 import io.ktor.client.features.websocket.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ticker
 import kotlinx.coroutines.flow.*
 import mu.KLoggable
@@ -21,7 +22,7 @@ import mu.KLogger
 /**
  * Base gateway interface
  */
-interface Gateway {
+interface Gateway: EventSupplier {
     val gatewayId: Int
     val scope: CoroutineScope
     val hello: GatewayHelloEvent
@@ -59,7 +60,7 @@ data class GatewayParameters(
 ) {
     fun buildPath() = "socket.io/?jwt=$jwt&EIO=$eioVersion&transport=$transport&guildedClientId=$guildedClientId".let {
         if (teamId != null) "$it&teamId=$teamId" else it
-    }.also { println(it) }
+    }
 }
 
 /**
@@ -83,6 +84,13 @@ class DefaultGateway(
     private lateinit var heartbeatJob: Job
 
     override val logger: KLogger = logger("Gateway $gatewayId Logger")
+
+    override val eventSupplierData: EventSupplierData by lazy {
+        EventSupplierData(
+            scope = scope,
+            sharedFlow = eventSharedFlow
+        )
+    }
 
     /**
      * Simply creates the websocket session with the specified
@@ -151,50 +159,4 @@ suspend fun Gateway.start() {
     connect()
     startListening()
     startHeartbeat()
-}
-
-@DeckDSL
-inline fun <reified T : GatewayEvent> GatewayOrchestrator.on(
-    scope: CoroutineScope = this,
-    noinline callback: suspend T.() -> Unit
-): Job = on(null, scope, globalEventsFlow, callback)
-
-@DeckDSL
-suspend inline fun <reified T : GatewayEvent> GatewayOrchestrator.await(
-    timeout: Long = 4000,
-    scope: CoroutineScope = this,
-): T? = await(null, scope, globalEventsFlow, timeout)
-
-@DeckDSL
-inline fun <reified T : GatewayEvent> Gateway.on(
-    scope: CoroutineScope = this.scope,
-    noinline callback: suspend T.() -> Unit
-): Job = on(gatewayId, scope, eventSharedFlow, callback)
-
-@DeckDSL
-suspend inline fun <reified T : GatewayEvent> Gateway.await(
-    timeout: Long = 4000,
-    scope: CoroutineScope = this.scope,
-): T? = await(gatewayId, scope, eventSharedFlow, timeout)
-
-inline fun <reified T : GatewayEvent> on(
-    gatewayId: Int?,
-    scope: CoroutineScope,
-    eventsFlow: SharedFlow<GatewayEvent>,
-    noinline callback: suspend T.() -> Unit
-): Job = eventsFlow.buffer(Channel.UNLIMITED).filterIsInstance<T>().filter { it.gatewayId == (gatewayId ?: return@filter true) }.onEach(callback).launchIn(scope)
-
-@OptIn(ExperimentalCoroutinesApi::class)
-suspend inline fun <reified T : GatewayEvent> await(
-    gatewayId: Int?,
-    scope: CoroutineScope,
-    eventsFlow: SharedFlow<GatewayEvent>,
-    timeout: Long = 4000
-): T? = withTimeoutOrNull(timeout) {
-    suspendCancellableCoroutine<T> { continuation ->
-        scope.launch {
-            val event = eventsFlow.buffer(Channel.UNLIMITED).filterIsInstance<T>().filter { it.gatewayId == (gatewayId ?: return@filter true) }.first()
-            continuation.resume(event) {}
-        }
-    }
 }
