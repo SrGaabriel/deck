@@ -27,8 +27,7 @@ open class OptionalPropertySerializer<T>(
     final override fun serialize(encoder: Encoder, value: OptionalProperty<T>) {
         when (value) {
             OptionalProperty.NotPresent -> throw SerializationException(
-                "Tried to serialize an optional property that had no value present." +
-                        " Is encodeDefaults false?"
+                "Tried to serialize an optional property that had no value present."
             )
             is OptionalProperty.Present ->
                 valueSerializer.serialize(encoder, value.value)
@@ -37,3 +36,21 @@ open class OptionalPropertySerializer<T>(
 }
 
 fun <T> T.optional() = OptionalProperty.Present(this)
+
+fun <T> T?.nullableOptional() =
+    if (this == null) OptionalProperty.NotPresent else OptionalProperty.Present(this)
+
+fun <T> OptionalProperty<T>.asNullable(): T? = when(this) {
+    is OptionalProperty.NotPresent -> null
+    is OptionalProperty.Present<T> -> value
+}
+
+fun <T, F> OptionalProperty<T>.map(block: (T) -> F): OptionalProperty<F> = when(this) {
+    is OptionalProperty.NotPresent -> OptionalProperty.NotPresent
+    is OptionalProperty.Present<T> -> block(this.value).optional()
+}
+
+fun <T, F : Any> OptionalProperty<T?>.mapNotNull(block: (T) -> F): OptionalProperty<F> = when(this) {
+    is OptionalProperty.NotPresent -> OptionalProperty.NotPresent
+    is OptionalProperty.Present<T?> -> if (value == null) OptionalProperty.NotPresent else block(value).optional()
+}

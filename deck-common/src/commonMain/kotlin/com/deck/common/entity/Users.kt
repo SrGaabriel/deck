@@ -32,11 +32,10 @@ data class RawUser(
 
 @Serializable
 data class RawUserStatus(
-    @DeckUnsupported
-    val content: String? = null,
+    val content: RawMessageContent,
     val customReactionId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
     @DeckUnknown
-    val customReaction: OptionalProperty<RawEmoji?> = OptionalProperty.NotPresent,
+    val customReaction: OptionalProperty<RawCustomReaction?> = OptionalProperty.NotPresent,
     val expireInMs: OptionalProperty<Long> = OptionalProperty.NotPresent
 )
 
@@ -52,7 +51,7 @@ data class RawTransientStatus(
 @Serializable
 data class RawUserAboutInfo(
     val bio: String?,
-    val tagLine: String?
+    val tagLine: OptionalProperty<String> = OptionalProperty.NotPresent
 )
 
 @Serializable

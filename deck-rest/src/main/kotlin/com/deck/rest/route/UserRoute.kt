@@ -18,7 +18,7 @@ class UserRoute(client: RestClient) : Route(client) {
         method = HttpMethod.Get
     )
 
-    suspend fun getUser(id: GenericId) = sendRequest<UserResponse, Unit>(
+    suspend fun getUser(id: GenericId) = sendNullableRequest<UserResponse, Unit>(
         endpoint = "/users/$id",
         method = HttpMethod.Get
     )
@@ -40,6 +40,18 @@ class UserRoute(client: RestClient) : Route(client) {
     suspend fun getUserDMs(selfId: GenericId) = sendRequest<UserDMResponse, Unit>(
         endpoint = "/users/$selfId/channels",
         method = HttpMethod.Get
+    )
+
+    suspend fun updateSelfAvatar(url: String) = sendRequest<SelfUpdateAvatarResponse, SelfUpdateAvatarRequest>(
+        endpoint = "/users/me/profile/images",
+        method = HttpMethod.Post,
+        body = SelfUpdateAvatarRequest(imageUrl = url)
+    )
+
+    suspend fun updateSelfBanner(url: String) = sendRequest<SelfUpdateBannerResponse, SelfUpdateAvatarRequest>(
+        endpoint = "/users/me/profile/images/banner",
+        method = HttpMethod.Post,
+        body = SelfUpdateAvatarRequest(imageUrl = url)
     )
 
     suspend fun createDMChannel(selfId: GenericId, builder: CreateDMChannelBuilder.() -> Unit) = sendRequest<UserDMResponse, CreateDMChannelRequest>(

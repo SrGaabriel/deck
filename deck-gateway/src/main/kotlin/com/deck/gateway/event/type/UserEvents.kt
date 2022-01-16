@@ -1,5 +1,6 @@
 package com.deck.gateway.event.type
 
+import com.deck.common.entity.RawUserAboutInfo
 import com.deck.common.entity.RawUserPresenceStatus
 import com.deck.common.util.DeckExperimental
 import com.deck.common.util.GenericId
@@ -8,6 +9,15 @@ import com.deck.common.util.UniqueId
 import com.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
+@Serializable
+@SerialName("USER_UPDATED")
+data class GatewayUserUpdatedEvent(
+    val name: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val avatar: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val subdomain: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val aboutInfo: OptionalProperty<RawUserAboutInfo> = OptionalProperty.NotPresent,
+): GatewayEvent()
 
 @Serializable
 @DeckExperimental

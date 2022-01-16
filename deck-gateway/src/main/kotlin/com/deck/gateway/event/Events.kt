@@ -100,6 +100,7 @@ private val serializationModule by lazy {
             subclass(GatewayTeamContentReactionsRemovedEvent::class)
             subclass(GatewayChatChannelNicknameChangedEvent::class)
             subclass(GatewayUserPresenceManuallySetEvent::class)
+            subclass(GatewayUserUpdatedEvent::class)
         }
     }
 }

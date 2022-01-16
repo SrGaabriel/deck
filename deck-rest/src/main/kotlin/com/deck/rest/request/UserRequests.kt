@@ -58,3 +58,22 @@ data class SelfReferralStatisticsResponse(
     val stonks: Int,
     val requiredForNextStonk: Int
 )
+
+@Serializable
+data class SelfUpdateAvatarRequest(
+    val imageUrl: String
+)
+
+@Serializable
+data class SelfUpdateAvatarResponse(
+    val profilePictureSm: String,
+    val profilePicture: String,
+    val profilePictureLg: String
+)
+
+@Serializable
+data class SelfUpdateBannerResponse(
+    val profileBannerSm: String,
+    val profileBannerLg: String,
+    val profileBannerBlur: String
+)

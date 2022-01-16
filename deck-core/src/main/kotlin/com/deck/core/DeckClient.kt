@@ -2,12 +2,14 @@ package com.deck.core
 
 import com.deck.common.util.Authentication
 import com.deck.common.util.AuthenticationResult
+import com.deck.core.com.deck.core.service.DefaultUserService
+import com.deck.core.com.deck.core.service.UserService
 import com.deck.core.event.DefaultEventService
 import com.deck.core.event.EventService
 import com.deck.core.module.GatewayModule
 import com.deck.core.module.RestModule
-import com.deck.core.service.AuthenticationService
-import com.deck.core.service.DefaultAuthenticationService
+import com.deck.core.service.AuthService
+import com.deck.core.service.DefaultAuthService
 import com.deck.core.util.setAuthentication
 import com.deck.gateway.util.EventSupplier
 
@@ -20,8 +22,10 @@ class DeckClient(
     @Deprecated("Not ready for use", replaceWith = ReplaceWith("gateway"))
     var eventService: EventService = DefaultEventService(gateway)
 
-    var authenticationService: AuthenticationService = DefaultAuthenticationService(rest)
+    var authenticationService: AuthService = DefaultAuthService(rest.authRoute)
     var authenticationResults: AuthenticationResult? = null
+
+    var userService: UserService = DefaultUserService(rest.userRoute)
 
     override val eventSupplierData by gateway::eventSupplierData
 
