@@ -1,8 +1,8 @@
-package com.deck.core.com.deck.core.builder
+package com.deck.core.builder
 
 import com.deck.common.entity.RawUserAboutInfo
 import com.deck.common.util.nullableOptional
-import com.deck.core.com.deck.core.entity.misc.DeckUserAboutInfo
+import com.deck.core.entity.misc.DeckUserAboutInfo
 import com.deck.rest.builder.RequestBuilder
 import com.deck.rest.request.ModifySelfUserRequest
 

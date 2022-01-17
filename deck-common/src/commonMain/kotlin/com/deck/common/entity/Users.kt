@@ -32,7 +32,7 @@ data class RawUser(
 
 @Serializable
 data class RawUserStatus(
-    val content: RawMessageContent,
+    val content: RawMessageContent?,
     val customReactionId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
     @DeckUnknown
     val customReaction: OptionalProperty<RawCustomReaction?> = OptionalProperty.NotPresent,

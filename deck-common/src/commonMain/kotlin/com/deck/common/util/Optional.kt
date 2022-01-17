@@ -50,7 +50,12 @@ fun <T, F> OptionalProperty<T>.map(block: (T) -> F): OptionalProperty<F> = when(
     is OptionalProperty.Present<T> -> block(this.value).optional()
 }
 
-fun <T, F : Any> OptionalProperty<T?>.mapNotNull(block: (T) -> F): OptionalProperty<F> = when(this) {
+fun <T, F : Any> OptionalProperty<T>.mapNotNull(block: (T) -> F?): OptionalProperty<F> = when(this) {
+    is OptionalProperty.NotPresent -> OptionalProperty.NotPresent
+    is OptionalProperty.Present<T> -> block(value)?.optional() ?: OptionalProperty.NotPresent
+}
+
+fun <T, F : Any> OptionalProperty<T?>.mapValueNotNull(block: (T) -> F): OptionalProperty<F> = when(this) {
     is OptionalProperty.NotPresent -> OptionalProperty.NotPresent
     is OptionalProperty.Present<T?> -> if (value == null) OptionalProperty.NotPresent else block(value).optional()
 }

@@ -104,6 +104,7 @@ class NodeEncoder {
 }
 
 val Node.nodeObject: String get() = when(this) {
+    is Node.Text -> "text"
     is Node.Link -> "inline"
     else -> "block"
 }

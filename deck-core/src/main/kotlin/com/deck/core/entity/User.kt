@@ -1,9 +1,9 @@
-package com.deck.core.com.deck.core.entity
+package com.deck.core.entity
 
 import com.deck.common.util.GenericId
 import com.deck.common.util.Timestamp
-import com.deck.core.com.deck.core.builder.DeckModifySelfBuilder
-import com.deck.core.com.deck.core.entity.misc.DeckUserAboutInfo
+import com.deck.core.builder.DeckModifySelfBuilder
+import com.deck.core.entity.misc.DeckUserAboutInfo
 
 interface User {
     val id: GenericId

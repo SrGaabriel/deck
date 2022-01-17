@@ -12,6 +12,8 @@ interface GatewayModule: EventSupplier {
     val orchestrator: GatewayOrchestrator
     val globalGateway: Gateway
 
+    val gateways: Map<Int, Gateway>
+
     var auth: AuthenticationResult
     var logPayloadsJson: Boolean
 
@@ -28,6 +30,8 @@ class DefaultGatewayModule: GatewayModule {
 
     override var auth: AuthenticationResult by orchestrator::authentication
     override var logPayloadsJson: Boolean by orchestrator::debugPayloads
+
+    override val gateways get() = orchestrator.gateways.associateBy { it.gatewayId }
 
     override val eventSupplierData: EventSupplierData by orchestrator::eventSupplierData
 

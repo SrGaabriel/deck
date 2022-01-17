@@ -1,9 +1,9 @@
-package com.deck.core.com.deck.core.util
+package com.deck.core.util
 
 import com.deck.common.entity.RawUserAboutInfo
 import com.deck.common.util.nullableOptional
-import com.deck.core.com.deck.core.builder.DeckModifySelfBuilder
-import com.deck.core.com.deck.core.entity.SelfUser
+import com.deck.core.builder.DeckModifySelfBuilder
+import com.deck.core.entity.SelfUser
 import com.deck.rest.route.UserRoute
 
 suspend fun UserRoute.editSelf(self: SelfUser, builder: DeckModifySelfBuilder.() -> Unit) = this.editSelf(self.id) {

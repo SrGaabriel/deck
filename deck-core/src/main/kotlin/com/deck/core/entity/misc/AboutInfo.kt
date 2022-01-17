@@ -1,4 +1,4 @@
-package com.deck.core.com.deck.core.entity.misc
+package com.deck.core.entity.misc
 
 import com.deck.common.entity.RawUserAboutInfo
 import com.deck.common.util.asNullable

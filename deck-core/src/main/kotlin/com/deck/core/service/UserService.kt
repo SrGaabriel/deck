@@ -1,12 +1,12 @@
-package com.deck.core.com.deck.core.service
+package com.deck.core.service
 
 import com.deck.common.util.GenericId
 import com.deck.common.util.asNullable
-import com.deck.core.com.deck.core.entity.SelfUser
-import com.deck.core.com.deck.core.entity.User
-import com.deck.core.com.deck.core.entity.impl.DeckSelfUser
-import com.deck.core.com.deck.core.entity.impl.DeckUser
-import com.deck.core.com.deck.core.entity.misc.forcefullyWrap
+import com.deck.core.entity.SelfUser
+import com.deck.core.entity.User
+import com.deck.core.entity.impl.DeckSelfUser
+import com.deck.core.entity.impl.DeckUser
+import com.deck.core.entity.misc.forcefullyWrap
 import com.deck.rest.route.UserRoute
 
 interface UserService {

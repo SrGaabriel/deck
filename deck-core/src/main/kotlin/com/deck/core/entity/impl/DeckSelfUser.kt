@@ -1,11 +1,11 @@
-package com.deck.core.com.deck.core.entity.impl
+package com.deck.core.entity.impl
 
 import com.deck.common.util.GenericId
 import com.deck.common.util.Timestamp
-import com.deck.core.com.deck.core.builder.DeckModifySelfBuilder
-import com.deck.core.com.deck.core.entity.SelfUser
-import com.deck.core.com.deck.core.entity.misc.DeckUserAboutInfo
-import com.deck.core.com.deck.core.util.editSelf
+import com.deck.core.builder.DeckModifySelfBuilder
+import com.deck.core.entity.SelfUser
+import com.deck.core.entity.misc.DeckUserAboutInfo
+import com.deck.core.util.editSelf
 import com.deck.rest.route.UserRoute
 
 data class DeckSelfUser constructor(

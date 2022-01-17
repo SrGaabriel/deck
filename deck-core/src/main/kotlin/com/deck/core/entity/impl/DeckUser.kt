@@ -1,9 +1,9 @@
-package com.deck.core.com.deck.core.entity.impl
+package com.deck.core.entity.impl
 
 import com.deck.common.util.GenericId
 import com.deck.common.util.Timestamp
-import com.deck.core.com.deck.core.entity.User
-import com.deck.core.com.deck.core.entity.misc.DeckUserAboutInfo
+import com.deck.core.entity.User
+import com.deck.core.entity.misc.DeckUserAboutInfo
 
 data class DeckUser(
     override val id: GenericId,
