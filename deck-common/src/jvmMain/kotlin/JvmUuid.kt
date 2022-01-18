@@ -2,8 +2,8 @@ package com.deck.common.util
 
 import java.util.*
 
-fun UniqueId.mapToBuiltin(): UUID =
+public fun UniqueId.mapToBuiltin(): UUID =
     UUID.fromString(raw)
 
-fun UUID.mapToModel(): UniqueId =
+public fun UUID.mapToModel(): UniqueId =
     UniqueId(toString())

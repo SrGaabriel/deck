@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-data class RawMessage(
+public data class RawMessage(
     val id: UniqueId,
     val channelId: UniqueId,
     val createdBy: GenericId,
@@ -23,7 +23,7 @@ data class RawMessage(
 )
 
 @Serializable
-data class RawPartialSentMessage(
+public data class RawPartialSentMessage(
     val id: UniqueId,
     val createdAt: Timestamp,
     val content: RawMessageContent,
@@ -37,7 +37,7 @@ data class RawPartialSentMessage(
 }
 
 @Serializable
-data class RawPartialRepliedMessage(
+public data class RawPartialRepliedMessage(
     val id: UniqueId,
     val content: RawMessageContent,
     val type: String,
@@ -52,7 +52,7 @@ data class RawPartialRepliedMessage(
 )
 
 @Serializable
-data class RawPartialDeletedMessage(
+public data class RawPartialDeletedMessage(
     val id: UniqueId,
     val contentType: RawChannelContentType,
     val isReply: Boolean,
@@ -61,13 +61,13 @@ data class RawPartialDeletedMessage(
 )
 
 @Serializable
-data class RawMessageContent(
+public data class RawMessageContent(
     @SerialName("object") val contentObject: String,
     val document: RawMessageContentNode
 )
 
 @Serializable
-data class RawMessageContentNode(
+public data class RawMessageContentNode(
     @SerialName("object") val documentObject: String,
     val data: RawMessageContentData = RawMessageContentData(),
     val type: OptionalProperty<String> = OptionalProperty.NotPresent,
@@ -76,27 +76,27 @@ data class RawMessageContentNode(
 )
 
 @Serializable
-data class RawMessageContentData(
+public data class RawMessageContentData(
     val src: OptionalProperty<String> = OptionalProperty.NotPresent,
     val href: OptionalProperty<String> = OptionalProperty.NotPresent,
     val reaction: OptionalProperty<RawReaction> = OptionalProperty.NotPresent
 )
 
 @Serializable
-data class RawMessageContentNodeLeaves(
+public data class RawMessageContentNodeLeaves(
     @SerialName("object") val leavesObject: String,
     val text: String,
     @DeckUnknown val marks: List<Unit>
 )
 
 @Serializable
-data class RawSlowmode(
+public data class RawSlowmode(
     val channelCooldown: OptionalProperty<Int> = OptionalProperty.NotPresent,
     val cooldownRemaining: OptionalProperty<Int> = OptionalProperty.NotPresent
 )
 
 @Serializable
-data class RawMessageMentionedUserInfo(
+public data class RawMessageMentionedUserInfo(
     val isDirectlyMentioned: Boolean,
     val mentionedByName: Boolean,
     val mentionedByRole: Boolean,

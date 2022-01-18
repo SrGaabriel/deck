@@ -4,25 +4,25 @@ import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmStatic
 
 @Serializable
-data class Authentication(
+public data class Authentication(
     val email: String,
     val password: String
 ) {
-    companion object {
+    public companion object {
         @JvmStatic
-        fun extractDataFromCookie(cookie: String, index: Int) =
+        public fun extractDataFromCookie(cookie: String, index: Int): String =
             cookie.split(" ")[index].split("=")[1].split(";")[0]
     }
 }
 
 @Serializable
-data class AuthenticationResult(
+public data class AuthenticationResult(
     val token: String,
     val midSession: String
 ) {
-    companion object {
+    public companion object {
         @JvmStatic
-        fun fromCookie(cookie: String) = AuthenticationResult(
+        public fun fromCookie(cookie: String): AuthenticationResult = AuthenticationResult(
             Authentication.extractDataFromCookie(cookie, 0),
             Authentication.extractDataFromCookie(cookie, 1)
         )
@@ -30,8 +30,8 @@ data class AuthenticationResult(
 }
 
 @DeckDSL
-class AuthenticationBuilder {
-    lateinit var email: String
-    lateinit var password: String
-    fun toSerializableAuthentication() = Authentication(email, password)
+public class AuthenticationBuilder {
+    public lateinit var email: String
+    public lateinit var password: String
+    public fun toSerializableAuthentication(): Authentication = Authentication(email, password)
 }

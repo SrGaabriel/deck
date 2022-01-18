@@ -6,7 +6,7 @@ package com.deck.common.util
  */
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.PROPERTY, AnnotationTarget.CLASS, AnnotationTarget.VALUE_PARAMETER)
-annotation class DeckUnknown
+public annotation class DeckUnknown
 
 /**
  * This implies that the annotated value isn't supported yet by the library,
@@ -15,7 +15,7 @@ annotation class DeckUnknown
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.PROPERTY)
 @RequiresOptIn(level = RequiresOptIn.Level.WARNING)
-annotation class DeckUnsupported
+public annotation class DeckUnsupported
 
 /**
  * Marks a feature as experimental, meaning they might contain errors
@@ -24,7 +24,7 @@ annotation class DeckUnsupported
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.PROPERTY, AnnotationTarget.FIELD, AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
 @RequiresOptIn(level = RequiresOptIn.Level.WARNING)
-annotation class DeckExperimental
+public annotation class DeckExperimental
 
 @DslMarker
-annotation class DeckDSL
+public annotation class DeckDSL

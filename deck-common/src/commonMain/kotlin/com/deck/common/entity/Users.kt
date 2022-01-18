@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RawUser(
+public data class RawUser(
     val id: GenericId,
     val name: String,
     val subdomain: OptionalProperty<String?> = OptionalProperty.NotPresent,
@@ -31,7 +31,7 @@ data class RawUser(
 )
 
 @Serializable
-data class RawUserStatus(
+public data class RawUserStatus(
     val content: RawMessageContent?,
     val customReactionId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
     @DeckUnknown
@@ -40,7 +40,7 @@ data class RawUserStatus(
 )
 
 @Serializable
-data class RawTransientStatus(
+public data class RawTransientStatus(
     val id: IntGenericId,
     @SerialName("gameId") val game: GameStatus,
     val type: RawUserPresenceType,
@@ -49,19 +49,19 @@ data class RawTransientStatus(
 )
 
 @Serializable
-data class RawUserAboutInfo(
+public data class RawUserAboutInfo(
     val bio: String?,
     val tagLine: OptionalProperty<String> = OptionalProperty.NotPresent
 )
 
 @Serializable
-data class RawUserFlair(
+public data class RawUserFlair(
     val flair: String,
     val amount: Int
 )
 
 @Serializable
-data class RawFriend(
+public data class RawFriend(
     val friendUserId: GenericId,
     val friendStatus: String?,
     val createdAt: Timestamp
@@ -69,7 +69,7 @@ data class RawFriend(
 
 /** @param channelId is missing when listing user permissions in a category */
 @Serializable
-data class RawUserPermission(
+public data class RawUserPermission(
     val userId: GenericId,
     val channelId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val createdAt: Timestamp,
@@ -79,7 +79,7 @@ data class RawUserPermission(
 )
 
 @Serializable
-data class RawUserPost(
+public data class RawUserPost(
     val id: IntGenericId,
     val title: String,
     val message: RawMessageContent,
@@ -95,7 +95,7 @@ data class RawUserPost(
 )
 
 @Serializable
-data class RawPostCreatedByInfo(
+public data class RawPostCreatedByInfo(
     val id: GenericId,
     val name: String,
     val profilePicture: String?,
@@ -103,10 +103,10 @@ data class RawPostCreatedByInfo(
 )
 
 @Serializable(RawUserPresenceStatus.Serializer::class)
-enum class RawUserPresenceStatus(val id: Int) {
+public enum class RawUserPresenceStatus(public val id: Int) {
     Online(1), Idle(2), Busy(3), Offline(4);
 
-    companion object Serializer : IntIdEnumSerializer<RawUserPresenceStatus>(
+    public companion object Serializer : IntIdEnumSerializer<RawUserPresenceStatus>(
         IntSerializationStrategy(values().associateBy { it.id })
     )
 }

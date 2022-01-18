@@ -1,10 +1,10 @@
 package com.deck.common.util
 
-object Constants {
-    const val GuildedRestApi = "https://www.guilded.gg/api"
-    const val GuildedGateway = "api.guilded.gg"
-    const val DefaultGenericIntId = 1661
+public object Constants {
+    public const val GuildedRestApi: String = "https://www.guilded.gg/api"
+    public const val GuildedGateway: String = "api.guilded.gg"
+    public const val DefaultGenericIntId: Int = 1661
 
-    const val GatewayPingContent = "2"
-    const val GatewayPongContent = "3"
+    public const val GatewayPingContent: String = "2"
+    public const val GatewayPongContent: String = "3"
 }

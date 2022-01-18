@@ -8,7 +8,7 @@ import kotlinx.serialization.json.JsonNames
 
 /** @param description is null only when creating channels */
 @Serializable
-data class RawChannel(
+public data class RawChannel(
     val id: UniqueId,
     val type: RawChannelType,
     val createdAt: Timestamp,
@@ -44,7 +44,7 @@ data class RawChannel(
 
 /** @param voiceParticipants is not present on DMChatChannelCreated events */
 @Serializable
-data class RawPrivateChannel(
+public data class RawPrivateChannel(
     val id: UniqueId,
     val type: RawChannelType,
     val createdAt: Timestamp,
@@ -68,7 +68,7 @@ data class RawPrivateChannel(
 )
 
 @Serializable
-data class RawChannelCategory(
+public data class RawChannelCategory(
     val id: IntGenericId,
     val name: String,
     val priority: Int?,
@@ -84,7 +84,7 @@ data class RawChannelCategory(
 
 @Serializable
 @OptIn(ExperimentalSerializationApi::class)
-enum class RawChannelType {
+public enum class RawChannelType {
     @SerialName("Team")
     @JsonNames("team")
     Team,
@@ -94,7 +94,7 @@ enum class RawChannelType {
 }
 
 @Serializable
-enum class RawChannelContentType {
+public enum class RawChannelContentType {
     @SerialName("chat")
     Chat,
 
@@ -128,7 +128,7 @@ enum class RawChannelContentType {
 
 /** Parameters [gameId] and [teamId] are absent when reply is sent in a forum. */
 @Serializable
-data class RawChannelContentReply @OptIn(ExperimentalSerializationApi::class) constructor(
+public data class RawChannelContentReply @OptIn(ExperimentalSerializationApi::class) constructor(
     val id: IntGenericId,
     val message: RawMessageContent,
     val createdAt: Timestamp,

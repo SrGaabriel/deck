@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RawTeam(
+public data class RawTeam(
     val id: GenericId,
     val name: String,
     val subdomain: String?,
@@ -22,7 +22,7 @@ data class RawTeam(
 )
 
 @Serializable
-data class RawTeamMember(
+public data class RawTeamMember(
     val id: GenericId,
     val name: String,
     val nickname: String?,
@@ -43,7 +43,7 @@ data class RawTeamMember(
 )
 
 @Serializable
-data class RawBot(
+public data class RawBot(
     val id: UniqueId,
     val name: String,
     val enabled: Boolean,
@@ -57,7 +57,7 @@ data class RawBot(
 )
 
 @Serializable
-data class RawBotFlow(
+public data class RawBotFlow(
     val id: UniqueId,
     val enabled: Boolean,
     val error: Boolean,
@@ -73,7 +73,7 @@ data class RawBotFlow(
 )
 
 @Serializable
-data class RawBan(
+public data class RawBan(
     val reason: String,
     val userId: GenericId,
     val bannedBy: GenericId,
@@ -81,7 +81,7 @@ data class RawBan(
 )
 
 @Serializable
-data class RawInvite(
+public data class RawInvite(
     val id: GenericId,
     val createdAt: Timestamp,
     val teamId: GenericId,
@@ -93,13 +93,13 @@ data class RawInvite(
 
 // This object is gateway exclusive, to be moved to gateway module later
 @Serializable
-data class RawTeamPaymentInfo(
+public data class RawTeamPaymentInfo(
     val subscriptionsEnabled: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     val onboardingStripeAccountOnboardedAt: OptionalProperty<Timestamp> = OptionalProperty.NotPresent,
 )
 
 @Serializable
-data class RawTeamSubscriptionPlan(
+public data class RawTeamSubscriptionPlan(
     val id: UniqueId,
     val name: String,
     val cost: Int,

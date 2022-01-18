@@ -4,7 +4,7 @@ import com.deck.common.util.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RawRole(
+public data class RawRole(
     val id: IntGenericId,
     val color: String,
     val isBase: Boolean,
@@ -23,7 +23,7 @@ data class RawRole(
 )
 
 @Serializable
-data class RawRolePermissions(
+public data class RawRolePermissions(
     val announcements: Int = 0,
     val bots: Int = 0,
     val brackets: Int = 0,
@@ -46,7 +46,7 @@ data class RawRolePermissions(
 
 /** @param channelCategoryId is missing when the channel doesn't have an ID */
 @Serializable
-data class RawRolePermissionsOverwritten(
+public data class RawRolePermissionsOverwritten(
     val teamId: GenericId,
     val createdAt: Timestamp,
     val updatedAt: Timestamp?,
@@ -57,6 +57,6 @@ data class RawRolePermissionsOverwritten(
 )
 
 @Serializable
-data class RawRoleBotScope(
+public data class RawRoleBotScope(
     val userId: GenericId?
 )
