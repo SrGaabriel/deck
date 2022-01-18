@@ -37,7 +37,7 @@ data class RawChannel(
     val groupId: GenericId?,
     @DeckUnknown val settings: Unit?,
     @DeckUnknown val groupType: String = "",
-    val rolesById: Dictionary<String, RawRole>,
+    val rolesById: Dictionary<String, RawRolePermissionsOverwritten>,
     @DeckUnknown val tournamentsRolesById: OptionalProperty<Unit?> = OptionalProperty.NotPresent,
     @DeckUnsupported val createdByInfo: OptionalProperty<Unit?> = OptionalProperty.NotPresent
 )

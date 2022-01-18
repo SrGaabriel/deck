@@ -7,6 +7,7 @@ import com.deck.core.util.WrappedEventSupplierData
 import com.deck.gateway.event.GatewayEvent
 import com.deck.gateway.event.type.GatewayChatMessageCreatedEvent
 import com.deck.gateway.util.on
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -39,6 +40,6 @@ class DefaultEventService(private val client: DeckClient): EventService {
     }
 }
 
-interface EventMapper<F : GatewayEvent, T : DeckEvent> {
-    fun map(client: DeckClient, event: F): T
+interface EventMapper<F : GatewayEvent, T : DeckEvent>: CoroutineScope {
+    suspend fun map(client: DeckClient, event: F): T
 }

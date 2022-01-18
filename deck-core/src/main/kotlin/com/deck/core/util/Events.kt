@@ -17,6 +17,7 @@ data class WrappedEventSupplierData(
     val listeningGatewayId: Int? = null
 )
 
+@DeckDSL
 @DeckExperimental
 inline fun <reified T : DeckEvent> WrappedEventSupplier.on(
     scope: CoroutineScope = wrappedEventSupplierData.scope,
@@ -32,7 +33,6 @@ suspend inline fun <reified T : DeckEvent> WrappedEventSupplier.await(
 ): T? = await(gatewayId, scope, wrappedEventSupplierData.sharedFlow, timeout)
 
 // TODO: remove boilerplate
-@DeckDSL
 inline fun <reified T : DeckEvent> on(
     gatewayId: Int?,
     scope: CoroutineScope,

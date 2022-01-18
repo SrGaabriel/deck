@@ -34,6 +34,7 @@ class RequestService(val client: HttpClient, val ratelimiter: Ratelimiter = Rate
             header(HttpHeaders.Cookie, "hmac_signed_session=${request.authentication}")
     }.let { response ->
         // TODO: Workaround, change later
+        println(response.receive<String>())
         return@let when {
             response is G -> response
             Unit is G -> Unit

@@ -2,10 +2,12 @@ package com.deck.core.entity.impl
 
 import com.deck.common.util.GenericId
 import com.deck.common.util.Timestamp
+import com.deck.core.DeckClient
 import com.deck.core.entity.User
 import com.deck.core.entity.misc.DeckUserAboutInfo
 
 data class DeckUser(
+    override val client: DeckClient,
     override val id: GenericId,
     override val name: String,
     override val subdomain: String?,

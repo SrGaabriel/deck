@@ -17,7 +17,9 @@ typealias LongGenericId = Long
 typealias Dictionary<K, V> = Map<K, V>
 
 @Serializable(UniqueIdSerializer::class)
-data class UniqueId(val raw: String)
+data class UniqueId(val raw: String) {
+    override fun toString(): String = raw
+}
 
 @Serializable(with = TimestampSerializer::class)
 data class Timestamp(

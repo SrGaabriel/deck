@@ -97,14 +97,12 @@ class NodeEncoder {
                 leavesObject = "leaf",
                 text = node.text ?: "",
                 marks = emptyList()
-            )
-            ).optional(), documentObject = "text"))
+            )).optional(), documentObject = "text"))
         )
     }
 }
 
 val Node.nodeObject: String get() = when(this) {
-    is Node.Text -> "text"
     is Node.Link -> "inline"
     else -> "block"
 }

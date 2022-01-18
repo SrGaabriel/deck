@@ -2,18 +2,19 @@ package com.deck.rest.builder
 
 import com.deck.common.util.ContentBuilder
 import com.deck.common.util.ContentWrapper
-import com.deck.common.util.UniqueId
 import com.deck.common.util.mapToModel
 import com.deck.rest.request.SendMessageRequest
 import java.util.*
 
 class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
-    var uniqueId: UniqueId = UUID.randomUUID().mapToModel()
+    var uniqueId: UUID = UUID.randomUUID()
     var private: Boolean = false
     var silent: Boolean = false
 
-    val content: ContentWrapper = ContentWrapper()
-    val contentBuilder: ContentBuilder by content::builder
+    var contentBuilder: ContentBuilder = ContentBuilder()
+    val content: ContentWrapper = ContentWrapper(contentBuilder)
+
+    var repliesTo: UUID? = null
 
     @Deprecated("Use content instead", ReplaceWith("content"))
     val messageText: String
@@ -23,9 +24,10 @@ class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
         get() = contentBuilder.nodes.mapNotNull { it.image }
 
     override fun toRequest() = SendMessageRequest(
-        messageId = uniqueId,
+        messageId = uniqueId.mapToModel(),
         content = contentBuilder.build(),
         isPrivate = private,
-        isSilent = silent
+        isSilent = silent,
+        repliesToIds = listOfNotNull(repliesTo?.mapToModel())
     )
 }

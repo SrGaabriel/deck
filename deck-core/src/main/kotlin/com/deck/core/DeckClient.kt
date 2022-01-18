@@ -3,14 +3,16 @@ package com.deck.core
 import com.deck.common.util.Authentication
 import com.deck.common.util.AuthenticationResult
 import com.deck.common.util.DeckExperimental
+import com.deck.core.delegator.DeckEntityDelegator
+import com.deck.core.delegator.DeckEntityStrategizer
+import com.deck.core.delegator.EntityDelegator
+import com.deck.core.delegator.EntityStrategizer
 import com.deck.core.event.DefaultEventService
 import com.deck.core.event.EventService
 import com.deck.core.module.GatewayModule
 import com.deck.core.module.RestModule
 import com.deck.core.service.AuthService
 import com.deck.core.service.DefaultAuthService
-import com.deck.core.service.DefaultUserService
-import com.deck.core.service.UserService
 import com.deck.core.util.WrappedEventSupplier
 import com.deck.core.util.WrappedEventSupplierData
 import com.deck.core.util.setAuthentication
@@ -27,10 +29,11 @@ class DeckClient(
     var authenticationService: AuthService = DefaultAuthService(rest.authRoute)
     var authenticationResults: AuthenticationResult? = null
 
-    var userService: UserService = DefaultUserService(rest.userRoute)
-
     override val eventSupplierData by gateway::eventSupplierData
     override val wrappedEventSupplierData: WrappedEventSupplierData by eventService::wrappedEventSupplierData
+
+    val entityStrategizer: EntityStrategizer = DeckEntityStrategizer(this)
+    val entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityStrategizer)
 
     suspend fun login() {
         this.setAuthentication(authenticationService.login(auth))

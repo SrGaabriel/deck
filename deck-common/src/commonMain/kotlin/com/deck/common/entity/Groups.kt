@@ -1,12 +1,11 @@
 package com.deck.common.entity
 
-import com.deck.common.util.GameStatus
-import com.deck.common.util.GenericId
-import com.deck.common.util.IntGenericId
-import com.deck.common.util.Timestamp
+import com.deck.common.util.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/** Apparently, parameters [visibilityTeamRoleId], [additionalVisibilityTeamRoleIds],
+ *  [membershipTeamRoleIds], [additionalMembershipTeamRoleIds] are absent in base groups*/
 @Serializable
 data class RawGroup(
     val id: GenericId,
@@ -19,12 +18,12 @@ data class RawGroup(
     val teamId: GenericId,
     @SerialName("gameId") val game: GameStatus?,
     // val additionalGameInfo: *,
-    val visibilityTeamRoleId: IntGenericId?,
-    val visibilityTeamRoleIds: List<IntGenericId>,
-    val additionalVisibilityTeamRoleIds: List<IntGenericId>?,
+    val visibilityTeamRoleId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
+    val visibilityTeamRoleIds: OptionalProperty<List<IntGenericId>> = OptionalProperty.NotPresent,
+    val additionalVisibilityTeamRoleIds: OptionalProperty<List<IntGenericId>?> = OptionalProperty.NotPresent,
     val membershipTeamRoleId: IntGenericId?,
-    val membershipTeamRoleIds: List<IntGenericId>,
-    val additionalMembershipTeamRoleIds: List<IntGenericId>?,
+    val membershipTeamRoleIds: OptionalProperty<List<IntGenericId>> = OptionalProperty.NotPresent,
+    val additionalMembershipTeamRoleIds: OptionalProperty<List<IntGenericId>?> = OptionalProperty.NotPresent,
     val isBase: Boolean,
     val createdAt: Timestamp,
     val createdBy: GenericId?,

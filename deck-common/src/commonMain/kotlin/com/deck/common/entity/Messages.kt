@@ -3,6 +3,7 @@ package com.deck.common.entity
 import com.deck.common.util.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 data class RawMessage(
@@ -30,7 +31,10 @@ data class RawPartialSentMessage(
     val createdBy: GenericId,
     val isPrivate: Boolean,
     val repliesToIds: List<UniqueId>
-)
+) {
+    @Transient
+    var isSilent: Boolean = false
+}
 
 @Serializable
 data class RawPartialRepliedMessage(

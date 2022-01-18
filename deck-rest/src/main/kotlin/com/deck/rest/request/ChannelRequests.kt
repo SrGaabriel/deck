@@ -10,9 +10,9 @@ import kotlinx.serialization.Serializable
 data class SendMessageRequest(
     val messageId: UniqueId,
     val content: RawMessageContent,
-    val repliesTools: List<UniqueId> = emptyList(),
-    val isSilent: Boolean?,
-    val isPrivate: Boolean?
+    val repliesToIds: List<UniqueId>,
+    val isSilent: Boolean,
+    val isPrivate: Boolean
 )
 
 @Serializable
