@@ -12,48 +12,48 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("USER_UPDATED")
-data class GatewayUserUpdatedEvent(
+public data class GatewayUserUpdatedEvent(
     val name: OptionalProperty<String> = OptionalProperty.NotPresent,
     val avatar: OptionalProperty<String> = OptionalProperty.NotPresent,
     val subdomain: OptionalProperty<String> = OptionalProperty.NotPresent,
     val aboutInfo: OptionalProperty<RawUserAboutInfo> = OptionalProperty.NotPresent,
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @DeckExperimental
 @SerialName("UserStreamsVisibilityUpdated")
-data class GatewayUserStreamsVisibilityUpdatedEvent(
+public data class GatewayUserStreamsVisibilityUpdatedEvent(
     val teamId: GenericId,
     val channelId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val groupId: OptionalProperty<GenericId> = OptionalProperty.NotPresent
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("USER_TEAMS_UPDATED")
-data class GatewayUserTeamsUpdated(
+public data class GatewayUserTeamsUpdated(
     val teamId: GenericId,
     val isUserBannedFromTeam: Boolean,
     val isRemoved: Boolean
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("USER_PINGED")
 @Deprecated("This will only be called if you open the guilded browser/app, it won't be called if you're running terminal only.")
-data class GatewaySelfUserPingedEvent(
+public data class GatewaySelfUserPingedEvent(
     val guildedClientId: UniqueId
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("USER_TEAM_SECTION_SEEN")
 @Deprecated("This will only be called if you open the guilded browser/app, it won't be called if you're running terminal only.")
-data class GatewayUserTeamSectionSeen(
+public data class GatewayUserTeamSectionSeen(
     val itemId: UniqueId,
     val teamId: GenericId,
     val guildedClientId: UniqueId
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("USER_PRESENCE_MANUALLY_SET")
-data class GatewayUserPresenceManuallySetEvent(
+public data class GatewayUserPresenceManuallySetEvent(
     val status: RawUserPresenceStatus
-): GatewayEvent()
+) : GatewayEvent()

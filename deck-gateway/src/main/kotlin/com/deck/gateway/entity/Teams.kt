@@ -1,4 +1,4 @@
-package com.deck.gateway.com.deck.gateway.entity
+package com.deck.gateway.entity
 
 import com.deck.common.util.GenericId
 import com.deck.common.util.OptionalProperty
@@ -7,7 +7,7 @@ import com.deck.common.util.UniqueId
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RawTeamInfo(
+public data class RawTeamInfo(
     val name: OptionalProperty<String> = OptionalProperty.NotPresent,
     val avatar: OptionalProperty<String> = OptionalProperty.NotPresent,
     val banner: OptionalProperty<String> = OptionalProperty.NotPresent,
@@ -23,7 +23,7 @@ data class RawTeamInfo(
  * All parameters are missing except for [teamId], [deletedAt] and [userId] when bot is deleted.
  */
 @Serializable
-data class RawPartialBot(
+public data class RawPartialBot(
     val id: UniqueId,
     val enabled: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     val error: OptionalProperty<Boolean> = OptionalProperty.NotPresent,

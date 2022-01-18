@@ -7,16 +7,16 @@ import com.deck.rest.builder.RequestBuilder
 import com.deck.rest.request.SendMessageRequest
 import java.util.*
 
-class DeckMessageBuilder: RequestBuilder<SendMessageRequest> {
-    var id: UUID = UUID.randomUUID()
+public class DeckMessageBuilder : RequestBuilder<SendMessageRequest> {
+    public var id: UUID = UUID.randomUUID()
 
-    var contentBuilder = ContentBuilder()
-    var content = ContentWrapper(contentBuilder)
+    public var contentBuilder: ContentBuilder = ContentBuilder()
+    public var content: ContentWrapper = ContentWrapper(contentBuilder)
 
-    var repliesTo: UUID? = null
+    public var repliesTo: UUID? = null
 
-    var isSilent = false
-    var isPrivate = false
+    public var isSilent: Boolean = false
+    public var isPrivate: Boolean = false
 
     override fun toRequest(): SendMessageRequest = SendMessageRequest(
         messageId = id.mapToModel(),

@@ -6,11 +6,11 @@ import com.deck.core.entity.misc.DeckUserAboutInfo
 import com.deck.rest.builder.RequestBuilder
 import com.deck.rest.request.ModifySelfUserRequest
 
-class DeckModifySelfBuilder: RequestBuilder<ModifySelfUserRequest> {
-    var name: String? = null
-    var avatar: String? = null
-    var subdomain: String? = null
-    var aboutInfo: DeckUserAboutInfo? = null
+public class DeckModifySelfBuilder : RequestBuilder<ModifySelfUserRequest> {
+    public var name: String? = null
+    public var avatar: String? = null
+    public var subdomain: String? = null
+    public var aboutInfo: DeckUserAboutInfo? = null
 
     override fun toRequest(): ModifySelfUserRequest = ModifySelfUserRequest(
         name = name,

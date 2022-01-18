@@ -88,21 +88,42 @@ enum class RawChannelType {
     @SerialName("Team")
     @JsonNames("team")
     Team,
-    @SerialName("DM") Private;
+
+    @SerialName("DM")
+    Private;
 }
 
 @Serializable
 enum class RawChannelContentType {
-    @SerialName("chat") Chat,
-    @SerialName("stream") Streaming,
-    @SerialName("voice") Voice,
-    @SerialName("event") Calendar,
-    @SerialName("scheduling") Scheduling,
-    @SerialName("announcement") Announcements,
-    @SerialName("forum") Forum,
-    @SerialName("list") List,
-    @SerialName("doc") Documentation,
-    @SerialName("media") Media;
+    @SerialName("chat")
+    Chat,
+
+    @SerialName("stream")
+    Streaming,
+
+    @SerialName("voice")
+    Voice,
+
+    @SerialName("event")
+    Calendar,
+
+    @SerialName("scheduling")
+    Scheduling,
+
+    @SerialName("announcement")
+    Announcements,
+
+    @SerialName("forum")
+    Forum,
+
+    @SerialName("list")
+    List,
+
+    @SerialName("doc")
+    Documentation,
+
+    @SerialName("media")
+    Media;
 }
 
 /** Parameters [gameId] and [teamId] are absent when reply is sent in a forum. */

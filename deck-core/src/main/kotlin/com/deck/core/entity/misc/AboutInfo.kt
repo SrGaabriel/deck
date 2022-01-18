@@ -10,16 +10,16 @@ import com.deck.common.util.asNullable
  *
  * **Note:** Those are not to be confused with your status.
  */
-data class DeckUserAboutInfo(
+public data class DeckUserAboutInfo(
     val biography: String,
     val tagline: String?
 ) {
-    companion object {
-        val Empty = DeckUserAboutInfo("", "")
+    public companion object {
+        public val Empty: DeckUserAboutInfo = DeckUserAboutInfo("", "")
     }
 }
 
-internal fun RawUserAboutInfo?.forcefullyWrap(): DeckUserAboutInfo? {
+internal fun RawUserAboutInfo?.forcefullyWrap(): DeckUserAboutInfo {
     return DeckUserAboutInfo(
         biography = this?.bio.orEmpty(),
         tagline = this?.tagLine?.asNullable()

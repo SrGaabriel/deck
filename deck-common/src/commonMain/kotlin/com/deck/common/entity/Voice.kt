@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 enum class RawBroadcastCallResponse {
     @SerialName("hangup")
     HANGUP,
+
     @SerialName("accepted")
     ACCEPTED;
 }

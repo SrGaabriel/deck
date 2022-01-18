@@ -10,21 +10,21 @@ import com.deck.rest.util.Route
 import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
-interface EntityDelegator: CoroutineScope {
-    val rest: RestModule
-    val strategizer: EntityStrategizer
+public interface EntityDelegator : CoroutineScope {
+    public val rest: RestModule
+    public val strategizer: EntityStrategizer
 
-    suspend fun getUser(id: GenericId): User?
+    public suspend fun getUser(id: GenericId): User?
 
-    suspend fun getSelfUser(): SelfUser
+    public suspend fun getSelfUser(): SelfUser
 
-    suspend fun getChannel(id: UUID, teamId: GenericId?): Channel?
+    public suspend fun getChannel(id: UUID, teamId: GenericId?): Channel?
 
-    suspend fun getTeamChannel(id: UUID, teamId: GenericId): TeamChannel?
+    public suspend fun getTeamChannel(id: UUID, teamId: GenericId): TeamChannel?
 
-    suspend fun getPrivateChannel(id: UUID): Channel?
+    public suspend fun getPrivateChannel(id: UUID): Channel?
 
-    suspend fun <T, R : Route> R.nullableRequest(block: suspend R.() -> T): T? = runCatching {
+    public suspend fun <T, R : Route> R.nullableRequest(block: suspend R.() -> T): T? = runCatching {
         block(this)
     }.onFailure { it.printStackTrace() }.getOrNull()
 }

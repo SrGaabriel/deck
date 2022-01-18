@@ -9,14 +9,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("teamReactionsUpdated")
-data class GatewayTeamReactionsUpdatedEvent(
+public data class GatewayTeamReactionsUpdatedEvent(
     val reactions: RawEmoji,
     val teamId: GenericId
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("teamReactionRemoved")
-data class GatewayTeamReactionRemovedEvent(
+public data class GatewayTeamReactionRemovedEvent(
     val reactionId: IntGenericId,
     val teamId: GenericId
-): GatewayEvent()
+) : GatewayEvent()

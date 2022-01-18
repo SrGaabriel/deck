@@ -6,12 +6,12 @@ import com.deck.rest.entity.RawFetchedTeam
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetTeamResponse(
+public data class GetTeamResponse(
     val team: RawFetchedTeam
 )
 
 @Serializable
-data class GetTeamChannelsResponse(
+public data class GetTeamChannelsResponse(
     val channels: List<RawChannel>,
     val temporalChannels: List<RawChannel>,
     val categories: List<RawChannelCategory>

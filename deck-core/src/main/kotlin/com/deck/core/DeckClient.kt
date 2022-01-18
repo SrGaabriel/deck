@@ -17,25 +17,26 @@ import com.deck.core.util.WrappedEventSupplier
 import com.deck.core.util.WrappedEventSupplierData
 import com.deck.core.util.setAuthentication
 import com.deck.gateway.util.EventSupplier
+import com.deck.gateway.util.EventSupplierData
 
-class DeckClient(
+public class DeckClient(
     private val auth: Authentication,
-    val rest: RestModule,
-    val gateway: GatewayModule
-): EventSupplier, WrappedEventSupplier {
+    public val rest: RestModule,
+    public val gateway: GatewayModule
+) : EventSupplier, WrappedEventSupplier {
     @DeckExperimental
-    var eventService: EventService = DefaultEventService(this)
+    public var eventService: EventService = DefaultEventService(this)
 
-    var authenticationService: AuthService = DefaultAuthService(rest.authRoute)
-    var authenticationResults: AuthenticationResult? = null
+    public var authenticationService: AuthService = DefaultAuthService(rest.authRoute)
+    public var authenticationResults: AuthenticationResult? = null
 
-    override val eventSupplierData by gateway::eventSupplierData
+    override val eventSupplierData: EventSupplierData by gateway::eventSupplierData
     override val wrappedEventSupplierData: WrappedEventSupplierData by eventService::wrappedEventSupplierData
 
-    val entityStrategizer: EntityStrategizer = DeckEntityStrategizer(this)
-    val entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityStrategizer)
+    public val entityStrategizer: EntityStrategizer = DeckEntityStrategizer(this)
+    public val entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityStrategizer)
 
-    suspend fun login() {
+    public suspend fun login() {
         this.setAuthentication(authenticationService.login(auth))
         openAllTeamGateways()
         gateway.start()

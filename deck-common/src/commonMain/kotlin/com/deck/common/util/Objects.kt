@@ -27,11 +27,12 @@ data class Timestamp(
 ) {
     @Transient
     val instant: Instant = Instant.parse(iso)
+
     @Transient
     val mills: Long = instant.toEpochMilliseconds()
 }
 
-object TimestampSerializer: KSerializer<Timestamp> {
+object TimestampSerializer : KSerializer<Timestamp> {
     override fun deserialize(decoder: Decoder): Timestamp =
         Timestamp(decoder.decodeString())
 
@@ -42,7 +43,7 @@ object TimestampSerializer: KSerializer<Timestamp> {
         encoder.encodeString(value.iso)
 }
 
-object UniqueIdSerializer: KSerializer<UniqueId> {
+object UniqueIdSerializer : KSerializer<UniqueId> {
     override fun deserialize(decoder: Decoder): UniqueId =
         UniqueId(decoder.decodeString())
 

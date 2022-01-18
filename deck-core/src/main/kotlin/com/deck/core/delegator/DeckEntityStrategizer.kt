@@ -16,7 +16,7 @@ import com.deck.core.entity.misc.forcefullyWrap
 import com.deck.core.entity.misc.mapToContent
 import java.util.*
 
-class DeckEntityStrategizer(private val client: DeckClient): EntityStrategizer {
+public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrategizer {
     override fun decodeUser(raw: RawUser): User = DeckUser(
         client = client,
         id = raw.id,
@@ -75,18 +75,19 @@ class DeckEntityStrategizer(private val client: DeckClient): EntityStrategizer {
         }
     }
 
-    override fun decodePartialSentMessage(channelId: UUID, teamId: GenericId?, raw: RawPartialSentMessage): Message = DeckMessage(
-        client = client,
-        id = raw.id.mapToBuiltin(),
-        content = raw.content.mapToContent(),
-        channelId = channelId,
-        createdAt = raw.createdAt,
-        createdBy = raw.createdBy,
-        updatedAt = null,
-        updatedBy = null,
-        isSilent = raw.isSilent,
-        isPrivate = raw.isPrivate,
-        teamId = teamId,
-        repliesToId = raw.repliesToIds.firstOrNull()?.mapToBuiltin()
-    )
+    override fun decodePartialSentMessage(channelId: UUID, teamId: GenericId?, raw: RawPartialSentMessage): Message =
+        DeckMessage(
+            client = client,
+            id = raw.id.mapToBuiltin(),
+            content = raw.content.mapToContent(),
+            channelId = channelId,
+            createdAt = raw.createdAt,
+            createdBy = raw.createdBy,
+            updatedAt = null,
+            updatedBy = null,
+            isSilent = raw.isSilent,
+            isPrivate = raw.isPrivate,
+            teamId = teamId,
+            repliesToId = raw.repliesToIds.firstOrNull()?.mapToBuiltin()
+        )
 }

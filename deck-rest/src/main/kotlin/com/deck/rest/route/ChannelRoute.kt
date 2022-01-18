@@ -9,13 +9,16 @@ import com.deck.rest.request.SendMessageResponse
 import com.deck.rest.util.Route
 import io.ktor.http.*
 
-class ChannelRoute(client: RestClient): Route(client) {
-    suspend fun getChannel(channelId: UniqueId) = sendRequest<RawChannel, Unit>(
+public class ChannelRoute(client: RestClient) : Route(client) {
+    public suspend fun getChannel(channelId: UniqueId): RawChannel = sendRequest<RawChannel, Unit>(
         endpoint = "/channels/$channelId/chat",
         method = HttpMethod.Get
     )
 
-    suspend fun sendMessage(channelId: UniqueId, builder: SendMessageRequestBuilder.() -> Unit): SendMessageResponse {
+    public suspend fun sendMessage(
+        channelId: UniqueId,
+        builder: SendMessageRequestBuilder.() -> Unit
+    ): SendMessageResponse {
         val request = SendMessageRequestBuilder().apply(builder).toRequest()
         val response = sendRequest<SendMessageResponse, SendMessageRequest>(
             endpoint = "/channels/$channelId/messages",

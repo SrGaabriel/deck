@@ -41,7 +41,7 @@ data class RawUserStatus(
 
 @Serializable
 data class RawTransientStatus(
-    val id : IntGenericId,
+    val id: IntGenericId,
     @SerialName("gameId") val game: GameStatus,
     val type: RawUserPresenceType,
     val startedAt: Timestamp,
@@ -106,7 +106,7 @@ data class RawPostCreatedByInfo(
 enum class RawUserPresenceStatus(val id: Int) {
     Online(1), Idle(2), Busy(3), Offline(4);
 
-    companion object Serializer: IntIdEnumSerializer<RawUserPresenceStatus>(
+    companion object Serializer : IntIdEnumSerializer<RawUserPresenceStatus>(
         IntSerializationStrategy(values().associateBy { it.id })
     )
 }

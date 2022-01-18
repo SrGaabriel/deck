@@ -6,20 +6,20 @@ import com.deck.core.entity.misc.ChannelContentType
 import com.deck.core.entity.misc.ChannelType
 import java.util.*
 
-interface Channel: Entity {
-    val id: UUID
-    val name: String
-    val description: String
+public interface Channel : Entity {
+    public val id: UUID
+    public val name: String
+    public val description: String
 
-    val type: ChannelType
-    val contentType: ChannelContentType
+    public val type: ChannelType
+    public val contentType: ChannelContentType
 
-    val createdAt: Timestamp
-    val createdBy: GenericId
+    public val createdAt: Timestamp
+    public val createdBy: GenericId
 
-    val archivedAt: Timestamp?
-    val archivedBy: GenericId?
+    public val archivedAt: Timestamp?
+    public val archivedBy: GenericId?
 
-    val updatedAt: Timestamp?
-    val deletedAt: Timestamp?
+    public val updatedAt: Timestamp?
+    public val deletedAt: Timestamp?
 }

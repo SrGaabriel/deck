@@ -11,7 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
-class DeckEntityDelegator(override val rest: RestModule, override val strategizer: EntityStrategizer): EntityDelegator {
+public class DeckEntityDelegator(override val rest: RestModule, override val strategizer: EntityStrategizer) :
+    EntityDelegator {
     override val coroutineContext: CoroutineContext = Dispatchers.Default
 
     override suspend fun getUser(id: GenericId): User? {
@@ -22,7 +23,7 @@ class DeckEntityDelegator(override val rest: RestModule, override val strategize
     override suspend fun getSelfUser(): SelfUser =
         strategizer.decodeSelf(rest.userRoute.getSelf().user)
 
-    override suspend fun getChannel(id: UUID, teamId: GenericId?): Channel? = when(teamId) {
+    override suspend fun getChannel(id: UUID, teamId: GenericId?): Channel? = when (teamId) {
         null -> getPrivateChannel(id)
         else -> getTeamChannel(id, teamId)
     }

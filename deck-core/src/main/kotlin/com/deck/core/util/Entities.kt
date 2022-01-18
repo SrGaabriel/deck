@@ -6,12 +6,13 @@ import com.deck.core.entity.Channel
 import com.deck.core.entity.Message
 import com.deck.core.entity.TeamChannel
 
-val Channel.teamId: GenericId? get() = when (this) {
-    is TeamChannel -> teamId
-    else -> null
-}
+public val Channel.teamId: GenericId?
+    get() = when (this) {
+        is TeamChannel -> teamId
+        else -> null
+    }
 
-suspend fun Channel.sendMessage(builder: DeckMessageBuilder.() -> Unit): Message =
+public suspend fun Channel.sendMessage(builder: DeckMessageBuilder.() -> Unit): Message =
     client.entityStrategizer.decodePartialSentMessage(
         id,
         teamId,

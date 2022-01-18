@@ -8,6 +8,7 @@ import com.deck.common.entity.RawMessageContentNodeLeaves
 class ContentBuilder {
     val nodes = mutableListOf<Node>()
     private val nodeEncoder = NodeEncoder()
+
     /**
      * Simply adds a new node to our list and returning
      * [Unit].
@@ -82,9 +83,9 @@ class LinkedText {
 }
 
 sealed class Node(open val text: String? = null, open val link: String? = null, open val image: String? = null) {
-    class Text(override val text: String): Node(text = text)
-    class Image(override val image: String): Node(image = image)
-    class Link(override val link: String): Node(text = link, link = link)
+    class Text(override val text: String) : Node(text = text)
+    class Image(override val image: String) : Node(image = image)
+    class Link(override val link: String) : Node(text = link, link = link)
 }
 
 class NodeEncoder {
@@ -93,28 +94,37 @@ class NodeEncoder {
             documentObject = node.nodeObject,
             type = node.nodeType.optional(),
             data = node.nodeData,
-            nodes = listOf(RawMessageContentNode(leaves = listOf(RawMessageContentNodeLeaves(
-                leavesObject = "leaf",
-                text = node.text ?: "",
-                marks = emptyList()
-            )).optional(), documentObject = "text"))
+            nodes = listOf(
+                RawMessageContentNode(
+                    leaves = listOf(
+                        RawMessageContentNodeLeaves(
+                            leavesObject = "leaf",
+                            text = node.text ?: "",
+                            marks = emptyList()
+                        )
+                    ).optional(), documentObject = "text"
+                )
+            )
         )
     }
 }
 
-val Node.nodeObject: String get() = when(this) {
-    is Node.Link -> "inline"
-    else -> "block"
-}
+val Node.nodeObject: String
+    get() = when (this) {
+        is Node.Link -> "inline"
+        else -> "block"
+    }
 
-val Node.nodeType: String get() = when(this) {
-    is Node.Text -> "paragraph"
-    is Node.Link -> "link"
-    is Node.Image -> "image"
-}
+val Node.nodeType: String
+    get() = when (this) {
+        is Node.Text -> "paragraph"
+        is Node.Link -> "link"
+        is Node.Image -> "image"
+    }
 
-val Node.nodeData: RawMessageContentData get() = when(this) {
-    is Node.Text -> RawMessageContentData()
-    is Node.Link -> RawMessageContentData(href = link.optional())
-    is Node.Image -> RawMessageContentData(src = image.optional())
-}
+val Node.nodeData: RawMessageContentData
+    get() = when (this) {
+        is Node.Text -> RawMessageContentData()
+        is Node.Link -> RawMessageContentData(href = link.optional())
+        is Node.Image -> RawMessageContentData(src = image.optional())
+    }

@@ -7,25 +7,28 @@ import io.ktor.client.statement.*
 import io.ktor.client.utils.*
 import io.ktor.http.*
 
-data class Request<S, G>(
+public data class Request<S, G>(
     val method: HttpMethod,
     val url: String,
     val body: S? = null,
     val authentication: String? = null
 )
 
-class RequestService(val client: HttpClient, val ratelimiter: Ratelimiter = Ratelimiter(client)) {
-    suspend inline fun <reified S, reified G> sendRequest(request: Request<S, G>): G =
+public class RequestService(public val client: HttpClient, public val ratelimiter: Ratelimiter = Ratelimiter(client)) {
+    public suspend inline fun <reified S, reified G> sendRequest(request: Request<S, G>): G =
         sendRequestWithDefaultSettings(request) { response ->
             throw response.receive<RawGuildedRequestException>().toException()
         }!!
 
-    suspend inline fun <reified S, reified G> sendNullableRequest(request: Request<S, G>): G? =
+    public suspend inline fun <reified S, reified G> sendNullableRequest(request: Request<S, G>): G? =
         sendRequestWithDefaultSettings(request) {
             null
         }
 
-    suspend inline fun <reified S, reified G> sendRequestWithDefaultSettings(request: Request<S, G>, onFailure: (HttpResponse) -> G?): G? = ratelimiter.scheduleRequest(request.url) {
+    public suspend inline fun <reified S, reified G> sendRequestWithDefaultSettings(
+        request: Request<S, G>,
+        onFailure: (HttpResponse) -> G?
+    ): G? = ratelimiter.scheduleRequest(request.url) {
         this.body = request.body ?: EmptyContent
         this.method = request.method
 

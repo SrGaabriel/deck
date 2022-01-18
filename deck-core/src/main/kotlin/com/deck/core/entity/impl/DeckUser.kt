@@ -6,7 +6,7 @@ import com.deck.core.DeckClient
 import com.deck.core.entity.User
 import com.deck.core.entity.misc.DeckUserAboutInfo
 
-data class DeckUser(
+public data class DeckUser(
     override val client: DeckClient,
     override val id: GenericId,
     override val name: String,

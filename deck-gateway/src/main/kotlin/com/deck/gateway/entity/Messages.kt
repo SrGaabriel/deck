@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
  * Parameters [isSilent] [isPrivate] [repliesToIds] aren't present in webhook messages
  */
 @Serializable
-data class RawPartialReceivedMessage(
+public data class RawPartialReceivedMessage(
     val id: UniqueId,
     val createdBy: GenericId,
     val content: RawMessageContent,
@@ -25,7 +25,7 @@ data class RawPartialReceivedMessage(
 )
 
 @Serializable
-data class RawPartialEditedMessage(
+public data class RawPartialEditedMessage(
     val id: UniqueId,
     val createdBy: GenericId,
     val content: RawMessageContent,
@@ -37,13 +37,13 @@ data class RawPartialEditedMessage(
 )
 
 @Serializable
-data class RawPartialDeletedMessage(
+public data class RawPartialDeletedMessage(
     val id: UniqueId,
     val deletedAt: Timestamp,
     val createdAt: Timestamp
 )
 
 @Serializable
-data class RawMessageIdObject(
+public data class RawMessageIdObject(
     val id: UniqueId
 )
