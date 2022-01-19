@@ -10,25 +10,20 @@ import com.deck.common.util.optional
 
 public object NodeGlobalStrategy {
     public fun encodeNode(node: Node): RawMessageContentNode {
-        val data: RawMessageContentData = when (node) {
+        val data: RawMessageContentData = when(node) {
             is Node.Text -> RawMessageContentData()
             is Node.Image -> RawMessageContentData(src = node.data.image!!.optional())
-            is Node.SystemMessage -> RawMessageContentData(node.data.text!!.optional())
         }
         return RawMessageContentNode(
             documentObject = node.`object`,
             type = node.type.optional(),
             data = data,
             nodes = listOf(
-                RawMessageContentNode(
-                    leaves = listOf(
-                        RawMessageContentNodeLeaves(
-                            leavesObject = "leaf",
-                            text = node.data.text.orEmpty(),
-                            marks = emptyList()
-                        )
-                    ).optional(), documentObject = "text"
-                )
+                RawMessageContentNode(leaves = listOf(RawMessageContentNodeLeaves(
+                    leavesObject = "leaf",
+                    text = node.data.text.orEmpty(),
+                    marks = emptyList()
+                )).optional(), documentObject = "text")
             )
         )
     }
@@ -45,15 +40,11 @@ public object NodeGlobalStrategy {
     }
 
     public fun decodeNode(node: RawMessageContentNode): Node? {
+        val leaf =  node.nodes[0].leaves.asNullable()!![0]
+        val image = node.data.src.asNullable()
         return when (node.type.asNullable()) {
-            "paragraph" -> Node.Text(text = node.nodes[0].leaves.asNullable()!![0].text)
-            "image" -> Node.Image(image = node.data.src.asNullable()!!)
-            "systemMessage" -> Node.SystemMessage(
-                messageData = SystemMessageData(
-                    node.type.asNullable()!!,
-                    null
-                )
-            )
+            "paragraph" -> Node.Text(text = leaf.text)
+            "image" -> Node.Image(image = image!!)
             else -> null
         }
     }
