@@ -22,7 +22,13 @@ public annotation class DeckUnsupported
  * and shouldn't be used with a large bot unless you know what you're doing.
  */
 @Retention(AnnotationRetention.BINARY)
-@Target(AnnotationTarget.PROPERTY, AnnotationTarget.FIELD, AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
+@Target(
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.FIELD,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.CLASS,
+    AnnotationTarget.PROPERTY_SETTER
+)
 @RequiresOptIn(level = RequiresOptIn.Level.WARNING)
 public annotation class DeckExperimental
 

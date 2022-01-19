@@ -1,6 +1,6 @@
 package com.deck.core.delegator
 
-import com.deck.common.content.node.NodeStrategy
+import com.deck.common.content.node.NodeGlobalStrategy
 import com.deck.common.entity.RawChannel
 import com.deck.common.entity.RawPartialSentMessage
 import com.deck.common.entity.RawUser
@@ -79,7 +79,7 @@ public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrat
         DeckMessage(
             client = client,
             id = raw.id.mapToBuiltin(),
-            content = NodeStrategy.decodeContent(raw.content),
+            content = NodeGlobalStrategy.decodeContent(raw.content),
             channelId = channelId,
             createdAt = raw.createdAt,
             createdBy = raw.createdBy,

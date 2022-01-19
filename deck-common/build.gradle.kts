@@ -16,6 +16,7 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-datetime:0.3.1")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
             }
+            explicitApi()
         }
         val commonTest by getting {
             dependencies {
