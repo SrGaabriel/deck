@@ -32,7 +32,7 @@ public data class GatewayTeamChannelUpdatedEvent(
 public data class GatewayTeamChannelDeletedEvent(
     val channelId: UniqueId,
     val guildedClientId: UniqueId,
-    val teamId: GenericId
+    val teamId: UniqueId
 ) : GatewayEvent()
 
 // When wrapping, remember that this event can be called even if only one channel was deleted.

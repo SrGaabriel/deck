@@ -1,12 +1,11 @@
 package com.deck.core.event
 
 import com.deck.core.DeckClient
-import com.deck.core.event.channel.*
 import com.deck.core.event.message.DeckMessageCreateEvent
 import com.deck.core.util.WrappedEventSupplier
 import com.deck.core.util.WrappedEventSupplierData
 import com.deck.gateway.event.GatewayEvent
-import com.deck.gateway.event.type.*
+import com.deck.gateway.event.type.GatewayChatMessageCreatedEvent
 import com.deck.gateway.util.on
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -35,15 +34,6 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
     override fun startListeningAndConveying(): Job = client.gateway.orchestrator.on<GatewayEvent> {
         val deckEvent: DeckEvent = when (this) {
             is GatewayChatMessageCreatedEvent -> DeckMessageCreateEvent.map(client, this)
-            is GatewayTeamChannelCreatedEvent -> DeckTeamChannelCreateEvent.map(client, this)
-            is GatewayTeamChannelDeletedEvent -> DeckTeamChannelDeleteEvent.map(client, this)
-            is GatewayTeamChannelUpdatedEvent -> DeckTeamChannelUpdateEvent.map(client, this)
-            is GatewayTeamChannelCategoryPrioritiesUpdatedEvent -> DeckTeamChannelCategoryPrioritiesUpdateEvent.map(
-                client,
-                this
-            )
-            is GatewayTeamChannelCategoryCreatedEvent -> DeckTeamChannelCategoryCreateEvent.map(client, this)
-
             else -> return@on
         }
         eventWrappingFlow.emit(deckEvent)

@@ -49,7 +49,7 @@ public data class RawPrivateChannel(
     val type: RawChannelType,
     val createdAt: Timestamp,
     val createdBy: GenericId,
-    val updatedAt: Timestamp?,
+    val updatedAt: Timestamp,
     val name: String?,
     val description: String?,
     val lastMessage: RawPartialDeletedMessage,

@@ -32,10 +32,8 @@ public data class GatewayUserStreamsVisibilityUpdatedEvent(
 @SerialName("USER_TEAMS_UPDATED")
 public data class GatewayUserTeamsUpdated(
     val teamId: GenericId,
-    // Optional in application accept
-    val isUserBannedFromTeam: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
-    // Optional in application accept
-    val isRemoved: OptionalProperty<Boolean> = OptionalProperty.NotPresent
+    val isUserBannedFromTeam: Boolean,
+    val isRemoved: Boolean
 ) : GatewayEvent()
 
 @Serializable
