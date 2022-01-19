@@ -6,19 +6,19 @@ import com.deck.rest.route.ChannelRoute
 import com.deck.rest.route.TeamRoute
 import com.deck.rest.route.UserRoute
 
-interface RestModule {
-    val restClient: RestClient
+public interface RestModule {
+    public val restClient: RestClient
 
-    val authRoute: AuthRoute
-    val userRoute: UserRoute
-    val teamRoute: TeamRoute
-    val channelRoute: ChannelRoute
+    public val authRoute: AuthRoute
+    public val userRoute: UserRoute
+    public val teamRoute: TeamRoute
+    public val channelRoute: ChannelRoute
 }
 
-class DefaultRestModule: RestModule {
+public class DefaultRestModule : RestModule {
     override var restClient: RestClient = RestClient()
-    override var authRoute = AuthRoute(restClient)
-    override var userRoute = UserRoute(restClient)
-    override val teamRoute = TeamRoute(restClient)
-    override var channelRoute = ChannelRoute(restClient)
+    override var authRoute: AuthRoute = AuthRoute(restClient)
+    override var userRoute: UserRoute = UserRoute(restClient)
+    override val teamRoute: TeamRoute = TeamRoute(restClient)
+    override var channelRoute: ChannelRoute = ChannelRoute(restClient)
 }

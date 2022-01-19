@@ -4,7 +4,7 @@ import com.deck.common.util.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RawEmoji(
+public data class RawEmoji(
     val id: IntGenericId,
     val name: String,
     val createdBy: GenericId,
@@ -20,14 +20,14 @@ data class RawEmoji(
 )
 
 @Serializable
-data class RawReaction(
+public data class RawReaction(
     val id: OptionalProperty<IntGenericId> = OptionalProperty.NotPresent,
     val customReaction: OptionalProperty<RawCustomReaction> = OptionalProperty.NotPresent,
     val customReactionId: IntGenericId
 )
 
 @Serializable
-data class RawCustomReaction(
+public data class RawCustomReaction(
     val id: IntGenericId,
     val name: String,
     val png: String,

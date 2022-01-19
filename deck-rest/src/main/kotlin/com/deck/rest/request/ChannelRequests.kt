@@ -7,7 +7,7 @@ import com.deck.common.util.UniqueId
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SendMessageRequest(
+public data class SendMessageRequest(
     val messageId: UniqueId,
     val content: RawMessageContent,
     val repliesToIds: List<UniqueId>,
@@ -16,7 +16,7 @@ data class SendMessageRequest(
 )
 
 @Serializable
-data class SendMessageResponse(
+public data class SendMessageResponse(
     val message: RawPartialSentMessage,
     val slowmode: RawSlowmode
 )

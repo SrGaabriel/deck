@@ -9,7 +9,7 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 
-abstract class Route(val client: RestClient) {
+public abstract class Route(public val client: RestClient) {
     /**
      * This will fire a request and throw an [GuildedRequestException] in case of failure.
      *
@@ -25,12 +25,19 @@ abstract class Route(val client: RestClient) {
      * @throws GuildedRequestException in case of failure.
      * @return Returns an object of type [R] in case of success.
      */
-    suspend inline fun <reified R, reified B> sendRequest(
+    public suspend inline fun <reified R, reified B> sendRequest(
         endpoint: String,
         method: HttpMethod,
         body: B? = null,
         authenticated: Boolean = true
-    ) = client.requestService.sendRequest(Request<B, R>(method, Constants.GuildedRestApi + endpoint, body, if (authenticated) client.token else null))
+    ): R = client.requestService.sendRequest(
+        Request<B, R>(
+            method,
+            Constants.GuildedRestApi + endpoint,
+            body,
+            if (authenticated) client.token else null
+        )
+    )
 
     /**
      * This will fire a request and return null in case of failure.
@@ -45,12 +52,19 @@ abstract class Route(val client: RestClient) {
      * @param authenticated Whether you need to provide an authentication for this request
      * @return Null in case of failure, [R] in case of success
      */
-    suspend inline fun <reified R, reified B> sendNullableRequest(
+    public suspend inline fun <reified R, reified B> sendNullableRequest(
         endpoint: String,
         method: HttpMethod,
         body: B? = null,
         authenticated: Boolean = true
-    ) = client.requestService.sendNullableRequest(Request<B, R>(method, Constants.GuildedRestApi + endpoint, body, if (authenticated) client.token else null))
+    ): R? = client.requestService.sendNullableRequest(
+        Request<B, R>(
+            method,
+            Constants.GuildedRestApi + endpoint,
+            body,
+            if (authenticated) client.token else null
+        )
+    )
 }
 
 internal fun RestClient.defaultHttpClient() = HttpClient(CIO.create()) {

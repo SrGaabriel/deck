@@ -15,18 +15,18 @@ import com.deck.gateway.event.type.GatewayChatMessageCreatedEvent
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
-data class DeckMessageCreateEvent(
+public data class DeckMessageCreateEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
     val message: Message,
     val channel: Channel,
     val teamId: GenericId?,
     val senderId: GenericId
-): DeckEvent {
-    suspend fun getSender(): User? =
+) : DeckEvent {
+    public suspend fun getSender(): User? =
         client.entityDelegator.getUser(senderId)
 
-    companion object: EventMapper<GatewayChatMessageCreatedEvent, DeckMessageCreateEvent> {
+    public companion object : EventMapper<GatewayChatMessageCreatedEvent, DeckMessageCreateEvent> {
         override suspend fun map(client: DeckClient, event: GatewayChatMessageCreatedEvent): DeckMessageCreateEvent =
             DeckMessageCreateEvent(
                 client = client,
@@ -49,6 +49,7 @@ data class DeckMessageCreateEvent(
                 teamId = event.teamId.asNullable(),
                 channel = client.entityDelegator.getChannel(event.channelId.mapToBuiltin(), event.teamId.asNullable())!!
             )
+
         override val coroutineContext: CoroutineContext = Dispatchers.Unconfined
     }
 }

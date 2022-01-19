@@ -18,7 +18,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 @SerialName("ChatMessageCreated")
-data class GatewayChatMessageCreatedEvent(
+public data class GatewayChatMessageCreatedEvent(
     val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val channelId: UniqueId,
     val channelCategoryId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
@@ -31,11 +31,11 @@ data class GatewayChatMessageCreatedEvent(
     val contentId: UniqueId,
     val createdBy: GenericId,
     val mentionedUserInfo: OptionalProperty<RawMessageMentionedUserInfo> = OptionalProperty.NotPresent
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("ChatMessageUpdated")
-data class GatewayChatMessageUpdatedEvent(
+public data class GatewayChatMessageUpdatedEvent(
     val guildedClientId: UniqueId,
     val channelId: UniqueId,
     val channelCategoryId: IntGenericId?,
@@ -45,11 +45,11 @@ data class GatewayChatMessageUpdatedEvent(
     val updatedBy: GenericId,
     val contentId: UniqueId,
     val message: RawPartialEditedMessage
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("ChatMessageDeleted")
-data class GatewayChatMessageDeleteEvent(
+public data class GatewayChatMessageDeleteEvent(
     val channelId: UniqueId,
     val channelCategoryId: UniqueId?,
     val channelType: RawChannelType,
@@ -57,12 +57,12 @@ data class GatewayChatMessageDeleteEvent(
     val contentType: RawChannelContentType,
     val message: RawPartialDeletedMessage,
     val newLastMessage: com.deck.common.entity.RawPartialDeletedMessage?
-): GatewayEvent()
+) : GatewayEvent()
 
 /** Parameters [channelCategoryId] and [teamId] are missing when reaction is added in private channel */
 @Serializable
 @SerialName("ChatMessageReactionAdded")
-data class GatewayChatMessageReactionAddedEvent(
+public data class GatewayChatMessageReactionAddedEvent(
     val guildedClientId: UniqueId,
     val channelId: UniqueId,
     val channelCategoryId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
@@ -71,12 +71,12 @@ data class GatewayChatMessageReactionAddedEvent(
     val contentType: RawChannelContentType,
     val reaction: RawReaction,
     val message: RawMessageIdObject
-): GatewayEvent()
+) : GatewayEvent()
 
 /** Parameters [channelCategoryId] and [teamId] are missing when reaction is added in private channel */
 @Serializable
 @SerialName("ChatMessageReactionDeleted")
-data class GatewayChatMessageReactionDeletedEvent(
+public data class GatewayChatMessageReactionDeletedEvent(
     val guildedClientId: UniqueId,
     val channelId: UniqueId,
     val channelCategoryId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
@@ -85,11 +85,11 @@ data class GatewayChatMessageReactionDeletedEvent(
     val contentType: RawChannelContentType,
     val reaction: RawReaction,
     val message: RawMessageIdObject
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("ChatPinnedMessageCreated")
-data class GatewayChatPinnedMessageCreatedEvent(
+public data class GatewayChatPinnedMessageCreatedEvent(
     val guildedClientId: UniqueId,
     val channelId: UniqueId,
     val channelCategoryId: IntGenericId?,
@@ -99,11 +99,11 @@ data class GatewayChatPinnedMessageCreatedEvent(
     val updatedBy: GenericId,
     val message: RawMessageIdObject,
     val userId: GenericId
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("ChatPinnedMessageDeleted")
-data class GatewayChatPinnedMessageDeletedEvent(
+public data class GatewayChatPinnedMessageDeletedEvent(
     val guildedClientId: UniqueId,
     val channelId: UniqueId,
     val channelCategoryId: IntGenericId?,
@@ -112,4 +112,4 @@ data class GatewayChatPinnedMessageDeletedEvent(
     val contentType: RawChannelContentType,
     val updatedBy: GenericId,
     val message: RawMessageIdObject,
-): GatewayEvent()
+) : GatewayEvent()

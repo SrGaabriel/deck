@@ -6,7 +6,7 @@ import com.deck.core.DeckClient
 import com.deck.core.entity.SelfUser
 import com.deck.core.entity.misc.DeckUserAboutInfo
 
-data class DeckSelfUser constructor(
+public data class DeckSelfUser constructor(
     override val client: DeckClient,
     override val id: GenericId,
     override var name: String,
@@ -16,4 +16,4 @@ data class DeckSelfUser constructor(
     override var aboutInfo: DeckUserAboutInfo?,
     override val creationTime: Timestamp,
     override val lastLoginTime: Timestamp
-): SelfUser
+) : SelfUser

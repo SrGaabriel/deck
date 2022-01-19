@@ -11,12 +11,12 @@ import kotlinx.serialization.encoding.Encoder
  * https://medium.com/livefront/kotlinx-serialization-de-serializing-jsons-nullable-optional-properties-442c7f0c2614
  */
 @Serializable(OptionalPropertySerializer::class)
-sealed class OptionalProperty<out T> {
-    object NotPresent : OptionalProperty<Nothing>()
-    data class Present<T>(val value: T) : OptionalProperty<T>()
+public sealed class OptionalProperty<out T> {
+    public object NotPresent : OptionalProperty<Nothing>()
+    public data class Present<T>(val value: T) : OptionalProperty<T>()
 }
 
-open class OptionalPropertySerializer<T>(
+public open class OptionalPropertySerializer<T>(
     private val valueSerializer: KSerializer<T>
 ) : KSerializer<OptionalProperty<T>> {
     final override val descriptor: SerialDescriptor = valueSerializer.descriptor
@@ -35,27 +35,27 @@ open class OptionalPropertySerializer<T>(
     }
 }
 
-fun <T> T.optional() = OptionalProperty.Present(this)
+public fun <T> T.optional(): OptionalProperty.Present<T> = OptionalProperty.Present(this)
 
-fun <T> T?.nullableOptional() =
+public fun <T> T?.nullableOptional(): OptionalProperty<T> =
     if (this == null) OptionalProperty.NotPresent else OptionalProperty.Present(this)
 
-fun <T> OptionalProperty<T>.asNullable(): T? = when(this) {
+public fun <T> OptionalProperty<T>.asNullable(): T? = when (this) {
     is OptionalProperty.NotPresent -> null
     is OptionalProperty.Present<T> -> value
 }
 
-fun <T, F> OptionalProperty<T>.map(block: (T) -> F): OptionalProperty<F> = when(this) {
+public fun <T, F> OptionalProperty<T>.map(block: (T) -> F): OptionalProperty<F> = when (this) {
     is OptionalProperty.NotPresent -> OptionalProperty.NotPresent
     is OptionalProperty.Present<T> -> block(this.value).optional()
 }
 
-fun <T, F : Any> OptionalProperty<T>.mapNotNull(block: (T) -> F?): OptionalProperty<F> = when(this) {
+public fun <T, F : Any> OptionalProperty<T>.mapNotNull(block: (T) -> F?): OptionalProperty<F> = when (this) {
     is OptionalProperty.NotPresent -> OptionalProperty.NotPresent
     is OptionalProperty.Present<T> -> block(value)?.optional() ?: OptionalProperty.NotPresent
 }
 
-fun <T, F : Any> OptionalProperty<T?>.mapValueNotNull(block: (T) -> F): OptionalProperty<F> = when(this) {
+public fun <T, F : Any> OptionalProperty<T?>.mapValueNotNull(block: (T) -> F): OptionalProperty<F> = when (this) {
     is OptionalProperty.NotPresent -> OptionalProperty.NotPresent
     is OptionalProperty.Present<T?> -> if (value == null) OptionalProperty.NotPresent else block(value).optional()
 }

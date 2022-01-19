@@ -7,7 +7,10 @@ import com.deck.common.util.Constants
 import com.deck.rest.RestClient
 import com.deck.rest.route.AuthRoute
 
-suspend fun authentication(authentication: Authentication, authenticationRoute: AuthRoute): AuthenticationResult {
+public suspend fun authentication(
+    authentication: Authentication,
+    authenticationRoute: AuthRoute
+): AuthenticationResult {
     val response = authenticationRoute.login(authentication)
     val cookie = response.headers["Set-Cookie"]
         ?: error("The authorization credentials seem to be wrong or invalid.")
@@ -21,7 +24,7 @@ suspend fun authentication(authentication: Authentication, authenticationRoute: 
  * @param authentication authentication credentials
  * @param authRoute authentication route
  */
-suspend fun RestClient.authenticate(authentication: Authentication, authRoute: AuthRoute = AuthRoute(this)) {
+public suspend fun RestClient.authenticate(authentication: Authentication, authRoute: AuthRoute = AuthRoute(this)) {
     this.token = authentication(authentication, authRoute).token
 }
 
@@ -32,5 +35,8 @@ suspend fun RestClient.authenticate(authentication: Authentication, authRoute: A
  * @param builder authentication builder
  * @param authRoute authentication route
  */
-suspend fun RestClient.authenticate(authRoute: AuthRoute = AuthRoute(this), builder: AuthenticationBuilder.() -> Unit) =
+public suspend fun RestClient.authenticate(
+    authRoute: AuthRoute = AuthRoute(this),
+    builder: AuthenticationBuilder.() -> Unit
+): RestClient =
     authenticate(AuthenticationBuilder().apply(builder).toSerializableAuthentication(), authRoute).let { this }

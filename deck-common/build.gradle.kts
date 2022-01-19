@@ -8,11 +8,8 @@ repositories {
 }
 
 kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "1.8"
-        }
-    }
+    jvm()
+
     sourceSets {
         val commonMain by getting {
             dependencies {

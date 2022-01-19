@@ -3,7 +3,8 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/SrGaabriel/deck)
 
 # 🎲 deck [WIP]
- Deck is a powerful yet simple-to-use guilded wrapper made entirely in Kotlin with support to multiplatform. 
+
+Deck is a powerful yet simple-to-use guilded wrapper made entirely in Kotlin with support to multiplatform.
 
 ## Implementating
 
@@ -29,6 +30,7 @@ Or with maven:
     </repository>
 </repositories>
 ```
+
 ```xml
 <dependencies>
     <dependency>

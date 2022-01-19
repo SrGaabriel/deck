@@ -5,18 +5,19 @@ import com.deck.common.entity.RawMessageContentData
 import com.deck.common.entity.RawMessageContentNode
 import com.deck.common.entity.RawMessageContentNodeLeaves
 
-class ContentBuilder {
-    val nodes = mutableListOf<Node>()
-    private val nodeEncoder = NodeEncoder()
+public class ContentBuilder {
+    public val nodes: MutableList<Node> = mutableListOf<Node>()
+    private val nodeEncoder: NodeEncoder = NodeEncoder()
+
     /**
      * Simply adds a new node to our list and returning
      * [Unit].
      *
      * @param node The node to be added
      */
-    fun addNode(node: Node) = node.let { nodes.add(it); Unit }
+    public fun addNode(node: Node): Unit = node.let { nodes.add(it); Unit }
 
-    fun build() = RawMessageContent(
+    public fun build(): RawMessageContent = RawMessageContent(
         contentObject = "value",
         document = RawMessageContentNode(
             documentObject = "document",
@@ -26,8 +27,8 @@ class ContentBuilder {
     )
 }
 
-class ContentWrapper(val builder: ContentBuilder = ContentBuilder()) {
-    val add = NodeRegistry()
+public class ContentWrapper(public val builder: ContentBuilder = ContentBuilder()) {
+    public val add: NodeRegistry = NodeRegistry()
 
     /**
      * Add a new paragraph node with [text] content skipping
@@ -36,7 +37,7 @@ class ContentWrapper(val builder: ContentBuilder = ContentBuilder()) {
      *
      * @param text The written content of the message
      */
-    infix fun NodeRegistry.text(text: String) = builder.addNode(Node.Text(text = text))
+    public infix fun NodeRegistry.text(text: String): Unit = builder.addNode(Node.Text(text = text))
 
     /**
      * Adds an image to the message, this method can be called between
@@ -45,7 +46,7 @@ class ContentWrapper(val builder: ContentBuilder = ContentBuilder()) {
      *
      * @param image The link of the image you'll be sending.
      */
-    infix fun NodeRegistry.image(image: String) = builder.addNode(Node.Image(image = image))
+    public infix fun NodeRegistry.image(image: String): Unit = builder.addNode(Node.Image(image = image))
 
     /**
      * Adds a link to the message, it's important because it'll inline/embed
@@ -54,26 +55,26 @@ class ContentWrapper(val builder: ContentBuilder = ContentBuilder()) {
      * @param text The text plus the placeholder {link}, which will be replaced
      * by the specified link in [LinkedText].
      */
-    infix fun NodeRegistry.linked(text: String): LinkedText = (LinkedText() + text)
+    public infix fun NodeRegistry.linked(text: String): LinkedText = (LinkedText() + text)
 
-    inline operator fun invoke(scope: ContentWrapper.() -> Unit) =
+    public inline operator fun invoke(scope: ContentWrapper.() -> Unit): ContentWrapper =
         this.apply(scope)
 
-    infix fun LinkedText.whereLink(link: String) {
+    public infix fun LinkedText.whereLink(link: String) {
         builder.addNode(Node.Text(text = beforeLink))
         builder.addNode(Node.Link(link = link))
         builder.addNode(Node.Text(text = afterLink))
     }
 
-    fun toContent() = builder.build()
+    public fun toContent(): RawMessageContent = builder.build()
 
-    class NodeRegistry
+    public class NodeRegistry
 }
 
-class LinkedText {
-    private val stringBuilder = StringBuilder()
+public class LinkedText {
+    private val stringBuilder: StringBuilder = StringBuilder()
 
-    operator fun plus(text: String): LinkedText = apply {
+    public operator fun plus(text: String): LinkedText = apply {
         stringBuilder.append(text)
     }
 
@@ -81,40 +82,53 @@ class LinkedText {
     internal val afterLink: String get() = stringBuilder.toString().substringAfter("{link}", "")
 }
 
-sealed class Node(open val text: String? = null, open val link: String? = null, open val image: String? = null) {
-    class Text(override val text: String): Node(text = text)
-    class Image(override val image: String): Node(image = image)
-    class Link(override val link: String): Node(text = link, link = link)
+public sealed class Node(
+    public open val text: String? = null,
+    public open val link: String? = null,
+    public open val image: String? = null
+) {
+    public class Text(override val text: String) : Node(text = text)
+    public class Image(override val image: String) : Node(image = image)
+    public class Link(override val link: String) : Node(text = link, link = link)
 }
 
-class NodeEncoder {
-    fun encodeNode(node: Node): RawMessageContentNode {
+public class NodeEncoder {
+    public fun encodeNode(node: Node): RawMessageContentNode {
         return RawMessageContentNode(
             documentObject = node.nodeObject,
             type = node.nodeType.optional(),
             data = node.nodeData,
-            nodes = listOf(RawMessageContentNode(leaves = listOf(RawMessageContentNodeLeaves(
-                leavesObject = "leaf",
-                text = node.text ?: "",
-                marks = emptyList()
-            )).optional(), documentObject = "text"))
+            nodes = listOf(
+                RawMessageContentNode(
+                    leaves = listOf(
+                        RawMessageContentNodeLeaves(
+                            leavesObject = "leaf",
+                            text = node.text ?: "",
+                            marks = emptyList()
+                        )
+                    ).optional(), documentObject = "text"
+                )
+            )
         )
     }
 }
 
-val Node.nodeObject: String get() = when(this) {
-    is Node.Link -> "inline"
-    else -> "block"
-}
+public val Node.nodeObject: String
+    get() = when (this) {
+        is Node.Link -> "inline"
+        else -> "block"
+    }
 
-val Node.nodeType: String get() = when(this) {
-    is Node.Text -> "paragraph"
-    is Node.Link -> "link"
-    is Node.Image -> "image"
-}
+public val Node.nodeType: String
+    get() = when (this) {
+        is Node.Text -> "paragraph"
+        is Node.Link -> "link"
+        is Node.Image -> "image"
+    }
 
-val Node.nodeData: RawMessageContentData get() = when(this) {
-    is Node.Text -> RawMessageContentData()
-    is Node.Link -> RawMessageContentData(href = link.optional())
-    is Node.Image -> RawMessageContentData(src = image.optional())
-}
+public val Node.nodeData: RawMessageContentData
+    get() = when (this) {
+        is Node.Text -> RawMessageContentData()
+        is Node.Link -> RawMessageContentData(href = link.optional())
+        is Node.Image -> RawMessageContentData(src = image.optional())
+    }

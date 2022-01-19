@@ -3,7 +3,7 @@ package com.deck.gateway.event.type
 import com.deck.common.entity.RawApplication
 import com.deck.common.entity.RawTeamMember
 import com.deck.common.util.*
-import com.deck.gateway.com.deck.gateway.entity.RawPartialApplication
+import com.deck.gateway.entity.RawPartialApplication
 import com.deck.gateway.entity.RawTeamMemberUserInfo
 import com.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
@@ -11,63 +11,63 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("TeamMemberJoined")
-data class GatewayTeamMemberJoinedEvent(
+public data class GatewayTeamMemberJoinedEvent(
     val user: RawTeamMember,
     val teamId: GenericId
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("TeamMemberRemoved")
-data class GatewayTeamMemberRemovedEvent(
+public data class GatewayTeamMemberRemovedEvent(
     val userId: GenericId,
     val teamId: GenericId
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("TeamApplicationCreated")
-data class GatewayTeamApplicationCreatedEvent(
+public data class GatewayTeamApplicationCreatedEvent(
     val teamId: GenericId,
     val application: RawApplication
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("TeamApplicationUpdated")
-data class GatewayTeamApplicationUpdatedEvent(
+public data class GatewayTeamApplicationUpdatedEvent(
     val teamId: GenericId,
     val applicationId: IntGenericId,
     val application: RawPartialApplication
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("TeamApplicationRemoved")
-data class GatewayTeamApplicationRemovedEvent(
+public data class GatewayTeamApplicationRemovedEvent(
     val teamId: GenericId,
     val applicationId: IntGenericId
-): GatewayEvent()
+) : GatewayEvent()
 
 /** Incredibly enough, [guildedClientId] and [updatedBy] are missing when webhooks update other members */
 @Serializable
 @DeckExperimental
 @SerialName("TeamMemberUpdated")
-data class GatewayTeamMemberUpdatedEvent(
+public data class GatewayTeamMemberUpdatedEvent(
     val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val userId: GenericId,
     val updatedBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     val userInfo: RawTeamMemberUserInfo
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("TeamMutedMembersUpdated")
-data class GatewayTeamMutedMembersUpdated(
+public data class GatewayTeamMutedMembersUpdated(
     val isMuted: Boolean,
     val peerId: GenericId,
     val teamId: GenericId
-): GatewayEvent()
+) : GatewayEvent()
 
 @Serializable
 @SerialName("TeamDeafenedMembersUpdated")
-data class GatewayTeamDeafenedMembersUpdatedEvent(
+public data class GatewayTeamDeafenedMembersUpdatedEvent(
     val isDeafened: Boolean,
     val peerId: GenericId,
     val teamId: GenericId
-): GatewayEvent()
+) : GatewayEvent()

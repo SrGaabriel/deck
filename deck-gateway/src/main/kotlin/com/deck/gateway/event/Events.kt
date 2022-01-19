@@ -13,9 +13,9 @@ import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 
 @Serializable
-abstract class GatewayEvent {
+public abstract class GatewayEvent {
     @Transient
-    open var gatewayId = -1
+    public open var gatewayId: Int = -1
 }
 
 @OptIn(DeckExperimental::class)
@@ -112,13 +112,13 @@ private val forgivingJson by lazy {
     }
 }
 
-interface EventDecoder {
-    fun decodeEventFromPayload(payload: Payload): GatewayEvent?
+public interface EventDecoder {
+    public fun decodeEventFromPayload(payload: Payload): GatewayEvent?
 
-    fun decodePayloadFromString(string: String): Payload?
+    public fun decodePayloadFromString(string: String): Payload?
 }
 
-class DefaultEventDecoder(private val gatewayId: Int): EventDecoder {
+public class DefaultEventDecoder(private val gatewayId: Int) : EventDecoder {
     /**
      * Events with a case in when are specifically the ones which don't have
      * come with a **type** parameter.
@@ -144,6 +144,6 @@ class DefaultEventDecoder(private val gatewayId: Int): EventDecoder {
     }
 }
 
-data class Payload(val type: String, val json: String) {
-    val isValid = type != json && json.contains("{")
+public data class Payload(val type: String, val json: String) {
+    public val isValid: Boolean = type != json && json.contains("{")
 }

@@ -6,9 +6,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GatewayHelloEvent(
+public data class GatewayHelloEvent(
     @SerialName("sid") val sessionId: String,
     @DeckUnknown val upgrades: List<Unit>,
     val pingInterval: Long,
     val pingTimeout: Long
-): GatewayEvent()
+) : GatewayEvent()

@@ -10,12 +10,12 @@ import com.deck.core.entity.SelfUser
 import com.deck.core.entity.User
 import java.util.*
 
-interface EntityStrategizer {
-    fun decodeUser(raw: RawUser): User
+public interface EntityStrategizer {
+    public fun decodeUser(raw: RawUser): User
 
-    fun decodeSelf(raw: RawUser): SelfUser
+    public fun decodeSelf(raw: RawUser): SelfUser
 
-    fun decodeChannel(raw: RawChannel): Channel
+    public fun decodeChannel(raw: RawChannel): Channel
 
-    fun decodePartialSentMessage(channelId: UUID, teamId: GenericId?, raw: RawPartialSentMessage): Message
+    public fun decodePartialSentMessage(channelId: UUID, teamId: GenericId?, raw: RawPartialSentMessage): Message
 }

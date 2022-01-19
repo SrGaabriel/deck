@@ -5,23 +5,23 @@ import com.deck.common.util.Timestamp
 import com.deck.core.entity.misc.Content
 import java.util.*
 
-interface Message: Entity {
-    val id: UUID
-    val content: Content
+public interface Message : Entity {
+    public val id: UUID
+    public val content: Content
 
-    val teamId: GenericId?
+    public val teamId: GenericId?
 
-    val channelId: UUID
-    val repliesToId: UUID?
+    public val channelId: UUID
+    public val repliesToId: UUID?
 
-    val createdAt: Timestamp
-    val updatedAt: Timestamp?
+    public val createdAt: Timestamp
+    public val updatedAt: Timestamp?
 
-    val createdBy: GenericId
-    val updatedBy: GenericId?
+    public val createdBy: GenericId
+    public val updatedBy: GenericId?
 
-    val isSilent: Boolean
-    val isPrivate: Boolean
+    public val isSilent: Boolean
+    public val isPrivate: Boolean
 
-    suspend fun getChannel(): Channel
+    public suspend fun getChannel(): Channel
 }

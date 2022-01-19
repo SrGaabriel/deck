@@ -6,7 +6,7 @@ import com.deck.common.util.Timestamp
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RawApplication(
+public data class RawApplication(
     val id: IntGenericId,
     val status: Int,
     // val applicantSocialLinks: List<*>,
@@ -22,20 +22,20 @@ data class RawApplication(
 )
 
 @Serializable
-data class RawApplicationFormResult(
+public data class RawApplicationFormResult(
     val isValid: Boolean,
     val sections: List<RawApplicationSection>,
     val hasChanged: Boolean
 )
 
 @Serializable
-data class RawApplicationSection(
+public data class RawApplicationSection(
     val header: String,
     val fieldSpecs: List<RawApplicationSectionField>
 )
 
 @Serializable
-data class RawApplicationSectionField(
+public data class RawApplicationSectionField(
     val grow: Int,
     val size: String,
     val type: String,

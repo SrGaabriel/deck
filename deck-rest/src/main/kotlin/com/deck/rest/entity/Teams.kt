@@ -8,7 +8,7 @@ import com.deck.common.util.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RawFetchedTeam(
+public data class RawFetchedTeam(
     val id: GenericId,
     val name: String,
     val subdomain: String,
@@ -52,7 +52,7 @@ data class RawFetchedTeam(
 )
 
 @Serializable
-data class RawFetchedTeamMeasurements(
+public data class RawFetchedTeamMeasurements(
     val numMembers: Int,
     val numFollowers: Int,
     val numRecentMatches: Int,
@@ -66,7 +66,7 @@ data class RawFetchedTeamMeasurements(
 )
 
 @Serializable
-data class RawTeamWebhook(
+public data class RawTeamWebhook(
     val id: UniqueId,
     val name: String,
     val teamId: GenericId,

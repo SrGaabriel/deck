@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
 
-class GatewayOrchestrator: EventSupplier, CoroutineScope {
+public class GatewayOrchestrator : EventSupplier, CoroutineScope {
     override val coroutineContext: CoroutineContext = Executors
         .newFixedThreadPool(4)
         .asCoroutineDispatcher()
@@ -22,7 +22,7 @@ class GatewayOrchestrator: EventSupplier, CoroutineScope {
         install(WebSockets)
     }
 
-    lateinit var authentication: AuthenticationResult
+    public lateinit var authentication: AuthenticationResult
     override val eventSupplierData: EventSupplierData by lazy {
         EventSupplierData(
             scope = this,
@@ -31,21 +31,29 @@ class GatewayOrchestrator: EventSupplier, CoroutineScope {
     }
 
     // When enabled prints payloads json
-    var debugPayloads: Boolean = false
-    val gateways = mutableListOf<Gateway>()
-    val globalEventsFlow = MutableSharedFlow<GatewayEvent>()
+    public var debugPayloads: Boolean = false
+    public val gateways: MutableList<Gateway> = mutableListOf<Gateway>()
+    public val globalEventsFlow: MutableSharedFlow<GatewayEvent> = MutableSharedFlow<GatewayEvent>()
 
     // We'll use a different counter since we don't want a previously closed gateway and a new one having same IDs
     private var gatewayCurrentId = 0
-    fun openGateway(parameters: GatewayParameters = GatewayParameters(guildedClientId = authentication.midSession)): Gateway =
-        DefaultGateway(authentication.token, debugPayloads, gatewayCurrentId.also { gatewayCurrentId++ },this, parameters, client = httpClient, eventSharedFlow = globalEventsFlow).also { gateways.add(it) }
+    public fun openGateway(parameters: GatewayParameters = GatewayParameters(guildedClientId = authentication.midSession)): Gateway =
+        DefaultGateway(
+            authentication.token,
+            debugPayloads,
+            gatewayCurrentId.also { gatewayCurrentId++ },
+            this,
+            parameters,
+            client = httpClient,
+            eventSharedFlow = globalEventsFlow
+        ).also { gateways.add(it) }
 
-    fun openTeamGateway(teamId: GenericId) =
+    public fun openTeamGateway(teamId: GenericId): Gateway =
         openGateway(GatewayParameters(teamId = teamId, guildedClientId = authentication.midSession))
 
-    suspend fun closeGateway(teamId: GenericId): Unit =
+    public suspend fun closeGateway(teamId: GenericId): Unit =
         closeGateway(gateways.first { it.parameters.teamId == teamId })
 
-    suspend fun closeGateway(gateway: Gateway): Unit =
+    public suspend fun closeGateway(gateway: Gateway): Unit =
         gateways.remove(gateway.also { gateway.disconnect(false) }).let {}
 }

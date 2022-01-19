@@ -1,13 +1,12 @@
-package com.deck.gateway.com.deck.gateway.entity
+package com.deck.gateway.entity
 
 import com.deck.common.entity.*
 import com.deck.common.util.*
-import com.deck.gateway.entity.RawUserIdObject
 import kotlinx.serialization.Serializable
 
 // All optional fields are missing on channel update (except on role updates)
 @Serializable
-data class RawPartialTeamChannel(
+public data class RawPartialTeamChannel(
     val id: UniqueId,
     val type: OptionalProperty<RawChannelType> = OptionalProperty.NotPresent,
     val createdAt: OptionalProperty<Timestamp> = OptionalProperty.NotPresent,
@@ -42,7 +41,7 @@ data class RawPartialTeamChannel(
 )
 
 @Serializable
-data class RawPartialPrivateChannel(
+public data class RawPartialPrivateChannel(
     val id: UniqueId,
     val name: OptionalProperty<String> = OptionalProperty.NotPresent,
     val voiceParticipants: OptionalProperty<List<RawUserIdObject>> = OptionalProperty.NotPresent
@@ -50,7 +49,7 @@ data class RawPartialPrivateChannel(
 
 // Received when deleting categories
 @Serializable
-data class RawTeamCategoryChannel(
+public data class RawTeamCategoryChannel(
     val id: UniqueId,
     val channelCategoryId: IntGenericId?,
     val isRoleSynced: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
@@ -60,13 +59,13 @@ data class RawTeamCategoryChannel(
 
 // Received when moving categories between groups
 @Serializable
-data class RawTeamCategoryChannelId(val id: UniqueId)
+public data class RawTeamCategoryChannelId(val id: UniqueId)
 
 @Serializable
-data class RawPrivateChannelRemovedInfo(val user: RawUserIdObject)
+public data class RawPrivateChannelRemovedInfo(val user: RawUserIdObject)
 
 @Serializable
-data class RawChannelEvent(
+public data class RawChannelEvent(
     val id: IntGenericId,
     val name: String,
     val description: RawMessageContent?,
@@ -111,7 +110,7 @@ data class RawChannelEvent(
 
 /** @param assignedTo is not present when editing items */
 @Serializable
-data class RawChannelListItem(
+public data class RawChannelListItem(
     val id: UniqueId,
     val message: RawMessageContent,
     val priority: Int,
@@ -136,7 +135,7 @@ data class RawChannelListItem(
 )
 
 @Serializable
-data class RawChannelForumThread(
+public data class RawChannelForumThread(
     val id: IntGenericId,
     val title: String,
     val message: RawMessageContent,
@@ -157,7 +156,7 @@ data class RawChannelForumThread(
 )
 
 @Serializable
-data class RawPartialChannelForumThread(
+public data class RawPartialChannelForumThread(
     val id: IntGenericId,
     val title: String,
     val message: RawMessageContent,
@@ -165,7 +164,7 @@ data class RawPartialChannelForumThread(
 )
 
 @Serializable
-data class RawChannelScheduleAvailability(
+public data class RawChannelScheduleAvailability(
     val id: IntGenericId,
     val availabilityId: IntGenericId,
     val teamId: GenericId,
@@ -178,7 +177,7 @@ data class RawChannelScheduleAvailability(
 )
 
 @Serializable
-data class RawChannelDocument(
+public data class RawChannelDocument(
     val id: IntGenericId,
     val title: String,
     val content: RawMessageContent,
@@ -197,7 +196,7 @@ data class RawChannelDocument(
 )
 
 @Serializable
-data class RawChannelMedia(
+public data class RawChannelMedia(
     val id: IntGenericId,
     val type: String,
     val src: String,
@@ -218,7 +217,7 @@ data class RawChannelMedia(
 )
 
 @Serializable
-data class RawChannelReplyProperties(
+public data class RawChannelReplyProperties(
     val isLocked: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     val isSticky: OptionalProperty<Boolean> = OptionalProperty.NotPresent
 )

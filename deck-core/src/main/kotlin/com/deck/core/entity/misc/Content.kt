@@ -3,18 +3,18 @@ package com.deck.core.entity.misc
 import com.deck.common.entity.RawMessageContent
 import com.deck.common.util.*
 
-class Content {
-    val builder: ContentBuilder = ContentBuilder()
-    val wrapper: ContentWrapper = ContentWrapper(builder)
+public class Content {
+    public val builder: ContentBuilder = ContentBuilder()
+    public val wrapper: ContentWrapper = ContentWrapper(builder)
 
-    val text get() = builder.nodes.mapNotNull { it.text }
-    val links get() = builder.nodes.mapNotNull { it.link }
-    val images get() = builder.nodes.mapNotNull { it.image }
+    public val text: List<String> get() = builder.nodes.mapNotNull { it.text }
+    public val links: List<String> get() = builder.nodes.mapNotNull { it.link }
+    public val images: List<String> get() = builder.nodes.mapNotNull { it.image }
 
-    val textAsString get() = text.joinToString("\n")
+    public val textAsString: String get() = text.joinToString("\n")
 }
 
-fun RawMessageContent.mapToContent() = Content().also {
+public fun RawMessageContent.mapToContent(): Content = Content().also {
     val mainNodes = document.nodes.getOrNull(0)?.nodes ?: return Content()
     for (node in mainNodes) {
         val leaf = node.leaves.mapNotNull { leaves -> leaves.getOrNull(0) }.asNullable()

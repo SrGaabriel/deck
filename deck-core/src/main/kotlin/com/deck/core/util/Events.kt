@@ -7,11 +7,11 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
-interface WrappedEventSupplier {
-    val wrappedEventSupplierData: WrappedEventSupplierData
+public interface WrappedEventSupplier {
+    public val wrappedEventSupplierData: WrappedEventSupplierData
 }
 
-data class WrappedEventSupplierData(
+public data class WrappedEventSupplierData(
     val scope: CoroutineScope,
     val sharedFlow: SharedFlow<DeckEvent>,
     val listeningGatewayId: Int? = null
@@ -19,29 +19,30 @@ data class WrappedEventSupplierData(
 
 @DeckDSL
 @DeckExperimental
-inline fun <reified T : DeckEvent> WrappedEventSupplier.on(
+public inline fun <reified T : DeckEvent> WrappedEventSupplier.on(
     scope: CoroutineScope = wrappedEventSupplierData.scope,
     gatewayId: Int? = wrappedEventSupplierData.listeningGatewayId,
     noinline callback: suspend T.() -> Unit
 ): Job = on(gatewayId, scope, wrappedEventSupplierData.sharedFlow, callback)
 
 @DeckExperimental
-suspend inline fun <reified T : DeckEvent> WrappedEventSupplier.await(
+public suspend inline fun <reified T : DeckEvent> WrappedEventSupplier.await(
     timeout: Long = 4000,
     scope: CoroutineScope = wrappedEventSupplierData.scope,
     gatewayId: Int? = wrappedEventSupplierData.listeningGatewayId
 ): T? = await(gatewayId, scope, wrappedEventSupplierData.sharedFlow, timeout)
 
 // TODO: remove boilerplate
-inline fun <reified T : DeckEvent> on(
+public inline fun <reified T : DeckEvent> on(
     gatewayId: Int?,
     scope: CoroutineScope,
     eventsFlow: SharedFlow<DeckEvent>,
     noinline callback: suspend T.() -> Unit
-): Job = eventsFlow.buffer(Channel.UNLIMITED).filterIsInstance<T>().filter { it.gatewayId == (gatewayId ?: return@filter true) }.onEach(callback).launchIn(scope)
+): Job = eventsFlow.buffer(Channel.UNLIMITED).filterIsInstance<T>()
+    .filter { it.gatewayId == (gatewayId ?: return@filter true) }.onEach(callback).launchIn(scope)
 
 @OptIn(ExperimentalCoroutinesApi::class)
-suspend inline fun <reified T : DeckEvent> await(
+public suspend inline fun <reified T : DeckEvent> await(
     gatewayId: Int?,
     scope: CoroutineScope,
     eventsFlow: SharedFlow<DeckEvent>,
@@ -49,7 +50,8 @@ suspend inline fun <reified T : DeckEvent> await(
 ): T? = withTimeoutOrNull(timeout) {
     suspendCancellableCoroutine<T> { continuation ->
         scope.launch {
-            val event = eventsFlow.buffer(Channel.UNLIMITED).filterIsInstance<T>().filter { it.gatewayId == (gatewayId ?: return@filter true) }.first()
+            val event = eventsFlow.buffer(Channel.UNLIMITED).filterIsInstance<T>()
+                .filter { it.gatewayId == (gatewayId ?: return@filter true) }.first()
             continuation.resume(event) {}
         }
     }

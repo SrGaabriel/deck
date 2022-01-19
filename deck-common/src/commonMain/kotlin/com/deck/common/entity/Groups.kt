@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 /** Apparently, parameters [visibilityTeamRoleId], [additionalVisibilityTeamRoleIds],
  *  [membershipTeamRoleIds], [additionalMembershipTeamRoleIds] are absent in base groups*/
 @Serializable
-data class RawGroup(
+public data class RawGroup(
     val id: GenericId,
     val name: String,
     val description: String?,

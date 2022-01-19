@@ -8,7 +8,7 @@ import com.deck.core.entity.misc.ChannelContentType
 import com.deck.core.entity.misc.ChannelType
 import java.util.*
 
-data class DeckTeamChannel(
+public data class DeckTeamChannel(
     override val client: DeckClient,
     override val id: UUID,
     override val name: String,
@@ -22,4 +22,4 @@ data class DeckTeamChannel(
     override val updatedAt: Timestamp?,
     override val deletedAt: Timestamp?,
     override val teamId: GenericId
-): TeamChannel
+) : TeamChannel

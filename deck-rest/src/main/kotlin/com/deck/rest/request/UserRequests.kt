@@ -7,7 +7,7 @@ import com.deck.common.util.RawUserPresenceType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SelfUserResponse(
+public data class SelfUserResponse(
     val updateMessage: String?,
     val user: RawUser,
     val teams: List<RawTeam>,
@@ -18,12 +18,12 @@ data class SelfUserResponse(
 )
 
 @Serializable
-data class UserResponse(
+public data class UserResponse(
     val user: RawUser
 )
 
 @Serializable
-data class ModifySelfUserRequest(
+public data class ModifySelfUserRequest(
     var name: String?,
     var avatar: String?,
     var subdomain: String?,
@@ -31,48 +31,48 @@ data class ModifySelfUserRequest(
 )
 
 @Serializable
-data class UserDMResponse(
+public data class UserDMResponse(
     val channels: List<RawPrivateChannel>
 )
 
 @Serializable
-data class CreateDMChannelRequest(
+public data class CreateDMChannelRequest(
     val users: List<GenericId>
 )
 
 @Serializable
-data class SetSelfPresenceRequest(
+public data class SetSelfPresenceRequest(
     val status: RawUserPresenceStatus
 )
 
 @Serializable
-data class SetUserTransientStatusRequest(
+public data class SetUserTransientStatusRequest(
     val id: Int,
     val gameId: Int?,
     val type: RawUserPresenceType
 )
 
 @Serializable
-data class SelfReferralStatisticsResponse(
+public data class SelfReferralStatisticsResponse(
     val referrals: Int,
     val stonks: Int,
     val requiredForNextStonk: Int
 )
 
 @Serializable
-data class SelfUpdateAvatarRequest(
+public data class SelfUpdateAvatarRequest(
     val imageUrl: String
 )
 
 @Serializable
-data class SelfUpdateAvatarResponse(
+public data class SelfUpdateAvatarResponse(
     val profilePictureSm: String,
     val profilePicture: String,
     val profilePictureLg: String
 )
 
 @Serializable
-data class SelfUpdateBannerResponse(
+public data class SelfUpdateBannerResponse(
     val profileBannerSm: String,
     val profileBannerLg: String,
     val profileBannerBlur: String

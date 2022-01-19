@@ -1,3 +1,3 @@
 package com.deck.core.entity
 
-interface SelfUser: User
+public interface SelfUser : User

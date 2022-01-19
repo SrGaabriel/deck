@@ -8,30 +8,30 @@ import com.deck.gateway.start
 import com.deck.gateway.util.EventSupplier
 import com.deck.gateway.util.EventSupplierData
 
-interface GatewayModule: EventSupplier {
-    val orchestrator: GatewayOrchestrator
-    val globalGateway: Gateway
+public interface GatewayModule : EventSupplier {
+    public val orchestrator: GatewayOrchestrator
+    public val globalGateway: Gateway
 
-    val gateways: Map<Int, Gateway>
+    public val gateways: Map<Int, Gateway>
 
-    var auth: AuthenticationResult
-    var logPayloadsJson: Boolean
+    public var auth: AuthenticationResult
+    public var logPayloadsJson: Boolean
 
-    suspend fun start()
+    public suspend fun start()
 
-    suspend fun openGateway(teamId: GenericId? = null): Gateway
+    public suspend fun openGateway(teamId: GenericId? = null): Gateway
 
-    suspend fun closeGateway(teamId: GenericId? = null)
+    public suspend fun closeGateway(teamId: GenericId? = null)
 }
 
-class DefaultGatewayModule: GatewayModule {
+public class DefaultGatewayModule : GatewayModule {
     override val orchestrator: GatewayOrchestrator = GatewayOrchestrator()
     override lateinit var globalGateway: Gateway
 
     override var auth: AuthenticationResult by orchestrator::authentication
     override var logPayloadsJson: Boolean by orchestrator::debugPayloads
 
-    override val gateways get() = orchestrator.gateways.associateBy { it.gatewayId }
+    override val gateways: Map<Int, Gateway> get() = orchestrator.gateways.associateBy { it.gatewayId }
 
     override val eventSupplierData: EventSupplierData by orchestrator::eventSupplierData
 
@@ -42,7 +42,7 @@ class DefaultGatewayModule: GatewayModule {
         }
     }
 
-    override suspend fun openGateway(teamId: GenericId?) =
+    override suspend fun openGateway(teamId: GenericId?): Gateway =
         if (teamId == null) orchestrator.openGateway() else orchestrator.openTeamGateway(teamId)
 
     override suspend fun closeGateway(teamId: GenericId?) {

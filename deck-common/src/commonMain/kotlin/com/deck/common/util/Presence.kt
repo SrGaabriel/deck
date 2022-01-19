@@ -4,14 +4,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class RawUserPresenceType {
+public enum class RawUserPresenceType {
     @SerialName("gamepresence")
     Game;
 }
 
 @Suppress("unused")
 @Serializable(GameStatus.Serializer::class)
-enum class GameStatus(val id: Int) {
+public enum class GameStatus(public val id: Int) {
     Overwatch(10100),
     LeagueOfLegends(10200),
     CounterStrike(10300),
@@ -583,5 +583,6 @@ enum class GameStatus(val id: Int) {
     KnockoutCity(476074),
     FarmingSimulator19(477074);
 
-    companion object Serializer: IntIdEnumSerializer<GameStatus>(IntSerializationStrategy(values().associateBy { it.id }))
+    public companion object Serializer :
+        IntIdEnumSerializer<GameStatus>(IntSerializationStrategy(values().associateBy { it.id }))
 }

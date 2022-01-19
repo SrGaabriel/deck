@@ -12,18 +12,18 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 
-interface DeckEvent {
-    val client: DeckClient
-    val gatewayId: Int
+public interface DeckEvent {
+    public val client: DeckClient
+    public val gatewayId: Int
 }
 
-interface EventService: WrappedEventSupplier {
-    val eventWrappingFlow: SharedFlow<DeckEvent>
+public interface EventService : WrappedEventSupplier {
+    public val eventWrappingFlow: SharedFlow<DeckEvent>
 
-    fun startListeningAndConveying(): Job
+    public fun startListeningAndConveying(): Job
 }
 
-class DefaultEventService(private val client: DeckClient): EventService {
+public class DefaultEventService(private val client: DeckClient) : EventService {
     override val eventWrappingFlow: MutableSharedFlow<DeckEvent> = MutableSharedFlow()
 
     override val wrappedEventSupplierData: WrappedEventSupplierData = WrappedEventSupplierData(
@@ -31,7 +31,7 @@ class DefaultEventService(private val client: DeckClient): EventService {
         sharedFlow = eventWrappingFlow
     )
 
-    override fun startListeningAndConveying() = client.gateway.orchestrator.on<GatewayEvent> {
+    override fun startListeningAndConveying(): Job = client.gateway.orchestrator.on<GatewayEvent> {
         val deckEvent: DeckEvent = when (this) {
             is GatewayChatMessageCreatedEvent -> DeckMessageCreateEvent.map(client, this)
             else -> return@on
@@ -40,6 +40,6 @@ class DefaultEventService(private val client: DeckClient): EventService {
     }
 }
 
-interface EventMapper<F : GatewayEvent, T : DeckEvent>: CoroutineScope {
-    suspend fun map(client: DeckClient, event: F): T
+public interface EventMapper<F : GatewayEvent, T : DeckEvent> : CoroutineScope {
+    public suspend fun map(client: DeckClient, event: F): T
 }

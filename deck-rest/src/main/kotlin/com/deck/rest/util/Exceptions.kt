@@ -2,16 +2,16 @@ package com.deck.rest.util
 
 import kotlinx.serialization.Serializable
 
-class GuildedRequestException(
+public class GuildedRequestException(
     code: String,
     message: String
-): RuntimeException("[$code] $message")
+) : RuntimeException("[$code] $message")
 
 @Serializable
-data class RawGuildedRequestException(
+public data class RawGuildedRequestException(
     val code: String,
     val message: String
 )
 
-fun RawGuildedRequestException.toException() =
+public fun RawGuildedRequestException.toException(): GuildedRequestException =
     GuildedRequestException(code, message)

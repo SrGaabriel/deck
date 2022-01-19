@@ -8,7 +8,7 @@ import com.deck.core.entity.misc.ChannelContentType
 import com.deck.core.entity.misc.ChannelType
 import java.util.*
 
-data class DeckPrivateChannel(
+public data class DeckPrivateChannel(
     override val client: DeckClient,
     override val id: UUID,
     override val name: String,
@@ -21,4 +21,4 @@ data class DeckPrivateChannel(
     override val archivedBy: GenericId?,
     override val updatedAt: Timestamp?,
     override val deletedAt: Timestamp?,
-): Channel
+) : Channel

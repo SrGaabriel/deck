@@ -8,14 +8,14 @@ import com.deck.core.module.DefaultRestModule
 import com.deck.core.module.GatewayModule
 import com.deck.core.module.RestModule
 
-class ClientBuilder {
-    var restModule: RestModule = DefaultRestModule()
-    var gatewayModule: GatewayModule = DefaultGatewayModule()
+public class ClientBuilder {
+    public var restModule: RestModule = DefaultRestModule()
+    public var gatewayModule: GatewayModule = DefaultGatewayModule()
 
-    var email: String? = null
-    var password: String? = null
+    public var email: String? = null
+    public var password: String? = null
 
-    fun build(): DeckClient {
+    public fun build(): DeckClient {
         require(email != null && password != null) {
             "You can't build a deck client without specifying your bot's authentication credentials."
         }
@@ -23,10 +23,10 @@ class ClientBuilder {
     }
 }
 
-inline fun client(builder: ClientBuilder.() -> Unit): DeckClient =
+public inline fun client(builder: ClientBuilder.() -> Unit): DeckClient =
     ClientBuilder().apply(builder).build()
 
-fun DeckClient.setAuthentication(authenticationResult: AuthenticationResult) {
+public fun DeckClient.setAuthentication(authenticationResult: AuthenticationResult) {
     rest.restClient.token = authenticationResult.token
     gateway.auth = authenticationResult
     this.authenticationResults = authenticationResult

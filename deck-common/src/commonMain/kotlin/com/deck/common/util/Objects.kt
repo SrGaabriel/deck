@@ -10,45 +10,46 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-typealias GenericId = String
-typealias IntGenericId = Int
-typealias LongGenericId = Long
+public typealias GenericId = String
+public typealias IntGenericId = Int
+public typealias LongGenericId = Long
 
-typealias Dictionary<K, V> = Map<K, V>
+public typealias Dictionary<K, V> = Map<K, V>
 
 @Serializable(UniqueIdSerializer::class)
-data class UniqueId(val raw: String) {
+public data class UniqueId(val raw: String) {
     override fun toString(): String = raw
 }
 
 @Serializable(with = TimestampSerializer::class)
-data class Timestamp(
+public data class Timestamp(
     val iso: String
 ) {
     @Transient
     val instant: Instant = Instant.parse(iso)
+
     @Transient
     val mills: Long = instant.toEpochMilliseconds()
 }
 
-object TimestampSerializer: KSerializer<Timestamp> {
+public object TimestampSerializer : KSerializer<Timestamp> {
     override fun deserialize(decoder: Decoder): Timestamp =
         Timestamp(decoder.decodeString())
 
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor("TimestampSerializer", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: Timestamp) =
+    override fun serialize(encoder: Encoder, value: Timestamp): Unit =
         encoder.encodeString(value.iso)
 }
 
-object UniqueIdSerializer: KSerializer<UniqueId> {
+public object UniqueIdSerializer : KSerializer<UniqueId> {
     override fun deserialize(decoder: Decoder): UniqueId =
         UniqueId(decoder.decodeString())
 
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor("UniqueIdSerializer", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: UniqueId) =
+    override fun serialize(encoder: Encoder, value: UniqueId): Unit =
         encoder.encodeString(value.raw)
 }

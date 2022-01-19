@@ -4,18 +4,19 @@ import com.deck.common.util.GenericId
 import com.deck.common.util.Timestamp
 import com.deck.core.entity.misc.DeckUserAboutInfo
 
-interface User: Entity {
-    val id: GenericId
-    val name: String
-    val subdomain: String?
+public interface User : Entity {
+    public val id: GenericId
+    public val name: String
+    public val subdomain: String?
 
     /** Null when user doesn't have an specific avatar set (default doggy avatar) */
-    val avatar: String?
+    public val avatar: String?
+
     /** Null when user doesn't have a banner set (empty) */
-    val banner: String?
+    public val banner: String?
 
-    val aboutInfo: DeckUserAboutInfo?
+    public val aboutInfo: DeckUserAboutInfo?
 
-    val creationTime: Timestamp
-    val lastLoginTime: Timestamp
+    public val creationTime: Timestamp
+    public val lastLoginTime: Timestamp
 }

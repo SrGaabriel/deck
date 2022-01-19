@@ -6,12 +6,12 @@ import com.deck.common.util.OptionalProperty
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RawTeamMemberUserInfo(
+public data class RawTeamMemberUserInfo(
     val nickname: OptionalProperty<String?> = OptionalProperty.NotPresent,
 )
 
 @Serializable
-data class RawTeamMemberRoleId(
+public data class RawTeamMemberRoleId(
     val userId: GenericId,
     val roleIds: List<IntGenericId>
 )

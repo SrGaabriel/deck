@@ -22,23 +22,23 @@ import mu.KLogger
 /**
  * Base gateway interface
  */
-interface Gateway: EventSupplier {
-    val gatewayId: Int
-    val scope: CoroutineScope
-    val hello: GatewayHelloEvent
-    val parameters: GatewayParameters
-    val eventSharedFlow: SharedFlow<GatewayEvent>
-    val webSocketSession: DefaultWebSocketSession
+public interface Gateway : EventSupplier {
+    public val gatewayId: Int
+    public val scope: CoroutineScope
+    public val hello: GatewayHelloEvent
+    public val parameters: GatewayParameters
+    public val eventSharedFlow: SharedFlow<GatewayEvent>
+    public val webSocketSession: DefaultWebSocketSession
 
-    suspend fun connect()
+    public suspend fun connect()
 
-    suspend fun startHeartbeat(): Job
+    public suspend fun startHeartbeat(): Job
 
-    suspend fun startListening(): Job
+    public suspend fun startListening(): Job
 
-    suspend fun sendCommand(command: GatewayCommand)
+    public suspend fun sendCommand(command: GatewayCommand)
 
-    suspend fun disconnect(expectingReconnect: Boolean = false)
+    public suspend fun disconnect(expectingReconnect: Boolean = false)
 }
 
 /**
@@ -51,22 +51,23 @@ interface Gateway: EventSupplier {
  * @param guildedClientId client id
  * @param teamId **optional** id of the team you'll connect your gateway to
  */
-data class GatewayParameters(
+public data class GatewayParameters(
     @DeckUnknown val jwt: String = "undefined",
     val eioVersion: Int = 3,
     val transport: String = "websocket",
     val guildedClientId: String,
     val teamId: GenericId? = null
 ) {
-    fun buildPath() = "socket.io/?jwt=$jwt&EIO=$eioVersion&transport=$transport&guildedClientId=$guildedClientId".let {
-        if (teamId != null) "$it&teamId=$teamId" else it
-    }
+    public fun buildPath(): String =
+        "socket.io/?jwt=$jwt&EIO=$eioVersion&transport=$transport&guildedClientId=$guildedClientId".let {
+            if (teamId != null) "$it&teamId=$teamId" else it
+        }
 }
 
 /**
  * Default implementation of [Gateway]
  */
-class DefaultGateway(
+public class DefaultGateway(
     private val token: String,
     private val debugPayloads: Boolean,
     override val gatewayId: Int,
@@ -76,7 +77,7 @@ class DefaultGateway(
     private val client: HttpClient,
     private val eventDecoder: EventDecoder = DefaultEventDecoder(gatewayId),
     private val commandEncoder: CommandEncoder = DefaultCommandEncoder()
-): Gateway, KLoggable {
+) : Gateway, KLoggable {
     override lateinit var hello: GatewayHelloEvent
     override lateinit var webSocketSession: DefaultWebSocketSession
 
@@ -134,7 +135,7 @@ class DefaultGateway(
         }
     }.also { heartbeatJob = it }
 
-    override suspend fun sendCommand(command: GatewayCommand) = scope.launch {
+    override suspend fun sendCommand(command: GatewayCommand): Unit = scope.launch {
         val encoded = commandEncoder.encodeCommandToString(command)
         webSocketSession.send(Frame.Text(encoded))
         logger.info { "[DECK Gateway #${gatewayId}] Sent command $encoded" }
@@ -155,7 +156,7 @@ class DefaultGateway(
  *
  * Calls [Gateway.connect], [Gateway.startListening], [Gateway.startHeartbeat] in order.
  */
-suspend fun Gateway.start() {
+public suspend fun Gateway.start() {
     connect()
     startListening()
     startHeartbeat()

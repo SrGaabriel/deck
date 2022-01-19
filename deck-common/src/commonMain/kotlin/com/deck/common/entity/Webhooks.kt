@@ -6,7 +6,7 @@ import com.deck.common.util.UniqueId
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RawWebhook(
+public data class RawWebhook(
     val id: UniqueId,
     val name: String,
     val token: String,
