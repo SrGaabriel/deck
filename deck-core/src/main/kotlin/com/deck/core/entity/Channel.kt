@@ -8,8 +8,8 @@ import java.util.*
 
 public interface Channel : Entity {
     public val id: UUID
-    public val name: String
-    public val description: String
+    public val name: String?
+    public val description: String?
 
     public val type: ChannelType
     public val contentType: ChannelContentType
