@@ -1,5 +1,6 @@
 package com.deck.core.delegator
 
+import com.deck.common.content.node.NodeStrategy
 import com.deck.common.entity.RawChannel
 import com.deck.common.entity.RawPartialSentMessage
 import com.deck.common.entity.RawUser
@@ -13,7 +14,6 @@ import com.deck.core.entity.SelfUser
 import com.deck.core.entity.User
 import com.deck.core.entity.impl.*
 import com.deck.core.entity.misc.forcefullyWrap
-import com.deck.core.entity.misc.mapToContent
 import java.util.*
 
 public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrategizer {
@@ -79,7 +79,7 @@ public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrat
         DeckMessage(
             client = client,
             id = raw.id.mapToBuiltin(),
-            content = raw.content.mapToContent(),
+            content = NodeStrategy.decodeContent(raw.content),
             channelId = channelId,
             createdAt = raw.createdAt,
             createdBy = raw.createdBy,

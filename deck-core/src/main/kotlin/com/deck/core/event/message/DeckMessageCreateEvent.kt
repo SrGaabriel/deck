@@ -1,5 +1,6 @@
 package com.deck.core.event.message
 
+import com.deck.common.content.node.NodeStrategy
 import com.deck.common.util.GenericId
 import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
@@ -8,7 +9,6 @@ import com.deck.core.entity.Channel
 import com.deck.core.entity.Message
 import com.deck.core.entity.User
 import com.deck.core.entity.impl.DeckMessage
-import com.deck.core.entity.misc.mapToContent
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
 import com.deck.gateway.event.type.GatewayChatMessageCreatedEvent
@@ -34,7 +34,7 @@ public data class DeckMessageCreateEvent(
                 message = DeckMessage(
                     client = client,
                     id = event.message.id.mapToBuiltin(),
-                    content = event.message.content.mapToContent(),
+                    content = NodeStrategy.decodeContent(event.message.content),
                     teamId = event.teamId.asNullable(),
                     repliesToId = event.message.repliesTo?.mapToBuiltin(),
                     createdAt = event.createdAt,

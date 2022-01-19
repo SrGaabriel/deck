@@ -1,8 +1,8 @@
 package com.deck.core.entity
 
+import com.deck.common.content.Content
 import com.deck.common.util.GenericId
 import com.deck.common.util.Timestamp
-import com.deck.core.entity.misc.Content
 import java.util.*
 
 public interface Message : Entity {
