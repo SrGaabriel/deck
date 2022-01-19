@@ -1,5 +1,7 @@
 package com.deck.common.content.node
 
+import com.deck.common.util.GenericId
+
 public sealed class Node(
     public val `object`: String,
     public val type: String,
@@ -16,9 +18,20 @@ public sealed class Node(
         type = "image",
         data = NodeData(image = image)
     )
+
+    public class SystemMessage(public val messageData: SystemMessageData) : Node(
+        `object` = "block",
+        type = "systemMessage",
+        data = NodeData()
+    )
 }
 
 public data class NodeData(
     val text: String? = null,
     val image: String? = null
+)
+
+public data class SystemMessageData(
+    public val type: String,
+    public val createdBy: GenericId? = null
 )
