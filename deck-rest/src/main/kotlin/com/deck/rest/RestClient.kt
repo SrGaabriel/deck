@@ -1,7 +1,7 @@
 package com.deck.rest
 
+import com.deck.rest.util.DEFAULT_HTTP_CLIENT
 import com.deck.rest.util.RequestService
-import com.deck.rest.util.defaultHttpClient
 import io.ktor.client.*
 
 public class RestClient {
@@ -12,6 +12,6 @@ public class RestClient {
             _token = value
         }
 
-    public var httpClient: HttpClient = defaultHttpClient()
+    public var httpClient: HttpClient = DEFAULT_HTTP_CLIENT
     public val requestService: RequestService = RequestService(httpClient)
 }
