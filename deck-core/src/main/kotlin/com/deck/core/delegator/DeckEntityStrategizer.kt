@@ -14,6 +14,7 @@ import com.deck.core.entity.SelfUser
 import com.deck.core.entity.User
 import com.deck.core.entity.impl.*
 import com.deck.core.entity.misc.forcefullyWrap
+import com.deck.core.util.BlankStatelessMessageChannel
 import java.util.*
 
 public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrategizer {
@@ -80,7 +81,7 @@ public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrat
             client = client,
             id = raw.id.mapToBuiltin(),
             content = NodeGlobalStrategy.decodeContent(raw.content),
-            channelId = channelId,
+            channel = BlankStatelessMessageChannel(client, channelId, teamId),
             createdAt = raw.createdAt,
             createdBy = raw.createdBy,
             updatedAt = null,

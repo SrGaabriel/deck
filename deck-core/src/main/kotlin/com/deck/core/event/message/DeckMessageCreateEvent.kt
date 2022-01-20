@@ -11,6 +11,8 @@ import com.deck.core.entity.User
 import com.deck.core.entity.impl.DeckMessage
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
+import com.deck.core.stateless.StatelessMessageChannel
+import com.deck.core.util.BlankStatelessMessageChannel
 import com.deck.gateway.event.type.GatewayChatMessageCreatedEvent
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
@@ -19,16 +21,24 @@ public data class DeckMessageCreateEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
     val message: Message,
-    val channel: Channel,
+    val channel: StatelessMessageChannel,
     val teamId: GenericId?,
     val senderId: GenericId
 ) : DeckEvent {
     public suspend fun getSender(): User? =
         client.entityDelegator.getUser(senderId)
 
+    public suspend fun getChannel(): Channel =
+        channel.getState()
+
     public companion object : EventMapper<GatewayChatMessageCreatedEvent, DeckMessageCreateEvent> {
-        override suspend fun map(client: DeckClient, event: GatewayChatMessageCreatedEvent): DeckMessageCreateEvent =
-            DeckMessageCreateEvent(
+        override suspend fun map(client: DeckClient, event: GatewayChatMessageCreatedEvent): DeckMessageCreateEvent {
+            val channel = BlankStatelessMessageChannel(
+                client = client,
+                id = event.channelId.mapToBuiltin(),
+                teamId = event.teamId.asNullable()
+            )
+            return DeckMessageCreateEvent(
                 client = client,
                 gatewayId = event.gatewayId,
                 message = DeckMessage(
@@ -41,15 +51,15 @@ public data class DeckMessageCreateEvent(
                     createdBy = event.createdBy,
                     updatedAt = null,
                     updatedBy = null,
-                    channelId = event.channelId.mapToBuiltin(),
+                    channel = channel,
                     isSilent = event.message.isSilent.asNullable() == true,
                     isPrivate = event.message.isPrivate.asNullable() == true
                 ),
                 senderId = event.message.createdBy,
                 teamId = event.teamId.asNullable(),
-                channel = client.entityDelegator.getChannel(event.channelId.mapToBuiltin(), event.teamId.asNullable())!!
+                channel = channel
             )
-
+        }
         override val coroutineContext: CoroutineContext = Dispatchers.Unconfined
     }
 }

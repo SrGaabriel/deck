@@ -1,7 +1,5 @@
 package com.deck.core.entity
 
-import com.deck.common.util.GenericId
+import com.deck.core.stateless.StatelessMessageChannel
 
-public interface TeamChannel : Channel {
-    public val teamId: GenericId
-}
+public interface TeamChannel : Channel, StatelessMessageChannel

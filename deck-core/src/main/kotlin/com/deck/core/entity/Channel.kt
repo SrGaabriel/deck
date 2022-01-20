@@ -4,10 +4,9 @@ import com.deck.common.util.GenericId
 import com.deck.common.util.Timestamp
 import com.deck.core.entity.misc.ChannelContentType
 import com.deck.core.entity.misc.ChannelType
-import java.util.*
+import com.deck.core.stateless.StatelessMessageChannel
 
-public interface Channel : Entity {
-    public val id: UUID
+public interface Channel : Entity, StatelessMessageChannel {
     public val name: String
     public val description: String
 
@@ -22,4 +21,6 @@ public interface Channel : Entity {
 
     public val updatedAt: Timestamp?
     public val deletedAt: Timestamp?
+
+    override val teamId: GenericId? get() = null
 }

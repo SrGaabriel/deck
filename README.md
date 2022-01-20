@@ -6,59 +6,34 @@
 
 Deck is a powerful yet simple-to-use guilded wrapper made entirely in Kotlin with support to multiplatform.
 
-## Implementating
-
-In case you're using gradle, you just need to add this to your `build.gradle.kts`:
-
-```kotlin
-repositories {
-    maven("https://jitpack.io")
-}
-
-dependencies {
-    implementation("com.github.SrGaabriel:deck:-SNAPSHOT")
-}
-```
-
-Or with maven:
-
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
-```xml
-<dependencies>
-    <dependency>
-        <groupId>com.github.SrGaabriel</groupId>
-        <artifactId>deck</artifactId>
-        <version>-SNAPSHOT</version>
-    </dependency>
-</dependencies>
-```
-
 ## Example
 
 This is a working example of deck's REST api:
 
 ```kotlin
 suspend fun main() {
-    val restClient = RestClient().authenticate {
+    val client: DeckClient = client {
         email = "email"
         password = "password"
     }
-    val channelRoute = ChannelRoute(restClient)
-    val message = channelRoute.sendMessage(channelId) {
-        content {
-            add text "Hello, World!"
-            add image "image_url"
-            add text "Goodbye, World!"
+    client.on<DeckMessageCreateEvent> {
+        if (!message.content.text.startsWith("+ping"))
+            return@on
+        val previousMessage: Message = channel.sendMessage {
+            content.text = "Pong!"
+        }
+        previousMessage.sendReply {
+            content.text = "quick, come up with something funny for the example"
         }
     }
-    println("Sent Message Id: ${message.id}")
+    client.login()
 }
 ```
+
+## Implementating
+
+We do not have an official repository/artifact, so the only available way is to compile the library yourself and implement it.
+
+## Thanks
+
+We want to specially thank the discord Kotlin wrapper library [Kord](https://github.com/kordlib/kord), since deck's structure was inspired/based around it.
