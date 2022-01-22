@@ -20,7 +20,7 @@ public object NodeGlobalStrategy {
             is Node.Embed -> RawMessageContentData(embeds = embeds)
             is Node.Image -> RawMessageContentData(src = node.data.image!!.optional())
             is Node.SystemMessage -> RawMessageContentData()
-            is Node.BlockQuoteLine -> RawMessageContentData()
+            is Node.Quote -> RawMessageContentData()
         }
         val leaf = RawMessageContentNodeLeaves(
             leavesObject = "leaf",

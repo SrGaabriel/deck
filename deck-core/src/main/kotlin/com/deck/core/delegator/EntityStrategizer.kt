@@ -20,5 +20,5 @@ public interface EntityStrategizer {
 
     public fun decodePartialSentMessage(channelId: UUID, teamId: GenericId?, raw: RawPartialSentMessage): Message
 
-    public fun decodePartialTeamChannel(raw: RawPartialTeamChannel, teamId: GenericId): PartialTeamChannel
+    public fun decodePartialTeamChannel(teamId: GenericId, raw: RawPartialTeamChannel): PartialTeamChannel
 }

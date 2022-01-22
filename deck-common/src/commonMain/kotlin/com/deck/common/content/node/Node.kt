@@ -32,9 +32,9 @@ public sealed class Node(
         data = NodeData()
     )
 
-    public class BlockQuoteLine(public val blockQuoteLineData: BlockQuoteLineData) : Node(
+    public class Quote(public val quoteContainerData: QuoteContainerData) : Node(
         `object` = "block",
-        type = "block-quote-line",
+        type = "block-quote-container",
         data = NodeData()
     )
 }
@@ -50,7 +50,7 @@ public data class SystemMessageData(
     public val createdBy: GenericId? = null
 )
 
-public data class BlockQuoteLineData(
+public data class QuoteContainerData(
     public val texts: List<String>?,
     public val marks: List<List<Unit>>?
 )

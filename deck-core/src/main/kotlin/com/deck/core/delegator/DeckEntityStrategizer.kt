@@ -103,7 +103,7 @@ public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrat
             repliesToId = raw.repliesToIds.firstOrNull()?.mapToBuiltin()
         )
 
-    override fun decodePartialTeamChannel(raw: RawPartialTeamChannel, teamId: GenericId): PartialTeamChannel =
+    override fun decodePartialTeamChannel(teamId: GenericId, raw: RawPartialTeamChannel): PartialTeamChannel =
         DeckPartialTeamChannel(
             client = client,
             id = raw.id.mapToBuiltin(),
