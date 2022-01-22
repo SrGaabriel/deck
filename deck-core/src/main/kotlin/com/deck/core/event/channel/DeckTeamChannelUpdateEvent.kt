@@ -20,7 +20,7 @@ public data class DeckTeamChannelUpdateEvent(
             if (event.channel.type.asNullable() == null && event.channel.createdAt.asNullable() == null)
                 return null
 
-            val channel = client.entityStrategizer.decodePartialTeamChannel(event.channel, event.teamId)
+            val channel = client.entityStrategizer.decodePartialTeamChannel(event.teamId, event.channel)
 
             return DeckTeamChannelUpdateEvent(
                 client = client,

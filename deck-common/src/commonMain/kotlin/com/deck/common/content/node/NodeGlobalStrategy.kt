@@ -67,8 +67,8 @@ public object NodeGlobalStrategy {
                     it.nodes.map { it.leaves.asNullable()!! }.first()
                 }
 
-                Node.BlockQuoteLine(
-                    blockQuoteLineData = BlockQuoteLineData(
+                Node.Quote(
+                    quoteContainerData = QuoteContainerData(
                         lineLeaves.map { it.text },
                         lineLeaves.map { it.marks }
                     )

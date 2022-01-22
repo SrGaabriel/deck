@@ -11,12 +11,6 @@ public class DeckCacheManager() : CacheManager {
     override val channels: Cache<UUID, Channel> = Caffeine.newBuilder().build<UUID, Channel>()
     override val users: Cache<GenericId, User> = Caffeine.newBuilder().build<GenericId, User>()
 
-    override fun updateChannel(newChannel: Channel): Unit =
-        channels.put(newChannel.id, newChannel)
-
-    override fun updateUser(newUser: User): Unit =
-        users.put(newUser.id, newUser)
-
     override fun retrieveChannel(channelId: UUID): Channel? =
         channels.getIfPresent(channelId)
 

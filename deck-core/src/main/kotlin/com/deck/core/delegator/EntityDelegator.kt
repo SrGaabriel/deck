@@ -15,8 +15,6 @@ public interface EntityDelegator : CoroutineScope {
 
     public suspend fun getTeam(id: GenericId): Team?
 
-    public suspend fun getTeam(id: GenericId): Team?
-
     public suspend fun getUser(id: GenericId): User?
 
     public suspend fun getSelfUser(): SelfUser
