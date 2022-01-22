@@ -1,7 +1,7 @@
 package com.deck.core.entity.impl
 
 import com.deck.common.util.GenericId
-import com.deck.common.util.Timestamp
+import kotlinx.datetime.Instant
 import com.deck.core.DeckClient
 import com.deck.core.entity.SelfUser
 import com.deck.core.entity.misc.DeckUserAboutInfo
@@ -14,6 +14,6 @@ public data class DeckSelfUser constructor(
     override var avatar: String?,
     override var banner: String?,
     override var aboutInfo: DeckUserAboutInfo?,
-    override val creationTime: Timestamp,
-    override val lastLoginTime: Timestamp
+    override val creationTime: Instant,
+    override val lastLoginTime: Instant
 ) : SelfUser

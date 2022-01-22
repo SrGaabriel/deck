@@ -4,13 +4,13 @@ import com.deck.common.entity.RawChannel
 import com.deck.common.entity.RawPartialSentMessage
 import com.deck.common.entity.RawUser
 import com.deck.common.util.GenericId
-import com.deck.core.entity.Channel
-import com.deck.core.entity.Message
-import com.deck.core.entity.SelfUser
-import com.deck.core.entity.User
+import com.deck.core.entity.*
+import com.deck.rest.entity.RawFetchedTeam
 import java.util.*
 
 public interface EntityStrategizer {
+    public fun decodeTeam(raw: RawFetchedTeam): Team
+
     public fun decodeUser(raw: RawUser): User
 
     public fun decodeSelf(raw: RawUser): SelfUser

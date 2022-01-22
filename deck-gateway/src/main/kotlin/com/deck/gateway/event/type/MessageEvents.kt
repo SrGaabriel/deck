@@ -7,6 +7,7 @@ import com.deck.gateway.entity.RawPartialDeletedMessage
 import com.deck.gateway.entity.RawPartialEditedMessage
 import com.deck.gateway.entity.RawPartialReceivedMessage
 import com.deck.gateway.event.GatewayEvent
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -27,7 +28,7 @@ public data class GatewayChatMessageCreatedEvent(
     val contentType: RawChannelContentType,
     val message: RawPartialReceivedMessage,
     val repliedToMessages: List<RawPartialRepliedMessage>,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val contentId: UniqueId,
     val createdBy: GenericId,
     val mentionedUserInfo: OptionalProperty<RawMessageMentionedUserInfo> = OptionalProperty.NotPresent

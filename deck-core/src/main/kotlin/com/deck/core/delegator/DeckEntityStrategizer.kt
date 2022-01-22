@@ -8,16 +8,28 @@ import com.deck.common.util.GenericId
 import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
-import com.deck.core.entity.Channel
-import com.deck.core.entity.Message
-import com.deck.core.entity.SelfUser
-import com.deck.core.entity.User
+import com.deck.core.entity.*
 import com.deck.core.entity.impl.*
 import com.deck.core.entity.misc.forcefullyWrap
+import com.deck.core.util.BlankStatelessMember
 import com.deck.core.util.BlankStatelessMessageChannel
+import com.deck.core.util.BlankStatelessUser
+import com.deck.rest.entity.RawFetchedTeam
 import java.util.*
 
 public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrategizer {
+    override fun decodeTeam(raw: RawFetchedTeam): Team = DeckTeam(
+        client = client,
+        id = raw.id,
+        name = raw.name,
+        description = raw.description,
+        owner = BlankStatelessUser(client, raw.ownerId),
+        members = raw.members.map { BlankStatelessMember(client, it.id) },
+        createdAt = raw.createdAt,
+        discordGuildId = raw.discordGuildId,
+        discordGuildName = raw.discordServerName
+    )
+
     override fun decodeUser(raw: RawUser): User = DeckUser(
         client = client,
         id = raw.id,

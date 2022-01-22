@@ -1,6 +1,7 @@
 package com.deck.common.entity
 
 import com.deck.common.util.*
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,13 +13,13 @@ public data class RawRole(
     val isMentionable: Boolean,
     val isSelfAssignable: Boolean,
     val name: String,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val discordRoleId: LongGenericId?,
-    val discordSyncedAt: Timestamp?,
+    val discordSyncedAt: Instant?,
     val priority: Int,
     val botScope: RawRoleBotScope?,
     val teamId: GenericId,
-    val updatedAt: Timestamp?,
+    val updatedAt: Instant?,
     val permissions: RawRolePermissions
 )
 
@@ -48,8 +49,8 @@ public data class RawRolePermissions(
 @Serializable
 public data class RawRolePermissionsOverwritten(
     val teamId: GenericId,
-    val createdAt: Timestamp,
-    val updatedAt: Timestamp?,
+    val createdAt: Instant,
+    val updatedAt: Instant?,
     val teamRoleId: IntGenericId,
     val denyPermissions: RawRolePermissions,
     val allowPermissions: RawRolePermissions,

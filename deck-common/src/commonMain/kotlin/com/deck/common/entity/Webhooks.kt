@@ -1,7 +1,7 @@
 package com.deck.common.entity
 
 import com.deck.common.util.GenericId
-import com.deck.common.util.Timestamp
+import kotlinx.datetime.Instant
 import com.deck.common.util.UniqueId
 import kotlinx.serialization.Serializable
 
@@ -14,6 +14,6 @@ public data class RawWebhook(
     val teamId: GenericId,
     val iconUrl: String?,
     val createdBy: GenericId,
-    val createdAt: Timestamp,
-    val deletedAt: Timestamp?
+    val createdAt: Instant,
+    val deletedAt: Instant?
 )

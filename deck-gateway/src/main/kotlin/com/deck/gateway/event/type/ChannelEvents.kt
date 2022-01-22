@@ -4,6 +4,7 @@ import com.deck.common.entity.*
 import com.deck.common.util.*
 import com.deck.gateway.entity.*
 import com.deck.gateway.event.GatewayEvent
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -59,7 +60,7 @@ public data class GatewayChannelBadgedEvent(
     val teamId: GenericId?,
     val channelId: UniqueId,
     val contentId: String,
-    val createdAt: Timestamp
+    val createdAt: Instant
 ) : GatewayEvent()
 
 @Serializable
@@ -148,7 +149,7 @@ public data class GatewayChatChannelUpdatedEvent(
 public data class GatewayChatChannelBroadcastCallEvent(
     val channelId: UniqueId,
     val participants: List<RawUserIdObject>,
-    val callStartTime: Timestamp,
+    val callStartTime: Instant,
     val callerName: String,
     val callType: RawChannelContentType
 ) : GatewayEvent()
@@ -217,7 +218,7 @@ public data class GatewayTeamChannelContentCreatedEvent(
     val channelType: RawChannelType,
     val teamId: GenericId,
     val contentType: RawChannelContentType,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val contentId: JsonElement,
     val createdBy: GenericId,
     val event: OptionalProperty<RawChannelEvent> = OptionalProperty.NotPresent,
@@ -249,7 +250,7 @@ public data class GatewayTeamChannelContentUpdatedEvent(
     @SerialName("doc") val document: OptionalProperty<RawChannelDocument> = OptionalProperty.NotPresent,
     val media: OptionalProperty<RawChannelMedia> = OptionalProperty.NotPresent,
     val reply: OptionalProperty<RawChannelReplyProperties> = OptionalProperty.NotPresent,
-    val createdAt: OptionalProperty<Timestamp> = OptionalProperty.NotPresent
+    val createdAt: OptionalProperty<Instant> = OptionalProperty.NotPresent
 ) : GatewayEvent()
 
 /**
@@ -265,7 +266,7 @@ public data class GatewayTeamChannelContentDeletedEvent(
     val channelType: RawChannelType,
     val teamId: GenericId,
     val contentType: RawChannelContentType,
-    val createdAt: OptionalProperty<Timestamp> = OptionalProperty.NotPresent,
+    val createdAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     val deletedBy: GenericId,
     val contentId: JsonElement
 ) : GatewayEvent()
@@ -316,7 +317,7 @@ public data class GatewayTeamChannelContentReplyCreatedEvent(
     val teamId: GenericId,
     val contentType: RawChannelContentType,
     val contentId: GenericId,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val createdBy: GenericId,
     val reply: RawChannelContentReply,
     val silenceNotification: Boolean
@@ -346,7 +347,7 @@ public data class GatewayTeamChannelContentReplyDeletedEvent(
     val channelType: RawChannelType,
     val teamId: GenericId,
     val contentType: RawChannelContentType,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val deletedBy: GenericId,
     val contentId: GenericId,
     val contentReplyId: IntGenericId

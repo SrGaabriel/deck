@@ -1,10 +1,7 @@
 package com.deck.core.delegator
 
 import com.deck.common.util.GenericId
-import com.deck.core.entity.Channel
-import com.deck.core.entity.SelfUser
-import com.deck.core.entity.TeamChannel
-import com.deck.core.entity.User
+import com.deck.core.entity.*
 import com.deck.core.module.RestModule
 import com.deck.rest.util.Route
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +10,8 @@ import java.util.*
 public interface EntityDelegator : CoroutineScope {
     public val rest: RestModule
     public val strategizer: EntityStrategizer
+
+    public suspend fun getTeam(id: GenericId): Team?
 
     public suspend fun getUser(id: GenericId): User?
 

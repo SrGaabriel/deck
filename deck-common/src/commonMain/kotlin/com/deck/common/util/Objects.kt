@@ -1,9 +1,7 @@
 package com.deck.common.util
 
-import kotlinx.datetime.Instant
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -19,28 +17,6 @@ public typealias Dictionary<K, V> = Map<K, V>
 @Serializable(UniqueIdSerializer::class)
 public data class UniqueId(val raw: String) {
     override fun toString(): String = raw
-}
-
-@Serializable(with = TimestampSerializer::class)
-public data class Timestamp(
-    val iso: String
-) {
-    @Transient
-    val instant: Instant = Instant.parse(iso)
-
-    @Transient
-    val mills: Long = instant.toEpochMilliseconds()
-}
-
-public object TimestampSerializer : KSerializer<Timestamp> {
-    override fun deserialize(decoder: Decoder): Timestamp =
-        Timestamp(decoder.decodeString())
-
-    override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor("TimestampSerializer", PrimitiveKind.STRING)
-
-    override fun serialize(encoder: Encoder, value: Timestamp): Unit =
-        encoder.encodeString(value.iso)
 }
 
 public object UniqueIdSerializer : KSerializer<UniqueId> {

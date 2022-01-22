@@ -1,6 +1,7 @@
 package com.deck.common.entity
 
 import com.deck.common.util.*
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -8,7 +9,7 @@ public data class RawEmoji(
     val id: IntGenericId,
     val name: String,
     val createdBy: GenericId,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val png: String,
     val webp: String,
     val apng: String,
@@ -16,7 +17,7 @@ public data class RawEmoji(
     val teamId: GenericId,
     val isDeleted: Boolean,
     val discordEmojiId: LongGenericId?,
-    val discordSyncedAt: Timestamp?
+    val discordSyncedAt: Instant?
 )
 
 @Serializable

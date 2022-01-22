@@ -2,7 +2,7 @@ package com.deck.core.entity
 
 import com.deck.common.content.Content
 import com.deck.common.util.GenericId
-import com.deck.common.util.Timestamp
+import kotlinx.datetime.Instant
 import com.deck.core.stateless.StatelessMessage
 import java.util.*
 
@@ -13,8 +13,8 @@ public interface Message : Entity, StatelessMessage {
 
     public val repliesToId: UUID?
 
-    public val createdAt: Timestamp
-    public val updatedAt: Timestamp?
+    public val createdAt: Instant
+    public val updatedAt: Instant?
 
     public val createdBy: GenericId
     public val updatedBy: GenericId?
@@ -22,5 +22,5 @@ public interface Message : Entity, StatelessMessage {
     public val isSilent: Boolean
     public val isPrivate: Boolean
 
-    public suspend fun getChannel(): Channel
+    public suspend fun getChannel(): Channel = channel.getState()
 }

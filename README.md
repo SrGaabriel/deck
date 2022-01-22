@@ -19,11 +19,16 @@ suspend fun main() {
     client.on<DeckMessageCreateEvent> {
         if (!message.content.text.startsWith("+ping"))
             return@on
-        val previousMessage: Message = channel.sendMessage {
-            content.text = "Pong!"
+        val pongMessage: Message = channel.sendEmbed {
+            title = "Pong!"
+            description = "The current ping is Xms!"
         }
-        previousMessage.sendReply {
-            content.text = "quick, come up with something funny for the example"
+        val replyMessage: Message = pongMessage.sendReply {
+            content {
+                + "This is a reply example!"
+                + image("url")
+                + "Pretty cool, right?"
+            }
         }
     }
     client.login()

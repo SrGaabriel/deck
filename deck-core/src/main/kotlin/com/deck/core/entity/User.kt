@@ -1,7 +1,7 @@
 package com.deck.core.entity
 
 import com.deck.common.util.GenericId
-import com.deck.common.util.Timestamp
+import kotlinx.datetime.Instant
 import com.deck.core.entity.misc.DeckUserAboutInfo
 
 public interface User : Entity {
@@ -17,6 +17,6 @@ public interface User : Entity {
 
     public val aboutInfo: DeckUserAboutInfo?
 
-    public val creationTime: Timestamp
-    public val lastLoginTime: Timestamp
+    public val creationTime: Instant
+    public val lastLoginTime: Instant
 }

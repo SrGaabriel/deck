@@ -1,7 +1,7 @@
 package com.deck.core.entity.impl
 
 import com.deck.common.util.GenericId
-import com.deck.common.util.Timestamp
+import kotlinx.datetime.Instant
 import com.deck.core.DeckClient
 import com.deck.core.entity.TeamChannel
 import com.deck.core.entity.misc.ChannelContentType
@@ -15,11 +15,11 @@ public data class DeckTeamChannel(
     override val description: String,
     override val type: ChannelType,
     override val contentType: ChannelContentType,
-    override val createdAt: Timestamp,
+    override val createdAt: Instant,
     override val createdBy: GenericId,
-    override val archivedAt: Timestamp?,
+    override val archivedAt: Instant?,
     override val archivedBy: GenericId?,
-    override val updatedAt: Timestamp?,
-    override val deletedAt: Timestamp?,
+    override val updatedAt: Instant?,
+    override val deletedAt: Instant?,
     override val teamId: GenericId
 ) : TeamChannel

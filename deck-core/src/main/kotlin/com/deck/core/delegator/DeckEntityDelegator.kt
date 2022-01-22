@@ -2,10 +2,7 @@ package com.deck.core.delegator
 
 import com.deck.common.util.GenericId
 import com.deck.common.util.mapToModel
-import com.deck.core.entity.Channel
-import com.deck.core.entity.SelfUser
-import com.deck.core.entity.TeamChannel
-import com.deck.core.entity.User
+import com.deck.core.entity.*
 import com.deck.core.module.RestModule
 import kotlinx.coroutines.Dispatchers
 import java.util.*
@@ -14,6 +11,11 @@ import kotlin.coroutines.CoroutineContext
 public class DeckEntityDelegator(override val rest: RestModule, override val strategizer: EntityStrategizer) :
     EntityDelegator {
     override val coroutineContext: CoroutineContext = Dispatchers.Default
+
+    override suspend fun getTeam(id: GenericId): Team? {
+        val team = rest.teamRoute.nullableRequest { getTeam(id) }?.team ?: return null
+        return strategizer.decodeTeam(team)
+    }
 
     override suspend fun getUser(id: GenericId): User? {
         val response = rest.userRoute.nullableRequest { getUser(id) } ?: return null

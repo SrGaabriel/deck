@@ -1,6 +1,7 @@
 package com.deck.common.entity
 
 import com.deck.common.util.*
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -11,9 +12,9 @@ public data class RawMessage(
     val channelId: UniqueId,
     val createdBy: GenericId,
     val content: RawMessageContent,
-    val createdAt: Timestamp,
-    val editedAt: Timestamp?,
-    val deletedAt: Timestamp?,
+    val createdAt: Instant,
+    val editedAt: Instant?,
+    val deletedAt: Instant?,
     val reactions: List<RawReaction>,
     val isPinned: Boolean,
     val pinnedBy: GenericId?,
@@ -25,7 +26,7 @@ public data class RawMessage(
 @Serializable
 public data class RawPartialSentMessage(
     val id: UniqueId,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val content: RawMessageContent,
     val type: String,
     val createdBy: GenericId,
@@ -42,9 +43,9 @@ public data class RawPartialRepliedMessage(
     val content: RawMessageContent,
     val type: String,
     val createdBy: GenericId,
-    val createdAt: Timestamp,
-    val editedAt: Timestamp?,
-    val deletedAt: Timestamp?,
+    val createdAt: Instant,
+    val editedAt: Instant?,
+    val deletedAt: Instant?,
     val channelId: UniqueId,
     val webhookId: GenericId?,
     val isSilent: Boolean,
@@ -57,7 +58,7 @@ public data class RawPartialDeletedMessage(
     val contentType: RawChannelContentType,
     val isReply: Boolean,
     val channelId: UniqueId,
-    val createdAt: Timestamp
+    val createdAt: Instant
 )
 
 @Serializable
@@ -77,6 +78,8 @@ public data class RawMessageContentNode(
 
 @Serializable
 public data class RawMessageContentData(
+    val githubDeliveryId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
+    val embeds: OptionalProperty<List<RawEmbed>> = OptionalProperty.NotPresent,
     val src: OptionalProperty<String> = OptionalProperty.NotPresent,
     val href: OptionalProperty<String> = OptionalProperty.NotPresent,
     val reaction: OptionalProperty<RawReaction> = OptionalProperty.NotPresent

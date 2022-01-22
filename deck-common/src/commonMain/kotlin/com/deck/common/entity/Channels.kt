@@ -1,6 +1,7 @@
 package com.deck.common.entity
 
 import com.deck.common.util.*
+import kotlinx.datetime.Instant
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -11,22 +12,22 @@ import kotlinx.serialization.json.JsonNames
 public data class RawChannel(
     val id: UniqueId,
     val type: RawChannelType,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val createdBy: GenericId,
-    val updatedAt: Timestamp,
+    val updatedAt: Instant,
     val name: String,
     val contentType: RawChannelContentType,
-    val archivedAt: Timestamp?,
+    val archivedAt: Instant?,
     val parentChannelId: UniqueId?,
-    val autoArchiveAt: Timestamp?,
-    val deletedAt: Timestamp?,
+    val autoArchiveAt: Instant?,
+    val deletedAt: Instant?,
     val archivedBy: GenericId?,
     val description: String?,
     val createdByWebhookId: UniqueId?,
     val archivedByWebhookId: UniqueId?,
     val teamId: GenericId?,
     val channelCategoryId: IntGenericId?,
-    val addedAt: Timestamp?,
+    val addedAt: Instant?,
     val channelId: UniqueId?,
     val isRoleSynced: Boolean?,
     val roles: List<RawRole>?,
@@ -47,18 +48,18 @@ public data class RawChannel(
 public data class RawPrivateChannel(
     val id: UniqueId,
     val type: RawChannelType,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val createdBy: GenericId,
-    val updatedAt: Timestamp,
+    val updatedAt: Instant,
     val name: String?,
     val description: String?,
     val lastMessage: RawPartialDeletedMessage,
     val contentType: RawChannelContentType,
-    val archivedAt: Timestamp?,
-    val autoArchiveAt: Timestamp?,
+    val archivedAt: Instant?,
+    val autoArchiveAt: Instant?,
     val archivedBy: GenericId?,
     val parentChannelId: UniqueId?,
-    val deletedAt: Timestamp?,
+    val deletedAt: Instant?,
     val createdByWebhookId: UniqueId?,
     val archivedByWebhookId: UniqueId?,
     val dmType: String = "Default",
@@ -75,8 +76,8 @@ public data class RawChannelCategory(
     val roles: List<RawRolePermissionsOverwritten>?,
     val rolesById: Dictionary<String, RawRolePermissionsOverwritten>,
     val teamId: GenericId,
-    val createdAt: Timestamp,
-    val updatedAt: Timestamp?,
+    val createdAt: Instant,
+    val updatedAt: Instant?,
     val groupId: GenericId,
     val channelCategoryId: IntGenericId?,
     val userPermissions: List<RawUserPermission>?
@@ -131,8 +132,8 @@ public enum class RawChannelContentType {
 public data class RawChannelContentReply @OptIn(ExperimentalSerializationApi::class) constructor(
     val id: IntGenericId,
     val message: RawMessageContent,
-    val createdAt: Timestamp,
-    val editedAt: Timestamp?,
+    val createdAt: Instant,
+    val editedAt: Instant?,
     val gameId: OptionalProperty<Int?> = OptionalProperty.NotPresent,
     val teamId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     @JsonNames("contentId", "repliesTo")
