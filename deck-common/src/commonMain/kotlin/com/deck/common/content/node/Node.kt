@@ -8,10 +8,10 @@ public sealed class Node(
     public val type: String,
     public val data: NodeData
 ) {
-    public class Text(text: String) : Node(
+    public class Text(text: String, insideQuoteBlock: Boolean = false) : Node(
         `object` = "block",
         type = "paragraph",
-        data = NodeData(text = text)
+        data = NodeData(text = text, insideQuoteBlock = insideQuoteBlock)
     )
 
     public class Embed(embeds: List<com.deck.common.content.Embed>) : Node(
@@ -32,25 +32,22 @@ public sealed class Node(
         data = NodeData()
     )
 
-    public class Quote(public val quoteContainerData: QuoteContainerData) : Node(
+    public class Quote(public val lines: List<Text>) : Node(
         `object` = "block",
         type = "block-quote-container",
-        data = NodeData()
+        data = NodeData(children = lines)
     )
 }
 
 public data class NodeData(
     val text: String? = null,
     val image: String? = null,
-    val embeds: List<Embed>? = null
+    val embeds: List<Embed>? = null,
+    val children: List<Node> = emptyList(),
+    val insideQuoteBlock: Boolean = false
 )
 
 public data class SystemMessageData(
     public val type: String,
     public val createdBy: GenericId? = null
-)
-
-public data class QuoteContainerData(
-    public val texts: List<String>?,
-    public val marks: List<List<Unit>>?
 )

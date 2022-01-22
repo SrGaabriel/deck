@@ -14,7 +14,7 @@ public class Content(public val nodes: List<Node> = listOf()) {
         get() = leaves.joinToString("\n")
 }
 
-public class ContentBuilder {
+public class ContentBuilder(private val quoteContainer: Boolean = false) {
     private val nodes: MutableList<Node> = mutableListOf()
 
     public operator fun Node.unaryPlus() {
@@ -22,11 +22,7 @@ public class ContentBuilder {
     }
 
     public operator fun String.unaryPlus() {
-        nodes.add(Node.Text(text = this))
-    }
-
-    public operator fun Image.unaryPlus() {
-        nodes.add(Node.Image(image = this.url))
+        nodes.add(Node.Text(text = this, insideQuoteBlock = quoteContainer))
     }
 
     public operator fun Embed.unaryPlus() {
@@ -37,16 +33,22 @@ public class ContentBuilder {
         nodes.add(Node.Embed(embeds = this.toList()))
     }
 
-    public fun image(url: String): Image = Image(url)
+    public fun quoteBlock(builder: ContentBuilder.() -> Unit): Node.Quote {
+        return Node.Quote(
+            ContentBuilder(quoteContainer = true)
+                .apply(builder)
+                .build()
+                .nodes
+                .filterIsInstance<Node.Text>()
+        )
+    }
+
+    public fun image(url: String): Node.Image = Node.Image(image = url)
 
     public operator fun invoke(builder: ContentBuilder.() -> Unit): Unit =
         this.let(builder)
 
     public fun build(): Content = Content(nodes)
-
-    public data class Image(
-        public val url: String
-    )
 }
 
 public fun contentBuilder(builder: ContentBuilder.() -> Unit): Content =

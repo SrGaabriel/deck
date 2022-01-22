@@ -10,15 +10,12 @@ public interface CacheManager {
     public val channels: Cache<UUID, Channel>
     public val users: Cache<GenericId, User>
 
-    public fun retrieveChannel(channelId: UUID): Channel?
+    public fun updateChannel(id: UUID, channel: Channel?)
 
-    public fun retrieveUser(userId: GenericId): User?
+    public fun retrieveChannel(id: UUID): Channel?
 
-    public fun putChannel(channel: Channel)
+    public fun updateUser(id: GenericId, user: User?)
 
-    public fun putUser(user: User)
+    public fun retrieveUser(id: GenericId): User?
 
-    public fun removeChannel(channelId: UUID)
-
-    public fun removeUser(userId: GenericId)
 }

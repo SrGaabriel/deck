@@ -8,24 +8,22 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import java.util.*
 
 public class DeckCacheManager() : CacheManager {
-    override val channels: Cache<UUID, Channel> = Caffeine.newBuilder().build<UUID, Channel>()
-    override val users: Cache<GenericId, User> = Caffeine.newBuilder().build<GenericId, User>()
+    override val channels: Cache<UUID, Channel> = Caffeine.newBuilder().build()
+    override val users: Cache<GenericId, User> = Caffeine.newBuilder().build()
 
-    override fun retrieveChannel(channelId: UUID): Channel? =
-        channels.getIfPresent(channelId)
+    override fun updateChannel(id: UUID, channel: Channel?) {
+        channels.put(id, channel)
+    }
 
-    override fun retrieveUser(userId: GenericId): User? =
-        users.getIfPresent(userId)
+    override fun retrieveChannel(id: UUID): Channel? {
+        return channels.getIfPresent(id)
+    }
 
-    override fun putChannel(channel: Channel): Unit =
-        channels.put(channel.id, channel)
+    override fun updateUser(id: GenericId, user: User?) {
+        users.put(id, user)
+    }
 
-    override fun putUser(user: User): Unit =
-        users.put(user.id, user)
-
-    override fun removeChannel(channelId: UUID): Unit =
-        channels.invalidate(channelId)
-
-    override fun removeUser(userId: GenericId): Unit =
-        users.invalidate(userId)
+    override fun retrieveUser(id: GenericId): User? {
+        return users.getIfPresent(id)
+    }
 }

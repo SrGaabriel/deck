@@ -33,24 +33,24 @@ public data class DeckRoleBotScope(
 ) : RoleBotScope
 
 public data class DeckRolePermissions(
-    override val announcements: Int,
-    override val bots: Int,
-    override val brackets: Int,
-    override val calendar: Int,
-    override val chat: Int,
-    override val customization: Int,
-    override val docs: Int,
-    override val forms: Int,
-    override val forums: Int,
-    override val general: Int,
-    override val lists: Int,
-    override val matchmaking: Int,
-    override val media: Int,
-    override val recruitment: Int,
-    override val scheduling: Int,
-    override val streams: Int,
-    override val voice: Int,
-    override val xp: Int
+    override val announcements: Int = 0,
+    override val bots: Int = 0,
+    override val brackets: Int = 0,
+    override val calendar: Int = 0,
+    override val chat: Int = 0,
+    override val customization: Int = 0,
+    override val docs: Int = 0,
+    override val forms: Int = 0,
+    override val forums: Int = 0,
+    override val general: Int = 0,
+    override val lists: Int = 0,
+    override val matchmaking: Int = 0,
+    override val media: Int = 0,
+    override val recruitment: Int = 0,
+    override val scheduling: Int = 0,
+    override val streams: Int = 0,
+    override val voice: Int = 0,
+    override val xp: Int = 0
 ) : RolePermissions
 
 public data class DeckRolePermissionsOverwritten(

@@ -103,35 +103,34 @@ public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrat
             repliesToId = raw.repliesToIds.firstOrNull()?.mapToBuiltin()
         )
 
-    override fun decodePartialTeamChannel(teamId: GenericId, raw: RawPartialTeamChannel): PartialTeamChannel =
-        DeckPartialTeamChannel(
-            client = client,
-            id = raw.id.mapToBuiltin(),
-            name = raw.name,
-            description = raw.description.orEmpty(),
-            type = RawChannelType.Team,
-            contentType = raw.contentType.asNullable()!!,
-            createdAt = raw.createdAt.asNullable()!!,
-            createdBy = raw.createdBy.asNullable()!!,
-            archivedAt = raw.archivedAt.asNullable(),
-            archivedBy = raw.archivedBy.asNullable(),
-            updatedAt = raw.updatedAt.asNullable(),
-            deletedAt = raw.deletedAt.asNullable(),
-            teamId = teamId,
-            parentChannelId = raw.parentChannelId.asNullable()?.mapToBuiltin(),
-            channelCategoryId = raw.channelCategoryId.asNullable(),
-            channelId = raw.channelId.asNullable()?.mapToBuiltin(),
-            groupId = raw.groupId.asNullable(),
-            createdByWebhookId = raw.createdByWebhookId.asNullable()?.mapToBuiltin(),
-            archivedByWebhookId = raw.archivedByWebhookId.asNullable()?.mapToBuiltin(),
-            addedAt = raw.addedAt.asNullable(),
-            autoArchiveAt = raw.autoArchiveAt.asNullable(),
-            isPublic = raw.isPublic,
-            isRoleSynced = raw.isRoleSynced.asNullable(),
-            userPermissions = raw.userPermissions.asNullable()?.map { it.forcefullyWrap()!! },
-            roles = raw.roles.asNullable()?.map { it.forcefullyWrap(client)!! },
-            rolePermissionsOverwrittenById = raw.rolesById.asNullable()?.entries?.associate {
+    override fun decodePartialTeamChannel(teamId: GenericId, raw: RawPartialTeamChannel): PartialTeamChannel = DeckPartialTeamChannel(
+        client = client,
+        id = raw.id.mapToBuiltin(),
+        name = raw.name,
+        description = raw.description.orEmpty(),
+        type = RawChannelType.Team,
+        contentType = raw.contentType.asNullable()!!,
+        createdAt = raw.createdAt.asNullable()!!,
+        createdBy = raw.createdBy.asNullable()!!,
+        archivedAt = raw.archivedAt.asNullable(),
+        archivedBy = raw.archivedBy.asNullable(),
+        updatedAt = raw.updatedAt.asNullable(),
+        deletedAt = raw.deletedAt.asNullable(),
+        teamId = teamId,
+        parentChannelId = raw.parentChannelId.asNullable()?.mapToBuiltin(),
+        channelCategoryId = raw.channelCategoryId.asNullable(),
+        channelId = raw.channelId.asNullable()?.mapToBuiltin(),
+        groupId = raw.groupId.asNullable(),
+        createdByWebhookId = raw.createdByWebhookId.asNullable()?.mapToBuiltin(),
+        archivedByWebhookId = raw.archivedByWebhookId.asNullable()?.mapToBuiltin(),
+        addedAt = raw.addedAt.asNullable(),
+        autoArchiveAt = raw.autoArchiveAt.asNullable(),
+        isPublic = raw.isPublic,
+        isRoleSynced = raw.isRoleSynced.asNullable(),
+        userPermissions = raw.userPermissions.asNullable()?.map { it.forcefullyWrap()!! },
+        roles = raw.roles.asNullable()?.map { it.forcefullyWrap(client)!! },
+        rolePermissionsOverwrittenById = raw.rolesById.asNullable()?.entries?.associate {
                 it.key to it.value.forcefullyWrap()!!
             } ?: emptyMap()
-        )
+    )
 }
