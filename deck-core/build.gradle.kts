@@ -16,4 +16,5 @@ dependencies {
     implementation("io.ktor:ktor-client-websockets:${Dependencies.KtorVersion}")
     implementation("io.ktor:ktor-client-serialization:${Dependencies.KtorVersion}")
     implementation("io.github.microutils:kotlin-logging-jvm:${Dependencies.KotlinLoggingVersion}")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.0.5")
 }

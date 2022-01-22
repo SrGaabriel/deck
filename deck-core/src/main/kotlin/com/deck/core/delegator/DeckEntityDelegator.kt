@@ -2,13 +2,18 @@ package com.deck.core.delegator
 
 import com.deck.common.util.GenericId
 import com.deck.common.util.mapToModel
+import com.deck.core.cache.CacheManager
 import com.deck.core.entity.*
 import com.deck.core.module.RestModule
 import kotlinx.coroutines.Dispatchers
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
-public class DeckEntityDelegator(override val rest: RestModule, override val strategizer: EntityStrategizer) :
+public class DeckEntityDelegator(
+    override val rest: RestModule,
+    override val strategizer: EntityStrategizer,
+    override val cacheManager: CacheManager
+) :
     EntityDelegator {
     override val coroutineContext: CoroutineContext = Dispatchers.Default
 

@@ -3,6 +3,8 @@ package com.deck.core
 import com.deck.common.util.Authentication
 import com.deck.common.util.AuthenticationResult
 import com.deck.common.util.DeckExperimental
+import com.deck.core.cache.CacheManager
+import com.deck.core.cache.DeckCacheManager
 import com.deck.core.delegator.DeckEntityDelegator
 import com.deck.core.delegator.DeckEntityStrategizer
 import com.deck.core.delegator.EntityDelegator
@@ -34,7 +36,8 @@ public class DeckClient(
     override val wrappedEventSupplierData: WrappedEventSupplierData by eventService::wrappedEventSupplierData
 
     public val entityStrategizer: EntityStrategizer = DeckEntityStrategizer(this)
-    public val entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityStrategizer)
+    public val entityCacheManager : CacheManager = DeckCacheManager()
+    public val entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityStrategizer, entityCacheManager)
 
     public suspend fun login() {
         this.setAuthentication(authenticationService.login(auth))

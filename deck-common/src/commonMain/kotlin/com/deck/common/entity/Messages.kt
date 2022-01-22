@@ -15,11 +15,11 @@ public data class RawMessage(
     val createdAt: Instant,
     val editedAt: Instant?,
     val deletedAt: Instant?,
-    val reactions: List<RawReaction>,
-    val isPinned: Boolean,
-    val pinnedBy: GenericId?,
+    val reactions: OptionalProperty<List<RawReaction>> = OptionalProperty.NotPresent,
+    val isPinned: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
+    val pinnedBy: OptionalProperty<GenericId?> = OptionalProperty.NotPresent,
     val webhookId: GenericId?,
-    val botId: GenericId?,
+    val botId: OptionalProperty<GenericId?> = OptionalProperty.NotPresent,
     val type: String
 )
 

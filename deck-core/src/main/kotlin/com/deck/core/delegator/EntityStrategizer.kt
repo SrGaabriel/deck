@@ -6,6 +6,7 @@ import com.deck.common.entity.RawUser
 import com.deck.common.util.GenericId
 import com.deck.core.entity.*
 import com.deck.rest.entity.RawFetchedTeam
+import com.deck.gateway.entity.RawPartialTeamChannel
 import java.util.*
 
 public interface EntityStrategizer {
@@ -18,4 +19,6 @@ public interface EntityStrategizer {
     public fun decodeChannel(raw: RawChannel): Channel
 
     public fun decodePartialSentMessage(channelId: UUID, teamId: GenericId?, raw: RawPartialSentMessage): Message
+
+    public fun decodePartialTeamChannel(teamId: GenericId, raw: RawPartialTeamChannel): PartialTeamChannel
 }

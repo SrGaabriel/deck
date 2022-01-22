@@ -1,11 +1,13 @@
 package com.deck.core.event
 
+import com.deck.common.util.asNullable
 import com.deck.core.DeckClient
+import com.deck.core.event.channel.*
 import com.deck.core.event.message.DeckMessageCreateEvent
 import com.deck.core.util.WrappedEventSupplier
 import com.deck.core.util.WrappedEventSupplierData
 import com.deck.gateway.event.GatewayEvent
-import com.deck.gateway.event.type.GatewayChatMessageCreatedEvent
+import com.deck.gateway.event.type.*
 import com.deck.gateway.util.on
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -33,12 +35,16 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
     override fun startListeningAndConveying(): Job = client.gateway.orchestrator.on<GatewayEvent> {
         val deckEvent: DeckEvent = when (this) {
             is GatewayChatMessageCreatedEvent -> DeckMessageCreateEvent.map(client, this)
+            is GatewayTeamChannelCreatedEvent -> DeckTeamChannelCreateEvent.map(client, this)
+            is GatewayTeamChannelDeletedEvent -> DeckTeamChannelDeleteEvent.map(client, this)
+            is GatewayTeamChannelUpdatedEvent -> DeckTeamChannelUpdateEvent.map(client, this)
+            is GatewayTeamChannelsDeletedEvent -> DeckTeamChannelsDeleteEvent.map(client, this)
             else -> return@on
-        }
+        } ?: return@on
         eventWrappingFlow.emit(deckEvent)
     }
 }
 
 public interface EventMapper<F : GatewayEvent, T : DeckEvent> {
-    public suspend fun map(client: DeckClient, event: F): T
+    public suspend fun map(client: DeckClient, event: F): T?
 }

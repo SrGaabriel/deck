@@ -1,6 +1,7 @@
 package com.deck.core.delegator
 
 import com.deck.common.util.GenericId
+import com.deck.core.cache.CacheManager
 import com.deck.core.entity.*
 import com.deck.core.module.RestModule
 import com.deck.rest.util.Route
@@ -10,6 +11,7 @@ import java.util.*
 public interface EntityDelegator : CoroutineScope {
     public val rest: RestModule
     public val strategizer: EntityStrategizer
+    public val cacheManager: CacheManager
 
     public suspend fun getTeam(id: GenericId): Team?
 
