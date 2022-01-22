@@ -1,32 +1,33 @@
 package com.deck.core.event.channel
 
-import com.deck.common.util.GenericId
+import com.deck.common.util.asNullable
 import com.deck.core.DeckClient
-import com.deck.core.entity.impl.DeckPartialTeamChannel
+import com.deck.core.entity.PartialTeamChannel
+import com.deck.core.entity.TeamChannel
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
 import com.deck.gateway.event.type.GatewayTeamChannelUpdatedEvent
-import kotlinx.coroutines.Dispatchers
-import kotlin.coroutines.CoroutineContext
 
 public data class DeckTeamChannelUpdateEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
-    val teamId: GenericId,
-    val channel: DeckPartialTeamChannel
+    val channel: PartialTeamChannel,
+    val old: TeamChannel?
 ) : DeckEvent {
     public companion object : EventMapper<GatewayTeamChannelUpdatedEvent, DeckTeamChannelUpdateEvent> {
-        override suspend fun map(
-            client: DeckClient,
-            event: GatewayTeamChannelUpdatedEvent
-        ): DeckTeamChannelUpdateEvent =
-            DeckTeamChannelUpdateEvent(
-                client,
-                event.gatewayId,
-                event.teamId,
-                client.entityStrategizer.decodeTeamPartialChannel(event.channel) as DeckPartialTeamChannel
-            )
+        override suspend fun map(client: DeckClient, event: GatewayTeamChannelUpdatedEvent): DeckTeamChannelUpdateEvent? {
+            // Event issued twice, this ignores the second time
+            if (event.channel.type.asNullable() == null && event.channel.createdAt.asNullable() == null)
+                return null
 
-        override val coroutineContext: CoroutineContext = Dispatchers.Unconfined
+            val channel = client.entityStrategizer.decodePartialTeamChannel(event.channel, event.teamId)
+
+            return DeckTeamChannelUpdateEvent(
+                client = client,
+                gatewayId = event.gatewayId,
+                channel = channel,
+                old = client.entityCacheManager.retrieveChannel(channel.id) as TeamChannel?
+            )
+        }
     }
 }

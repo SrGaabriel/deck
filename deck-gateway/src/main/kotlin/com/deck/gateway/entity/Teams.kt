@@ -2,7 +2,7 @@ package com.deck.gateway.entity
 
 import com.deck.common.util.GenericId
 import com.deck.common.util.OptionalProperty
-import com.deck.common.util.Timestamp
+import kotlinx.datetime.Instant
 import com.deck.common.util.UniqueId
 import kotlinx.serialization.Serializable
 
@@ -30,8 +30,8 @@ public data class RawPartialBot(
     val botId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val teamId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     val createdBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
-    val createdAt: OptionalProperty<Timestamp> = OptionalProperty.NotPresent,
-    val deletedAt: OptionalProperty<Timestamp?> = OptionalProperty.NotPresent,
+    val createdAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    val deletedAt: OptionalProperty<Instant?> = OptionalProperty.NotPresent,
     val triggerType: OptionalProperty<String> = OptionalProperty.NotPresent,
     // val triggerMeta: OptionalProperty<RawBotFlowMeta> = OptionalProperty.NotPresent,
     val userId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,

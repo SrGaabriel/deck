@@ -5,6 +5,7 @@ import com.deck.common.entity.RawGroup
 import com.deck.common.entity.RawTeamMember
 import com.deck.common.entity.RawTeamPaymentInfo
 import com.deck.common.util.*
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,7 +27,7 @@ public data class RawFetchedTeam(
     val bots: List<RawBot>,
     @DeckUnknown
     val rolesVersion: Int,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val ownerId: GenericId,
     val profilePicture: String?,
     val teamDashImage: String?,
@@ -72,6 +73,6 @@ public data class RawTeamWebhook(
     val teamId: GenericId,
     val iconUrl: String?,
     val createdBy: GenericId,
-    val createdAt: Timestamp,
-    val deletedAt: Timestamp?
+    val createdAt: Instant,
+    val deletedAt: Instant?
 )

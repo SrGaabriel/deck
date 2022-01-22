@@ -1,9 +1,11 @@
 package com.deck.rest.route
 
 import com.deck.common.entity.RawChannel
+import com.deck.common.entity.RawMessage
 import com.deck.common.util.UniqueId
 import com.deck.rest.RestClient
 import com.deck.rest.builder.SendMessageRequestBuilder
+import com.deck.rest.request.GetMessageResponse
 import com.deck.rest.request.SendMessageRequest
 import com.deck.rest.request.SendMessageResponse
 import com.deck.rest.util.Route
@@ -28,4 +30,9 @@ public class ChannelRoute(client: RestClient) : Route(client) {
         response.message.isSilent = request.isSilent
         return response
     }
+
+    public suspend fun getMessage(channelId: UniqueId, messageId: UniqueId): GetMessageResponse = sendRequest<GetMessageResponse, Unit>(
+        endpoint = "/content/route/metadata?route=//channels/$channelId/chat?messageId=$messageId",
+        method = HttpMethod.Get
+    )
 }

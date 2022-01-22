@@ -2,7 +2,7 @@ package com.deck.common.entity
 
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
-import com.deck.common.util.Timestamp
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,7 +13,7 @@ public data class RawApplication(
     // val applicantAliases: List<*>,
     val teamId: GenericId,
     val gameId: IntGenericId?,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val createdBy: GenericId,
     val applicantName: String,
     val applicantProfilePicture: String? = null,

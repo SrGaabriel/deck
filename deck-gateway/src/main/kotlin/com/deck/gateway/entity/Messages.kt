@@ -3,7 +3,7 @@ package com.deck.gateway.entity
 import com.deck.common.entity.RawMessageContent
 import com.deck.common.util.GenericId
 import com.deck.common.util.OptionalProperty
-import com.deck.common.util.Timestamp
+import kotlinx.datetime.Instant
 import com.deck.common.util.UniqueId
 import kotlinx.serialization.Serializable
 
@@ -18,8 +18,8 @@ public data class RawPartialReceivedMessage(
     val repliesToIds: OptionalProperty<List<UniqueId>> = OptionalProperty.NotPresent,
     val repliesTo: UniqueId?,
     val type: String,
-    val createdAt: Timestamp,
-    val editedAt: OptionalProperty<Timestamp?> = OptionalProperty.NotPresent,
+    val createdAt: Instant,
+    val editedAt: OptionalProperty<Instant?> = OptionalProperty.NotPresent,
     val isSilent: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     val isPrivate: OptionalProperty<Boolean> = OptionalProperty.NotPresent
 )
@@ -31,16 +31,16 @@ public data class RawPartialEditedMessage(
     val content: RawMessageContent,
     val repliesToIds: List<UniqueId>?,
     val type: String,
-    val createdAt: Timestamp,
-    val editedAt: Timestamp,
+    val createdAt: Instant,
+    val editedAt: Instant,
     val isPrivate: Boolean
 )
 
 @Serializable
 public data class RawPartialDeletedMessage(
     val id: UniqueId,
-    val deletedAt: Timestamp,
-    val createdAt: Timestamp
+    val deletedAt: Instant,
+    val createdAt: Instant
 )
 
 @Serializable

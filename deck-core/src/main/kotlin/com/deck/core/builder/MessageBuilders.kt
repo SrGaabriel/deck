@@ -1,6 +1,7 @@
 package com.deck.core.builder
 
 import com.deck.common.content.Content
+import com.deck.common.content.ContentBuilder
 import com.deck.common.content.node.NodeGlobalStrategy
 import com.deck.common.util.mapToModel
 import com.deck.rest.builder.RequestBuilder
@@ -16,6 +17,10 @@ public class DeckMessageBuilder : RequestBuilder<SendMessageRequest> {
 
     public var isSilent: Boolean = false
     public var isPrivate: Boolean = false
+
+    public operator fun Content.invoke(builder: ContentBuilder.() -> Unit) {
+        this@DeckMessageBuilder.content = ContentBuilder().apply(builder).build()
+    }
 
     override fun toRequest(): SendMessageRequest = SendMessageRequest(
         messageId = id.mapToModel(),

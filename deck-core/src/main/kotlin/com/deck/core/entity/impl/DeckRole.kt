@@ -1,119 +1,134 @@
 package com.deck.core.entity.impl
 
-import com.deck.common.entity.RawRole
-import com.deck.common.entity.RawRoleBotScope
-import com.deck.common.entity.RawRolePermissions
-import com.deck.common.entity.RawRolePermissionsOverwritten
+import com.deck.common.entity.*
 import com.deck.common.util.*
 import com.deck.core.DeckClient
 import com.deck.core.entity.Role
 import com.deck.core.entity.RoleBotScope
 import com.deck.core.entity.RolePermissions
 import com.deck.core.entity.RolePermissionsOverwritten
+import kotlinx.datetime.Instant
 
-public class DeckRole(
+public data class DeckRole(
     override val client: DeckClient,
-    public val raw: RawRole
-) : Role {
-    override val id: IntGenericId get() = raw.id
+    override val id: IntGenericId,
+    override val color: String,
+    override val isBase: Boolean,
+    override val isDisplayedSeparately: Boolean,
+    override val isMentionable: Boolean,
+    override val isSelfAssignable: Boolean,
+    override val name: String,
+    override val createdAt: Instant,
+    override val discordRoleId: LongGenericId?,
+    override val discordSyncedAt: Instant?,
+    override val priority: Int,
+    override val botScope: RoleBotScope?,
+    override val teamId: GenericId,
+    override val updatedAt: Instant?,
+    override val permissions: RolePermissions
+) : Role
 
-    override val color: String get() = raw.color
+public data class DeckRoleBotScope(
+    override val userId: GenericId?
+) : RoleBotScope
 
-    override val isBase: Boolean get() = raw.isBase
-
-    override val isDisplayedSeparately: Boolean get() = raw.isDisplayedSeparately
-
-    override val isMentionable: Boolean get() = raw.isMentionable
-
-    override val isSelfAssignable: Boolean get() = raw.isSelfAssignable
-
-    override val name: String get() = raw.name
-
-    override val createdAt: Timestamp get() = raw.createdAt
-
-    override val discordRoleId: LongGenericId? get() = raw.discordRoleId
-
-    override val discordSyncedAt: Timestamp? get() = raw.discordSyncedAt
-
-    override val priority: Int get() = raw.priority
-
-    override val botScope: RoleBotScope?
-        get() = raw.botScope?.let {
-            DeckRoleBotScope(
-                client,
-                it
-            )
-        }
-
-    override val teamId: GenericId get() = raw.teamId
-
-    override val updatedAt: Timestamp? get() = raw.updatedAt
-
-    override val permissions: RolePermissions get() = DeckRolePermissions(raw.permissions)
-}
+public data class DeckRolePermissions(
+    override val announcements: Int,
+    override val bots: Int,
+    override val brackets: Int,
+    override val calendar: Int,
+    override val chat: Int,
+    override val customization: Int,
+    override val docs: Int,
+    override val forms: Int,
+    override val forums: Int,
+    override val general: Int,
+    override val lists: Int,
+    override val matchmaking: Int,
+    override val media: Int,
+    override val recruitment: Int,
+    override val scheduling: Int,
+    override val streams: Int,
+    override val voice: Int,
+    override val xp: Int
+) : RolePermissions
 
 public data class DeckRolePermissionsOverwritten(
-    override val client: DeckClient,
-    public val raw: RawRolePermissionsOverwritten
-) : RolePermissionsOverwritten {
-    override val teamId: GenericId get() = raw.teamId
+    override val teamId: GenericId,
+    override val createdAt: Instant,
+    override val updatedAt: Instant?,
+    override val teamRoleId: IntGenericId,
+    override val channelCategoryId: IntGenericId?,
+    override val denyPermissions: RolePermissions,
+    override val allowPermissions: RolePermissions
+) : RolePermissionsOverwritten
 
-    override val createdAt: Timestamp get() = raw.createdAt
+internal fun RawRole?.forcefullyWrap(client: DeckClient): DeckRole? {
+    val raw = this ?: return null
 
-    override val updatedAt: Timestamp? get() = raw.updatedAt
-
-    override val teamRoleId: IntGenericId get() = raw.teamRoleId
-
-    override val denyPermissions: RolePermissions get() = DeckRolePermissions(raw.denyPermissions)
-
-    override val allowPermissions: RolePermissions get() = DeckRolePermissions(raw.allowPermissions)
-
-    override val channelCategoryId: IntGenericId? get() = raw.channelCategoryId.asNullable()
+    return DeckRole(
+        client = client,
+        id = raw.id,
+        color = raw.color,
+        isBase = raw.isBase,
+        isDisplayedSeparately = raw.isDisplayedSeparately,
+        isMentionable = raw.isMentionable,
+        isSelfAssignable = raw.isSelfAssignable,
+        name = raw.name,
+        createdAt = raw.createdAt,
+        discordRoleId = raw.discordRoleId,
+        discordSyncedAt = raw.discordSyncedAt,
+        priority = raw.priority,
+        botScope = raw.botScope.forcefullyWrap(),
+        teamId = raw.teamId,
+        updatedAt = raw.updatedAt,
+        permissions = raw.permissions.forcefullyWrap()!!
+    )
 }
 
-public class DeckRolePermissions(
-    public val raw: RawRolePermissions
-) : RolePermissions {
-    override val announcements: Int get() = raw.announcements
+internal fun RawRoleBotScope?.forcefullyWrap(): DeckRoleBotScope? {
+    val raw = this ?: return null
 
-    override val bots: Int get() = raw.bots
-
-    override val brackets: Int get() = raw.brackets
-
-    override val chat: Int get() = raw.chat
-
-    override val customization: Int get() = raw.customization
-
-    override val docs: Int get() = raw.docs
-
-    override val forms: Int get() = raw.forms
-
-    override val forums: Int get() = raw.forums
-
-    override val calendar: Int get() = raw.calendar
-
-    override val general: Int get() = raw.general
-
-    override val lists: Int get() = raw.lists
-
-    override val matchmaking: Int get() = raw.matchmaking
-
-    override val media: Int get() = raw.media
-
-    override val recruitment: Int get() = raw.recruitment
-
-    override val scheduling: Int get() = raw.scheduling
-
-    override val streams: Int get() = raw.streams
-
-    override val voice: Int get() = raw.voice
-
-    override val xp: Int get() = raw.xp
+    return DeckRoleBotScope(
+        userId = raw.userId
+    )
 }
 
-public class DeckRoleBotScope(
-    override val client: DeckClient,
-    public val raw: RawRoleBotScope?
-) : RoleBotScope {
-    override val userId: GenericId? get() = raw?.userId
+internal fun RawRolePermissions?.forcefullyWrap(): DeckRolePermissions? {
+    val raw = this ?: return null
+
+    return DeckRolePermissions(
+        announcements = raw.announcements,
+        bots = raw.bots,
+        brackets = raw.brackets,
+        calendar = raw.calendar,
+        chat = raw.chat,
+        customization = raw.customization,
+        docs = raw.docs,
+        forms = raw.forms,
+        forums = raw.forums,
+        general = raw.general,
+        lists = raw.lists,
+        matchmaking = raw.matchmaking,
+        media = raw.media,
+        recruitment = raw.recruitment,
+        scheduling = raw.scheduling,
+        streams = raw.streams,
+        voice = raw.voice,
+        xp = raw.xp
+    )
+}
+
+internal fun RawRolePermissionsOverwritten?.forcefullyWrap() : DeckRolePermissionsOverwritten? {
+    val raw = this ?: return null
+
+    return DeckRolePermissionsOverwritten(
+        teamId = raw.teamId,
+        createdAt = raw.createdAt,
+        updatedAt = raw.updatedAt,
+        teamRoleId = raw.teamRoleId,
+        channelCategoryId = raw.channelCategoryId.asNullable(),
+        denyPermissions = raw.denyPermissions.forcefullyWrap()!!,
+        allowPermissions = raw.allowPermissions.forcefullyWrap()!!
+    )
 }

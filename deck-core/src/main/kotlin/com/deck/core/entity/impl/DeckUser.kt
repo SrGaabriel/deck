@@ -1,53 +1,47 @@
 package com.deck.core.entity.impl
 
-import com.deck.common.entity.RawUser
 import com.deck.common.entity.RawUserPermission
 import com.deck.common.util.GenericId
-import com.deck.common.util.Timestamp
 import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
+import kotlinx.datetime.Instant
 import com.deck.core.DeckClient
 import com.deck.core.entity.RolePermissions
 import com.deck.core.entity.User
 import com.deck.core.entity.UserPermission
 import com.deck.core.entity.misc.DeckUserAboutInfo
-import com.deck.core.entity.misc.forcefullyWrap
 import java.util.*
 
 public data class DeckUser(
     override val client: DeckClient,
-    public val raw: RawUser
-) : User {
-    override val id: GenericId get() = raw.id
-
-    override val name: String get() = raw.name
-
-    override val subdomain: String? get() = raw.subdomain.asNullable()
-
-    override val avatar: String? get() = raw.profilePicture.asNullable()
-
-    override val banner: String? get() = raw.profileBannerSm.asNullable()
-
-    override val aboutInfo: DeckUserAboutInfo get() = raw.aboutInfo.asNullable().forcefullyWrap()
-
-    override val creationTime: Timestamp get() = raw.joinDate.asNullable()!!
-
-    override val lastLoginTime: Timestamp? get() = raw.lastOnline.asNullable()
-}
+    override val id: GenericId,
+    override val name: String,
+    override val subdomain: String?,
+    override val avatar: String?,
+    override val banner: String?,
+    override val aboutInfo: DeckUserAboutInfo?,
+    override val creationTime: Instant,
+    override val lastLoginTime: Instant
+) : User
 
 public data class DeckUserPermission(
-    override val client: DeckClient,
-    public val raw: RawUserPermission
-) : UserPermission {
-    override val userId: GenericId get() = raw.userId
+    override val userId: GenericId,
+    override val channelId: UUID?,
+    override val createdAt: Instant,
+    override val updatedAt: Instant?,
+    override val denyPermissions: RolePermissions,
+    override val allowPermissions: RolePermissions
+) : UserPermission
 
-    override val channelId: UUID? get() = raw.channelId.asNullable()?.mapToBuiltin()
+internal fun RawUserPermission?.forcefullyWrap(): DeckUserPermission? {
+    val raw = this ?: return null
 
-    override val createdAt: Timestamp get() = raw.createdAt
-
-    override val updatedAt: Timestamp? get() = raw.updatedAt
-
-    override val denyPermissions: RolePermissions get() = DeckRolePermissions(raw.denyPermissions)
-
-    override val allowPermissions: RolePermissions get() = DeckRolePermissions(raw.denyPermissions)
+     return DeckUserPermission(
+        userId = raw.userId,
+        channelId = raw.channelId.asNullable()?.mapToBuiltin(),
+        createdAt = raw.createdAt,
+        updatedAt = raw.updatedAt,
+        denyPermissions = raw.denyPermissions.forcefullyWrap()!!,
+        allowPermissions = raw.allowPermissions.forcefullyWrap()!!
+    )
 }

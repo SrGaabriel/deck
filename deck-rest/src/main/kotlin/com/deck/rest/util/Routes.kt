@@ -31,7 +31,7 @@ public abstract class Route(public val client: RestClient) {
         body: B? = null,
         authenticated: Boolean = true
     ): R = client.requestService.sendRequest(
-        Request<B, R>(
+        Request(
             method,
             Constants.GuildedRestApi + endpoint,
             body,
@@ -67,7 +67,7 @@ public abstract class Route(public val client: RestClient) {
     )
 }
 
-internal fun RestClient.defaultHttpClient() = HttpClient(CIO.create()) {
+internal val DEFAULT_HTTP_CLIENT = HttpClient(CIO.create()) {
     install(JsonFeature) {
         serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
             encodeDefaults = false

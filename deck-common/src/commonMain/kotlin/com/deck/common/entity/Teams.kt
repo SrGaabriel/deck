@@ -1,6 +1,7 @@
 package com.deck.common.entity
 
 import com.deck.common.util.*
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -30,12 +31,12 @@ public data class RawTeamMember(
     val membershipRole: String,
     val profilePicture: String?,
     val profileBannerBlur: String?,
-    val joinDate: Timestamp,
+    val joinDate: Instant,
     val userStatus: RawUserStatus,
     val userPresenceStatus: RawUserPresenceStatus,
     val userTransientStatus: OptionalProperty<RawTransientStatus?> = OptionalProperty.NotPresent,
     // val aliases: List<*>,
-    val lastOnline: Timestamp,
+    val lastOnline: Instant,
     val roleIds: List<IntGenericId>?,
     val subscriptionType: OptionalProperty<Int?> = OptionalProperty.NotPresent,
     // val socialLinks: List<RawSocialLink>,
@@ -50,8 +51,8 @@ public data class RawBot(
     val flows: List<RawBotFlow>,
     val teamId: GenericId,
     val createdBy: GenericId,
-    val createdAt: Timestamp,
-    val deletedAt: Timestamp?,
+    val createdAt: Instant,
+    val deletedAt: Instant?,
     val userId: GenericId,
     val iconUrl: String?
 )
@@ -64,8 +65,8 @@ public data class RawBotFlow(
     val botId: UniqueId,
     val teamId: GenericId,
     val createdBy: GenericId,
-    val createdAt: Timestamp,
-    val deletedAt: Timestamp?,
+    val createdAt: Instant,
+    val deletedAt: Instant?,
     val triggerType: String,
     // val triggerMeta: RawBotFlowMeta,
     val actionType: String,
@@ -77,13 +78,13 @@ public data class RawBan(
     val reason: String,
     val userId: GenericId,
     val bannedBy: GenericId,
-    val createdAt: Timestamp
+    val createdAt: Instant
 )
 
 @Serializable
 public data class RawInvite(
     val id: GenericId,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val teamId: GenericId,
     val invitedBy: GenericId,
     val userBy: GenericId?,
@@ -95,7 +96,7 @@ public data class RawInvite(
 @Serializable
 public data class RawTeamPaymentInfo(
     val subscriptionsEnabled: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
-    val onboardingStripeAccountOnboardedAt: OptionalProperty<Timestamp> = OptionalProperty.NotPresent,
+    val onboardingStripeAccountOnboardedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
 )
 
 @Serializable
@@ -108,6 +109,6 @@ public data class RawTeamSubscriptionPlan(
     val teamRoleId: IntGenericId,
     val subscriptionTier: String,
     val stripePriceId: String,
-    val createdAt: Timestamp,
-    val deletedAt: Timestamp?
+    val createdAt: Instant,
+    val deletedAt: Instant?
 )

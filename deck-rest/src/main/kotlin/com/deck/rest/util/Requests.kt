@@ -14,7 +14,7 @@ public data class Request<S, G>(
     val authentication: String? = null
 )
 
-public class RequestService(public val client: HttpClient, public val ratelimiter: Ratelimiter = Ratelimiter(client)) {
+public class RequestService(public val client: HttpClient, public val ratelimiter: RateLimiter = RateLimiter(client)) {
     public suspend inline fun <reified S, reified G> sendRequest(request: Request<S, G>): G =
         sendRequestWithDefaultSettings(request) { response ->
             throw response.receive<RawGuildedRequestException>().toException()
@@ -37,7 +37,6 @@ public class RequestService(public val client: HttpClient, public val ratelimite
             header(HttpHeaders.Cookie, "hmac_signed_session=${request.authentication}")
     }.let { response ->
         // TODO: Workaround, change later
-        println(response.receive<String>())
         return@let when {
             response is G -> response
             Unit is G -> Unit

@@ -2,6 +2,7 @@ package com.deck.gateway.entity
 
 import com.deck.common.entity.*
 import com.deck.common.util.*
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 // All optional fields are missing on channel update (except on role updates)
@@ -9,22 +10,22 @@ import kotlinx.serialization.Serializable
 public data class RawPartialTeamChannel(
     val id: UniqueId,
     val type: OptionalProperty<RawChannelType> = OptionalProperty.NotPresent,
-    val createdAt: OptionalProperty<Timestamp> = OptionalProperty.NotPresent,
+    val createdAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     val createdBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
-    val updatedAt: OptionalProperty<Timestamp?> = OptionalProperty.NotPresent,
+    val updatedAt: OptionalProperty<Instant?> = OptionalProperty.NotPresent,
     val name: String,
     val contentType: OptionalProperty<RawChannelContentType> = OptionalProperty.NotPresent,
-    val archivedAt: OptionalProperty<Timestamp?> = OptionalProperty.NotPresent,
+    val archivedAt: OptionalProperty<Instant?> = OptionalProperty.NotPresent,
     val parentChannelId: OptionalProperty<UniqueId?> = OptionalProperty.NotPresent,
-    val autoArchiveAt: OptionalProperty<Timestamp?> = OptionalProperty.NotPresent,
-    val deletedAt: OptionalProperty<Timestamp?> = OptionalProperty.NotPresent,
+    val autoArchiveAt: OptionalProperty<Instant?> = OptionalProperty.NotPresent,
+    val deletedAt: OptionalProperty<Instant?> = OptionalProperty.NotPresent,
     val archivedBy: OptionalProperty<GenericId?> = OptionalProperty.NotPresent,
     val description: String?,
     val createdByWebhookId: OptionalProperty<UniqueId?> = OptionalProperty.NotPresent,
     val archivedByWebhookId: OptionalProperty<UniqueId?> = OptionalProperty.NotPresent,
     val teamId: OptionalProperty<GenericId?> = OptionalProperty.NotPresent,
     val channelCategoryId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
-    val addedAt: OptionalProperty<Timestamp?> = OptionalProperty.NotPresent,
+    val addedAt: OptionalProperty<Instant?> = OptionalProperty.NotPresent,
     val channelId: OptionalProperty<UniqueId?> = OptionalProperty.NotPresent,
     val isRoleSynced: OptionalProperty<Boolean?> = OptionalProperty.NotPresent,
     val roles: OptionalProperty<List<RawRole>?> = OptionalProperty.NotPresent,
@@ -74,12 +75,12 @@ public data class RawChannelEvent(
     val location: String?,
     val visibility: String,
     val allowedRoleIds: OptionalProperty<List<IntGenericId>> = OptionalProperty.NotPresent,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val teamId: GenericId,
     val createdBy: GenericId,
     val gameId: Int?,
-    val happensAt: Timestamp,
-    val notifiedAt: Timestamp?,
+    val happensAt: Instant,
+    val notifiedAt: Instant?,
     val familyId: UniqueId,
     // val extraInfo: *?,
     // val repeatsEvery: *,
@@ -93,7 +94,7 @@ public data class RawChannelEvent(
     val isOpen: Boolean,
     val rsvpLimit: Int?,
     val discordChannelId: Long?,
-    val recurringNotifiedAt: Timestamp?,
+    val recurringNotifiedAt: Instant?,
     val channelId: UniqueId,
     val isPrivate: Boolean,
     val isCancelled: Boolean,
@@ -116,17 +117,17 @@ public data class RawChannelListItem(
     val priority: Int,
     val note: RawMessageContent?,
     val channelId: UniqueId,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val createdBy: GenericId,
     val updatedBy: GenericId?,
     val completedBy: GenericId?,
-    val completedAt: Timestamp?,
+    val completedAt: Instant?,
     val deletedBy: GenericId?,
-    val deletedAt: Timestamp?,
+    val deletedAt: Instant?,
     val parentId: IntGenericId?,
-    val noteCreatedAt: Timestamp?,
+    val noteCreatedAt: Instant?,
     val noteCreatedBy: GenericId?,
-    val noteUpdatedAt: Timestamp?,
+    val noteUpdatedAt: Instant?,
     val noteUpdatedBy: GenericId?,
     val teamId: GenericId,
     val webhookId: UniqueId?,
@@ -140,9 +141,9 @@ public data class RawChannelForumThread(
     val title: String,
     val message: RawMessageContent,
     val visibility: String,
-    val createdAt: Timestamp,
-    val bumpedAt: Timestamp,
-    val editedAt: Timestamp?,
+    val createdAt: Instant,
+    val bumpedAt: Instant,
+    val editedAt: Instant?,
     val createdBy: GenericId,
     val teamId: GenericId,
     val gameId: Int?,
@@ -160,7 +161,7 @@ public data class RawPartialChannelForumThread(
     val id: IntGenericId,
     val title: String,
     val message: RawMessageContent,
-    val editedAt: Timestamp
+    val editedAt: Instant
 )
 
 @Serializable
@@ -170,10 +171,10 @@ public data class RawChannelScheduleAvailability(
     val teamId: GenericId,
     val channelId: UniqueId,
     val userId: GenericId,
-    val createdAt: Timestamp,
-    val updatedAt: Timestamp,
-    val startDate: Timestamp,
-    val endDate: Timestamp
+    val createdAt: Instant,
+    val updatedAt: Instant,
+    val startDate: Instant,
+    val endDate: Instant
 )
 
 @Serializable
@@ -183,8 +184,8 @@ public data class RawChannelDocument(
     val content: RawMessageContent,
     val visibility: String,
     val tags: String,
-    val createdAt: Timestamp,
-    val modifiedAt: Timestamp,
+    val createdAt: Instant,
+    val modifiedAt: Instant,
     val modifiedBy: GenericId,
     val teamId: GenericId,
     val gameId: Int?,
@@ -204,7 +205,7 @@ public data class RawChannelMedia(
     val description: String?,
     val tags: List<String>,
     val visibility: String,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val socialLinkSource: String?,
     val serviceId: Int?,
     //val additionalInfo: *?,

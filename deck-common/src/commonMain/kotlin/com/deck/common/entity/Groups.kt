@@ -1,6 +1,7 @@
 package com.deck.common.entity
 
 import com.deck.common.util.*
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -25,14 +26,14 @@ public data class RawGroup(
     val membershipTeamRoleIds: OptionalProperty<List<IntGenericId>> = OptionalProperty.NotPresent,
     val additionalMembershipTeamRoleIds: OptionalProperty<List<IntGenericId>?> = OptionalProperty.NotPresent,
     val isBase: Boolean,
-    val createdAt: Timestamp,
+    val createdAt: Instant,
     val createdBy: GenericId?,
-    val updatedAt: Timestamp?,
+    val updatedAt: Instant?,
     val updatedBy: GenericId?,
-    val deletedAt: Timestamp?,
+    val deletedAt: Instant?,
     val customReactionId: Int?,
     val isPublic: Boolean,
-    val archivedAt: Timestamp?,
+    val archivedAt: Instant?,
     val archivedBy: GenericId?,
     // val membershipUpdates: List<*>
 )
