@@ -47,5 +47,21 @@ public annotation class DeckExperimental
 @RequiresOptIn(level = RequiresOptIn.Level.WARNING)
 public annotation class DeckDelicateApi
 
+/**
+ * Marks a feature as obsolete, indicating that it's deprecated,
+ * but doesn't have an actual replacement yet.
+ */
+@Retention(AnnotationRetention.BINARY)
+@Target(
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.FIELD,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.CLASS,
+    AnnotationTarget.PROPERTY_SETTER
+)
+@RequiresOptIn(level = RequiresOptIn.Level.WARNING)
+public annotation class DeckObsoleteApi
+
+
 @DslMarker
 public annotation class DeckDSL

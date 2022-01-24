@@ -1,6 +1,9 @@
 package com.deck.common.entity
 
-import com.deck.common.util.*
+import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
+import com.deck.common.util.LongGenericId
+import com.deck.common.util.OptionalProperty
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
@@ -31,7 +34,7 @@ public data class RawReaction(
 public data class RawCustomReaction(
     val id: IntGenericId,
     val name: String,
-    val png: String,
+    val png: String?,
     val webp: String?,
     val apgn: OptionalProperty<String?> = OptionalProperty.NotPresent
 )

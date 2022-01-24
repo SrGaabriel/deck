@@ -4,10 +4,8 @@ import com.deck.common.content.Content
 import com.deck.common.content.Embed
 import com.deck.common.content.contentBuilder
 import com.deck.common.content.from
-import com.deck.common.entity.RawMessageContent
-import com.deck.common.entity.RawMessageContentData
-import com.deck.common.entity.RawMessageContentNode
-import com.deck.common.entity.RawMessageContentNodeLeaves
+import com.deck.common.entity.*
+import com.deck.common.util.OptionalProperty
 import com.deck.common.util.asNullable
 import com.deck.common.util.nullableOptional
 import com.deck.common.util.optional
@@ -16,27 +14,36 @@ public object NodeGlobalStrategy {
     public fun encodeNode(node: Node): RawMessageContentNode {
         val embeds = node.data.embeds?.map { it.toSerializable() }.nullableOptional()
         val data: RawMessageContentData = when(node) {
-            is Node.Text -> RawMessageContentData()
+            is Node.Paragraph -> RawMessageContentData()
+            is Node.Paragraph.Text -> RawMessageContentData()
+            is Node.Paragraph.Link -> RawMessageContentData(href = node.data.link!!.optional())
+            is Node.Paragraph.Reaction -> RawMessageContentData(reaction = RawReaction(id = node.id.optional(), customReactionId = node.id).optional())
             is Node.Embed -> RawMessageContentData(embeds = embeds)
             is Node.Image -> RawMessageContentData(src = node.data.image!!.optional())
             is Node.SystemMessage -> RawMessageContentData()
             is Node.Quote -> RawMessageContentData()
         }
+        val leaf: String? = when(node) {
+            is Node.Paragraph -> null
+            is Node.Paragraph.Link -> null
+            is Node.Quote -> null
+            else -> node.data.text.orEmpty()
+        }
+        val leaves = if (leaf != null) listOf(RawMessageContentNodeLeaves(
+            leavesObject = "leaf",
+            text = leaf,
+            marks = emptyList()
+        )) else emptyList()
         val type = if (node.data.insideQuoteBlock) "block-quote-line" else node.type
         val children: MutableList<RawMessageContentNode> = node.data.children
             .map { encodeNode(it) }
             .toMutableList()
-        if (children.isEmpty())
-            children.add(RawMessageContentNode(leaves = listOf(RawMessageContentNodeLeaves(
-                leavesObject = "leaf",
-                text = node.data.text.orEmpty(),
-                marks = emptyList()
-            )).optional(), documentObject = "text"))
         return RawMessageContentNode(
             documentObject = node.`object`,
-            type = type.optional(),
+            type = if (type.isEmpty()) OptionalProperty.NotPresent else type.optional(),
             data = data,
-            nodes = children
+            nodes = children,
+            leaves = leaves.optional()
         )
     }
 
@@ -55,9 +62,21 @@ public object NodeGlobalStrategy {
         val leaf = node.nodes.firstOrNull()?.leaves?.asNullable()?.firstOrNull()
         val image = node.data.src.asNullable()
         val embeds = node.data.embeds.asNullable()?.map { Embed.from(it) }
+        val children = node.nodes
 
         return when (node.type.asNullable()) {
-            "paragraph" -> Node.Text(text = leaf!!.text)
+            "paragraph" -> {
+                Node.Paragraph(content = children.mapNotNull { decodeNode(it) })
+            }
+            null -> {
+                Node.Paragraph.Text(node.leaves.asNullable()?.getOrNull(0)?.text!!)
+            }
+            "link" -> {
+                Node.Paragraph.Link(node.data.href.asNullable()!!)
+            }
+            "reaction" -> {
+                Node.Paragraph.Reaction(node.data.reaction.asNullable()!!.customReactionId)
+            }
             "webhookMessage" -> Node.Embed(embeds = embeds.orEmpty())
             "image" -> Node.Image(image = image!!)
             "systemMessage" -> Node.SystemMessage(
@@ -67,14 +86,12 @@ public object NodeGlobalStrategy {
                 )
             )
             "block-quote-container" -> {
-                val lines: List<Node.Text> = node.nodes
+                val lines: List<Node> = node.nodes
                     .mapNotNull { decodeNode(it) }
-                    .filterIsInstance<Node.Text>()
-
                 Node.Quote(lines = lines)
             }
             "block-quote-line" -> {
-                Node.Text(text = leaf?.text ?: return null, insideQuoteBlock = true)
+                Node.Paragraph(content = listOf(Node.Paragraph.Text(text = leaf?.text?: return null)), insideQuoteBlock = true)
             }
             else -> null
         }
