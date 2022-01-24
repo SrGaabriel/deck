@@ -14,10 +14,12 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
 
-public class GatewayOrchestrator : EventSupplier, CoroutineScope {
-    override val coroutineContext: CoroutineContext = Executors
-        .newFixedThreadPool(4)
-        .asCoroutineDispatcher()
+public class GatewayOrchestrator: EventSupplier, CoroutineScope {
+    override val coroutineContext: CoroutineContext by lazy {
+        Executors
+            .newFixedThreadPool(4)
+            .asCoroutineDispatcher()
+    }
     private val httpClient = HttpClient(CIO.create()) {
         install(WebSockets)
     }

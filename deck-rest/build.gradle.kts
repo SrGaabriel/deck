@@ -13,4 +13,5 @@ dependencies {
     implementation("io.ktor:ktor-client-core:${Dependencies.KtorVersion}")
     implementation("io.ktor:ktor-client-cio:${Dependencies.KtorVersion}")
     implementation("io.ktor:ktor-client-serialization:${Dependencies.KtorVersion}")
+    implementation("io.github.microutils:kotlin-logging-jvm:${Dependencies.KotlinLoggingVersion}")
 }

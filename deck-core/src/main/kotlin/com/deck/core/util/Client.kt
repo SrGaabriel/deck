@@ -17,7 +17,7 @@ public class ClientBuilder {
 
     public fun build(): DeckClient {
         require(email != null && password != null) {
-            "You can't build a deck client without specifying your bot's authentication credentials."
+            "Tried to build a client without providing neither an email nor a password."
         }
         return DeckClient(Authentication(email!!, password!!), restModule, gatewayModule)
     }

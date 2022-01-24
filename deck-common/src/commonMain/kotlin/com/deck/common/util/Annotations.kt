@@ -32,5 +32,20 @@ public annotation class DeckUnsupported
 @RequiresOptIn(level = RequiresOptIn.Level.WARNING)
 public annotation class DeckExperimental
 
+/**
+ * Marks a feature as delicate, indicating that it might break
+ * anytime, and should be carefully studied/inspected before use.
+ */
+@Retention(AnnotationRetention.BINARY)
+@Target(
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.FIELD,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.CLASS,
+    AnnotationTarget.PROPERTY_SETTER
+)
+@RequiresOptIn(level = RequiresOptIn.Level.WARNING)
+public annotation class DeckDelicateApi
+
 @DslMarker
 public annotation class DeckDSL

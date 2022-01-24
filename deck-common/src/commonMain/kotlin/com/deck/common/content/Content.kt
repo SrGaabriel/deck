@@ -1,6 +1,8 @@
 package com.deck.common.content
 
 import com.deck.common.content.node.Node
+import com.deck.common.util.DeckDelicateApi
+import com.deck.common.util.GuildedMedia
 
 public class Content(public val nodes: List<Node> = listOf()) {
     public val leaves: List<String>
@@ -25,6 +27,10 @@ public class ContentBuilder(private val quoteContainer: Boolean = false) {
         nodes.add(Node.Text(text = this, insideQuoteBlock = quoteContainer))
     }
 
+    public operator fun GuildedMedia.unaryPlus() {
+        nodes.add(Node.Image(image = this.url))
+    }
+
     public operator fun Embed.unaryPlus() {
         nodes.add(Node.Embed(embeds = listOf(this)))
     }
@@ -43,6 +49,11 @@ public class ContentBuilder(private val quoteContainer: Boolean = false) {
         )
     }
 
+    @DeckDelicateApi
+    /**
+     * This method only attaches the specified message if it's
+     * from guilded's CDN, so to attach a separate image, you need to upload it via rest.
+     */
     public fun image(url: String): Node.Image = Node.Image(image = url)
 
     public operator fun invoke(builder: ContentBuilder.() -> Unit): Unit =
