@@ -6,34 +6,13 @@
 
 Deck is a powerful yet simple-to-use guilded wrapper made entirely in Kotlin with support to multiplatform.
 
-## Example
+This library is meant for the Client API (self-bots), it does not cover the early Official Bot Api. In the future we plan to support both APIs, but in case that is deemed impossible or an expensive task, we'll drop support to the Client API.
 
-This is a working example of deck's REST api:
+## Documentation
 
-```kotlin
-suspend fun main() {
-    val client: DeckClient = client {
-        email = "email"
-        password = "password"
-    }
-    client.on<DeckMessageCreateEvent> {
-        if (!message.content.text.startsWith("+ping"))
-            return@on
-        val pongMessage: Message = channel.sendEmbed {
-            title = "Pong!"
-            description = "The current ping is Xms!"
-        }
-        val replyMessage: Message = pongMessage.sendReply {
-            content {
-                + "This is a reply example!"
-                + image("url")
-                + "Pretty cool, right?"
-            }
-        }
-    }
-    client.login()
-}
-```
+You can find deck's documentation [here](https://github.com/SrGaabriel/deck/wiki). Although incomplete, it covers some little more complex topics. If you want to contribute with the wiki, feel more than glad to do so.
+
+If problems arise while using the API, you can either open a [GitHub Issue](https://github.com/SrGaabriel/deck/issues/new), or contact me in either my Discord (Gaabriel#1911) or my Guilded (SrGaabriel).
 
 ## Implementating
 
@@ -42,3 +21,5 @@ We do not have an official repository/artifact, so the only available way is to 
 ## Thanks
 
 We want to specially thank the discord Kotlin wrapper library [Kord](https://github.com/kordlib/kord), since deck's structure was inspired/based around it.
+
+There's also [Guilded API](https://guildedapi.com/), the unofficial documentation for Guilded's API. It's all thanks to them that Deck has many features with a very young age.
