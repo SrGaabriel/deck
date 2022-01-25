@@ -1,4 +1,4 @@
-import net.researchgate.release.GitAdapter
+import net.researchgate.release.*
 
 plugins {
     kotlin("jvm") version Dependencies.KotlinVersion
@@ -19,8 +19,14 @@ subprojects {
     }
     release {
         failOnUnversionedFiles = false
+        failOnCommitNeeded = false
+        failOnPublishNeeded = false
         with(propertyMissing("git") as GitAdapter.GitConfig) {
             requireBranch = """master|development|"""
+        }
+        with(propertyMissing("svn") as SvnAdapter.SvnConfig) {
+            username = System.getProperty("USERNAME") ?: System.getenv("USERNAME")
+            password = System.getProperty("TOKEN") ?: System.getenv("TOKEN")
         }
     }
 }
