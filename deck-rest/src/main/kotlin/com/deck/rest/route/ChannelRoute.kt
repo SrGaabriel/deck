@@ -1,7 +1,6 @@
 package com.deck.rest.route
 
 import com.deck.common.entity.RawChannel
-import com.deck.common.entity.RawMessage
 import com.deck.common.util.UniqueId
 import com.deck.rest.RestClient
 import com.deck.rest.builder.SendMessageRequestBuilder

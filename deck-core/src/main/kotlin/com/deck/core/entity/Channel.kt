@@ -1,10 +1,10 @@
 package com.deck.core.entity
 
 import com.deck.common.util.GenericId
-import kotlinx.datetime.Instant
 import com.deck.core.entity.misc.ChannelContentType
 import com.deck.core.entity.misc.ChannelType
 import com.deck.core.stateless.StatelessMessageChannel
+import kotlinx.datetime.Instant
 
 public interface Channel : Entity, StatelessMessageChannel {
     public val name: String

@@ -2,8 +2,8 @@ package com.deck.core.entity
 
 import com.deck.common.content.Content
 import com.deck.common.util.GenericId
-import kotlinx.datetime.Instant
 import com.deck.core.stateless.StatelessMessage
+import kotlinx.datetime.Instant
 import java.util.*
 
 public interface Message : Entity, StatelessMessage {

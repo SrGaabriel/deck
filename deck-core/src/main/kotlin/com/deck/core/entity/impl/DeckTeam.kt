@@ -1,12 +1,12 @@
 package com.deck.core.entity.impl
 
 import com.deck.common.util.GenericId
-import kotlinx.datetime.Instant
 import com.deck.core.DeckClient
 import com.deck.core.entity.Member
 import com.deck.core.entity.Team
 import com.deck.core.stateless.StatelessMember
 import com.deck.core.stateless.StatelessUser
+import kotlinx.datetime.Instant
 
 public class DeckTeam(
     override val client: DeckClient,

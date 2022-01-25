@@ -1,7 +1,10 @@
 package com.deck.gateway.event.type
 
 import com.deck.common.entity.*
-import com.deck.common.util.*
+import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
+import com.deck.common.util.OptionalProperty
+import com.deck.common.util.UniqueId
 import com.deck.gateway.entity.RawMessageIdObject
 import com.deck.gateway.entity.RawPartialDeletedMessage
 import com.deck.gateway.entity.RawPartialEditedMessage

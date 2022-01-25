@@ -1,11 +1,11 @@
 package com.deck.core.entity.impl
 
 import com.deck.common.util.GenericId
-import kotlinx.datetime.Instant
 import com.deck.core.DeckClient
 import com.deck.core.entity.Channel
 import com.deck.core.entity.misc.ChannelContentType
 import com.deck.core.entity.misc.ChannelType
+import kotlinx.datetime.Instant
 import java.util.*
 
 public data class DeckPrivateChannel(

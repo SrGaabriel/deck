@@ -1,8 +1,8 @@
 package com.deck.common.entity
 
 import com.deck.common.util.GenericId
-import kotlinx.datetime.Instant
 import com.deck.common.util.UniqueId
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable

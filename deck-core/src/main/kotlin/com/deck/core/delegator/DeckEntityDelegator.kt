@@ -12,9 +12,8 @@ import kotlin.coroutines.CoroutineContext
 public class DeckEntityDelegator(
     override val rest: RestModule,
     override val decoder: EntityDecoder,
-    override val cacheManager: CacheManager
-) :
-    EntityDelegator {
+    override val cache: CacheManager
+) : EntityDelegator {
     override val coroutineContext: CoroutineContext = Dispatchers.Default
 
     override suspend fun getTeam(id: GenericId): Team? {
@@ -30,9 +29,11 @@ public class DeckEntityDelegator(
     override suspend fun getSelfUser(): SelfUser =
         decoder.decodeSelf(rest.userRoute.getSelf())
 
-    override suspend fun getChannel(id: UUID, teamId: GenericId?): Channel? = when (teamId) {
-        null -> getPrivateChannel(id)
-        else -> getTeamChannel(id, teamId)
+    override suspend fun getChannel(id: UUID, teamId: GenericId?): Channel? {
+        return when (teamId) {
+            null -> getPrivateChannel(id)
+            else -> getTeamChannel(id, teamId)
+        }
     }
 
     override suspend fun getTeamChannel(id: UUID, teamId: GenericId): TeamChannel? {

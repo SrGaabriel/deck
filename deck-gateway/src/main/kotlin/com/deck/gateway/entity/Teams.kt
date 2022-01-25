@@ -2,8 +2,8 @@ package com.deck.gateway.entity
 
 import com.deck.common.util.GenericId
 import com.deck.common.util.OptionalProperty
-import kotlinx.datetime.Instant
 import com.deck.common.util.UniqueId
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable

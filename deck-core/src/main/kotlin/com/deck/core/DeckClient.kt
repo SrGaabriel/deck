@@ -5,6 +5,8 @@ import com.deck.common.util.AuthenticationResult
 import com.deck.common.util.DeckExperimental
 import com.deck.core.cache.CacheManager
 import com.deck.core.cache.DeckCacheManager
+import com.deck.core.cache.observer.CacheEntityObserver
+import com.deck.core.cache.observer.DefaultCacheEntityObserver
 import com.deck.core.delegator.DeckEntityDecoder
 import com.deck.core.delegator.DeckEntityDelegator
 import com.deck.core.delegator.EntityDecoder
@@ -36,6 +38,7 @@ public class DeckClient(
 
     public val entityDecoder: EntityDecoder = DeckEntityDecoder(this)
     public val entityCacheManager : CacheManager = DeckCacheManager()
+    public val entityCacheObserver : CacheEntityObserver = DefaultCacheEntityObserver(this, entityCacheManager, entityDecoder)
     public val entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityDecoder, entityCacheManager)
 
     public suspend fun login() {
@@ -47,5 +50,6 @@ public class DeckClient(
         gateway.openTeamGateways(*self.teams.map { it.id }.toTypedArray())
         gateway.start()
         eventService.startListeningAndConveying()
+        entityCacheObserver.startObserving()
     }
 }
