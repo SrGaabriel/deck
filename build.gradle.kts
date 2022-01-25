@@ -1,6 +1,8 @@
+import net.researchgate.release.GitAdapter
+
 plugins {
     kotlin("jvm") version Dependencies.KotlinVersion
-    id("net.researchgate.release") version "2.8.1"
+    id("net.researchgate.release") version "2.6.0"
 
 }
 
@@ -17,6 +19,9 @@ subprojects {
     }
     release {
         failOnUnversionedFiles = false
+        with(propertyMissing("git") as GitAdapter.GitConfig) {
+            requireBranch = """master|development|"""
+        }
     }
 }
 
