@@ -5,8 +5,6 @@ import com.deck.core.entity.TeamChannel
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
 import com.deck.gateway.event.type.GatewayTeamChannelCreatedEvent
-import kotlinx.coroutines.Dispatchers
-import kotlin.coroutines.CoroutineContext
 
 public data class DeckTeamChannelCreateEvent(
     override val client: DeckClient,
@@ -18,7 +16,7 @@ public data class DeckTeamChannelCreateEvent(
             DeckTeamChannelCreateEvent(
                 client = client,
                 gatewayId = event.gatewayId,
-                channel = client.entityStrategizer.decodeChannel(event.channel) as TeamChannel
+                channel = client.entityDecoder.decodeChannel(event.channel) as TeamChannel
             )
     }
 }

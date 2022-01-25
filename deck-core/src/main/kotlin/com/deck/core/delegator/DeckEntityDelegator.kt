@@ -11,7 +11,7 @@ import kotlin.coroutines.CoroutineContext
 
 public class DeckEntityDelegator(
     override val rest: RestModule,
-    override val strategizer: EntityStrategizer,
+    override val decoder: EntityDecoder,
     override val cacheManager: CacheManager
 ) :
     EntityDelegator {
@@ -19,16 +19,16 @@ public class DeckEntityDelegator(
 
     override suspend fun getTeam(id: GenericId): Team? {
         val team = rest.teamRoute.nullableRequest { getTeam(id) }?.team ?: return null
-        return strategizer.decodeTeam(team)
+        return decoder.decodeTeam(team)
     }
 
     override suspend fun getUser(id: GenericId): User? {
         val response = rest.userRoute.nullableRequest { getUser(id) } ?: return null
-        return strategizer.decodeUser(response.user)
+        return decoder.decodeUser(response.user)
     }
 
     override suspend fun getSelfUser(): SelfUser =
-        strategizer.decodeSelf(rest.userRoute.getSelf())
+        decoder.decodeSelf(rest.userRoute.getSelf())
 
     override suspend fun getChannel(id: UUID, teamId: GenericId?): Channel? = when (teamId) {
         null -> getPrivateChannel(id)
@@ -37,11 +37,11 @@ public class DeckEntityDelegator(
 
     override suspend fun getTeamChannel(id: UUID, teamId: GenericId): TeamChannel? {
         val channels = rest.teamRoute.nullableRequest { getTeamChannels(teamId) }?.channels ?: return null
-        return strategizer.decodeChannel(channels.first { it.id == id.mapToModel() }) as? TeamChannel
+        return decoder.decodeChannel(channels.first { it.id == id.mapToModel() }) as? TeamChannel
     }
 
     override suspend fun getPrivateChannel(id: UUID): Channel? {
         val channel = rest.channelRoute.nullableRequest { getChannel(id.mapToModel()) } ?: return null
-        return strategizer.decodeChannel(channel)
+        return decoder.decodeChannel(channel)
     }
 }

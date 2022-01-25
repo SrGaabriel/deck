@@ -15,7 +15,6 @@ public abstract class Route(public val client: RestClient) {
      *
      * @param R Response type (Special types: [Unit], [HttpResponse])
      * @param B Body type
-     * TODO: Change sorting
      *
      * @param endpoint The request endpoint (not the entire url)
      * @param method The request http method
@@ -44,7 +43,6 @@ public abstract class Route(public val client: RestClient) {
      *
      * @param R Response type (Special types: [Unit], [HttpResponse])
      * @param B Body type
-     * TODO: Change sorting
      *
      * @param endpoint The request endpoint (not the entire url)
      * @param method The request http method

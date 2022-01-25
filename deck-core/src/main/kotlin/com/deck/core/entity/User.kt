@@ -1,9 +1,10 @@
 package com.deck.core.entity
 
 import com.deck.common.util.GenericId
-import kotlinx.datetime.Instant
 import com.deck.core.entity.misc.DeckUserAboutInfo
-import java.util.*
+import com.deck.core.stateless.StatelessMessageChannel
+import com.deck.core.stateless.StatelessUser
+import kotlinx.datetime.Instant
 
 public interface User : Entity {
     public val id: GenericId
@@ -22,9 +23,9 @@ public interface User : Entity {
     public val lastLoginTime: Instant
 }
 
-public interface UserPermission {
-    public val userId: GenericId
-    public val channelId: UUID?
+public interface UserPermissionsOverride {
+    public val user: StatelessUser
+    public val channel: StatelessMessageChannel?
 
     public val createdAt: Instant
     public val updatedAt: Instant?

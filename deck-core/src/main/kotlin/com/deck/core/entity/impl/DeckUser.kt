@@ -1,16 +1,14 @@
 package com.deck.core.entity.impl
 
-import com.deck.common.entity.RawUserPermission
 import com.deck.common.util.GenericId
-import com.deck.common.util.asNullable
-import com.deck.common.util.mapToBuiltin
-import kotlinx.datetime.Instant
 import com.deck.core.DeckClient
 import com.deck.core.entity.RolePermissions
 import com.deck.core.entity.User
-import com.deck.core.entity.UserPermission
+import com.deck.core.entity.UserPermissionsOverride
 import com.deck.core.entity.misc.DeckUserAboutInfo
-import java.util.*
+import com.deck.core.stateless.StatelessMessageChannel
+import com.deck.core.stateless.StatelessUser
+import kotlinx.datetime.Instant
 
 public data class DeckUser(
     override val client: DeckClient,
@@ -24,24 +22,11 @@ public data class DeckUser(
     override val lastLoginTime: Instant
 ) : User
 
-public data class DeckUserPermission(
-    override val userId: GenericId,
-    override val channelId: UUID?,
+public data class DeckUserPermissionsOverride(
+    override val user: StatelessUser,
+    override val channel: StatelessMessageChannel?,
     override val createdAt: Instant,
     override val updatedAt: Instant?,
     override val denyPermissions: RolePermissions,
     override val allowPermissions: RolePermissions
-) : UserPermission
-
-internal fun RawUserPermission?.forcefullyWrap(): DeckUserPermission? {
-    val raw = this ?: return null
-
-     return DeckUserPermission(
-        userId = raw.userId,
-        channelId = raw.channelId.asNullable()?.mapToBuiltin(),
-        createdAt = raw.createdAt,
-        updatedAt = raw.updatedAt,
-        denyPermissions = raw.denyPermissions.forcefullyWrap()!!,
-        allowPermissions = raw.allowPermissions.forcefullyWrap()!!
-    )
-}
+) : UserPermissionsOverride

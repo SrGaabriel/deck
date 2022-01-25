@@ -24,7 +24,7 @@ public suspend fun authentication(
  * @param authentication authentication credentials
  * @param authRoute authentication route
  */
-public suspend fun RestClient.authenticate(authentication: Authentication, authRoute: AuthRoute = AuthRoute(this)) {
+public suspend fun RestClient.authenticate(authentication: Authentication, authRoute: AuthRoute = AuthRoute(this)): RestClient = apply {
     this.token = authentication(authentication, authRoute).token
 }
 
@@ -38,5 +38,6 @@ public suspend fun RestClient.authenticate(authentication: Authentication, authR
 public suspend fun RestClient.authenticate(
     authRoute: AuthRoute = AuthRoute(this),
     builder: AuthenticationBuilder.() -> Unit
-): RestClient =
-    authenticate(AuthenticationBuilder().apply(builder).toSerializableAuthentication(), authRoute).let { this }
+): RestClient = apply {
+    authenticate(AuthenticationBuilder().apply(builder).toSerializableAuthentication(), authRoute)
+}

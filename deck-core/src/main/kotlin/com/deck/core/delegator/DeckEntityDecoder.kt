@@ -1,17 +1,14 @@
 package com.deck.core.delegator
 
 import com.deck.common.content.node.decode
-import com.deck.common.entity.RawChannel
-import com.deck.common.entity.RawChannelType
-import com.deck.common.entity.RawPartialSentMessage
-import com.deck.common.entity.RawUser
+import com.deck.common.entity.*
 import com.deck.common.util.GenericId
 import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.*
 import com.deck.core.entity.impl.*
-import com.deck.core.entity.misc.forcefullyWrap
+import com.deck.core.entity.misc.DeckUserAboutInfo
 import com.deck.core.util.BlankStatelessMember
 import com.deck.core.util.BlankStatelessMessageChannel
 import com.deck.core.util.BlankStatelessTeam
@@ -21,7 +18,7 @@ import com.deck.rest.entity.RawFetchedTeam
 import com.deck.rest.request.SelfUserResponse
 import java.util.*
 
-public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrategizer {
+public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
     override fun decodeTeam(raw: RawFetchedTeam): Team = DeckTeam(
         client = client,
         id = raw.id,
@@ -41,7 +38,7 @@ public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrat
         subdomain = raw.subdomain.asNullable(),
         avatar = raw.profilePicture.asNullable(),
         banner = raw.profileBannerSm.asNullable(),
-        aboutInfo = raw.aboutInfo.asNullable().forcefullyWrap(),
+        aboutInfo = raw.aboutInfo.asNullable()?.let { DeckUserAboutInfo.from(it) },
         creationTime = raw.joinDate.asNullable()!!,
         lastLoginTime = raw.lastOnline.asNullable()!!,
     )
@@ -53,7 +50,7 @@ public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrat
         subdomain = raw.user.subdomain.asNullable(),
         avatar = raw.user.profilePicture.asNullable(),
         banner = raw.user.profileBannerLg.asNullable(),
-        aboutInfo = raw.user.aboutInfo.asNullable().forcefullyWrap(),
+        aboutInfo = raw.user.aboutInfo.asNullable()?.let { DeckUserAboutInfo.from(it) },
         creationTime = raw.user.joinDate.asNullable()!!,
         lastLoginTime = raw.user.lastOnline.asNullable()!!,
         teams = raw.teams.map { BlankStatelessTeam(client, it.id) }
@@ -92,6 +89,65 @@ public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrat
             )
         }
     }
+
+    override fun decodeRole(raw: RawRole): Role = DeckRole(
+        client = client,
+        id = raw.id,
+        color = raw.color,
+        isBase = raw.isBase,
+        isDisplayedSeparately = raw.isDisplayedSeparately,
+        isMentionable = raw.isMentionable,
+        isSelfAssignable = raw.isSelfAssignable,
+        name = raw.name,
+        createdAt = raw.createdAt,
+        discordRoleId = raw.discordRoleId,
+        discordSyncedAt = raw.discordSyncedAt,
+        priority = raw.priority,
+        botId = raw.botScope?.userId,
+        teamId = raw.teamId,
+        updatedAt = raw.updatedAt,
+        permissions = decodeRolePermissions(raw.permissions)
+    )
+
+    override fun decodeRolePermissions(raw: RawRolePermissions): RolePermissions = DeckRolePermissions(
+        announcements = raw.announcements,
+        bots = raw.bots,
+        brackets = raw.brackets,
+        calendar = raw.calendar,
+        chat = raw.chat,
+        customization = raw.customization,
+        docs = raw.docs,
+        forms = raw.forms,
+        forums = raw.forums,
+        general = raw.general,
+        lists = raw.lists,
+        matchmaking = raw.matchmaking,
+        media = raw.media,
+        recruitment = raw.recruitment,
+        scheduling = raw.scheduling,
+        streams = raw.streams,
+        voice = raw.voice,
+        xp = raw.xp,
+    )
+
+    override fun decodeRolePermissionsOverride(raw: RawRolePermissionsOverride): RolePermissionsOverride = DeckRolePermissionsOverride(
+        teamId = raw.teamId,
+        createdAt = raw.createdAt,
+        updatedAt = raw.updatedAt,
+        teamRoleId = raw.teamRoleId,
+        channelCategoryId = raw.channelCategoryId.asNullable(),
+        denyPermissions = decodeRolePermissions(raw.denyPermissions),
+        allowPermissions = decodeRolePermissions(raw.allowPermissions)
+    )
+
+    override fun decodeUserPermissionsOverride(raw: RawUserPermission): UserPermissionsOverride = DeckUserPermissionsOverride(
+        user = BlankStatelessUser(client, raw.userId),
+        channel = raw.channelId.asNullable()?.mapToBuiltin()?.let { BlankStatelessMessageChannel(client, it) },
+        createdAt = raw.createdAt,
+        updatedAt = raw.updatedAt,
+        denyPermissions = decodeRolePermissions(raw.denyPermissions),
+        allowPermissions = decodeRolePermissions(raw.allowPermissions)
+    )
 
     override fun decodePartialSentMessage(channelId: UUID, teamId: GenericId?, raw: RawPartialSentMessage): Message =
         DeckMessage(
@@ -133,10 +189,8 @@ public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrat
         autoArchiveAt = raw.autoArchiveAt.asNullable(),
         isPublic = raw.isPublic,
         isRoleSynced = raw.isRoleSynced.asNullable(),
-        userPermissions = raw.userPermissions.asNullable()?.map { it.forcefullyWrap()!! },
-        roles = raw.roles.asNullable()?.map { it.forcefullyWrap(client)!! },
-        rolePermissionsOverwrittenById = raw.rolesById.asNullable()?.entries?.associate {
-                it.key to it.value.forcefullyWrap()!!
-            } ?: emptyMap()
+        userPermissionOverrides = raw.userPermissions.asNullable()?.map { decodeUserPermissionsOverride(it) },
+        roles = raw.roles.asNullable()?.map { decodeRole(it) },
+        rolePermissionsOverrideById = raw.rolesById.asNullable()?.mapValues { decodeRolePermissionsOverride(it.value) } ?: emptyMap()
     )
 }

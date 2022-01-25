@@ -3,11 +3,11 @@ package com.deck.core.entity.impl
 import com.deck.common.util.Dictionary
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
-import kotlinx.datetime.Instant
 import com.deck.core.DeckClient
 import com.deck.core.entity.*
 import com.deck.core.entity.misc.ChannelContentType
 import com.deck.core.entity.misc.ChannelType
+import kotlinx.datetime.Instant
 import java.util.*
 
 public data class DeckTeamChannel(
@@ -50,7 +50,7 @@ public data class DeckPartialTeamChannel(
     override val autoArchiveAt: Instant?,
     override val isPublic: Boolean,
     override val isRoleSynced: Boolean?,
-    override val userPermissions: List<UserPermission>?,
+    override val userPermissionOverrides: List<UserPermissionsOverride>?,
     override val roles: List<Role>?,
-    override val rolePermissionsOverwrittenById: Dictionary<String, RolePermissionsOverwritten>
+    override val rolePermissionsOverrideById: Dictionary<String, RolePermissionsOverride>
 ) : PartialTeamChannel

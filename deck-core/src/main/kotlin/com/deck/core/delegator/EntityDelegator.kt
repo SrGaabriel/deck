@@ -10,7 +10,7 @@ import java.util.*
 
 public interface EntityDelegator : CoroutineScope {
     public val rest: RestModule
-    public val strategizer: EntityStrategizer
+    public val decoder: EntityDecoder
     public val cacheManager: CacheManager
 
     public suspend fun getTeam(id: GenericId): Team?

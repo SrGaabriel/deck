@@ -38,7 +38,7 @@ public data class RawChannel(
     val groupId: GenericId?,
     @DeckUnknown val settings: Unit?,
     @DeckUnknown val groupType: String = "",
-    val rolesById: Dictionary<String, RawRolePermissionsOverwritten>,
+    val rolesById: Dictionary<String, RawRolePermissionsOverride>,
     @DeckUnknown val tournamentsRolesById: OptionalProperty<Unit?> = OptionalProperty.NotPresent,
     @DeckUnsupported val createdByInfo: OptionalProperty<Unit?> = OptionalProperty.NotPresent
 )
@@ -73,8 +73,8 @@ public data class RawChannelCategory(
     val id: IntGenericId,
     val name: String,
     val priority: Int?,
-    val roles: List<RawRolePermissionsOverwritten>?,
-    val rolesById: Dictionary<String, RawRolePermissionsOverwritten>,
+    val roles: List<RawRolePermissionsOverride>?,
+    val rolesById: Dictionary<String, RawRolePermissionsOverride>,
     val teamId: GenericId,
     val createdAt: Instant,
     val updatedAt: Instant?,

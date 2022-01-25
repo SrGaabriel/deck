@@ -12,13 +12,12 @@ public interface StatelessMessageChannel: StatelessEntity<Channel> {
     public val teamId: GenericId?
 
     public suspend fun sendMessage(builder: DeckMessageBuilder.() -> Unit): Message =
-        client.entityStrategizer.decodePartialSentMessage(
+        client.entityDecoder.decodePartialSentMessage(
             id,
             teamId,
             client.rest.channelRoute.sendMessage(id, builder).message
         )
 
-    // TODO: Try to access cache first instead of directly resorting to rest
     override suspend fun getState(): Channel {
         return client.entityDelegator.getChannel(id, teamId)
             ?: error("Tried to access a deleted channel's state")

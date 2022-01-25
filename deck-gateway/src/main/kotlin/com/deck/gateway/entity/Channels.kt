@@ -36,7 +36,7 @@ public data class RawPartialTeamChannel(
     val groupId: OptionalProperty<GenericId?> = OptionalProperty.NotPresent,
     @DeckUnknown val settings: OptionalProperty<Unit?> = OptionalProperty.NotPresent,
     @DeckUnknown val groupType: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val rolesById: OptionalProperty<Dictionary<String, RawRolePermissionsOverwritten>> = OptionalProperty.NotPresent,
+    val rolesById: OptionalProperty<Dictionary<String, RawRolePermissionsOverride>> = OptionalProperty.NotPresent,
     @DeckUnknown val tournamentsRolesById: OptionalProperty<Unit?> = OptionalProperty.NotPresent,
     @DeckUnsupported val createdByInfo: OptionalProperty<Unit?> = OptionalProperty.NotPresent
 )
@@ -54,7 +54,7 @@ public data class RawTeamCategoryChannel(
     val id: UniqueId,
     val channelCategoryId: IntGenericId?,
     val isRoleSynced: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
-    val rolesById: OptionalProperty<Dictionary<String, RawRolePermissionsOverwritten>> = OptionalProperty.NotPresent,
+    val rolesById: OptionalProperty<Dictionary<String, RawRolePermissionsOverride>> = OptionalProperty.NotPresent,
     val userPermissions: OptionalProperty<List<RawUserPermission>> = OptionalProperty.NotPresent
 )
 

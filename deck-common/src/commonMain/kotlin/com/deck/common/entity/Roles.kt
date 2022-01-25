@@ -1,6 +1,9 @@
 package com.deck.common.entity
 
-import com.deck.common.util.*
+import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
+import com.deck.common.util.LongGenericId
+import com.deck.common.util.OptionalProperty
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
@@ -47,7 +50,7 @@ public data class RawRolePermissions(
 
 /** @param channelCategoryId is missing when the channel doesn't have an ID */
 @Serializable
-public data class RawRolePermissionsOverwritten(
+public data class RawRolePermissionsOverride(
     val teamId: GenericId,
     val createdAt: Instant,
     val updatedAt: Instant?,

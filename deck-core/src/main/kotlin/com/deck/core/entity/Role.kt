@@ -1,6 +1,8 @@
 package com.deck.core.entity
 
-import com.deck.common.util.*
+import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
+import com.deck.common.util.LongGenericId
 import kotlinx.datetime.Instant
 
 public interface Role : Entity {
@@ -15,7 +17,7 @@ public interface Role : Entity {
     public val discordRoleId: LongGenericId?
     public val discordSyncedAt: Instant?
     public val priority: Int
-    public val botScope: RoleBotScope?
+    public val botId: GenericId?
     public val teamId: GenericId
     public val updatedAt: Instant?
     public val permissions: RolePermissions
@@ -42,7 +44,7 @@ public interface RolePermissions {
     public val xp: Int
 }
 
-public interface RolePermissionsOverwritten {
+public interface RolePermissionsOverride {
     public val teamId: GenericId
     public val createdAt: Instant
     public val updatedAt: Instant?

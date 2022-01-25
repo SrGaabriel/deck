@@ -1,7 +1,8 @@
 package com.deck.core.entity
 
-import com.deck.common.util.*
 import com.deck.common.util.Dictionary
+import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
 import com.deck.core.stateless.StatelessMessageChannel
 import kotlinx.datetime.Instant
 import java.util.*
@@ -23,8 +24,8 @@ public interface PartialTeamChannel : TeamChannel {
     public val isPublic: Boolean
     public val isRoleSynced: Boolean?
 
-    public val userPermissions: List<UserPermission>?
+    public val userPermissionOverrides: List<UserPermissionsOverride>?
 
     public val roles: List<Role>?
-    public val rolePermissionsOverwrittenById: Dictionary<String, RolePermissionsOverwritten>
+    public val rolePermissionsOverrideById: Dictionary<String, RolePermissionsOverride>
 }
