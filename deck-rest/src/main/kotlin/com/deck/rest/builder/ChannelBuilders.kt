@@ -1,7 +1,7 @@
 package com.deck.rest.builder
 
 import com.deck.common.content.Content
-import com.deck.common.content.node.NodeGlobalStrategy
+import com.deck.common.content.node.encode
 import com.deck.common.util.mapToModel
 import com.deck.rest.request.SendMessageRequest
 import java.util.*
@@ -17,7 +17,7 @@ public class SendMessageRequestBuilder : RequestBuilder<SendMessageRequest> {
 
     override fun toRequest(): SendMessageRequest = SendMessageRequest(
         messageId = uniqueId.mapToModel(),
-        content = NodeGlobalStrategy.encodeContent(content),
+        content = content.encode(),
         isPrivate = private,
         isSilent = silent,
         repliesToIds = listOfNotNull(repliesTo?.mapToModel())

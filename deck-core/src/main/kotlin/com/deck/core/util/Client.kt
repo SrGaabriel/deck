@@ -1,7 +1,6 @@
 package com.deck.core.util
 
 import com.deck.common.util.Authentication
-import com.deck.common.util.AuthenticationResult
 import com.deck.core.DeckClient
 import com.deck.core.module.DefaultGatewayModule
 import com.deck.core.module.DefaultRestModule
@@ -25,9 +24,3 @@ public class ClientBuilder {
 
 public inline fun client(builder: ClientBuilder.() -> Unit): DeckClient =
     ClientBuilder().apply(builder).build()
-
-public fun DeckClient.setAuthentication(authenticationResult: AuthenticationResult) {
-    rest.restClient.token = authenticationResult.token
-    gateway.auth = authenticationResult
-    this.authenticationResults = authenticationResult
-}

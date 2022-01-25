@@ -1,67 +1,62 @@
 package com.deck.common.content.node
 
-import com.deck.common.content.Embed
-import com.deck.common.util.DeckObsoleteApi
+import com.deck.common.entity.RawMessageContentNodeType
 import com.deck.common.util.GenericId
 
 public sealed class Node(
     public val `object`: String,
-    public val type: String,
+    public val type: RawMessageContentNodeType,
     public val data: NodeData
 ) {
     public class Paragraph(content: List<Node>, insideQuoteBlock: Boolean = false) : Node(
         `object` = "block",
-        type = "paragraph",
-        data = NodeData(children = content, insideQuoteBlock = insideQuoteBlock)
+        type = RawMessageContentNodeType.PARAGRAPH,
+        data = NodeData(text = null, children = content, insideQuoteBlock = insideQuoteBlock)
     ) {
         public class Text(public val text: String): Node(
             `object` = "text",
-            type = "",
+            type = RawMessageContentNodeType.BLANK,
             data = NodeData(text = text)
         )
-        public class Link(link: String): Node(
+        public class Link(public val link: String): Node(
             `object` = "inline",
-            type = "link",
-            data = NodeData(children = listOf(Text(link)), text = link, link = link)
+            type = RawMessageContentNodeType.LINK,
+            data = NodeData(children = listOf(Text(link)), text = null)
         )
         public class Reaction(public val id: Int): Node(
             `object` = "inline",
-            type = "reaction",
+            type = RawMessageContentNodeType.REACTION,
             data = NodeData()
         )
     }
 
-    public class Embed(embeds: List<com.deck.common.content.Embed>) : Node(
+    public class Embed(public val embeds: List<com.deck.common.content.Embed>) : Node(
         `object` = "block",
-        type = "webhookMessage",
-        data = NodeData(embeds = embeds)
+        type = RawMessageContentNodeType.WEBHOOK_MESSAGE,
+        data = NodeData()
     )
 
-    public class Image(image: String) : Node(
+    public class Image(public val image: String) : Node(
         `object` = "block",
-        type = "image",
-        data = NodeData(image = image)
+        type = RawMessageContentNodeType.IMAGE,
+        data = NodeData()
     )
 
     public class SystemMessage(public val messageData: SystemMessageData) : Node(
         `object` = "block",
-        type = "systemMessage",
+        type = RawMessageContentNodeType.SYSTEM_MESSAGE,
         data = NodeData()
     )
 
-    public class Quote(public val lines: List<Node>) : Node(
+    public class Quote(lines: List<Node>) : Node(
         `object` = "block",
-        type = "block-quote-container",
+        type = RawMessageContentNodeType.BLOCK_QUOTE_CONTAINER,
         data = NodeData(children = lines)
     )
 }
 
-@DeckObsoleteApi
 public data class NodeData(
-    val text: String? = null,
-    val link: String? = null,
-    val image: String? = null,
-    val embeds: List<Embed>? = null,
+    val text: String? = "",
     val children: List<Node> = emptyList(),
     val insideQuoteBlock: Boolean = false
 )

@@ -1,3 +1,7 @@
 package com.deck.core.entity
 
-public interface SelfUser : User
+import com.deck.core.stateless.StatelessTeam
+
+public interface SelfUser : User {
+    public val teams: List<StatelessTeam>
+}

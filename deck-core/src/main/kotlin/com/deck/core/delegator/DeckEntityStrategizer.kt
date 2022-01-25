@@ -1,7 +1,10 @@
 package com.deck.core.delegator
 
-import com.deck.common.content.node.NodeGlobalStrategy
-import com.deck.common.entity.*
+import com.deck.common.content.node.decode
+import com.deck.common.entity.RawChannel
+import com.deck.common.entity.RawChannelType
+import com.deck.common.entity.RawPartialSentMessage
+import com.deck.common.entity.RawUser
 import com.deck.common.util.GenericId
 import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
@@ -11,9 +14,11 @@ import com.deck.core.entity.impl.*
 import com.deck.core.entity.misc.forcefullyWrap
 import com.deck.core.util.BlankStatelessMember
 import com.deck.core.util.BlankStatelessMessageChannel
+import com.deck.core.util.BlankStatelessTeam
 import com.deck.core.util.BlankStatelessUser
-import com.deck.rest.entity.RawFetchedTeam
 import com.deck.gateway.entity.RawPartialTeamChannel
+import com.deck.rest.entity.RawFetchedTeam
+import com.deck.rest.request.SelfUserResponse
 import java.util.*
 
 public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrategizer {
@@ -41,16 +46,17 @@ public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrat
         lastLoginTime = raw.lastOnline.asNullable()!!,
     )
 
-    override fun decodeSelf(raw: RawUser): SelfUser = DeckSelfUser(
+    override fun decodeSelf(raw: SelfUserResponse): SelfUser = DeckSelfUser(
         client = client,
-        id = raw.id,
-        name = raw.name,
-        subdomain = raw.subdomain.asNullable(),
-        avatar = raw.profilePicture.asNullable(),
-        banner = raw.profileBannerLg.asNullable(),
-        aboutInfo = raw.aboutInfo.asNullable().forcefullyWrap(),
-        creationTime = raw.joinDate.asNullable()!!,
-        lastLoginTime = raw.lastOnline.asNullable()!!,
+        id = raw.user.id,
+        name = raw.user.name,
+        subdomain = raw.user.subdomain.asNullable(),
+        avatar = raw.user.profilePicture.asNullable(),
+        banner = raw.user.profileBannerLg.asNullable(),
+        aboutInfo = raw.user.aboutInfo.asNullable().forcefullyWrap(),
+        creationTime = raw.user.joinDate.asNullable()!!,
+        lastLoginTime = raw.user.lastOnline.asNullable()!!,
+        teams = raw.teams.map { BlankStatelessTeam(client, it.id) }
     )
 
     override fun decodeChannel(raw: RawChannel): Channel = raw.run {
@@ -91,7 +97,7 @@ public class DeckEntityStrategizer(private val client: DeckClient) : EntityStrat
         DeckMessage(
             client = client,
             id = raw.id.mapToBuiltin(),
-            content = NodeGlobalStrategy.decodeContent(raw.content),
+            content = raw.content.decode(),
             channel = BlankStatelessMessageChannel(client, channelId, teamId),
             createdAt = raw.createdAt,
             createdBy = raw.createdBy,

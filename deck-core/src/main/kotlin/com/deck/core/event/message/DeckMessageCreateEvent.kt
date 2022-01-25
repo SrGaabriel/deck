@@ -1,6 +1,6 @@
 package com.deck.core.event.message
 
-import com.deck.common.content.node.NodeGlobalStrategy
+import com.deck.common.content.node.decode
 import com.deck.common.util.asNullable
 import com.deck.common.util.map
 import com.deck.common.util.mapToBuiltin
@@ -44,7 +44,7 @@ public data class DeckMessageCreateEvent(
             val message = DeckMessage(
                 client = client,
                 id = event.message.id.mapToBuiltin(),
-                content = NodeGlobalStrategy.decodeContent(event.message.content),
+                content = event.message.content.decode(),
                 teamId = event.teamId.asNullable(),
                 repliesToId = event.message.repliesTo?.mapToBuiltin(),
                 createdAt = event.createdAt,

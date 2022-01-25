@@ -28,7 +28,7 @@ public class DeckEntityDelegator(
     }
 
     override suspend fun getSelfUser(): SelfUser =
-        strategizer.decodeSelf(rest.userRoute.getSelf().user)
+        strategizer.decodeSelf(rest.userRoute.getSelf())
 
     override suspend fun getChannel(id: UUID, teamId: GenericId?): Channel? = when (teamId) {
         null -> getPrivateChannel(id)

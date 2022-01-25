@@ -8,9 +8,9 @@ public class Content(public val nodes: List<Node> = listOf()) {
     public val leaves: List<String>
         get() = nodes.filterIsInstance<Node.Paragraph>().flatMap { it.data.children }.mapNotNull { it.data.text }
     public val images: List<String>
-        get() = nodes.mapNotNull { it.data.image }
+        get() = nodes.filterIsInstance<Node.Image>().map { it.image }
     public val embeds: List<Embed>
-        get() = nodes.flatMap { it.data.embeds.orEmpty() }
+        get() = nodes.filterIsInstance<Node.Embed>().flatMap { it.embeds }
 
     public val text: String
         get() = leaves.joinToString("\n")
@@ -65,10 +65,10 @@ public class ContentBuilder(private val quoteContainer: Boolean = false) {
     public fun image(url: String): Node.Image = Node.Image(image = url)
 
     public fun reaction(before: String = "", id: Int, after: String = ""): Node.Paragraph =
-        Node.Paragraph(content = listOf(Node.Paragraph.Text(text = "$before "), Node.Paragraph.Reaction(id = id), Node.Paragraph.Text(text = " $after")), insideQuoteBlock = quoteContainer)
+        Node.Paragraph(content = listOf(Node.Paragraph.Text(text = before), Node.Paragraph.Reaction(id = id), Node.Paragraph.Text(text = after)), insideQuoteBlock = quoteContainer)
 
     public fun link(before: String = "", url: String, after: String = ""): Node.Paragraph =
-        Node.Paragraph(content = listOf(Node.Paragraph.Text(text = "$before "), Node.Paragraph.Link(link = url), Node.Paragraph.Text(text = " $after")), insideQuoteBlock = quoteContainer)
+        Node.Paragraph(content = listOf(Node.Paragraph.Text(text = before), Node.Paragraph.Link(link = url), Node.Paragraph.Text(text = after)), insideQuoteBlock = quoteContainer)
 
     public operator fun invoke(builder: ContentBuilder.() -> Unit): Unit =
         this.let(builder)
@@ -95,13 +95,13 @@ public class ParagraphBuilder {
 
     public fun reaction(id: Int): Node.Paragraph.Reaction = Node.Paragraph.Reaction(id = id)
 
-    @Deprecated("Why would you want to use this method when you're inside a paragraph?", replaceWith = ReplaceWith("reaction(id)"))
+    @Deprecated("This method requires you to provide text before and after the reaction", replaceWith = ReplaceWith("reaction(id)"))
     public fun reaction(before: String = "", id: Int, after: String = ""): List<Node> =
         listOf(Node.Paragraph.Text(text = "$before "), Node.Paragraph.Reaction(id = id), Node.Paragraph.Text(text = " $after"))
 
-    @Deprecated("Why would you want to use this method when you're inside a paragraph?", replaceWith = ReplaceWith("link(id)"))
+    @Deprecated("This method requires you to provide text before and after the link", replaceWith = ReplaceWith("reaction(id)"))
     public fun link(before: String = "", url: String, after: String = ""): List<Node> =
-        listOf(Node.Paragraph(content = listOf(Node.Paragraph.Text(text = "$before "), Node.Paragraph.Link(link = url), Node.Paragraph.Text(text = " $after"))))
+        listOf(Node.Paragraph(content = listOf(Node.Paragraph.Text(text = before), Node.Paragraph.Link(link = url), Node.Paragraph.Text(text = after))))
 }
 
 public fun contentBuilder(builder: ContentBuilder.() -> Unit): Content =

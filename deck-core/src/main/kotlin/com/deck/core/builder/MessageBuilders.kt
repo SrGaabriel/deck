@@ -2,7 +2,7 @@ package com.deck.core.builder
 
 import com.deck.common.content.Content
 import com.deck.common.content.ContentBuilder
-import com.deck.common.content.node.NodeGlobalStrategy
+import com.deck.common.content.node.encode
 import com.deck.common.util.mapToModel
 import com.deck.rest.builder.RequestBuilder
 import com.deck.rest.request.SendMessageRequest
@@ -24,7 +24,7 @@ public class DeckMessageBuilder : RequestBuilder<SendMessageRequest> {
 
     override fun toRequest(): SendMessageRequest = SendMessageRequest(
         messageId = id.mapToModel(),
-        content = NodeGlobalStrategy.encodeContent(content),
+        content = content.encode(),
         repliesToIds = listOfNotNull(repliesTo?.mapToModel()),
         isSilent = isSilent,
         isPrivate = isPrivate

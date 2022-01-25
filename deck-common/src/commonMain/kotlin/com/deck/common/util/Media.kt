@@ -5,6 +5,11 @@ public data class GuildedMedia(
     public val type: DynamicMediaType
 )
 
+public data class UploadMedia(
+    public val extension: String,
+    public val type: DynamicMediaType
+)
+
 @Suppress("FunctionName")
 /**
  * Represents a [GuildedMedia] with [DynamicMediaType.ContentMedia] type.

@@ -14,10 +14,10 @@ public interface RestModule {
 }
 
 public class DefaultRestModule : RestModule {
-    override var restClient: RestClient = RestClient()
-    override var authRoute: AuthRoute = AuthRoute(restClient)
-    override var userRoute: UserRoute = UserRoute(restClient)
+    override val restClient: RestClient = RestClient()
+    override val authRoute: AuthRoute = AuthRoute(restClient)
+    override val userRoute: UserRoute = UserRoute(restClient)
     override val teamRoute: TeamRoute = TeamRoute(restClient)
     override val mediaRoute: MediaRoute = MediaRoute(restClient)
-    override var channelRoute: ChannelRoute = ChannelRoute(restClient)
+    override val channelRoute: ChannelRoute = ChannelRoute(restClient)
 }

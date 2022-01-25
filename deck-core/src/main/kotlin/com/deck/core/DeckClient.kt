@@ -17,7 +17,6 @@ import com.deck.core.service.AuthService
 import com.deck.core.service.DefaultAuthService
 import com.deck.core.util.WrappedEventSupplier
 import com.deck.core.util.WrappedEventSupplierData
-import com.deck.core.util.setAuthentication
 import com.deck.gateway.util.EventSupplier
 import com.deck.gateway.util.EventSupplierData
 
@@ -40,16 +39,13 @@ public class DeckClient(
     public val entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityStrategizer, entityCacheManager)
 
     public suspend fun login() {
-        this.setAuthentication(authenticationService.login(auth))
-        openAllTeamGateways()
+        authenticationResults = authenticationService.login(auth).also { result ->
+            gateway.auth = result
+            rest.restClient.token = result.token
+        }
+        val self = entityDelegator.getSelfUser()
+        gateway.openTeamGateways(*self.teams.map { it.id }.toTypedArray())
         gateway.start()
         eventService.startListeningAndConveying()
-    }
-
-    private suspend fun openAllTeamGateways() {
-        val self = rest.userRoute.getSelf()
-        for (team in self.teams) {
-            gateway.openGateway(team.id)
-        }
     }
 }

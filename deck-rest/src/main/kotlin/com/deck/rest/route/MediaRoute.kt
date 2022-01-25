@@ -13,14 +13,18 @@ import mu.KotlinLogging
 
 public class MediaRoute(client: RestClient): Route(client) {
     @OptIn(InternalAPI::class)
-    public suspend fun uploadMedia(bytes: ByteArray, type: DynamicMediaType): GuildedMedia {
+    public suspend fun uploadMedia(
+        name: String,
+        bytes: ByteArray,
+        type: DynamicMediaType
+    ): GuildedMedia {
         val response = client.requestService.constructExceptionalRateLimitedRequest<UploadMediaResponse> {
             client.httpClient.submitFormWithBinaryData(
                 url = "$GuildedMediaEndpoint/upload?dynamicMediaTypeId=${type.name}",
                 formData = formData {
                     append("file", bytes, Headers.build {
-                        append(HttpHeaders.ContentType, ContentType.Image.JPEG)
-                        append(HttpHeaders.ContentDisposition, "filename=FB_IMG_1594674179744.jpg")
+                        append(HttpHeaders.ContentType, ContentType.Image.Any)
+                        append(HttpHeaders.ContentDisposition, "filename=$name")
                     })
                 }
             )

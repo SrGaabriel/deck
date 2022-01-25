@@ -21,6 +21,8 @@ public interface GatewayModule : EventSupplier {
 
     public suspend fun openGateway(teamId: GenericId? = null): Gateway
 
+    public suspend fun openTeamGateways(vararg teamIds: GenericId)
+
     public suspend fun closeGateway(teamId: GenericId? = null)
 }
 
@@ -44,6 +46,12 @@ public class DefaultGatewayModule : GatewayModule {
 
     override suspend fun openGateway(teamId: GenericId?): Gateway =
         if (teamId == null) orchestrator.openGateway() else orchestrator.openTeamGateway(teamId)
+
+    override suspend fun openTeamGateways(vararg teamIds: GenericId) {
+        for (team in teamIds) {
+            openGateway(team)
+        }
+    }
 
     override suspend fun closeGateway(teamId: GenericId?) {
         if (teamId == null) orchestrator.closeGateway(globalGateway) else orchestrator.closeGateway(teamId)

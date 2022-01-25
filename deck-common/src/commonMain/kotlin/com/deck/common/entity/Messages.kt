@@ -1,6 +1,9 @@
 package com.deck.common.entity
 
-import com.deck.common.util.*
+import com.deck.common.util.DeckUnknown
+import com.deck.common.util.GenericId
+import com.deck.common.util.OptionalProperty
+import com.deck.common.util.UniqueId
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -71,10 +74,31 @@ public data class RawMessageContent(
 public data class RawMessageContentNode(
     @SerialName("object") val documentObject: String,
     val data: RawMessageContentData = RawMessageContentData(),
-    val type: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val type: RawMessageContentNodeType = RawMessageContentNodeType.BLANK,
     val nodes: List<RawMessageContentNode> = emptyList(),
     val leaves: OptionalProperty<List<RawMessageContentNodeLeaves>> = OptionalProperty.NotPresent
 )
+
+@Serializable
+public enum class RawMessageContentNodeType {
+    BLANK,
+    @SerialName("paragraph")
+    PARAGRAPH,
+    @SerialName("link")
+    LINK,
+    @SerialName("reaction")
+    REACTION,
+    @SerialName("webhookMessage")
+    WEBHOOK_MESSAGE,
+    @SerialName("image")
+    IMAGE,
+    @SerialName("systemMessage")
+    SYSTEM_MESSAGE,
+    @SerialName("block-quote-line")
+    BLOCK_QUOTE_LINE,
+    @SerialName("block-quote-container")
+    BLOCK_QUOTE_CONTAINER;
+}
 
 @Serializable
 public data class RawMessageContentData(
