@@ -54,8 +54,39 @@ public sealed class Node(
     public class Quote(lines: List<Node>) : Node(
         `object` = "block",
         type = RawMessageContentNodeType.BLOCK_QUOTE_CONTAINER,
-        data = NodeData(children = lines)
+        data = NodeData(leaves = null, children = lines)
     )
+
+    public interface Lists {
+        public class Bulleted(override val items: List<Item>): Node(
+            `object` = "block",
+            type = RawMessageContentNodeType.BULLETED_LIST,
+            data = NodeData(leaves = null, children = items)
+        ), Lists
+        public class Numbered(override val items: List<Item>): Node(
+            `object` = "block",
+            type = RawMessageContentNodeType.NUMBERED_LIST,
+            data = NodeData(leaves = null, children = items)
+        ), Lists
+        public class Item(children: List<Node>): Node(
+            `object` = "block",
+            type = RawMessageContentNodeType.LIST_ITEM,
+            data = NodeData(leaves = null, children = children)
+        )
+        public val items: List<Item>
+    }
+
+    public class CodeBlock(public val language: String, lines: List<Line>): Node(
+        `object` = "block",
+        type = RawMessageContentNodeType.CODE_BLOCK,
+        data = NodeData(leaves = null, children = lines)
+    ) {
+        public class Line(text: String): Node(
+            `object` = "block",
+            type = RawMessageContentNodeType.CODE_LINE,
+            data = NodeData(children = listOf(Paragraph.Text(leaves = listOf(Paragraph.Text.Leaf(text)))))
+        )
+    }
 }
 
 public data class NodeData(

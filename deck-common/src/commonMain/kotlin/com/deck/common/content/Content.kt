@@ -4,16 +4,28 @@ import com.deck.common.content.node.Node
 import com.deck.common.entity.RawMessageContentNodeLeavesMarkType
 import com.deck.common.util.DeckDelicateApi
 import com.deck.common.util.GuildedMedia
+import com.deck.common.util.IntGenericId
 
+// TODO: refactor this shit
 public class Content(public val nodes: List<Node> = emptyList()) {
     public val leaves: List<Node.Paragraph.Text.Leaf>
         get() = nodes.filterIsInstance<Node.Paragraph>().flatMap { it.data.children }.filter { it.data.leaves != null }.flatMap { it.data.leaves!! }
+    public val links: List<String>
+        get() = nodes.filterIsInstance<Node.Paragraph>().flatMap { it.data.children }.filterIsInstance<Node.Paragraph.Link>().map { it.link }
+    public val reactions: List<IntGenericId>
+        get() = nodes.filterIsInstance<Node.Paragraph>().flatMap { it.data.children }.filterIsInstance<Node.Paragraph.Reaction>().map { it.id }
     public val texts: List<String>
         get() = leaves.map { it.text }
     public val images: List<String>
         get() = nodes.filterIsInstance<Node.Image>().map { it.image }
     public val embeds: List<Embed>
         get() = nodes.filterIsInstance<Node.Embed>().flatMap { it.embeds }
+    public val lists: List<Node.Lists>
+        get() = nodes.filterIsInstance<Node.Lists>()
+    public val codeBlocks: List<Node.CodeBlock>
+        get() = nodes.filterIsInstance<Node.CodeBlock>()
+    public val quoteBlocks: List<Node.Quote>
+        get() = nodes.filterIsInstance<Node.Quote>()
 
     public val text: String
         get() = texts.joinToString("\n")
@@ -31,7 +43,7 @@ public class ContentBuilder(private val quoteContainer: Boolean = false): Markab
     }
 
     public operator fun String.unaryPlus() {
-        nodes.add(text { + this@unaryPlus })
+        nodes.add(text(this))
     }
 
     public operator fun GuildedMedia.unaryPlus() {
@@ -46,8 +58,20 @@ public class ContentBuilder(private val quoteContainer: Boolean = false): Markab
         nodes.add(Node.Embed(embeds = this.toList()))
     }
 
-    public fun paragraph(builder: ParagraphBuilder.() -> Unit): Node.Paragraph {
-        return Node.Paragraph(
+    public fun codeblock(language: String, text: String) {
+        nodes.add(Node.CodeBlock(lines = text.lines().map { Node.CodeBlock.Line(it) }, language = language))
+    }
+
+    public fun codeblock(language: String = "unformatted", builder: CodeBlockBuilder.() -> Unit) {
+        + Node.CodeBlock(language.lowercase(),
+            CodeBlockBuilder()
+                .apply(builder)
+                .lines
+        )
+    }
+
+    public fun paragraph(builder: ParagraphBuilder.() -> Unit) {
+        + Node.Paragraph(
             ParagraphBuilder()
                 .apply(builder)
                 .nodes,
@@ -55,18 +79,34 @@ public class ContentBuilder(private val quoteContainer: Boolean = false): Markab
         )
     }
 
-    public fun quote(builder: ContentBuilder.() -> Unit): Node.Quote {
-        return Node.Quote(
+    public fun quote(builder: ContentBuilder.() -> Unit) {
+        + Node.Quote(
             ContentBuilder(quoteContainer = true)
                 .apply(builder)
                 .nodes
         )
     }
 
+    public fun bulletedList(builder: ListBuilder.() -> Unit) {
+        + Node.Lists.Bulleted(
+            ListBuilder()
+                .apply(builder)
+                .items
+        )
+    }
+
+    public fun numberedList(builder: ListBuilder.() -> Unit) {
+        + Node.Lists.Numbered(
+            ListBuilder()
+                .apply(builder)
+                .items
+        )
+    }
+
     public fun text(text: String, marks: List<RawMessageContentNodeLeavesMarkType> = emptyList()): Node.Paragraph.Text =
         Node.Paragraph.Text(leaves = listOf(Node.Paragraph.Text.Leaf(text, marks)))
 
-    public fun text(builder: LeavesBuilder.() -> Unit): Node.Paragraph = paragraph {
+    public fun text(builder: LeavesBuilder.() -> Unit) {
         + Node.Paragraph.Text(
             LeavesBuilder()
                 .apply(builder)
@@ -109,11 +149,14 @@ public class ParagraphBuilder: Markable {
     }
 
     public operator fun String.unaryPlus() {
-        nodes.add(text { + this@unaryPlus })
+        nodes.add(text(this))
     }
 
-    public fun text(builder: LeavesBuilder.() -> Unit): Node.Paragraph.Text {
-        return Node.Paragraph.Text(
+    public fun text(text: String, marks: List<RawMessageContentNodeLeavesMarkType> = emptyList()): Node.Paragraph.Text =
+        Node.Paragraph.Text(leaves = listOf(Node.Paragraph.Text.Leaf(text, marks)))
+
+    public fun text(builder: LeavesBuilder.() -> Unit) {
+        + Node.Paragraph.Text(
             LeavesBuilder()
                 .apply(builder)
                 .leaves
@@ -126,11 +169,11 @@ public class ParagraphBuilder: Markable {
 
     @Deprecated("This method requires you to provide text before and after the reaction", replaceWith = ReplaceWith("reaction(id)"))
     public fun reaction(before: String = "", id: Int, after: String = ""): List<Node> =
-        listOf(text { +before }, Node.Paragraph.Reaction(id = id), text { +after })
+        listOf(text(before), Node.Paragraph.Reaction(id = id), text(after))
 
     @Deprecated("This method requires you to provide text before and after the link", replaceWith = ReplaceWith("reaction(id)"))
     public fun link(before: String = "", url: String, after: String = ""): List<Node> =
-        listOf(Node.Paragraph(content = listOf(text { +before }, Node.Paragraph.Link(link = url), text { +after })))
+        listOf(Node.Paragraph(content = listOf(text(before), Node.Paragraph.Link(link = url), text(after))))
 }
 
 public class LeavesBuilder: Markable {
@@ -142,6 +185,28 @@ public class LeavesBuilder: Markable {
 
     public operator fun String.unaryPlus() {
         leaves.add(Node.Paragraph.Text.Leaf(this))
+    }
+}
+
+public class CodeBlockBuilder {
+    public val lines: MutableList<Node.CodeBlock.Line> = mutableListOf()
+
+    public operator fun String.unaryPlus() {
+        lines.add(Node.CodeBlock.Line(this))
+    }
+}
+
+public class ListBuilder {
+    public val items: MutableList<Node.Lists.Item> = mutableListOf()
+
+    public fun item(builder: ParagraphBuilder.() -> Unit) {
+        items.add(
+            Node.Lists.Item(
+                ParagraphBuilder()
+                    .apply(builder)
+                    .nodes
+            )
+        )
     }
 }
 

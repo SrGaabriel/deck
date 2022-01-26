@@ -27,6 +27,11 @@ public fun Node.encode(): RawMessageContentNode {
         is Node.Image -> RawMessageContentData(src = image.optional())
         is Node.SystemMessage -> RawMessageContentData()
         is Node.Quote -> RawMessageContentData()
+        is Node.CodeBlock -> RawMessageContentData(language = language.optional())
+        is Node.CodeBlock.Line -> RawMessageContentData()
+        is Node.Lists.Item -> RawMessageContentData()
+        is Node.Lists.Bulleted -> RawMessageContentData(isList = true.optional())
+        is Node.Lists.Numbered -> RawMessageContentData(isList = true.optional())
     }
     val leaves = this.data.leaves?.map {
         RawMessageContentNodeLeaves(
@@ -86,5 +91,15 @@ public fun RawMessageContentNode.decode(): Node? {
             Node.Paragraph(content = listOf(Node.Paragraph.Text(leaves = leaves ?: return null)), insideQuoteBlock = true)
         RawMessageContentNodeType.BLANK ->
             Node.Paragraph.Text(leaves ?: return null)
+        RawMessageContentNodeType.CODE_BLOCK ->
+            Node.CodeBlock(data.language.asNullable()!!, nodes.mapNotNull(RawMessageContentNode::decode).filterIsInstance<Node.CodeBlock.Line>())
+        RawMessageContentNodeType.CODE_LINE ->
+            Node.CodeBlock.Line(nodes.firstOrNull()?.decode()?.data?.leaves?.firstOrNull()?.text ?: return null)
+        RawMessageContentNodeType.BULLETED_LIST ->
+            Node.Lists.Bulleted(nodes.mapNotNull(RawMessageContentNode::decode).filterIsInstance<Node.Lists.Item>())
+        RawMessageContentNodeType.NUMBERED_LIST ->
+            Node.Lists.Numbered(nodes.mapNotNull(RawMessageContentNode::decode).filterIsInstance<Node.Lists.Item>())
+        RawMessageContentNodeType.LIST_ITEM ->
+            Node.Lists.Item(nodes.mapNotNull(RawMessageContentNode::decode))
     }
 }

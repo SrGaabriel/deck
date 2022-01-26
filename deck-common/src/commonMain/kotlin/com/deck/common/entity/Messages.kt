@@ -98,7 +98,17 @@ public enum class RawMessageContentNodeType {
     @SerialName("block-quote-container")
     BLOCK_QUOTE_CONTAINER,
     @SerialName("markdown-plain-text")
-    MARKDOWN_PLAIN_TEXT;
+    MARKDOWN_PLAIN_TEXT,
+    @SerialName("code-container")
+    CODE_BLOCK,
+    @SerialName("code-line")
+    CODE_LINE,
+    @SerialName("unordered-list")
+    BULLETED_LIST,
+    @SerialName("ordered-list")
+    NUMBERED_LIST,
+    @SerialName("list-item")
+    LIST_ITEM,
 }
 
 @Serializable
@@ -108,6 +118,7 @@ public data class RawMessageContentData(
     val src: OptionalProperty<String> = OptionalProperty.NotPresent,
     val href: OptionalProperty<String> = OptionalProperty.NotPresent,
     val language: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val isList: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     val reaction: OptionalProperty<RawReaction> = OptionalProperty.NotPresent
 )
 
