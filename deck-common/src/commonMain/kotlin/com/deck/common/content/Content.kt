@@ -39,11 +39,11 @@ public class ContentBuilder(private val quoteContainer: Boolean = false): Markab
     }
 
     override fun Node.Paragraph.Text.Leaf.unaryPlus() {
-        nodes.add(Node.Paragraph(content = listOf(Node.Paragraph.Text(listOf(this)))))
+        nodes.add(Node.Paragraph(content = listOf(Node.Paragraph.Text(listOf(this))), insideQuoteBlock = quoteContainer))
     }
 
     public operator fun String.unaryPlus() {
-        nodes.add(text(this))
+        nodes.add(Node.Paragraph(listOf(text(this)), insideQuoteBlock = quoteContainer))
     }
 
     public operator fun GuildedMedia.unaryPlus() {
@@ -59,7 +59,7 @@ public class ContentBuilder(private val quoteContainer: Boolean = false): Markab
     }
 
     public fun codeblock(language: String, text: String) {
-        nodes.add(Node.CodeBlock(lines = text.lines().map { Node.CodeBlock.Line(it) }, language = language))
+        nodes.add(Node.CodeBlock(lines = text.lines().map { Node.CodeBlock.Line(it) }, language = language.lowercase()))
     }
 
     public fun codeblock(language: String = "unformatted", builder: CodeBlockBuilder.() -> Unit) {

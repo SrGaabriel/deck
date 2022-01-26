@@ -5,6 +5,7 @@ import com.deck.common.content.Embed
 import com.deck.common.content.contentBuilder
 import com.deck.common.content.from
 import com.deck.common.entity.*
+import com.deck.common.util.OptionalProperty
 import com.deck.common.util.asNullable
 import com.deck.common.util.optional
 
@@ -45,7 +46,7 @@ public fun Node.encode(): RawMessageContentNode {
                 )
             }
         )
-    }.orEmpty()
+    }?.optional() ?: OptionalProperty.NotPresent
     val type = if (this.data.insideQuoteBlock) RawMessageContentNodeType.BLOCK_QUOTE_LINE else this.type
     val children: MutableList<RawMessageContentNode> = this.data.children
         .map { it.encode() }
@@ -55,7 +56,7 @@ public fun Node.encode(): RawMessageContentNode {
         type = type,
         data = data,
         nodes = children,
-        leaves = leaves.optional()
+        leaves = leaves
     )
 }
 
