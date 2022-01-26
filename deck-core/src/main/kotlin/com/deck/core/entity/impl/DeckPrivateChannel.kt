@@ -2,7 +2,7 @@ package com.deck.core.entity.impl
 
 import com.deck.common.util.GenericId
 import com.deck.core.DeckClient
-import com.deck.core.entity.Channel
+import com.deck.core.entity.channel.Channel
 import com.deck.core.entity.misc.ChannelContentType
 import com.deck.core.entity.misc.ChannelType
 import kotlinx.datetime.Instant

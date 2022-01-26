@@ -3,7 +3,7 @@ package com.deck.core.event.channel
 import com.deck.common.util.GenericId
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
-import com.deck.core.entity.TeamChannel
+import com.deck.core.entity.channel.TeamChannel
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
 import com.deck.gateway.event.type.GatewayTeamChannelsDeletedEvent

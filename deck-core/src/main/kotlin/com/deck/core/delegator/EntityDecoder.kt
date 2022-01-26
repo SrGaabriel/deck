@@ -3,6 +3,8 @@ package com.deck.core.delegator
 import com.deck.common.entity.*
 import com.deck.common.util.GenericId
 import com.deck.core.entity.*
+import com.deck.core.entity.channel.Channel
+import com.deck.core.entity.channel.PartialTeamChannel
 import com.deck.gateway.entity.RawPartialTeamChannel
 import com.deck.rest.entity.RawFetchedTeam
 import com.deck.rest.request.SelfUserResponse
@@ -19,7 +21,7 @@ public interface EntityDecoder {
 
     public fun decodeRole(raw: RawRole): Role
 
-    public fun decodeUserPermissionsOverride(raw: RawUserPermission): UserPermissionsOverride
+    public fun decodeUserPermissionsOverride(teamId: GenericId, raw: RawUserPermission): UserPermissionsOverride
 
     public fun decodeRolePermissions(raw: RawRolePermissions): RolePermissions
 

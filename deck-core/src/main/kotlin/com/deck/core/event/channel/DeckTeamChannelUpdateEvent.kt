@@ -2,8 +2,8 @@ package com.deck.core.event.channel
 
 import com.deck.common.util.asNullable
 import com.deck.core.DeckClient
-import com.deck.core.entity.PartialTeamChannel
-import com.deck.core.entity.TeamChannel
+import com.deck.core.entity.channel.PartialTeamChannel
+import com.deck.core.entity.channel.TeamChannel
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
 import com.deck.gateway.event.type.GatewayTeamChannelUpdatedEvent

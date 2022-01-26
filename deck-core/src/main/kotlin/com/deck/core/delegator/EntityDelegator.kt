@@ -2,7 +2,11 @@ package com.deck.core.delegator
 
 import com.deck.common.util.GenericId
 import com.deck.core.cache.CacheManager
-import com.deck.core.entity.*
+import com.deck.core.entity.SelfUser
+import com.deck.core.entity.Team
+import com.deck.core.entity.User
+import com.deck.core.entity.channel.Channel
+import com.deck.core.entity.channel.TeamChannel
 import com.deck.core.module.RestModule
 import com.deck.rest.util.Route
 import kotlinx.coroutines.CoroutineScope

@@ -2,10 +2,10 @@ package com.deck.core.util
 
 import com.deck.common.util.GenericId
 import com.deck.core.DeckClient
-import com.deck.core.entity.Channel
 import com.deck.core.entity.SelfUser
 import com.deck.core.entity.Team
 import com.deck.core.entity.User
+import com.deck.core.entity.channel.Channel
 import java.util.*
 
 public suspend fun DeckClient.getUser(id: GenericId): User? =

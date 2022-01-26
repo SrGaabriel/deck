@@ -4,7 +4,11 @@ import com.deck.common.util.Dictionary
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.core.DeckClient
-import com.deck.core.entity.*
+import com.deck.core.entity.Role
+import com.deck.core.entity.RolePermissionsOverride
+import com.deck.core.entity.UserPermissionsOverride
+import com.deck.core.entity.channel.PartialTeamChannel
+import com.deck.core.entity.channel.TeamChannel
 import com.deck.core.entity.misc.ChannelContentType
 import com.deck.core.entity.misc.ChannelType
 import kotlinx.datetime.Instant

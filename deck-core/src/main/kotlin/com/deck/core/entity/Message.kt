@@ -2,6 +2,7 @@ package com.deck.core.entity
 
 import com.deck.common.content.Content
 import com.deck.common.util.GenericId
+import com.deck.core.entity.channel.Channel
 import com.deck.core.stateless.StatelessMessage
 import kotlinx.datetime.Instant
 import java.util.*

@@ -28,11 +28,19 @@ public fun Node.encode(): RawMessageContentNode {
         is Node.SystemMessage -> RawMessageContentData()
         is Node.Quote -> RawMessageContentData()
     }
-    val leaves = if (this.data.text != null) listOf(RawMessageContentNodeLeaves(
-        leavesObject = "leaf",
-        text = this.data.text,
-        marks = emptyList()
-    )) else emptyList()
+    val leaves = this.data.leaves?.map {
+        RawMessageContentNodeLeaves(
+            leavesObject = "leaf",
+            text = it.text,
+            marks = it.marks.map { markType ->
+                RawMessageContentNodeLeavesMark(
+                    markObject = "mark",
+                    type = markType,
+                    data = RawMessageContentData()
+                )
+            }
+        )
+    }.orEmpty()
     val type = if (this.data.insideQuoteBlock) RawMessageContentNodeType.BLOCK_QUOTE_LINE else this.type
     val children: MutableList<RawMessageContentNode> = this.data.children
         .map { it.encode() }
@@ -53,12 +61,14 @@ public fun RawMessageContent.decode(): Content = contentBuilder {
 }
 
 public fun RawMessageContentNode.decode(): Node? {
-    val leaf = nodes.firstOrNull()?.leaves?.asNullable()?.firstOrNull()
+    val leaves = leaves.asNullable()?.map { Node.Paragraph.Text.Leaf(it.text, it.marks.map { mark -> mark.type }) }
     val image = data.src.asNullable()
     val embeds = data.embeds.asNullable()?.map { Embed.from(it) }
 
     return when (type) {
         RawMessageContentNodeType.PARAGRAPH ->
+            Node.Paragraph(content = nodes.mapNotNull(RawMessageContentNode::decode))
+        RawMessageContentNodeType.MARKDOWN_PLAIN_TEXT ->
             Node.Paragraph(content = nodes.mapNotNull(RawMessageContentNode::decode))
         RawMessageContentNodeType.LINK ->
             Node.Paragraph.Link(data.href.asNullable()!!)
@@ -73,8 +83,8 @@ public fun RawMessageContentNode.decode(): Node? {
         RawMessageContentNodeType.BLOCK_QUOTE_CONTAINER ->
             Node.Paragraph(content = nodes.mapNotNull(RawMessageContentNode::decode), insideQuoteBlock = true)
         RawMessageContentNodeType.BLOCK_QUOTE_LINE ->
-            Node.Paragraph(content = listOf(Node.Paragraph.Text(text = leaf?.text?: return null)), insideQuoteBlock = true)
+            Node.Paragraph(content = listOf(Node.Paragraph.Text(leaves = leaves ?: return null)), insideQuoteBlock = true)
         RawMessageContentNodeType.BLANK ->
-            Node.Paragraph.Text(leaves.asNullable()?.getOrNull(0)?.text!!)
+            Node.Paragraph.Text(leaves ?: return null)
     }
 }

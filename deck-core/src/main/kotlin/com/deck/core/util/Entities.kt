@@ -6,7 +6,7 @@ import com.deck.common.content.embedBuilder
 import com.deck.core.builder.DeckMessageBuilder
 import com.deck.core.entity.Message
 import com.deck.core.stateless.StatelessMessage
-import com.deck.core.stateless.StatelessMessageChannel
+import com.deck.core.stateless.channel.StatelessMessageChannel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 

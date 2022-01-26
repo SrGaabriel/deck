@@ -1,13 +1,14 @@
-package com.deck.core.stateless
+package com.deck.core.stateless.channel
 
 import com.deck.common.util.GenericId
 import com.deck.core.builder.DeckMessageBuilder
-import com.deck.core.entity.Channel
 import com.deck.core.entity.Message
+import com.deck.core.entity.channel.MessageChannel
+import com.deck.core.stateless.StatelessEntity
 import com.deck.core.util.sendMessage
 import java.util.*
 
-public interface StatelessMessageChannel: StatelessEntity<Channel> {
+public interface StatelessMessageChannel: StatelessEntity<MessageChannel> {
     public val id: UUID
     public val teamId: GenericId?
 
@@ -18,8 +19,7 @@ public interface StatelessMessageChannel: StatelessEntity<Channel> {
             client.rest.channelRoute.sendMessage(id, builder).message
         )
 
-    override suspend fun getState(): Channel {
-        return client.entityDelegator.getChannel(id, teamId)
-            ?: error("Tried to access a deleted channel's state")
+    override suspend fun getState(): MessageChannel {
+        return client.entityDelegator.getChannel(id, teamId) as? MessageChannel ?: error("Tried to access a deleted channel's state")
     }
 }

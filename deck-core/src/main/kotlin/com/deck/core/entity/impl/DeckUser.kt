@@ -6,9 +6,9 @@ import com.deck.core.entity.RolePermissions
 import com.deck.core.entity.User
 import com.deck.core.entity.UserPermissionsOverride
 import com.deck.core.entity.misc.DeckUserAboutInfo
-import com.deck.core.stateless.StatelessMessageChannel
 import com.deck.core.stateless.StatelessUser
 import kotlinx.datetime.Instant
+import java.util.*
 
 public data class DeckUser(
     override val client: DeckClient,
@@ -24,7 +24,8 @@ public data class DeckUser(
 
 public data class DeckUserPermissionsOverride(
     override val user: StatelessUser,
-    override val channel: StatelessMessageChannel?,
+    /** Missing when override is in a category, not a channel */
+    override val channelId: UUID?,
     override val createdAt: Instant,
     override val updatedAt: Instant?,
     override val denyPermissions: RolePermissions,

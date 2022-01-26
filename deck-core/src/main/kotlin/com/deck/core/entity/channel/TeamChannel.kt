@@ -1,13 +1,15 @@
-package com.deck.core.entity
+package com.deck.core.entity.channel
 
 import com.deck.common.util.Dictionary
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
-import com.deck.core.stateless.StatelessMessageChannel
+import com.deck.core.entity.Role
+import com.deck.core.entity.RolePermissionsOverride
+import com.deck.core.entity.UserPermissionsOverride
 import kotlinx.datetime.Instant
 import java.util.*
 
-public interface TeamChannel : Channel, StatelessMessageChannel
+public interface TeamChannel : Channel
 
 public interface PartialTeamChannel : TeamChannel {
     public val parentChannelId: UUID?

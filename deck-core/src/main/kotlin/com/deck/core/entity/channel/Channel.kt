@@ -1,14 +1,18 @@
-package com.deck.core.entity
+package com.deck.core.entity.channel
 
 import com.deck.common.util.GenericId
+import com.deck.core.entity.Entity
 import com.deck.core.entity.misc.ChannelContentType
 import com.deck.core.entity.misc.ChannelType
-import com.deck.core.stateless.StatelessMessageChannel
 import kotlinx.datetime.Instant
+import java.util.*
 
-public interface Channel : Entity, StatelessMessageChannel {
+public interface Channel : Entity {
+    public val id: UUID
     public val name: String
     public val description: String
+
+    public val teamId: GenericId?
 
     public val type: ChannelType
     public val contentType: ChannelContentType
@@ -21,6 +25,4 @@ public interface Channel : Entity, StatelessMessageChannel {
 
     public val updatedAt: Instant?
     public val deletedAt: Instant?
-
-    override val teamId: GenericId?
 }

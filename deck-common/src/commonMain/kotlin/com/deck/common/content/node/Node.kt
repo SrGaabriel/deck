@@ -1,5 +1,6 @@
 package com.deck.common.content.node
 
+import com.deck.common.entity.RawMessageContentNodeLeavesMarkType
 import com.deck.common.entity.RawMessageContentNodeType
 import com.deck.common.util.GenericId
 
@@ -11,17 +12,19 @@ public sealed class Node(
     public class Paragraph(content: List<Node>, insideQuoteBlock: Boolean = false) : Node(
         `object` = "block",
         type = RawMessageContentNodeType.PARAGRAPH,
-        data = NodeData(text = null, children = content, insideQuoteBlock = insideQuoteBlock)
+        data = NodeData(leaves = null, children = content, insideQuoteBlock = insideQuoteBlock)
     ) {
-        public class Text(public val text: String): Node(
+        public class Text(leaves: List<Leaf>): Node(
             `object` = "text",
             type = RawMessageContentNodeType.BLANK,
-            data = NodeData(text = text)
-        )
-        public class Link(public val link: String): Node(
+            data = NodeData(leaves = leaves)
+        ) {
+            public data class Leaf(val text: String, val marks: List<RawMessageContentNodeLeavesMarkType> = emptyList())
+        }
+        public class Link(public val link: String, public val leaf: Text.Leaf = Text.Leaf(link)): Node(
             `object` = "inline",
             type = RawMessageContentNodeType.LINK,
-            data = NodeData(children = listOf(Text(link)), text = null)
+            data = NodeData(children = listOf(Text(listOf(leaf))), leaves = null)
         )
         public class Reaction(public val id: Int): Node(
             `object` = "inline",
@@ -56,7 +59,7 @@ public sealed class Node(
 }
 
 public data class NodeData(
-    val text: String? = "",
+    val leaves: List<Node.Paragraph.Text.Leaf>? = emptyList(),
     val children: List<Node> = emptyList(),
     val insideQuoteBlock: Boolean = false
 )

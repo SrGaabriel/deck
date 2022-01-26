@@ -7,6 +7,8 @@ import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.*
+import com.deck.core.entity.channel.Channel
+import com.deck.core.entity.channel.PartialTeamChannel
 import com.deck.core.entity.impl.*
 import com.deck.core.entity.misc.DeckUserAboutInfo
 import com.deck.core.util.BlankStatelessMember
@@ -140,9 +142,9 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
         allowPermissions = decodeRolePermissions(raw.allowPermissions)
     )
 
-    override fun decodeUserPermissionsOverride(raw: RawUserPermission): UserPermissionsOverride = DeckUserPermissionsOverride(
+    override fun decodeUserPermissionsOverride(teamId: GenericId, raw: RawUserPermission): UserPermissionsOverride = DeckUserPermissionsOverride(
         user = BlankStatelessUser(client, raw.userId),
-        channel = raw.channelId.asNullable()?.mapToBuiltin()?.let { BlankStatelessMessageChannel(client, it) },
+        channelId = raw.channelId.asNullable()?.mapToBuiltin(),
         createdAt = raw.createdAt,
         updatedAt = raw.updatedAt,
         denyPermissions = decodeRolePermissions(raw.denyPermissions),
@@ -189,7 +191,7 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
         autoArchiveAt = raw.autoArchiveAt.asNullable(),
         isPublic = raw.isPublic,
         isRoleSynced = raw.isRoleSynced.asNullable(),
-        userPermissionOverrides = raw.userPermissions.asNullable()?.map { decodeUserPermissionsOverride(it) },
+        userPermissionOverrides = raw.userPermissions.asNullable()?.map { decodeUserPermissionsOverride(teamId, it) },
         roles = raw.roles.asNullable()?.map { decodeRole(it) },
         rolePermissionsOverrideById = raw.rolesById.asNullable()?.mapValues { decodeRolePermissionsOverride(it.value) } ?: emptyMap()
     )

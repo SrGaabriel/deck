@@ -1,6 +1,5 @@
 package com.deck.common.entity
 
-import com.deck.common.util.DeckUnknown
 import com.deck.common.util.GenericId
 import com.deck.common.util.OptionalProperty
 import com.deck.common.util.UniqueId
@@ -97,7 +96,9 @@ public enum class RawMessageContentNodeType {
     @SerialName("block-quote-line")
     BLOCK_QUOTE_LINE,
     @SerialName("block-quote-container")
-    BLOCK_QUOTE_CONTAINER;
+    BLOCK_QUOTE_CONTAINER,
+    @SerialName("markdown-plain-text")
+    MARKDOWN_PLAIN_TEXT;
 }
 
 @Serializable
@@ -106,6 +107,7 @@ public data class RawMessageContentData(
     val embeds: OptionalProperty<List<RawEmbed>> = OptionalProperty.NotPresent,
     val src: OptionalProperty<String> = OptionalProperty.NotPresent,
     val href: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val language: OptionalProperty<String> = OptionalProperty.NotPresent,
     val reaction: OptionalProperty<RawReaction> = OptionalProperty.NotPresent
 )
 
@@ -113,8 +115,35 @@ public data class RawMessageContentData(
 public data class RawMessageContentNodeLeaves(
     @SerialName("object") val leavesObject: String,
     val text: String,
-    @DeckUnknown val marks: List<Unit>
+    val marks: List<RawMessageContentNodeLeavesMark>
 )
+
+/**
+ * Here we'll create a new object for the marks, because
+ * we don't want our mark type to conflict with the [RawMessageContentNodeType] enum.
+ */
+@Serializable
+public data class RawMessageContentNodeLeavesMark(
+    @SerialName("object") val markObject: String,
+    val type: RawMessageContentNodeLeavesMarkType,
+    val data: RawMessageContentData
+)
+
+@Serializable
+public enum class RawMessageContentNodeLeavesMarkType {
+    @SerialName("underline")
+    UNDERLINE,
+    @SerialName("bold")
+    BOLD,
+    @SerialName("italic")
+    ITALIC,
+    @SerialName("strikethrough")
+    STRIKETHROUGH,
+    @SerialName("spoiler")
+    SPOILER,
+    @SerialName("inline-code-v2")
+    INLINE_CODE
+}
 
 @Serializable
 public data class RawSlowmode(

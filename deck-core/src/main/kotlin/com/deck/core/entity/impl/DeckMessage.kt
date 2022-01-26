@@ -4,7 +4,7 @@ import com.deck.common.content.Content
 import com.deck.common.util.GenericId
 import com.deck.core.DeckClient
 import com.deck.core.entity.Message
-import com.deck.core.stateless.StatelessMessageChannel
+import com.deck.core.stateless.channel.StatelessMessageChannel
 import kotlinx.datetime.Instant
 import java.util.*
 
