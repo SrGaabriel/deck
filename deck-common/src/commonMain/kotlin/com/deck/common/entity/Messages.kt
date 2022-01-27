@@ -57,8 +57,6 @@ public data class RawPartialRepliedMessage(
 @Serializable
 public data class RawPartialDeletedMessage(
     val id: UniqueId,
-    val contentType: RawChannelContentType,
-    val isReply: Boolean,
     val channelId: UniqueId,
     val createdAt: Instant
 )

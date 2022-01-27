@@ -2,7 +2,6 @@ package com.deck.core.util
 
 import com.deck.common.content.ContentBuilder
 import com.deck.common.content.EmbedBuilder
-import com.deck.common.content.embedBuilder
 import com.deck.core.builder.DeckMessageBuilder
 import com.deck.core.entity.Message
 import com.deck.core.stateless.StatelessMessage
@@ -20,7 +19,7 @@ public suspend fun StatelessMessageChannel.sendEmbed(
 ): Message = sendContent {
     if (additionalText != null)
         + additionalText
-    + embedBuilder(builder)
+    embed(builder)
 }
 
 public suspend fun StatelessMessageChannel.sendContent(builder: ContentBuilder.() -> Unit): Message = sendMessage {

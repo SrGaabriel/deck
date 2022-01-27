@@ -4,7 +4,10 @@ import com.deck.common.entity.RawBot
 import com.deck.common.entity.RawGroup
 import com.deck.common.entity.RawTeamMember
 import com.deck.common.entity.RawTeamPaymentInfo
-import com.deck.common.util.*
+import com.deck.common.util.DeckUnknown
+import com.deck.common.util.GenericId
+import com.deck.common.util.OptionalProperty
+import com.deck.common.util.UniqueId
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
@@ -18,7 +21,7 @@ public data class RawFetchedTeam(
     val timezone: String,
     val description: String?,
     val type: String,
-    val games: List<GameStatus>,
+    val games: List<Int>,
     // val characteristics: Unit?,
     val measurements: RawFetchedTeamMeasurements,
     val members: List<RawTeamMember>,

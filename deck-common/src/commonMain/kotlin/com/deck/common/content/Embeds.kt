@@ -15,7 +15,7 @@ public data class Embed(
     public val description: String? = null,
     public val url: String? = null,
     public val color: Int? = null,
-    public val fields: List<Field>? = null,
+    public val fields: List<Field> = emptyList(),
     public val thumbnail: String? = null,
     public val image: String? = null,
     public val footer: Footer? = null,
@@ -137,8 +137,5 @@ public fun Embed.Companion.from(raw: RawEmbed): Embed = Embed(
     image = raw.image.asNullable()?.url?.asNullable(),
     thumbnail = raw.thumbnail.asNullable()?.url?.asNullable(),
     author = raw.author.asNullable()?.let { Embed.Author(it.name.asNullable(), it.url.asNullable(), it.iconUrl.asNullable()) },
-    fields = raw.fields.asNullable()?.map { Embed.Field(it.name, it.value, it.inline.asNullable() == true) }
+    fields = raw.fields.asNullable()?.map { Embed.Field(it.name, it.value, it.inline.asNullable() == true) }.orEmpty()
 )
-
-public fun embedBuilder(builder: EmbedBuilder.() -> Unit): Embed =
-    EmbedBuilder().apply(builder).build()

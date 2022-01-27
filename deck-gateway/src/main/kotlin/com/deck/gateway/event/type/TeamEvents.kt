@@ -105,7 +105,7 @@ public data class GatewayTeamServerSubscriptionPlanDeletedEvent(
 @Serializable
 @SerialName("TeamGameAdded")
 public data class GatewayTeamGameAddedEvent(
-    @SerialName("gameId") val game: GameStatus,
+    @SerialName("gameId") val game: Int,
     val teamId: GenericId
 ) : GatewayEvent()
 

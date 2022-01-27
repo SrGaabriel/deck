@@ -3,6 +3,7 @@ package com.deck.common.content
 import com.deck.common.content.node.Node
 import com.deck.common.entity.RawMessageContentNodeLeavesMarkType
 import com.deck.common.util.DeckDelicateApi
+import com.deck.common.util.Emoji
 import com.deck.common.util.GuildedMedia
 import com.deck.common.util.IntGenericId
 
@@ -58,6 +59,10 @@ public class ContentBuilder(private val quoteContainer: Boolean = false): Markab
         nodes.add(Node.Embed(embeds = this.toList()))
     }
 
+    public operator fun Emoji.unaryPlus() {
+        nodes.add(Node.Paragraph.Reaction(id))
+    }
+
     public fun codeblock(language: String, text: String) {
         nodes.add(Node.CodeBlock(lines = text.lines().map { Node.CodeBlock.Line(it) }, language = language.lowercase()))
     }
@@ -103,15 +108,19 @@ public class ContentBuilder(private val quoteContainer: Boolean = false): Markab
         )
     }
 
-    public fun text(text: String, marks: List<RawMessageContentNodeLeavesMarkType> = emptyList()): Node.Paragraph.Text =
-        Node.Paragraph.Text(leaves = listOf(Node.Paragraph.Text.Leaf(text, marks)))
-
     public fun text(builder: LeavesBuilder.() -> Unit) {
         + Node.Paragraph.Text(
             LeavesBuilder()
                 .apply(builder)
                 .leaves
         )
+    }
+
+    public fun text(text: String, marks: List<RawMessageContentNodeLeavesMarkType> = emptyList()): Node.Paragraph.Text =
+        Node.Paragraph.Text(leaves = listOf(Node.Paragraph.Text.Leaf(text, marks)))
+
+    public fun embed(builder: EmbedBuilder.() -> Unit) {
+        + Node.Embed(listOf(EmbedBuilder().apply(builder).build()))
     }
 
     @DeckDelicateApi
@@ -150,6 +159,10 @@ public class ParagraphBuilder: Markable {
 
     public operator fun String.unaryPlus() {
         nodes.add(text(this))
+    }
+
+    public operator fun Emoji.unaryPlus() {
+        nodes.add(Node.Paragraph.Reaction(id))
     }
 
     public fun text(text: String, marks: List<RawMessageContentNodeLeavesMarkType> = emptyList()): Node.Paragraph.Text =

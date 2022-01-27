@@ -1,6 +1,5 @@
 package com.deck.common.entity
 
-import com.deck.common.util.GameStatus
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.common.util.OptionalProperty
@@ -20,7 +19,7 @@ public data class RawGroup(
     val avatar: String?,
     val banner: String?,
     val teamId: GenericId,
-    @SerialName("gameId") val game: GameStatus?,
+    @SerialName("gameId") val game: Int?,
     // val additionalGameInfo: *,
     val visibilityTeamRoleId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
     val visibilityTeamRoleIds: OptionalProperty<List<IntGenericId>> = OptionalProperty.NotPresent,

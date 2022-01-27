@@ -127,7 +127,7 @@ public class DefaultGateway(
      */
     @OptIn(ObsoleteCoroutinesApi::class)
     override suspend fun startHeartbeat(): Job = scope.launch {
-        hello = await(8000) ?: error("Gateway hello payload wasn't sent in time in gateway $gatewayId.")
+        hello = await(8000, gatewayId = gatewayId) ?: return@launch logger.error { "Gateway hello payload wasn't sent in time in gateway $gatewayId." }
         val tickerChannel = ticker(hello.pingInterval, hello.pingTimeout)
         logger.info { "[DECK Gateway #${gatewayId}] Created ticker channel, now starting to send heartbeats to guilded." }
         tickerChannel.consumeAsFlow().collect {

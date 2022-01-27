@@ -3,7 +3,6 @@ package com.deck.rest.route
 import com.deck.common.entity.RawTransientStatus
 import com.deck.common.entity.RawUserPost
 import com.deck.common.entity.RawUserPresenceStatus
-import com.deck.common.util.GameStatus
 import com.deck.common.util.GenericId
 import com.deck.common.util.RawUserPresenceType
 import com.deck.rest.RestClient
@@ -69,10 +68,10 @@ public class UserRoute(client: RestClient) : Route(client) {
         body = SetSelfPresenceRequest(status)
     )
 
-    public suspend fun setSelfTransientStatus(game: GameStatus): RawTransientStatus = sendRequest(
+    public suspend fun setSelfTransientStatus(game: Int): RawTransientStatus = sendRequest(
         endpoint = "/users/me/status/transient",
         method = HttpMethod.Post,
-        body = SetUserTransientStatusRequest(1686, game.id, RawUserPresenceType.Game)
+        body = SetUserTransientStatusRequest(1686, game, RawUserPresenceType.Game)
     )
 
     public suspend fun deleteSelfTransientStatus(): Unit = sendRequest<Unit, Unit>(

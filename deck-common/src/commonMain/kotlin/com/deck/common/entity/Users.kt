@@ -43,7 +43,7 @@ public data class RawUserStatus(
 @Serializable
 public data class RawTransientStatus(
     val id: IntGenericId,
-    @SerialName("gameId") val game: GameStatus,
+    @SerialName("gameId") val game: Int,
     val type: RawUserPresenceType,
     val startedAt: Instant,
     val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent

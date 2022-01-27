@@ -1,6 +1,5 @@
 plugins {
     kotlin("jvm")
-    kotlin("plugin.serialization") version Dependencies.KotlinVersion
 }
 
 repositories {

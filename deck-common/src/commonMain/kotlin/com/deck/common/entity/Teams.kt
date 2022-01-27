@@ -1,6 +1,9 @@
 package com.deck.common.entity
 
-import com.deck.common.util.*
+import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
+import com.deck.common.util.OptionalProperty
+import com.deck.common.util.UniqueId
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -14,7 +17,7 @@ public data class RawTeam(
     val timezone: String?,
     val description: OptionalProperty<String> = OptionalProperty.NotPresent,
     val type: String?,
-    val games: List<GameStatus>,
+    val games: List<Int>,
     val profilePicture: String?,
     val ownerId: GenericId,
     val members: OptionalProperty<List<RawTeamMember>> = OptionalProperty.NotPresent,
@@ -88,7 +91,7 @@ public data class RawInvite(
     val teamId: GenericId,
     val invitedBy: GenericId,
     val userBy: GenericId?,
-    @SerialName("gameId") val game: GameStatus?,
+    @SerialName("gameId") val game: Int?,
     val useCount: Int
 )
 
