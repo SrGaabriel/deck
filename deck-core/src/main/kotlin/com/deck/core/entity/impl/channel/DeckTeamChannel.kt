@@ -1,4 +1,4 @@
-package com.deck.core.entity.impl
+package com.deck.core.entity.impl.channel
 
 import com.deck.common.util.Dictionary
 import com.deck.common.util.GenericId

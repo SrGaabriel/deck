@@ -6,6 +6,7 @@ import com.deck.core.stateless.StatelessMember
 import com.deck.core.stateless.StatelessMessage
 import com.deck.core.stateless.StatelessTeam
 import com.deck.core.stateless.StatelessUser
+import com.deck.core.stateless.channel.StatelessForumChannel
 import com.deck.core.stateless.channel.StatelessMessageChannel
 import java.util.*
 
@@ -25,6 +26,12 @@ internal class BlankStatelessMessageChannel(
     override val id: UUID,
     override val teamId: GenericId? = null
 ): StatelessMessageChannel
+
+public class BlankStatelessForumChannel(
+    override val client: DeckClient,
+    override val id: UUID,
+    override val teamId: GenericId
+): StatelessForumChannel
 
 internal class BlankStatelessTeam(
     override val client: DeckClient,

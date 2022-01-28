@@ -42,7 +42,8 @@ public class DeckEntityDelegator(
 
     override suspend fun getTeamChannel(id: UUID, teamId: GenericId): TeamChannel? {
         val channels = rest.teamRoute.nullableRequest { getTeamChannels(teamId) }?.channels ?: return null
-        return decoder.decodeChannel(channels.first { it.id == id.mapToModel() }) as? TeamChannel
+        val channel = channels.firstOrNull { it.id == id.mapToModel() } ?: return null
+        return decoder.decodeChannel(channel) as? TeamChannel
     }
 
     override suspend fun getPrivateChannel(id: UUID): Channel? {

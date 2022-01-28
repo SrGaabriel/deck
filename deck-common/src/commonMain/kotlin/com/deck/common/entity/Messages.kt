@@ -1,6 +1,7 @@
 package com.deck.common.entity
 
 import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
 import com.deck.common.util.OptionalProperty
 import com.deck.common.util.UniqueId
 import kotlinx.datetime.Instant
@@ -107,6 +108,8 @@ public enum class RawMessageContentNodeType {
     NUMBERED_LIST,
     @SerialName("list-item")
     LIST_ITEM,
+    @SerialName("replying-to-user-header")
+    REPLYING_TO_USER_HEADER;
 }
 
 @Serializable
@@ -117,7 +120,10 @@ public data class RawMessageContentData(
     val href: OptionalProperty<String> = OptionalProperty.NotPresent,
     val language: OptionalProperty<String> = OptionalProperty.NotPresent,
     val isList: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
-    val reaction: OptionalProperty<RawReaction> = OptionalProperty.NotPresent
+    val reaction: OptionalProperty<RawReaction> = OptionalProperty.NotPresent,
+    val postId: OptionalProperty<IntGenericId> = OptionalProperty.NotPresent,
+    val type: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val createdBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent
 )
 
 @Serializable

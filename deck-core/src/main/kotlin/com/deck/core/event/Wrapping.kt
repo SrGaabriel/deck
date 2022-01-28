@@ -5,6 +5,8 @@ import com.deck.core.event.channel.DeckTeamChannelCreateEvent
 import com.deck.core.event.channel.DeckTeamChannelDeleteEvent
 import com.deck.core.event.channel.DeckTeamChannelUpdateEvent
 import com.deck.core.event.channel.DeckTeamChannelsDeleteEvent
+import com.deck.core.event.channel.content.DeckTeamChannelContentCreateEvent
+import com.deck.core.event.channel.content.DeckTeamChannelContentDeleteEvent
 import com.deck.core.event.message.DeckMessageCreateEvent
 import com.deck.core.util.WrappedEventSupplier
 import com.deck.core.util.WrappedEventSupplierData
@@ -41,6 +43,8 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
             is GatewayTeamChannelDeletedEvent -> DeckTeamChannelDeleteEvent.map(client, this)
             is GatewayTeamChannelUpdatedEvent -> DeckTeamChannelUpdateEvent.map(client, this)
             is GatewayTeamChannelsDeletedEvent -> DeckTeamChannelsDeleteEvent.map(client, this)
+            is GatewayTeamChannelContentCreatedEvent -> DeckTeamChannelContentCreateEvent.map(client, this)
+            is GatewayTeamChannelContentDeletedEvent -> DeckTeamChannelContentDeleteEvent.map(client, this)
             else -> return@on
         } ?: return@on
         eventWrappingFlow.emit(deckEvent)

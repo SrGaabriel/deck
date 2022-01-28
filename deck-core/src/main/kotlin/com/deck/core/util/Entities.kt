@@ -1,10 +1,18 @@
 package com.deck.core.util
 
+import com.deck.common.content.Content
 import com.deck.common.content.ContentBuilder
 import com.deck.common.content.EmbedBuilder
+import com.deck.common.content.node.Node
+import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
 import com.deck.core.builder.DeckMessageBuilder
 import com.deck.core.entity.Message
+import com.deck.core.entity.channel.ForumThread
+import com.deck.core.entity.channel.ForumThreadReply
 import com.deck.core.stateless.StatelessMessage
+import com.deck.core.stateless.channel.StatelessForumChannel
+import com.deck.core.stateless.channel.StatelessForumThread
 import com.deck.core.stateless.channel.StatelessMessageChannel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -43,3 +51,36 @@ public suspend fun StatelessMessage.sendUnreifiedReply(builder: DeckMessageBuild
     }
     return BlankStatelessMessage(client, id, this.channel)
 }
+
+public suspend fun StatelessForumChannel.createThread(title: String, content: ContentBuilder.() -> Unit): ForumThread = createThread {
+    this.title = title
+    this.content(content)
+}
+
+public suspend fun StatelessForumThread.createReplyOfContent(builder: ContentBuilder.() -> Unit): ForumThreadReply = createReply {
+    content(builder)
+}
+
+internal suspend fun StatelessForumThread.createQuotingReply(
+    postId: IntGenericId,
+    postContent: Content,
+    postCreatedBy: GenericId,
+    builder: ContentBuilder.() -> Unit
+): ForumThreadReply = createReplyOfContent {
+    quote {
+        paragraph {
+            +Node.Quote.ReplyingToUserHeader(postId, postCreatedBy)
+        }
+        postContent.nodes.toList()
+            .filter { it !is Node.Quote }
+            .map { if (it is Node.Paragraph) Node.Paragraph(it.data.children, true) else it }
+            .forEach { it.unaryPlus() }
+    }
+    builder(this)
+}
+
+public suspend fun ForumThread.createQuotingReplyToMainPost(builder: ContentBuilder.() -> Unit): ForumThreadReply =
+    createQuotingReply(id, content, createdBy, builder)
+
+public suspend fun ForumThreadReply.createQuotingReply(builder: ContentBuilder.() -> Unit): ForumThreadReply =
+    thread.createQuotingReply(id, content, createdBy, builder)

@@ -9,7 +9,9 @@ import com.deck.core.entity.UserPermissionsOverride
 import kotlinx.datetime.Instant
 import java.util.*
 
-public interface TeamChannel : Channel
+public interface TeamChannel : Channel {
+    override val teamId: GenericId
+}
 
 public interface PartialTeamChannel : TeamChannel {
     public val parentChannelId: UUID?

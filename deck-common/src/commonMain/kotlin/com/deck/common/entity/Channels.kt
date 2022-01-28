@@ -140,3 +140,26 @@ public data class RawChannelContentReply @OptIn(ExperimentalSerializationApi::cl
     val contentId: IntGenericId,
     val createdBy: GenericId
 )
+
+/** @param groupId is missing for events */
+@Serializable
+public data class RawChannelForumThread(
+    val bumpedAt: Instant,
+    val categoryId: UniqueId?,
+    val channelId: UniqueId,
+    val createdAt: Instant,
+    val createdBy: GenericId,
+    val editedAt: Instant?,
+    val gameId: Int?,
+    val groupId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+    val id: IntGenericId,
+    val isDeleted: Boolean,
+    val isLocked: Boolean,
+    val isShare: Boolean,
+    val isSticky: Boolean,
+    val message: RawMessageContent,
+    val replyCount: Int,
+    val teamId: GenericId,
+    val title: String,
+    val visibility: String
+)

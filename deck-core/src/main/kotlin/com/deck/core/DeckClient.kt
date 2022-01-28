@@ -3,6 +3,7 @@ package com.deck.core
 import com.deck.common.util.Authentication
 import com.deck.common.util.AuthenticationResult
 import com.deck.common.util.DeckExperimental
+import com.deck.common.util.GenericId
 import com.deck.core.cache.CacheManager
 import com.deck.core.cache.DeckCacheManager
 import com.deck.core.cache.observer.CacheEntityObserver
@@ -41,12 +42,16 @@ public class DeckClient(
     public val entityCacheObserver : CacheEntityObserver = DefaultCacheEntityObserver(this, entityCacheManager, entityDecoder)
     public val entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityDecoder, entityCacheManager)
 
+    private lateinit var _selfId: GenericId
+    public val selfId: GenericId get() = _selfId
+
     public suspend fun login() {
         authenticationResults = authenticationService.login(auth).also { result ->
             gateway.auth = result
             rest.restClient.token = result.token
         }
         val self = entityDelegator.getSelfUser()
+        _selfId = self.id
         gateway.openTeamGateways(*self.teams.map { it.id }.toTypedArray())
         gateway.start()
         eventService.startListeningAndConveying()

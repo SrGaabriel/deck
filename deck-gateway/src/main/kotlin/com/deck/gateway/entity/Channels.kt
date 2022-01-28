@@ -136,27 +136,6 @@ public data class RawChannelListItem(
 )
 
 @Serializable
-public data class RawChannelForumThread(
-    val id: IntGenericId,
-    val title: String,
-    val message: RawMessageContent,
-    val visibility: String,
-    val createdAt: Instant,
-    val bumpedAt: Instant,
-    val editedAt: Instant?,
-    val createdBy: GenericId,
-    val teamId: GenericId,
-    val gameId: Int?,
-    val isSticky: Boolean,
-    val isShare: Boolean,
-    val isDeleted: Boolean,
-    val categoryId: IntGenericId?,
-    val isLocked: Boolean,
-    val channelId: UniqueId,
-    val replyCount: Int
-)
-
-@Serializable
 public data class RawPartialChannelForumThread(
     val id: IntGenericId,
     val title: String,

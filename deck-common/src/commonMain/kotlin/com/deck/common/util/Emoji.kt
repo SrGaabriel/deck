@@ -11,18 +11,11 @@ public data class Emoji(
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other == null || this::class != other::class) return false
+        if (other == null) return false
 
-        other as Emoji
-
-        if (id != other.id) return false
-        if (name != other.name) return false
-        if (category != other.category) return false
-        if (order != other.order) return false
-        if (!aliases.contentEquals(other.aliases)) return false
-        if (isAnimated != other.isAnimated) return false
-
-        return true
+        if (other is Emoji) return other.id == id
+        else if (other is Number) return other == id
+        else return false
     }
 
     override fun hashCode(): Int {

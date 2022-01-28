@@ -1,4 +1,4 @@
-package com.deck.databases
+package com.deck.extras
 
 public object Games {
     public const val OVERWATCH: Int = 10100

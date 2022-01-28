@@ -212,7 +212,7 @@ public data class GatewaySelfChannelSeenEvent(
 @Serializable
 @SerialName("TEAM_CHANNEL_CONTENT_CREATED")
 public data class GatewayTeamChannelContentCreatedEvent(
-    val guildedClientId: UniqueId,
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val channelId: UniqueId,
     val channelCategoryId: IntGenericId?,
     val channelType: RawChannelType,
@@ -310,7 +310,7 @@ public data class GatewayTeamChannelAvailabilitiesRemovedEvent(
 @Serializable
 @SerialName("TEAM_CHANNEL_CONTENT_REPLY_CREATED")
 public data class GatewayTeamChannelContentReplyCreatedEvent(
-    val guildedClientId: UniqueId,
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val channelId: UniqueId,
     val channelCategoryId: IntGenericId?,
     val channelType: RawChannelType,
@@ -320,7 +320,7 @@ public data class GatewayTeamChannelContentReplyCreatedEvent(
     val createdAt: Instant,
     val createdBy: GenericId,
     val reply: RawChannelContentReply,
-    val silenceNotification: Boolean
+    val silenceNotification: OptionalProperty<Boolean> = OptionalProperty.NotPresent
 ) : GatewayEvent()
 
 @Serializable

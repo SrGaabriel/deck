@@ -8,13 +8,12 @@ import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.*
 import com.deck.core.entity.channel.Channel
+import com.deck.core.entity.channel.ForumThread
 import com.deck.core.entity.channel.PartialTeamChannel
 import com.deck.core.entity.impl.*
+import com.deck.core.entity.impl.channel.*
 import com.deck.core.entity.misc.DeckUserAboutInfo
-import com.deck.core.util.BlankStatelessMember
-import com.deck.core.util.BlankStatelessMessageChannel
-import com.deck.core.util.BlankStatelessTeam
-import com.deck.core.util.BlankStatelessUser
+import com.deck.core.util.*
 import com.deck.gateway.entity.RawPartialTeamChannel
 import com.deck.rest.entity.RawFetchedTeam
 import com.deck.rest.request.SelfUserResponse
@@ -59,8 +58,8 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
     )
 
     override fun decodeChannel(raw: RawChannel): Channel = raw.run {
-        when (teamId) {
-            null -> DeckPrivateChannel(
+        if (raw.teamId == null)
+            return DeckPrivateChannel(
                 client = client,
                 id = id.mapToBuiltin(),
                 name = name,
@@ -73,6 +72,37 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
                 archivedBy = archivedBy,
                 updatedAt = updatedAt,
                 deletedAt = deletedAt
+            )
+        return when (raw.contentType) {
+            RawChannelContentType.Chat -> DeckTeamMessageChannel(
+                client = client,
+                id = id.mapToBuiltin(),
+                name = name,
+                description = description.orEmpty(),
+                type = type,
+                contentType = contentType,
+                createdAt = createdAt,
+                createdBy = createdBy,
+                archivedAt = archivedAt,
+                archivedBy = archivedBy,
+                updatedAt = updatedAt,
+                deletedAt = deletedAt,
+                teamId = teamId!!
+            )
+            RawChannelContentType.Forum -> DeckForumChannel(
+                client = client,
+                id = id.mapToBuiltin(),
+                name = name,
+                description = description.orEmpty(),
+                type = type,
+                contentType = contentType,
+                createdAt = createdAt,
+                createdBy = createdBy,
+                archivedAt = archivedAt,
+                archivedBy = archivedBy,
+                updatedAt = updatedAt,
+                deletedAt = deletedAt,
+                teamId = teamId!!
             )
             else -> DeckTeamChannel(
                 client = client,
@@ -194,5 +224,21 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
         userPermissionOverrides = raw.userPermissions.asNullable()?.map { decodeUserPermissionsOverride(teamId, it) },
         roles = raw.roles.asNullable()?.map { decodeRole(it) },
         rolePermissionsOverrideById = raw.rolesById.asNullable()?.mapValues { decodeRolePermissionsOverride(it.value) } ?: emptyMap()
+    )
+
+    override fun decodeForumThread(raw: RawChannelForumThread): ForumThread = DeckForumThread(
+        client = client,
+        id = raw.id,
+        title = raw.title,
+        content = raw.message.decode(),
+        channel = BlankStatelessForumChannel(client, raw.channelId.mapToBuiltin(), raw.teamId),
+        createdAt = raw.createdAt,
+        createdBy = raw.createdBy,
+        editedAt = raw.editedAt,
+        isSticky = raw.isSticky,
+        isShare = raw.isShare,
+        isLocked = raw.isLocked,
+        isDeleted = raw.isDeleted,
+        teamId = raw.teamId
     )
 }

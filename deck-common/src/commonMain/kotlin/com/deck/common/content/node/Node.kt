@@ -3,6 +3,7 @@ package com.deck.common.content.node
 import com.deck.common.entity.RawMessageContentNodeLeavesMarkType
 import com.deck.common.entity.RawMessageContentNodeType
 import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
 
 public sealed class Node(
     public val `object`: String,
@@ -55,7 +56,13 @@ public sealed class Node(
         `object` = "block",
         type = RawMessageContentNodeType.BLOCK_QUOTE_CONTAINER,
         data = NodeData(leaves = null, children = lines)
-    )
+    ) {
+        public class ReplyingToUserHeader(public val postId: IntGenericId, public val postAuthor: GenericId): Node(
+            `object` = "block",
+            type = RawMessageContentNodeType.REPLYING_TO_USER_HEADER,
+            data = NodeData(leaves = null, children = listOf(Paragraph.Text(emptyList())))
+        )
+    }
 
     public interface Lists {
         public class Bulleted(override val items: List<Item>): Node(

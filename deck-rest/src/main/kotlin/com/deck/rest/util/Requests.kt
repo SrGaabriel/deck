@@ -20,9 +20,9 @@ public class RequestService(public val client: HttpClient, public val rateLimite
         crossinline block: suspend () -> HttpResponse,
     ): G? = block().let { response ->
         when {
+            !response.status.isSuccess() -> failureHandler.onFailure(response)
             response is G -> response
             Unit is G -> Unit
-            !response.status.isSuccess() -> failureHandler.onFailure(response)
             else -> response.receive()
         }
     }

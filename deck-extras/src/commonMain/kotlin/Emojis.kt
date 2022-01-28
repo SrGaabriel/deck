@@ -1,4 +1,4 @@
-package com.deck.databases
+package com.deck.extras
 
 import com.deck.common.util.Emoji
 
