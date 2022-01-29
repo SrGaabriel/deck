@@ -1,8 +1,6 @@
 package com.deck.gateway
 
 import com.deck.common.util.Constants
-import com.deck.common.util.DeckUnknown
-import com.deck.common.util.GenericId
 import com.deck.gateway.event.*
 import com.deck.gateway.event.type.GatewayHelloEvent
 import com.deck.gateway.util.EventSupplier
@@ -26,7 +24,6 @@ public interface Gateway : EventSupplier {
     public val gatewayId: Int
     public val scope: CoroutineScope
     public val hello: GatewayHelloEvent
-    public val parameters: GatewayParameters
     public val eventSharedFlow: SharedFlow<GatewayEvent>
     public val webSocketSession: DefaultWebSocketSession
 
@@ -42,29 +39,6 @@ public interface Gateway : EventSupplier {
 }
 
 /**
- * All parameters required by guilded to connect
- * to the gateway.
- *
- * @param jwt unknown
- * @param eioVersion EngineIO version
- * @param transport transport method
- * @param guildedClientId client id
- * @param teamId **optional** id of the team you'll connect your gateway to
- */
-public data class GatewayParameters(
-    @DeckUnknown val jwt: String = "undefined",
-    val eioVersion: Int = 3,
-    val transport: String = "websocket",
-    val guildedClientId: String,
-    val teamId: GenericId? = null
-) {
-    public fun buildPath(): String =
-        "socket.io/?jwt=$jwt&EIO=$eioVersion&transport=$transport&guildedClientId=$guildedClientId".let {
-            if (teamId != null) "$it&teamId=$teamId" else it
-        }
-}
-
-/**
  * Default implementation of [Gateway]
  */
 public class DefaultGateway(
@@ -72,7 +46,6 @@ public class DefaultGateway(
     private val debugPayloads: Boolean,
     override val gatewayId: Int,
     override val scope: CoroutineScope,
-    override val parameters: GatewayParameters,
     override val eventSharedFlow: MutableSharedFlow<GatewayEvent>,
     private val client: HttpClient,
     private val eventDecoder: EventDecoder = DefaultEventDecoder(gatewayId),
@@ -94,15 +67,14 @@ public class DefaultGateway(
     }
 
     /**
-     * Simply creates the websocket session with the specified
-     * [parameters], nothing more nothing less.
+     * Simply creates the websocket session.
      *
      * @see [startHeartbeat]
      * @see [startListening]
      */
     override suspend fun connect() {
-        webSocketSession = client.webSocketSession(host = Constants.GuildedGateway, path = parameters.buildPath()) {
-            header(HttpHeaders.Cookie, "hmac_signed_session=$token")
+        webSocketSession = client.webSocketSession(host = Constants.GuildedGateway, path = Constants.GuildedGatewayPath) {
+            header(HttpHeaders.Authorization, "Bearer $token")
         }
     }
 
@@ -112,11 +84,11 @@ public class DefaultGateway(
      */
     override suspend fun startListening(): Job = scope.launch {
         webSocketSession.incoming.receiveAsFlow().filterIsInstance<Frame.Text>().collect { frame ->
-            if (frame.data.contentEquals(Constants.GatewayPongContent.toByteArray())) return@collect
-            val payload = eventDecoder.decodePayloadFromString(frame.readText()) ?: return@collect
-            val event = eventDecoder.decodeEventFromPayload(payload)
-                ?: return@collect logger.info { "[DECK Gateway #${gatewayId}] Failed to parse event with body ${payload.json}" }
-            logger.info { "[DECK Gateway #${gatewayId}] Received event ${payload.type}".let { log -> if (debugPayloads) "$log with JSON ${payload.json}" else log } }
+            if (frame.data.contentEquals(Constants.GatewayPongContent.toByteArray())) return@collect println("Pong")
+            val data = eventDecoder.decodeDataFromPayload(frame.readText())
+            val event = eventDecoder.decodeEventFromPayload(data)
+                ?: return@collect logger.info { "[DECK Gateway #${gatewayId}] Failed to parse event with body ${data.data}" }
+            logger.info { "[DECK Gateway #${gatewayId}] Received event ${data.type}".let { log -> if (debugPayloads) "$log with JSON ${data.data}" else log } }
             eventSharedFlow.emit(event)
         }
     }.also { listeningJob = it }
@@ -128,7 +100,7 @@ public class DefaultGateway(
     @OptIn(ObsoleteCoroutinesApi::class)
     override suspend fun startHeartbeat(): Job = scope.launch {
         hello = await(8000, gatewayId = gatewayId) ?: return@launch logger.error { "Gateway hello payload wasn't sent in time in gateway $gatewayId." }
-        val tickerChannel = ticker(hello.pingInterval, hello.pingTimeout)
+        val tickerChannel = ticker(hello.heartbeatIntervalMs, 5000)
         logger.info { "[DECK Gateway #${gatewayId}] Created ticker channel, now starting to send heartbeats to guilded." }
         tickerChannel.consumeAsFlow().collect {
             webSocketSession.send(Constants.GatewayPingContent)
@@ -159,5 +131,5 @@ public class DefaultGateway(
 public suspend fun Gateway.start() {
     connect()
     startListening()
-    startHeartbeat()
+    // startHeartbeat()
 }

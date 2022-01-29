@@ -1,17 +1,15 @@
 package com.deck.core.event
 
 import com.deck.core.DeckClient
-import com.deck.core.event.channel.DeckTeamChannelCreateEvent
-import com.deck.core.event.channel.DeckTeamChannelDeleteEvent
-import com.deck.core.event.channel.DeckTeamChannelUpdateEvent
-import com.deck.core.event.channel.DeckTeamChannelsDeleteEvent
-import com.deck.core.event.channel.content.DeckTeamChannelContentCreateEvent
-import com.deck.core.event.channel.content.DeckTeamChannelContentDeleteEvent
 import com.deck.core.event.message.DeckMessageCreateEvent
+import com.deck.core.event.server.DeckServerXpAddEvent
+import com.deck.core.event.user.DeckHelloEvent
 import com.deck.core.util.WrappedEventSupplier
 import com.deck.core.util.WrappedEventSupplierData
 import com.deck.gateway.event.GatewayEvent
-import com.deck.gateway.event.type.*
+import com.deck.gateway.event.type.GatewayChatMessageCreatedEvent
+import com.deck.gateway.event.type.GatewayHelloEvent
+import com.deck.gateway.event.type.GatewayServerXpAddeedEvent
 import com.deck.gateway.util.on
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -25,7 +23,7 @@ public interface DeckEvent {
 public interface EventService : WrappedEventSupplier {
     public val eventWrappingFlow: SharedFlow<DeckEvent>
 
-    public fun startListeningAndConveying(): Job
+    public fun startListening(): Job
 }
 
 public class DefaultEventService(private val client: DeckClient) : EventService {
@@ -36,15 +34,11 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         sharedFlow = eventWrappingFlow
     )
 
-    override fun startListeningAndConveying(): Job = client.gateway.orchestrator.on<GatewayEvent> {
+    override fun startListening(): Job = client.gateway.orchestrator.on<GatewayEvent> {
         val deckEvent: DeckEvent = when (this) {
+            is GatewayHelloEvent -> DeckHelloEvent.map(client, this)
+            is GatewayServerXpAddeedEvent -> DeckServerXpAddEvent.map(client, this)
             is GatewayChatMessageCreatedEvent -> DeckMessageCreateEvent.map(client, this)
-            is GatewayTeamChannelCreatedEvent -> DeckTeamChannelCreateEvent.map(client, this)
-            is GatewayTeamChannelDeletedEvent -> DeckTeamChannelDeleteEvent.map(client, this)
-            is GatewayTeamChannelUpdatedEvent -> DeckTeamChannelUpdateEvent.map(client, this)
-            is GatewayTeamChannelsDeletedEvent -> DeckTeamChannelsDeleteEvent.map(client, this)
-            is GatewayTeamChannelContentCreatedEvent -> DeckTeamChannelContentCreateEvent.map(client, this)
-            is GatewayTeamChannelContentDeletedEvent -> DeckTeamChannelContentDeleteEvent.map(client, this)
             else -> return@on
         } ?: return@on
         eventWrappingFlow.emit(deckEvent)

@@ -12,20 +12,18 @@ public typealias GenericId = String
 public typealias IntGenericId = Int
 public typealias LongGenericId = Long
 
-public typealias Dictionary<K, V> = Map<K, V>
-
-@Serializable(UniqueIdSerializer::class)
+@Serializable(UniqueId.Serializer::class)
 public data class UniqueId(val raw: String) {
     override fun toString(): String = raw
-}
 
-public object UniqueIdSerializer : KSerializer<UniqueId> {
-    override fun deserialize(decoder: Decoder): UniqueId =
-        UniqueId(decoder.decodeString())
+    public companion object Serializer: KSerializer<UniqueId> {
+        override fun deserialize(decoder: Decoder): UniqueId =
+            UniqueId(decoder.decodeString())
 
-    override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor("UniqueIdSerializer", PrimitiveKind.STRING)
+        override val descriptor: SerialDescriptor =
+            PrimitiveSerialDescriptor("UniqueIdSerializer", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: UniqueId): Unit =
-        encoder.encodeString(value.raw)
+        override fun serialize(encoder: Encoder, value: UniqueId): Unit =
+            encoder.encodeString(value.raw)
+    }
 }

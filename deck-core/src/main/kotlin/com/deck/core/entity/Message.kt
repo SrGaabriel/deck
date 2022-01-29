@@ -1,27 +1,20 @@
 package com.deck.core.entity
 
-import com.deck.common.content.Content
-import com.deck.common.util.GenericId
-import com.deck.core.entity.channel.Channel
 import com.deck.core.stateless.StatelessMessage
+import com.deck.core.stateless.StatelessServer
+import com.deck.core.stateless.StatelessUser
 import kotlinx.datetime.Instant
 import java.util.*
 
 public interface Message : Entity, StatelessMessage {
-    public val content: Content
+    public val content: String
 
-    public val teamId: GenericId?
-
-    public val repliesToId: UUID?
+    public val author: StatelessUser
+    public val server: StatelessServer?
 
     public val createdAt: Instant
     public val updatedAt: Instant?
 
-    public val createdBy: GenericId
-    public val updatedBy: GenericId?
-
-    public val isSilent: Boolean
+    public val repliesTo: List<UUID>
     public val isPrivate: Boolean
-
-    public suspend fun getChannel(): Channel = channel.getState()
 }

@@ -2,6 +2,6 @@ package com.deck.core.stateless
 
 import com.deck.common.util.GenericId
 
-public interface StatelessUser: StatelessEntity {
+public interface StatelessServer: StatelessEntity {
     public val id: GenericId
 }

@@ -1,24 +1,22 @@
 package com.deck.core.entity.impl
 
-import com.deck.common.content.Content
-import com.deck.common.util.GenericId
 import com.deck.core.DeckClient
 import com.deck.core.entity.Message
+import com.deck.core.stateless.StatelessServer
+import com.deck.core.stateless.StatelessUser
 import com.deck.core.stateless.channel.StatelessMessageChannel
 import kotlinx.datetime.Instant
 import java.util.*
 
-public data class DeckMessage(
+public class DeckMessage(
     override val client: DeckClient,
     override val id: UUID,
-    override val content: Content,
-    override val teamId: GenericId?,
+    override val content: String,
     override val channel: StatelessMessageChannel,
-    override val repliesToId: UUID?,
+    override val author: StatelessUser,
+    override val server: StatelessServer?,
     override val createdAt: Instant,
     override val updatedAt: Instant?,
-    override val createdBy: GenericId,
-    override val updatedBy: GenericId?,
-    override val isSilent: Boolean,
+    override val repliesTo: List<UUID>,
     override val isPrivate: Boolean
-) : Message
+): Message
