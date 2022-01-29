@@ -3,9 +3,7 @@
 package com.deck.gateway.event
 
 import com.deck.common.util.DeckExperimental
-import com.deck.gateway.event.type.GatewayChatMessageCreatedEvent
-import com.deck.gateway.event.type.GatewayHelloEvent
-import com.deck.gateway.event.type.GatewayServerXpAddeedEvent
+import com.deck.gateway.event.type.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 import kotlinx.serialization.modules.SerializersModule
@@ -23,8 +21,11 @@ private val polymorphicJson by lazy {
         serializersModule = SerializersModule {
             polymorphic(GatewayEvent::class) {
                 subclass(GatewayHelloEvent::class)
-                subclass(GatewayServerXpAddeedEvent::class)
+                subclass(GatewayServerXpAddedEvent::class)
+                subclass(GatewayTeamMemberUpdatedEvent::class)
                 subclass(GatewayChatMessageCreatedEvent::class)
+                subclass(GatewayChatMessageUpdatedEvent::class)
+                subclass(GatewayChatMessageDeletedEvent::class)
             }
         }
     }

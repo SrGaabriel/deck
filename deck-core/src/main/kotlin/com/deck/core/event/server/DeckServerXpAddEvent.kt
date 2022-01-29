@@ -7,7 +7,7 @@ import com.deck.core.stateless.StatelessServer
 import com.deck.core.stateless.StatelessUser
 import com.deck.core.util.BlankStatelessServer
 import com.deck.core.util.BlankStatelessUser
-import com.deck.gateway.event.type.GatewayServerXpAddeedEvent
+import com.deck.gateway.event.type.GatewayServerXpAddedEvent
 
 public data class DeckServerXpAddEvent(
     override val client: DeckClient,
@@ -16,8 +16,8 @@ public data class DeckServerXpAddEvent(
     public val server: StatelessServer,
     public val amount: Int
 ) : DeckEvent {
-    public companion object: EventMapper<GatewayServerXpAddeedEvent, DeckServerXpAddEvent> {
-        override suspend fun map(client: DeckClient, event: GatewayServerXpAddeedEvent): DeckServerXpAddEvent = DeckServerXpAddEvent(
+    public companion object: EventMapper<GatewayServerXpAddedEvent, DeckServerXpAddEvent> {
+        override suspend fun map(client: DeckClient, event: GatewayServerXpAddedEvent): DeckServerXpAddEvent = DeckServerXpAddEvent(
             client = client,
             gatewayId = event.gatewayId,
             users = event.userIds.map { BlankStatelessUser(client, it) },
