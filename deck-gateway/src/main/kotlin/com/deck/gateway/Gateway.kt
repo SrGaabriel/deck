@@ -84,7 +84,7 @@ public class DefaultGateway(
      */
     override suspend fun startListening(): Job = scope.launch {
         webSocketSession.incoming.receiveAsFlow().filterIsInstance<Frame.Text>().collect { frame ->
-            if (frame.data.contentEquals(Constants.GatewayPongContent.toByteArray())) return@collect println("Pong")
+            if (frame.data.contentEquals(Constants.GatewayPongContent.toByteArray())) return@collect
             val data = eventDecoder.decodeDataFromPayload(frame.readText())
             val event = eventDecoder.decodeEventFromPayload(data)
                 ?: return@collect logger.info { "[DECK Gateway #${gatewayId}] Failed to parse event with body ${data.data}" }
@@ -131,5 +131,5 @@ public class DefaultGateway(
 public suspend fun Gateway.start() {
     connect()
     startListening()
-    // startHeartbeat()
+    startHeartbeat()
 }

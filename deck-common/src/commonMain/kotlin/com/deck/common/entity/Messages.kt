@@ -15,7 +15,7 @@ public data class RawMessage(
     public val channelId: UniqueId,
     public val content: String,
     public val replyMessageIds: OptionalProperty<List<UniqueId>> = OptionalProperty.NotPresent,
-    public val isPrivate: Boolean,
+    public val isPrivate: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     public val createdAt: Instant,
     public val createdBy: GenericId,
     public val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,

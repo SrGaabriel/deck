@@ -24,7 +24,7 @@ public class DeckEntityDecoder(private val client: DeckClient): EntityDecoder {
             createdAt = raw.createdAt,
             updatedAt = raw.updatedAt.asNullable(),
             repliesTo = raw.replyMessageIds.asNullable()?.map { it.mapToBuiltin() }.orEmpty(),
-            isPrivate = raw.isPrivate
+            isPrivate = raw.isPrivate.asNullable() == true
         )
     }
 }

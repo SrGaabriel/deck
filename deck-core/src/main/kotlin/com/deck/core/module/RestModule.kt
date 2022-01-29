@@ -1,5 +1,16 @@
 package com.deck.core.module
 
-public interface RestModule
+import com.deck.rest.RestClient
+import com.deck.rest.route.ChannelRoute
 
-public class DefaultRestModule(private val token: String): RestModule
+public interface RestModule {
+    public val restClient: RestClient
+
+    public val channelRoute: ChannelRoute
+}
+
+public class DefaultRestModule(token: String): RestModule {
+    override val restClient: RestClient = RestClient(token)
+
+    override val channelRoute: ChannelRoute = ChannelRoute(restClient)
+}
