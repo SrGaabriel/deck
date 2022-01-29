@@ -1,6 +1,8 @@
 package com.deck.rest.route
 
 import com.deck.common.entity.RawMessage
+import com.deck.common.util.DeckObsoleteApi
+import com.deck.common.util.IntGenericId
 import com.deck.rest.RestClient
 import com.deck.rest.builder.SendMessageRequestBuilder
 import com.deck.rest.request.GetChannelMessagesResponse
@@ -54,4 +56,24 @@ public class ChannelRoute(client: RestClient): Route(client) {
         endpoint = "/channels/$channelId/messages?includePrivate=$includePrivate",
         method = HttpMethod.Get,
     ).messages
+
+    public suspend fun addReactionToContent(
+        channelId: UUID,
+        messageId: UUID,
+        emoteId: IntGenericId
+    ): Unit = sendRequest<Unit, Unit>(
+        endpoint = "/channels/$channelId/content/$messageId/emotes/$emoteId",
+        method = HttpMethod.Put
+    )
+
+    @DeckObsoleteApi
+    // Not yet supported
+    public suspend fun removeReactionFromContent(
+        channelId: UUID,
+        messageId: UUID,
+        emoteId: IntGenericId
+    ): Unit = sendRequest<Unit, Unit>(
+        endpoint = "/channels/$channelId/content/$messageId/emotes/$emoteId",
+        method = HttpMethod.Delete
+    )
 }

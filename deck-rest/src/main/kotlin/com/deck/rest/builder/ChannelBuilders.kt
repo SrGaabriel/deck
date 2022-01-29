@@ -8,11 +8,14 @@ public class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
     public var content: String? = null
     public var isPrivate: Boolean = false
 
-    public var repliesTo: List<UUID> = emptyList()
+    public val repliesTo: MutableList<UUID> = mutableListOf()
+
+    public fun addReplyTarget(vararg messageIds: UUID): Unit =
+        repliesTo.addAll(messageIds).let {}
 
     override fun toRequest(): SendMessageRequest = SendMessageRequest(
         content = content ?: error("Can't send an empty message"),
         isPrivate = isPrivate,
-        replyMessageIds = repliesTo.map(UUID::mapToModel)
+        replyMessageIds = repliesTo.toList().map(UUID::mapToModel)
     )
 }
