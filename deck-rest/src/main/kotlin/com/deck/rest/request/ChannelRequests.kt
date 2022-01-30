@@ -1,7 +1,11 @@
 package com.deck.rest.request
 
+import com.deck.common.entity.RawDocumentation
+import com.deck.common.entity.RawListItem
 import com.deck.common.entity.RawMessage
+import com.deck.common.util.OptionalProperty
 import com.deck.common.util.UniqueId
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -24,4 +28,33 @@ public data class UpdateMessageRequest(
 @Serializable
 public data class GetChannelMessagesResponse(
     public val messages: List<RawMessage>
+)
+
+@Serializable
+public data class CreateDocumentationRequest(
+    public val title: String,
+    public val content: String
+)
+
+@Serializable
+public data class CreateDocumentationResponse(
+    @SerialName("doc")
+    public val documentation: RawDocumentation
+)
+
+@Serializable
+public data class GetDocumentationsResponse(
+    @SerialName("docs")
+    public val documentations: List<RawDocumentation>
+)
+
+@Serializable
+public data class CreateListItemRequest(
+    public val message: String,
+    public val note: OptionalProperty<String> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public data class CreateListItemResponse(
+    public val listItem: RawListItem
 )

@@ -15,14 +15,14 @@ public data class GatewayChatMessageCreatedEvent(
 ): GatewayEvent()
 
 @Serializable
-@SerialName("ChatMessageCreated")
+@SerialName("ChatMessageUpdated")
 public data class GatewayChatMessageUpdatedEvent(
     public val serverId: GenericId,
     public val message: RawMessage
 ): GatewayEvent()
 
 @Serializable
-@SerialName("ChatMessageCreated")
+@SerialName("ChatMessageDeleted")
 public data class GatewayChatMessageDeletedEvent(
     public val serverId: GenericId,
     public val message: RawPartialDeletedMessage

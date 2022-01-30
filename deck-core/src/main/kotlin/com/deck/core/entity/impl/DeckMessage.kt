@@ -8,7 +8,7 @@ import com.deck.core.stateless.channel.StatelessMessageChannel
 import kotlinx.datetime.Instant
 import java.util.*
 
-public class DeckMessage(
+public data class DeckMessage(
     override val client: DeckClient,
     override val id: UUID,
     override val content: String,
