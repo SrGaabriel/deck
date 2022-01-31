@@ -40,22 +40,6 @@ public class TeamUpdateBuilder : RequestBuilder<TeamUpdateRequest> {
     )
 }
 
-public class SetNicknameBuilder : RequestBuilder<SetNicknameRequest> {
-    public var nickname: String? = null
-
-    override fun toRequest(): SetNicknameRequest = SetNicknameRequest(
-        nickname!!
-    )
-}
-
-public class SetMemberXPBuilder : RequestBuilder<SetMemberXPRequest> {
-    public var amount: Long? = null
-
-    override fun toRequest(): SetMemberXPRequest = SetMemberXPRequest(
-        amount!!
-    )
-}
-
 public class BanMemberBuilder : RequestBuilder<BanMemberRequest> {
     public var deleteMessagesDays: Int? = null
     public var reason: String? = null
@@ -97,14 +81,6 @@ public class CreateEmojiBuilder : RequestBuilder<CreateEmojiRequest> {
         imageUrl!!,
         imageUrl!!,
         imageUrl!!
-    )
-}
-
-public class UpdateEmojiBuilder : RequestBuilder<UpdateEmojiRequest> {
-    public var name: String? = null
-
-    override fun toRequest(): UpdateEmojiRequest = UpdateEmojiRequest(
-        name!!
     )
 }
 

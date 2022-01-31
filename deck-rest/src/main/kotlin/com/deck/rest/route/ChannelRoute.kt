@@ -2,6 +2,7 @@ package com.deck.rest.route
 
 import com.deck.common.entity.RawChannel
 import com.deck.common.entity.RawChannelForumThread
+import com.deck.common.entity.RawMessage
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.common.util.UniqueId
@@ -91,11 +92,11 @@ public class ChannelRoute(client: RestClient) : Route(client) {
         body = AddForumThreadReplyReactionRequest(reactionId, teamId)
     )
 
-    public suspend fun getMessage(channelId: UniqueId, messageId: UniqueId): GetMessageResponse =
+    public suspend fun getMessage(channelId: UniqueId, messageId: UniqueId): GetMessageMetadata =
         sendRequest<GetMessageResponse, Unit>(
             endpoint = "/content/route/metadata?route=//channels/$channelId/chat?messageId=$messageId",
             method = HttpMethod.Get
-        )
+        ).metadata
 
     public suspend fun deleteChannel(teamId: GenericId, channelId: UniqueId, groupId: GenericId? = null): Unit =
         sendRequest<Unit, Unit>(
@@ -103,11 +104,11 @@ public class ChannelRoute(client: RestClient) : Route(client) {
             method = HttpMethod.Delete
         )
 
-    public suspend fun getChannelMessages(channelId: UniqueId): GetChannelMessagesResponse =
+    public suspend fun getChannelMessages(channelId: UniqueId): List<RawMessage> =
         sendRequest<GetChannelMessagesResponse, Unit>(
             endpoint = "/channels/$channelId/messages",
             method = HttpMethod.Get
-        )
+        ).messages
 
     public suspend fun deleteMessage(channelId: UniqueId, messageId: UniqueId): Unit = sendRequest<Unit, Unit>(
         endpoint = "/channels/$channelId/messages/$messageId",

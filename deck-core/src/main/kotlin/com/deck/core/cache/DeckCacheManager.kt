@@ -44,7 +44,7 @@ public class DeckCacheManager() : CacheManager {
         return messages.getIfPresent(id)
     }
 
-    override fun updateMessage(id: UniqueId, message: Message) {
+    override fun updateMessage(id: UniqueId, message: Message?) {
         messages.put(id, message)
     }
 }

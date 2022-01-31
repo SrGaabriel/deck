@@ -49,11 +49,11 @@ public class TeamRoute(client: RestClient) : Route(client) {
     public suspend fun setNickname(
         teamId: GenericId,
         memberId: GenericId,
-        builder: SetNicknameBuilder.() -> Unit
+        nickname: String
     ): Unit = sendRequest<Unit, SetNicknameRequest>(
         endpoint = "/teams/$teamId/members/$memberId/nickname",
         method = HttpMethod.Put,
-        body = SetNicknameBuilder().apply(builder).toRequest()
+        body = SetNicknameRequest(nickname)
     )
 
     public suspend fun resetNickname(teamId: GenericId, memberId: GenericId): Unit = sendRequest<Unit, Unit>(
@@ -64,11 +64,11 @@ public class TeamRoute(client: RestClient) : Route(client) {
     public suspend fun setMemberXp(
         teamId: GenericId,
         memberId: GenericId,
-        builder: SetMemberXPBuilder.() -> Unit
+        amount: Long
     ): Unit = sendRequest<Unit, SetMemberXPRequest>(
         endpoint = "/teams/$teamId/members/$memberId/xp",
         method = HttpMethod.Put,
-        body = SetMemberXPBuilder().apply(builder).toRequest()
+        body = SetMemberXPRequest(amount)
     )
 
     public suspend fun kickMember(teamId: GenericId, memberId: GenericId): Unit = sendRequest<Unit, Unit>(
@@ -161,11 +161,11 @@ public class TeamRoute(client: RestClient) : Route(client) {
     public suspend fun updateEmoji(
         teamId: GenericId,
         emojiId: IntGenericId,
-        builder: UpdateEmojiBuilder.() -> Unit
+        newName: String
     ): Unit = sendRequest<Unit, UpdateEmojiRequest>(
         endpoint = "/teams/$teamId/customReactions/$emojiId",
         method = HttpMethod.Put,
-        body = UpdateEmojiBuilder().apply(builder).toRequest()
+        body = UpdateEmojiRequest(newName)
     )
 
     public suspend fun createWebhook(builder: CreateWebhookBuilder.() -> Unit): RawWebhook =

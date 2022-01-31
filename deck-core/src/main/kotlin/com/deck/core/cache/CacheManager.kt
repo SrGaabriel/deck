@@ -29,5 +29,5 @@ public interface CacheManager {
 
     public fun retrieveMessage(id: UniqueId): Message?
 
-    public fun updateMessage(id: UniqueId, message: Message)
+    public fun updateMessage(id: UniqueId, message: Message?)
 }
