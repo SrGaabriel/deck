@@ -7,6 +7,7 @@ import com.deck.core.entity.channel.ForumThread
 import com.deck.core.event.EventMapper
 import com.deck.core.stateless.channel.StatelessForumChannel
 import com.deck.core.util.BlankStatelessForumChannel
+import com.deck.core.util.BlankStatelessTeam
 import com.deck.gateway.event.type.GatewayTeamChannelContentCreatedEvent
 
 public class DeckForumThreadCreateEvent(
@@ -21,7 +22,7 @@ public class DeckForumThreadCreateEvent(
             event: GatewayTeamChannelContentCreatedEvent
         ): DeckForumThreadCreateEvent {
             val thread = event.thread.asNullable()!!
-            val channel = BlankStatelessForumChannel(client, thread.channelId.mapToBuiltin(), thread.teamId)
+            val channel = BlankStatelessForumChannel(client, thread.channelId.mapToBuiltin(), BlankStatelessTeam(client, thread.teamId))
             return DeckForumThreadCreateEvent(
                 client = client,
                 gatewayId = event.gatewayId,

@@ -1,5 +1,6 @@
 package com.deck.common.content.node
 
+import com.deck.common.entity.RawMentionData
 import com.deck.common.entity.RawMessageContentNodeLeavesMarkType
 import com.deck.common.entity.RawMessageContentNodeType
 import com.deck.common.util.GenericId
@@ -94,6 +95,12 @@ public sealed class Node(
             data = NodeData(children = listOf(Paragraph.Text(leaves = listOf(Paragraph.Text.Leaf(text)))))
         )
     }
+
+    public class Mention(public val mentionData: RawMentionData) : Node(
+        `object` = "block",
+        type = RawMessageContentNodeType.MENTION,
+        data = NodeData()
+    )
 }
 
 public data class NodeData(

@@ -56,3 +56,13 @@ public data class AddForumThreadReplyReactionRequest(
     val customReactionId: IntGenericId,
     val teamId: GenericId
 )
+
+@Serializable
+public data class GetChannelMessagesResponse(
+    val messages: List<RawMessage>
+)
+
+@Serializable
+public data class PinMessageRequest(
+    val messageId: UniqueId
+)

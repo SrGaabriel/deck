@@ -34,6 +34,7 @@ public fun Node.encode(): RawMessageContentNode {
         is Node.Lists.Bulleted -> RawMessageContentData(isList = true.optional())
         is Node.Lists.Numbered -> RawMessageContentData(isList = true.optional())
         is Node.Quote.ReplyingToUserHeader -> RawMessageContentData(postId = postId.optional(), type = "block-quote".optional(), createdBy = postAuthor.optional())
+        is Node.Mention -> RawMessageContentData(mention = mentionData.optional())
     }
     val leaves = this.data.leaves?.map {
         RawMessageContentNodeLeaves(
@@ -105,5 +106,6 @@ public fun RawMessageContentNode.decode(): Node? {
             Node.Lists.Item(nodes.mapNotNull(RawMessageContentNode::decode))
         RawMessageContentNodeType.REPLYING_TO_USER_HEADER ->
             null
+        RawMessageContentNodeType.MENTION -> Node.Mention(data.mention.asNullable()!!)
     }
 }

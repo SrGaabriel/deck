@@ -27,9 +27,10 @@ public class Content(public val nodes: List<Node> = emptyList()) {
         get() = nodes.filterIsInstance<Node.CodeBlock>()
     public val quoteBlocks: List<Node.Quote>
         get() = nodes.filterIsInstance<Node.Quote>()
-
     public val text: String
         get() = texts.joinToString("\n")
+    public val mentions: List<Node.Mention>
+        get() = nodes.filterIsInstance<Node.Mention>()
 }
 
 public class ContentBuilder(private val quoteContainer: Boolean = false): Markable {

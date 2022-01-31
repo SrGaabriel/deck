@@ -29,11 +29,6 @@ public class UserRoute(client: RestClient) : Route(client) {
         body = ModifySelfUserBuilder().apply(builder).toRequest()
     )
 
-    public suspend fun leaveTeam(teamId: GenericId, selfId: GenericId): Unit = sendRequest<Unit, Unit>(
-        endpoint = "/teams/$teamId/members/$selfId",
-        method = HttpMethod.Delete
-    )
-
     public suspend fun getUserDMs(selfId: GenericId): UserDMResponse = sendRequest<UserDMResponse, Unit>(
         endpoint = "/users/$selfId/channels",
         method = HttpMethod.Get

@@ -4,13 +4,14 @@ import com.deck.common.content.Content
 import com.deck.common.util.GenericId
 import com.deck.core.entity.channel.Channel
 import com.deck.core.stateless.StatelessMessage
+import com.deck.core.stateless.StatelessTeam
 import kotlinx.datetime.Instant
 import java.util.*
 
 public interface Message : Entity, StatelessMessage {
     public val content: Content
 
-    public val teamId: GenericId?
+    public val team: StatelessTeam?
 
     public val repliesToId: UUID?
 

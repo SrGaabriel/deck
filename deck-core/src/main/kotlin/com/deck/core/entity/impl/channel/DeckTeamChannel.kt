@@ -11,6 +11,8 @@ import com.deck.core.entity.channel.PartialTeamChannel
 import com.deck.core.entity.channel.TeamChannel
 import com.deck.core.entity.misc.ChannelContentType
 import com.deck.core.entity.misc.ChannelType
+import com.deck.core.stateless.StatelessTeam
+import com.deck.core.stateless.StatelessUser
 import kotlinx.datetime.Instant
 import java.util.*
 
@@ -22,12 +24,12 @@ public data class DeckTeamChannel(
     override val type: ChannelType,
     override val contentType: ChannelContentType,
     override val createdAt: Instant,
-    override val createdBy: GenericId,
+    override val createdBy: StatelessUser,
     override val archivedAt: Instant?,
-    override val archivedBy: GenericId?,
+    override val archivedBy: StatelessUser?,
     override val updatedAt: Instant?,
     override val deletedAt: Instant?,
-    override val teamId: GenericId
+    override val team: StatelessTeam
 ) : TeamChannel
 
 public data class DeckPartialTeamChannel(
@@ -38,12 +40,12 @@ public data class DeckPartialTeamChannel(
     override val type: ChannelType,
     override val contentType: ChannelContentType,
     override val createdAt: Instant,
-    override val createdBy: GenericId,
+    override val createdBy: StatelessUser,
     override val archivedAt: Instant?,
-    override val archivedBy: GenericId?,
+    override val archivedBy: StatelessUser?,
     override val updatedAt: Instant?,
     override val deletedAt: Instant?,
-    override val teamId: GenericId,
+    override val team: StatelessTeam,
     override val parentChannelId: UUID?,
     override val channelCategoryId: IntGenericId?,
     override val channelId: UUID?,

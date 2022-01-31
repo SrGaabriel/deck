@@ -21,13 +21,25 @@ public class DeckEntityDelegator(
     override val coroutineContext: CoroutineContext = Dispatchers.Default
 
     override suspend fun getTeam(id: GenericId): Team? {
+        val cachedTeam = cache.retrieveTeam(id)
+        if (cachedTeam != null) return cachedTeam
+
         val team = rest.teamRoute.nullableRequest { getTeam(id) }?.team ?: return null
-        return decoder.decodeTeam(team)
+        val decodedTeam = decoder.decodeTeam(team)
+        cache.updateTeam(id, decodedTeam)
+
+        return decodedTeam
     }
 
     override suspend fun getUser(id: GenericId): User? {
+        val cachedUser = cache.retrieveUser(id)
+        if (cachedUser != null) return cachedUser
+
         val response = rest.userRoute.nullableRequest { getUser(id) } ?: return null
-        return decoder.decodeUser(response.user)
+        val decodedUser = decoder.decodeUser(response.user)
+        cache.updateUser(id, decodedUser)
+
+        return decodedUser
     }
 
     override suspend fun getSelfUser(): SelfUser =
@@ -41,13 +53,26 @@ public class DeckEntityDelegator(
     }
 
     override suspend fun getTeamChannel(id: UUID, teamId: GenericId): TeamChannel? {
+        val cachedChannel = cache.retrieveChannel(id)
+        if (cachedChannel != null) return cachedChannel as? TeamChannel
+
         val channels = rest.teamRoute.nullableRequest { getTeamChannels(teamId) }?.channels ?: return null
         val channel = channels.firstOrNull { it.id == id.mapToModel() } ?: return null
-        return decoder.decodeChannel(channel) as? TeamChannel
+
+        val decodedChannel = decoder.decodeChannel(channel) as? TeamChannel
+        cache.updateChannel(id, decodedChannel)
+        
+        return decodedChannel
     }
 
     override suspend fun getPrivateChannel(id: UUID): Channel? {
+        val cachedChannel = cache.retrieveChannel(id)
+        if (cachedChannel != null) return cachedChannel
+
         val channel = rest.channelRoute.nullableRequest { getChannel(id.mapToModel()) } ?: return null
-        return decoder.decodeChannel(channel)
+        val decodedChannel = decoder.decodeChannel(channel)
+        cache.updateChannel(id, decodedChannel)
+
+        return decodedChannel
     }
 }

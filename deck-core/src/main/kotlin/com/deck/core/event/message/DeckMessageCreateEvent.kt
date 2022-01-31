@@ -45,7 +45,7 @@ public data class DeckMessageCreateEvent(
                 client = client,
                 id = event.message.id.mapToBuiltin(),
                 content = event.message.content.decode(),
-                teamId = event.teamId.asNullable(),
+                team = event.teamId.asNullable()?.let { BlankStatelessTeam(client, it) },
                 repliesToId = event.message.repliesTo?.mapToBuiltin(),
                 createdAt = event.createdAt,
                 createdBy = event.createdBy,

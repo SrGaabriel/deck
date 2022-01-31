@@ -8,6 +8,7 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.json.JsonPrimitive
 
 @Serializable
 public data class RawMessage(
@@ -109,7 +110,9 @@ public enum class RawMessageContentNodeType {
     @SerialName("list-item")
     LIST_ITEM,
     @SerialName("replying-to-user-header")
-    REPLYING_TO_USER_HEADER;
+    REPLYING_TO_USER_HEADER,
+    @SerialName("mention")
+    MENTION
 }
 
 @Serializable
@@ -123,7 +126,27 @@ public data class RawMessageContentData(
     val reaction: OptionalProperty<RawReaction> = OptionalProperty.NotPresent,
     val postId: OptionalProperty<IntGenericId> = OptionalProperty.NotPresent,
     val type: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val createdBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent
+    val createdBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+    val mention: OptionalProperty<RawMentionData> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public data class RawMentionData(
+    val type: String,
+    val matcher: String,
+    val name: String,
+    val id: JsonPrimitive,
+    val color: OptionalProperty<String> = OptionalProperty.NotPresent,
+    @SerialName("nickname")
+    val hasNickname: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
+    val mentionedUser: OptionalProperty<RawMentionedUser> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public data class RawMentionedUser(
+    val isGilBot: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
+    @SerialName("userinfo")
+    val user: OptionalProperty<RawUser> = OptionalProperty.NotPresent
 )
 
 @Serializable
