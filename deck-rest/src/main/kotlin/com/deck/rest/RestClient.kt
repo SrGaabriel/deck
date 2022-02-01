@@ -6,7 +6,7 @@ import com.deck.rest.util.RequestService
 import io.ktor.client.*
 
 public class RestClient {
-    internal lateinit var token: String
+    public lateinit var token: String
 
     internal lateinit var _selfId: GenericId
     public val selfId: GenericId get() = _selfId
