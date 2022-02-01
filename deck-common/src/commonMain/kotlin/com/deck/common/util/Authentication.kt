@@ -1,12 +1,14 @@
 package com.deck.common.util
 
+import com.deck.common.entity.RawSelfUser
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmStatic
 
 @Serializable
 public data class Authentication(
     val email: String,
-    val password: String
+    val password: String,
+    val getMe: Boolean
 ) {
     public companion object {
         @JvmStatic
@@ -17,12 +19,14 @@ public data class Authentication(
 
 @Serializable
 public data class AuthenticationResult(
+    val self: RawSelfUser,
     val token: String,
     val midSession: String
 ) {
     public companion object {
         @JvmStatic
-        public fun fromCookie(cookie: String): AuthenticationResult = AuthenticationResult(
+        public fun fromCookie(self: RawSelfUser, cookie: String): AuthenticationResult = AuthenticationResult(
+            self,
             Authentication.extractDataFromCookie(cookie, 0),
             Authentication.extractDataFromCookie(cookie, 1)
         )
@@ -33,5 +37,5 @@ public data class AuthenticationResult(
 public class AuthenticationBuilder {
     public lateinit var email: String
     public lateinit var password: String
-    public fun toSerializableAuthentication(): Authentication = Authentication(email, password)
+    public fun toSerializableAuthentication(): Authentication = Authentication(email, password, true)
 }

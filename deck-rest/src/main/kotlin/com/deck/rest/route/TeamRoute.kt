@@ -12,10 +12,10 @@ import io.ktor.http.*
 
 public class TeamRoute(client: RestClient) : Route(client) {
     public suspend fun createTeam(builder: CreateTeamBuilder.() -> Unit): Unit =
-        sendRequest<Unit, CreateTeamRequest>(
+        sendRequest(
             endpoint = "/teams",
             method = HttpMethod.Post,
-            body = CreateTeamBuilder().apply(builder).toRequest()
+            body = CreateTeamBuilder(client.selfId).apply(builder).toRequest()
         )
 
     public suspend fun getTeam(teamId: GenericId): GetTeamResponse = sendRequest<GetTeamResponse, Unit>(
@@ -30,7 +30,7 @@ public class TeamRoute(client: RestClient) : Route(client) {
         )
 
     public suspend fun updateTeam(teamId: GenericId, builder: TeamUpdateBuilder.() -> Unit): Unit =
-        sendRequest<Unit, TeamUpdateRequest>(
+        sendRequest(
             endpoint = "/teams/$teamId/games/null/settings",
             method = HttpMethod.Put,
             body = TeamUpdateBuilder().apply(builder).toRequest()

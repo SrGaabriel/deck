@@ -1,5 +1,6 @@
 package com.deck.rest.route
 
+import com.deck.common.entity.RawSelfUser
 import com.deck.common.entity.RawTransientStatus
 import com.deck.common.entity.RawUserPost
 import com.deck.common.entity.RawUserPresenceStatus
@@ -13,7 +14,7 @@ import com.deck.rest.util.Route
 import io.ktor.http.*
 
 public class UserRoute(client: RestClient) : Route(client) {
-    public suspend fun getSelf(): SelfUserResponse = sendRequest<SelfUserResponse, Unit>(
+    public suspend fun getSelf(): RawSelfUser = sendRequest<RawSelfUser, Unit>(
         endpoint = "/me",
         method = HttpMethod.Get
     )

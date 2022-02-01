@@ -16,7 +16,6 @@ import com.deck.core.entity.misc.DeckUserAboutInfo
 import com.deck.core.util.*
 import com.deck.gateway.entity.RawPartialTeamChannel
 import com.deck.rest.entity.RawFetchedTeam
-import com.deck.rest.request.SelfUserResponse
 import java.util.*
 
 public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
@@ -44,7 +43,7 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
         lastLoginTime = raw.lastOnline.asNullable()!!,
     )
 
-    override fun decodeSelf(raw: SelfUserResponse): SelfUser = DeckSelfUser(
+    override fun decodeSelf(raw: RawSelfUser): SelfUser = DeckSelfUser(
         client = client,
         id = raw.user.id,
         name = raw.user.name,

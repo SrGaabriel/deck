@@ -18,7 +18,7 @@ public class ClientBuilder {
         require(email != null && password != null) {
             "Tried to build a client without providing neither an email nor a password."
         }
-        return DeckClient(Authentication(email!!, password!!), restModule, gatewayModule)
+        return DeckClient(Authentication(email!!, password!!, true), restModule, gatewayModule)
     }
 }
 

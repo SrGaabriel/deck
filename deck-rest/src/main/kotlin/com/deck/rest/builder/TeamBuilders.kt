@@ -5,15 +5,14 @@ import com.deck.common.entity.RawTeamType
 import com.deck.common.util.GenericId
 import com.deck.rest.request.*
 
-public class CreateTeamBuilder : RequestBuilder<CreateTeamRequest> {
+public class CreateTeamBuilder(private val userId: GenericId): RequestBuilder<CreateTeamRequest> {
     public var name: String? = null
-    public var userId: GenericId? = null
     public var avatar: String? = null
 
     override fun toRequest(): CreateTeamRequest = CreateTeamRequest(
         CreateTeamExtraInfoRequest("desktop"),
         name!!,
-        userId!!,
+        userId,
         avatar
     )
 }

@@ -8,7 +8,6 @@ import com.deck.core.entity.channel.ForumThread
 import com.deck.core.entity.channel.PartialTeamChannel
 import com.deck.gateway.entity.RawPartialTeamChannel
 import com.deck.rest.entity.RawFetchedTeam
-import com.deck.rest.request.SelfUserResponse
 import java.util.*
 
 public interface EntityDecoder {
@@ -16,7 +15,7 @@ public interface EntityDecoder {
 
     public fun decodeUser(raw: RawUser): User
 
-    public fun decodeSelf(raw: SelfUserResponse): SelfUser
+    public fun decodeSelf(raw: RawSelfUser): SelfUser
 
     public fun decodeChannel(raw: RawChannel): Channel
 
