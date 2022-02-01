@@ -42,8 +42,15 @@ public class DeckEntityDelegator(
         return decodedUser
     }
 
-    override suspend fun getSelfUser(): SelfUser =
-        decoder.decodeSelf(rest.userRoute.getSelf())
+    override suspend fun getSelfUser(): SelfUser {
+        val cachedSelf = cache.retrieveUser(rest.restClient.selfId)
+        if (cachedSelf != null) return cachedSelf as SelfUser
+
+        val self = decoder.decodeSelf(rest.userRoute.getSelf())
+        cache.updateUser(self.id, self)
+
+        return self
+    }
 
     override suspend fun getChannel(id: UUID, teamId: GenericId?): Channel? {
         return when (teamId) {
@@ -61,7 +68,7 @@ public class DeckEntityDelegator(
 
         val decodedChannel = decoder.decodeChannel(channel) as? TeamChannel
         cache.updateChannel(id, decodedChannel)
-        
+
         return decodedChannel
     }
 
