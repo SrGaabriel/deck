@@ -30,7 +30,7 @@ public suspend fun authentication(
 public suspend fun RestClient.authenticate(authentication: Authentication, authRoute: AuthRoute = AuthRoute(this)): RestClient = apply {
     val results = authentication(authentication, authRoute)
     this.token = results.token
-    this._selfId = results.self.user.id
+    this.selfId = results.self.user.id
 }
 
 /**

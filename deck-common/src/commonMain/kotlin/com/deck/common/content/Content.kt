@@ -2,10 +2,8 @@ package com.deck.common.content
 
 import com.deck.common.content.node.Node
 import com.deck.common.entity.RawMessageContentNodeLeavesMarkType
-import com.deck.common.util.DeckDelicateApi
-import com.deck.common.util.Emoji
-import com.deck.common.util.GuildedMedia
-import com.deck.common.util.IntGenericId
+import com.deck.common.util.*
+import kotlinx.serialization.json.JsonPrimitive
 
 // TODO: refactor this shit
 public class Content(public val nodes: List<Node> = emptyList()) {
@@ -131,6 +129,15 @@ public class ContentBuilder(private val quoteContainer: Boolean = false): Markab
      */
     public fun image(url: String): Node.Image = Node.Image(image = url)
 
+    public fun user(before: String = "", id: GenericId, after: String = ""): Node.Paragraph =
+        Node.Paragraph(content = listOf(text(before), Node.Mention(id = JsonPrimitive(id), mentionType = "person"), text(after)), insideQuoteBlock = quoteContainer)
+
+    public fun role(before: String = "", id: IntGenericId, after: String = ""): Node.Paragraph =
+        Node.Paragraph(content = listOf(text(before), Node.Mention(id = JsonPrimitive(id), mentionType = "role"), text(after)), insideQuoteBlock = quoteContainer)
+
+    public fun channel(before: String = "", id: UniqueId, after: String = ""): Node.Paragraph =
+        Node.Paragraph(content = listOf(text(before), Node.Mention.Channel(id = id), text(after)), insideQuoteBlock = quoteContainer)
+
     public fun reaction(before: String = "", id: Int, after: String = ""): Node.Paragraph =
         Node.Paragraph(content = listOf(text(before), Node.Paragraph.Reaction(id = id), text(after)), insideQuoteBlock = quoteContainer)
 
@@ -180,6 +187,12 @@ public class ParagraphBuilder: Markable {
     public fun link(url: String): Node.Paragraph.Link = Node.Paragraph.Link(link = url)
 
     public fun reaction(id: Int): Node.Paragraph.Reaction = Node.Paragraph.Reaction(id = id)
+
+    public fun user(id: GenericId): Node.Mention = Node.Mention(id = JsonPrimitive(id), mentionType = "person")
+
+    public fun role(id: IntGenericId): Node.Mention = Node.Mention(id = JsonPrimitive(id), mentionType = "role")
+
+    public fun channel(id: UniqueId): Node.Mention.Channel = Node.Mention.Channel(id = id)
 
     @Deprecated("This method requires you to provide text before and after the reaction", replaceWith = ReplaceWith("reaction(id)"))
     public fun reaction(before: String = "", id: Int, after: String = ""): List<Node> =

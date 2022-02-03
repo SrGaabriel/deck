@@ -42,16 +42,15 @@ public class DeckClient(
     public val entityCacheObserver : CacheEntityObserver = DefaultCacheEntityObserver(this, entityCacheManager, entityDecoder)
     public val entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityDecoder, entityCacheManager)
 
-    private lateinit var _selfId: GenericId
-    public val selfId: GenericId get() = _selfId
+    public val selfId: GenericId by rest.restClient::selfId
 
     public suspend fun login() {
         authenticationResults = authenticationService.login(auth).also { result ->
             gateway.auth = result
             rest.restClient.token = result.token
+            rest.restClient.selfId = result.self.user.id
         }
-        val self = entityDelegator.getSelfUser()
-        _selfId = self.id
+        val self = authenticationResults!!.self
         gateway.openTeamGateways(*self.teams.map { it.id }.toTypedArray())
         gateway.start()
         eventService.startListeningAndConveying()

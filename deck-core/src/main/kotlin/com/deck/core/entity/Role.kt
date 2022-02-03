@@ -3,12 +3,12 @@ package com.deck.core.entity
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.common.util.LongGenericId
+import com.deck.core.stateless.StatelessRole
 import com.deck.core.stateless.StatelessTeam
 import com.deck.core.stateless.StatelessUser
 import kotlinx.datetime.Instant
 
-public interface Role : Entity {
-    public val id: IntGenericId
+public interface Role : Entity, StatelessRole {
     public val color: String
     public val isBase: Boolean
     public val isDisplayedSeparately: Boolean

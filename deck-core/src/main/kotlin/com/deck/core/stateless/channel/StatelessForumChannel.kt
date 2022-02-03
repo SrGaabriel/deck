@@ -5,10 +5,8 @@ import com.deck.core.entity.channel.ForumThread
 import com.deck.core.stateless.StatelessEntity
 import com.deck.core.stateless.StatelessTeam
 import com.deck.rest.builder.CreateForumThreadBuilder
-import java.util.*
 
-public interface StatelessForumChannel: StatelessEntity<ForumChannel> {
-    public val id: UUID
+public interface StatelessForumChannel: StatelessEntity<ForumChannel>, StatelessChannel {
     public val team: StatelessTeam
 
     public suspend fun createThread(builder: CreateForumThreadBuilder.() -> Unit): ForumThread =

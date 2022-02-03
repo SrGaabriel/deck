@@ -1,10 +1,11 @@
 package com.deck.common.content.node
 
-import com.deck.common.entity.RawMentionData
 import com.deck.common.entity.RawMessageContentNodeLeavesMarkType
 import com.deck.common.entity.RawMessageContentNodeType
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
+import com.deck.common.util.UniqueId
+import kotlinx.serialization.json.JsonPrimitive
 
 public sealed class Node(
     public val `object`: String,
@@ -96,11 +97,17 @@ public sealed class Node(
         )
     }
 
-    public class Mention(public val mentionData: RawMentionData) : Node(
-        `object` = "block",
+    public class Mention(public val id: JsonPrimitive, public val mentionType: String) : Node(
+        `object` = "inline",
         type = RawMessageContentNodeType.MENTION,
-        data = NodeData()
-    )
+        data = NodeData(children = listOf(Paragraph.Text(leaves = listOf(Paragraph.Text.Leaf("@MentionTest")))))
+    ) {
+        public class Channel(public val id: UniqueId): Node(
+            `object` = "inline",
+            type = RawMessageContentNodeType.MENTION_CHANNEL,
+            data = NodeData(children = listOf(Paragraph.Text(leaves = listOf(Paragraph.Text.Leaf("#MentionTest")))))
+        )
+    }
 }
 
 public data class NodeData(
