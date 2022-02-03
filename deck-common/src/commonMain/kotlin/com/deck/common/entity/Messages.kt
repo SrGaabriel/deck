@@ -112,7 +112,9 @@ public enum class RawMessageContentNodeType {
     @SerialName("replying-to-user-header")
     REPLYING_TO_USER_HEADER,
     @SerialName("mention")
-    MENTION
+    MENTION,
+    @SerialName("channel")
+    MENTION_CHANNEL
 }
 
 @Serializable
@@ -127,14 +129,15 @@ public data class RawMessageContentData(
     val postId: OptionalProperty<IntGenericId> = OptionalProperty.NotPresent,
     val type: OptionalProperty<String> = OptionalProperty.NotPresent,
     val createdBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
-    val mention: OptionalProperty<RawMentionData> = OptionalProperty.NotPresent
+    val mention: OptionalProperty<RawMentionData> = OptionalProperty.NotPresent,
+    val channel: OptionalProperty<RawMentionedChannel> = OptionalProperty.NotPresent
 )
 
 @Serializable
 public data class RawMentionData(
-    val type: String,
-    val matcher: String,
-    val name: String,
+    val type: RawMentionType,
+    val matcher: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val name: OptionalProperty<String> = OptionalProperty.NotPresent,
     val id: JsonPrimitive,
     val color: OptionalProperty<String> = OptionalProperty.NotPresent,
     @SerialName("nickname")
@@ -147,6 +150,11 @@ public data class RawMentionedUser(
     val isGilBot: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     @SerialName("userinfo")
     val user: OptionalProperty<RawUser> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public data class RawMentionedChannel(
+    public val id: UniqueId
 )
 
 @Serializable
@@ -197,3 +205,9 @@ public data class RawMessageMentionedUserInfo(
     val mentionedByEveryone: Boolean,
     val mentionedByHere: Boolean
 )
+
+@Serializable
+public enum class RawMentionType {
+    @SerialName("person") USER,
+    @SerialName("role") ROLE;
+}
