@@ -24,7 +24,7 @@ public class DeckEntityDelegator(
         val cachedTeam = cache.retrieveTeam(id)
         if (cachedTeam != null) return cachedTeam
 
-        val team = rest.teamRoute.nullableRequest { getTeam(id) }?.team ?: return null
+        val team = rest.teamRoute.nullableRequest { getTeam(id) } ?: return null
         val decodedTeam = decoder.decodeTeam(team)
         cache.updateTeam(id, decodedTeam)
 
@@ -35,8 +35,8 @@ public class DeckEntityDelegator(
         val cachedUser = cache.retrieveUser(id)
         if (cachedUser != null) return cachedUser
 
-        val response = rest.userRoute.nullableRequest { getUser(id) } ?: return null
-        val decodedUser = decoder.decodeUser(response.user)
+        val user = rest.userRoute.nullableRequest { getUser(id) } ?: return null
+        val decodedUser = decoder.decodeUser(user)
         cache.updateUser(id, decodedUser)
 
         return decodedUser
