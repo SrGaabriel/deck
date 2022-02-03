@@ -127,11 +127,11 @@ public class ChannelRoute(client: RestClient) : Route(client) {
             method = HttpMethod.Delete
         )
 
-    public suspend fun getPinnedMessages(channelId: UniqueId): GetChannelMessagesResponse =
+    public suspend fun getPinnedMessages(channelId: UniqueId): List<RawMessage> =
         sendRequest<GetChannelMessagesResponse, Unit>(
             endpoint = "/channels/$channelId/pins",
             method = HttpMethod.Get
-        )
+        ).messages
 
     public suspend fun pinMessage(channelId: UniqueId, messageId: UniqueId): Unit =
         sendRequest<Unit, PinMessageRequest>(
@@ -145,8 +145,8 @@ public class ChannelRoute(client: RestClient) : Route(client) {
         method = HttpMethod.Delete
     )
 
-    public suspend fun leaveThread(userId: GenericId, channelId: UniqueId): String = sendRequest<String, Unit>(
-        endpoint = "/users/$userId/channels/$channelId",
+    public suspend fun leaveThread(channelId: UniqueId): String = sendRequest<String, Unit>(
+        endpoint = "/users/${client.selfId}/channels/$channelId",
         method = HttpMethod.Delete
     )
 

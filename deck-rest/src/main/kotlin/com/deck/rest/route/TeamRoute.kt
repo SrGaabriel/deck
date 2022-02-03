@@ -1,11 +1,13 @@
 package com.deck.rest.route
 
 import com.deck.common.entity.RawEmoji
+import com.deck.common.entity.RawGroup
 import com.deck.common.entity.RawWebhook
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.rest.RestClient
 import com.deck.rest.builder.*
+import com.deck.rest.entity.RawFetchedTeam
 import com.deck.rest.request.*
 import com.deck.rest.util.Route
 import io.ktor.http.*
@@ -18,10 +20,10 @@ public class TeamRoute(client: RestClient) : Route(client) {
             body = CreateTeamBuilder(client.selfId).apply(builder).toRequest()
         )
 
-    public suspend fun getTeam(teamId: GenericId): GetTeamResponse = sendRequest<GetTeamResponse, Unit>(
+    public suspend fun getTeam(teamId: GenericId): RawFetchedTeam = sendRequest<GetTeamResponse, Unit>(
         endpoint = "/teams/$teamId",
         method = HttpMethod.Get
-    )
+    ).team
 
     public suspend fun getTeamChannels(teamId: GenericId): GetTeamChannelsResponse =
         sendRequest<GetTeamChannelsResponse, Unit>(
@@ -97,8 +99,8 @@ public class TeamRoute(client: RestClient) : Route(client) {
         method = HttpMethod.Put
     )
 
-    public suspend fun joinTeam(teamId: GenericId, userId: GenericId): String = sendRequest<String, Unit>(
-        endpoint = "/teams/$teamId/members/$userId/join",
+    public suspend fun joinTeam(teamId: GenericId): String = sendRequest<String, Unit>(
+        endpoint = "/teams/$teamId/members/${client.selfId}/join",
         method = HttpMethod.Put
     )
 
@@ -107,12 +109,12 @@ public class TeamRoute(client: RestClient) : Route(client) {
         method = HttpMethod.Get
     )
 
-    public suspend fun createInvite(teamId: GenericId): CreateInviteResponse =
+    public suspend fun createInvite(teamId: GenericId): PartialInviteResponse =
         sendRequest<CreateInviteResponse, CreateInviteRequest>(
             endpoint = "/teams/$teamId/invites",
             method = HttpMethod.Post,
             body = CreateInviteRequest(teamId)
-        )
+        ).invite
 
     public suspend fun useInvite(inviteId: GenericId): String = sendRequest<String, Unit>(
         endpoint = "/invites/$inviteId",
@@ -135,11 +137,11 @@ public class TeamRoute(client: RestClient) : Route(client) {
         teamId: GenericId,
         groupId: GenericId,
         builder: CreateGroupBuilder.() -> Unit
-    ): UpdateGroupResponse = sendRequest<UpdateGroupResponse, CreateGroupRequest>(
+    ): RawGroup = sendRequest<UpdateGroupResponse, CreateGroupRequest>(
         endpoint = "/teams/$teamId/groups/$groupId",
         method = HttpMethod.Put,
         body = CreateGroupBuilder().apply(builder).toRequest()
-    )
+    ).group
 
     public suspend fun deleteGroup(teamId: GenericId, groupId: GenericId): Unit = sendRequest<Unit, Unit>(
         endpoint = "/teams/$teamId/groups/$groupId",
