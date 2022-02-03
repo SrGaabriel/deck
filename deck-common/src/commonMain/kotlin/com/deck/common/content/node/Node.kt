@@ -1,5 +1,6 @@
 package com.deck.common.content.node
 
+import com.deck.common.entity.RawMentionType
 import com.deck.common.entity.RawMessageContentNodeLeavesMarkType
 import com.deck.common.entity.RawMessageContentNodeType
 import com.deck.common.util.GenericId
@@ -97,7 +98,7 @@ public sealed class Node(
         )
     }
 
-    public class Mention(public val id: JsonPrimitive, public val mentionType: String) : Node(
+    public class Mention(public val id: JsonPrimitive, public val mentionType: RawMentionType) : Node(
         `object` = "inline",
         type = RawMessageContentNodeType.MENTION,
         data = NodeData(children = listOf(Paragraph.Text(leaves = listOf(Paragraph.Text.Leaf("@MentionTest")))))

@@ -135,7 +135,7 @@ public data class RawMessageContentData(
 
 @Serializable
 public data class RawMentionData(
-    val type: String,
+    val type: RawMentionType,
     val matcher: OptionalProperty<String> = OptionalProperty.NotPresent,
     val name: OptionalProperty<String> = OptionalProperty.NotPresent,
     val id: JsonPrimitive,
@@ -205,3 +205,9 @@ public data class RawMessageMentionedUserInfo(
     val mentionedByEveryone: Boolean,
     val mentionedByHere: Boolean
 )
+
+@Serializable
+public enum class RawMentionType {
+    @SerialName("person") USER,
+    @SerialName("role") ROLE;
+}
