@@ -2,6 +2,7 @@ package com.deck.gateway.event.type
 
 import com.deck.common.entity.RawGroup
 import com.deck.common.util.GenericId
+import com.deck.common.util.OptionalProperty
 import com.deck.common.util.UniqueId
 import com.deck.gateway.entity.RawGroupIdObject
 import com.deck.gateway.event.GatewayEvent
@@ -13,7 +14,7 @@ import kotlinx.serialization.Serializable
 public data class GatewayTeamGroupCreatedEvent(
     val group: RawGroup,
     val teamId: GenericId,
-    val guildedClientId: UniqueId
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent
 ) : GatewayEvent()
 
 @Serializable

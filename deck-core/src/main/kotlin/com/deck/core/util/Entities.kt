@@ -80,7 +80,7 @@ internal suspend fun StatelessForumThread.createQuotingReply(
 }
 
 public suspend fun ForumThread.createQuotingReplyToMainPost(builder: ContentBuilder.() -> Unit): ForumThreadReply =
-    createQuotingReply(id, content, createdBy, builder)
+    createQuotingReply(id, content, createdBy.id, builder)
 
 public suspend fun ForumThreadReply.createQuotingReply(builder: ContentBuilder.() -> Unit): ForumThreadReply =
     thread.createQuotingReply(id, content, createdBy, builder)

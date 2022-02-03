@@ -3,10 +3,12 @@ package com.deck.core.entity
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.common.util.LongGenericId
+import com.deck.core.stateless.StatelessRole
+import com.deck.core.stateless.StatelessTeam
+import com.deck.core.stateless.StatelessUser
 import kotlinx.datetime.Instant
 
-public interface Role : Entity {
-    public val id: IntGenericId
+public interface Role : Entity, StatelessRole {
     public val color: String
     public val isBase: Boolean
     public val isDisplayedSeparately: Boolean
@@ -18,7 +20,7 @@ public interface Role : Entity {
     public val discordSyncedAt: Instant?
     public val priority: Int
     public val botId: GenericId?
-    public val teamId: GenericId
+    public val team: StatelessTeam
     public val updatedAt: Instant?
     public val permissions: RolePermissions
 }
@@ -45,7 +47,7 @@ public interface RolePermissions {
 }
 
 public interface RolePermissionsOverride {
-    public val teamId: GenericId
+    public val team: StatelessTeam
     public val createdAt: Instant
     public val updatedAt: Instant?
 
@@ -57,5 +59,5 @@ public interface RolePermissionsOverride {
 }
 
 public interface RoleBotScope {
-    public val userId: GenericId?
+    public val user: StatelessUser?
 }

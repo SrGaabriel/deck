@@ -5,12 +5,14 @@ import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.core.DeckClient
 import com.deck.core.entity.Entity
+import com.deck.core.stateless.StatelessTeam
+import com.deck.core.stateless.StatelessUser
 import com.deck.core.stateless.channel.StatelessForumChannel
 import com.deck.core.stateless.channel.StatelessForumThread
 import kotlinx.datetime.Instant
 
-public interface ForumChannel: TeamChannel, StatelessForumChannel {
-    override val teamId: GenericId
+public interface ForumChannel : TeamChannel, StatelessForumChannel {
+    override val team: StatelessTeam
 }
 
 public interface ForumThread: Entity, StatelessForumThread {
@@ -18,7 +20,7 @@ public interface ForumThread: Entity, StatelessForumThread {
     public val content: Content
 
     public val createdAt: Instant
-    public val createdBy: GenericId
+    public val createdBy: StatelessUser
 
     public val editedAt: Instant?
 
@@ -33,12 +35,12 @@ public class ForumThreadReply(
     public val id: IntGenericId,
     public val content: Content,
     public val thread: StatelessForumThread,
-    public val teamId: GenericId,
+    public val team: StatelessTeam,
     public val createdBy: GenericId
 ) {
     public suspend fun addReaction(reactionId: IntGenericId): Unit =
-        client.rest.channelRoute.addReactionToForumThreadReply(teamId, id, reactionId)
+        client.rest.channelRoute.addReactionToForumThreadReply(team.id, id, reactionId)
 
     public suspend fun removeReaction(reactionId: IntGenericId): Unit =
-        client.rest.channelRoute.removeReactionFromForumThreadReply(teamId, id, reactionId)
+        client.rest.channelRoute.removeReactionFromForumThreadReply(team.id, id, reactionId)
 }

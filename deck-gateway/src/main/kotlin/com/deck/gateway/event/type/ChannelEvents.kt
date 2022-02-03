@@ -14,7 +14,7 @@ import kotlinx.serialization.json.JsonElement
 public data class GatewayTeamChannelCreatedEvent(
     val channel: RawChannel,
     val name: String,
-    val guildedClientId: UniqueId,
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val teamId: GenericId
 ) : GatewayEvent()
 
@@ -206,7 +206,8 @@ public data class GatewaySelfChannelSeenEvent(
     val teamId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     val clearAllBadges: Boolean,
     val contentType: RawChannelContentType,
-    val guildedClientId: UniqueId
+    // Optional in create team
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent
 ) : GatewayEvent()
 
 @Serializable

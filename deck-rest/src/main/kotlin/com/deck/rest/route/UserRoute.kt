@@ -1,43 +1,35 @@
 package com.deck.rest.route
 
-import com.deck.common.entity.RawTransientStatus
-import com.deck.common.entity.RawUserPost
-import com.deck.common.entity.RawUserPresenceStatus
+import com.deck.common.entity.*
 import com.deck.common.util.GenericId
 import com.deck.common.util.RawUserPresenceType
 import com.deck.rest.RestClient
-import com.deck.rest.builder.CreateDMChannelBuilder
 import com.deck.rest.builder.ModifySelfUserBuilder
 import com.deck.rest.request.*
 import com.deck.rest.util.Route
 import io.ktor.http.*
 
 public class UserRoute(client: RestClient) : Route(client) {
-    public suspend fun getSelf(): SelfUserResponse = sendRequest<SelfUserResponse, Unit>(
+    public suspend fun getSelf(): RawSelfUser = sendRequest<RawSelfUser, Unit>(
         endpoint = "/me",
         method = HttpMethod.Get
     )
 
-    public suspend fun getUser(id: GenericId): UserResponse? = sendNullableRequest<UserResponse, Unit>(
+    public suspend fun getUser(id: GenericId): RawUser? = sendNullableRequest<UserResponse, Unit>(
         endpoint = "/users/$id",
         method = HttpMethod.Get
-    )
+    )?.user
 
-    public suspend fun editSelf(selfId: GenericId, builder: ModifySelfUserBuilder.() -> Unit): Unit = sendRequest(
-        endpoint = "/users/$selfId/profilev2",
+    public suspend fun editSelf(builder: ModifySelfUserBuilder.() -> Unit): Unit = sendRequest(
+        endpoint = "/users/${client.selfId}/profilev2",
         method = HttpMethod.Put,
         body = ModifySelfUserBuilder().apply(builder).toRequest()
     )
 
-    public suspend fun leaveTeam(teamId: GenericId, selfId: GenericId): Unit = sendRequest<Unit, Unit>(
-        endpoint = "/teams/$teamId/members/$selfId",
-        method = HttpMethod.Delete
-    )
-
-    public suspend fun getUserDMs(selfId: GenericId): UserDMResponse = sendRequest<UserDMResponse, Unit>(
-        endpoint = "/users/$selfId/channels",
+    public suspend fun getUserDMs(): List<RawPrivateChannel> = sendRequest<UserDMResponse, Unit>(
+        endpoint = "/users/${client.selfId}/channels",
         method = HttpMethod.Get
-    )
+    ).channels
 
     public suspend fun updateSelfAvatar(url: String): SelfUpdateAvatarResponse = sendRequest(
         endpoint = "/users/me/profile/images",
@@ -51,11 +43,11 @@ public class UserRoute(client: RestClient) : Route(client) {
         body = SelfUpdateAvatarRequest(imageUrl = url)
     )
 
-    public suspend fun createDMChannel(selfId: GenericId, builder: CreateDMChannelBuilder.() -> Unit): UserDMResponse = sendRequest(
-        endpoint = "/users/$selfId/channels",
+    public suspend fun createDMChannel(users: List<GenericId>): List<RawPrivateChannel> = sendRequest<UserDMResponse, CreateDMChannelRequest>(
+        endpoint = "/users/${client.selfId}/channels",
         method = HttpMethod.Post,
-        body = CreateDMChannelBuilder().apply(builder).toRequest()
-    )
+        body = CreateDMChannelRequest(users)
+    ).channels
 
     public suspend fun getUserPosts(id: GenericId): List<RawUserPost> = sendRequest<List<RawUserPost>, Unit>(
         endpoint = "/users/$id/posts",

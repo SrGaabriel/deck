@@ -6,10 +6,8 @@ import com.deck.core.entity.Message
 import com.deck.core.entity.channel.MessageChannel
 import com.deck.core.stateless.StatelessEntity
 import com.deck.core.util.sendMessage
-import java.util.*
 
-public interface StatelessMessageChannel: StatelessEntity<MessageChannel> {
-    public val id: UUID
+public interface StatelessMessageChannel: StatelessEntity<MessageChannel>, StatelessChannel {
     public val teamId: GenericId?
 
     public suspend fun sendMessage(builder: DeckMessageBuilder.() -> Unit): Message =

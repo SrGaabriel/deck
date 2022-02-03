@@ -6,11 +6,12 @@ import com.deck.common.util.IntGenericId
 import com.deck.core.entity.Role
 import com.deck.core.entity.RolePermissionsOverride
 import com.deck.core.entity.UserPermissionsOverride
+import com.deck.core.stateless.StatelessTeam
 import kotlinx.datetime.Instant
 import java.util.*
 
 public interface TeamChannel : Channel {
-    override val teamId: GenericId
+    override val team: StatelessTeam
 }
 
 public interface PartialTeamChannel : TeamChannel {

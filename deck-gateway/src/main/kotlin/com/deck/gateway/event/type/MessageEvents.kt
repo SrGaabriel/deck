@@ -55,7 +55,7 @@ public data class GatewayChatMessageUpdatedEvent(
 @SerialName("ChatMessageDeleted")
 public data class GatewayChatMessageDeleteEvent(
     val channelId: UniqueId,
-    val channelCategoryId: UniqueId?,
+    val channelCategoryId: IntGenericId?,
     val channelType: RawChannelType,
     val teamId: GenericId?,
     val contentType: RawChannelContentType,
@@ -67,7 +67,7 @@ public data class GatewayChatMessageDeleteEvent(
 @Serializable
 @SerialName("ChatMessageReactionAdded")
 public data class GatewayChatMessageReactionAddedEvent(
-    val guildedClientId: UniqueId,
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val channelId: UniqueId,
     val channelCategoryId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
     val channelType: RawChannelType,
@@ -81,7 +81,7 @@ public data class GatewayChatMessageReactionAddedEvent(
 @Serializable
 @SerialName("ChatMessageReactionDeleted")
 public data class GatewayChatMessageReactionDeletedEvent(
-    val guildedClientId: UniqueId,
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val channelId: UniqueId,
     val channelCategoryId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
     val channelType: RawChannelType,
@@ -94,7 +94,7 @@ public data class GatewayChatMessageReactionDeletedEvent(
 @Serializable
 @SerialName("ChatPinnedMessageCreated")
 public data class GatewayChatPinnedMessageCreatedEvent(
-    val guildedClientId: UniqueId,
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val channelId: UniqueId,
     val channelCategoryId: IntGenericId?,
     val channelType: RawChannelType,
@@ -108,7 +108,7 @@ public data class GatewayChatPinnedMessageCreatedEvent(
 @Serializable
 @SerialName("ChatPinnedMessageDeleted")
 public data class GatewayChatPinnedMessageDeletedEvent(
-    val guildedClientId: UniqueId,
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val channelId: UniqueId,
     val channelCategoryId: IntGenericId?,
     val channelType: RawChannelType,

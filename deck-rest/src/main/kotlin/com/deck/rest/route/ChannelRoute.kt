@@ -2,6 +2,7 @@ package com.deck.rest.route
 
 import com.deck.common.entity.RawChannel
 import com.deck.common.entity.RawChannelForumThread
+import com.deck.common.entity.RawMessage
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.common.util.UniqueId
@@ -91,8 +92,73 @@ public class ChannelRoute(client: RestClient) : Route(client) {
         body = AddForumThreadReplyReactionRequest(reactionId, teamId)
     )
 
-    public suspend fun getMessage(channelId: UniqueId, messageId: UniqueId): GetMessageResponse = sendRequest<GetMessageResponse, Unit>(
-        endpoint = "/content/route/metadata?route=//channels/$channelId/chat?messageId=$messageId",
-        method = HttpMethod.Get
+    public suspend fun getMessage(channelId: UniqueId, messageId: UniqueId): GetMessageMetadata =
+        sendRequest<GetMessageResponse, Unit>(
+            endpoint = "/content/route/metadata?route=//channels/$channelId/chat?messageId=$messageId",
+            method = HttpMethod.Get
+        ).metadata
+
+    public suspend fun deleteChannel(teamId: GenericId, channelId: UniqueId, groupId: GenericId? = null): Unit =
+        sendRequest<Unit, Unit>(
+            endpoint = "/teams/$teamId/groups/${groupId ?: "undefined"}/channels/$channelId",
+            method = HttpMethod.Delete
+        )
+
+    public suspend fun getChannelMessages(channelId: UniqueId): List<RawMessage> =
+        sendRequest<GetChannelMessagesResponse, Unit>(
+            endpoint = "/channels/$channelId/messages",
+            method = HttpMethod.Get
+        ).messages
+
+    public suspend fun deleteMessage(channelId: UniqueId, messageId: UniqueId): Unit = sendRequest<Unit, Unit>(
+        endpoint = "/channels/$channelId/messages/$messageId",
+        method = HttpMethod.Delete
     )
+
+    public suspend fun addReaction(channelId: UniqueId, messageId: UniqueId, reactionId: IntGenericId): Unit =
+        sendRequest<Unit, Unit>(
+            endpoint = "/channels/$channelId/messages/$messageId/reactions/$reactionId",
+            method = HttpMethod.Post
+        )
+
+    public suspend fun deleteOwnReaction(channelId: UniqueId, messageId: UniqueId, reactionId: IntGenericId): Unit =
+        sendRequest<Unit, Unit>(
+            endpoint = "/channels/$channelId/messages/$messageId/reactions/$reactionId",
+            method = HttpMethod.Delete
+        )
+
+    public suspend fun getPinnedMessages(channelId: UniqueId): List<RawMessage> =
+        sendRequest<GetChannelMessagesResponse, Unit>(
+            endpoint = "/channels/$channelId/pins",
+            method = HttpMethod.Get
+        ).messages
+
+    public suspend fun pinMessage(channelId: UniqueId, messageId: UniqueId): Unit =
+        sendRequest<Unit, PinMessageRequest>(
+            endpoint = "/channels/$channelId/pins",
+            method = HttpMethod.Post,
+            body = PinMessageRequest(messageId)
+        )
+
+    public suspend fun unpinMessage(channelId: UniqueId, messageId: UniqueId): Unit = sendRequest<Unit, Unit>(
+        endpoint = "/channels/$channelId/pins/$messageId",
+        method = HttpMethod.Delete
+    )
+
+    public suspend fun leaveThread(channelId: UniqueId): String = sendRequest<String, Unit>(
+        endpoint = "/users/${client.selfId}/channels/$channelId",
+        method = HttpMethod.Delete
+    )
+
+    public suspend fun archiveThread(teamId: GenericId, threadId: UniqueId, groupId: GenericId? = null): Unit =
+        sendRequest<Unit, Unit>(
+            endpoint = "/teams/$teamId/groups/${groupId ?: "undefined"}/channels/$threadId/archive",
+            method = HttpMethod.Put
+        )
+
+    public suspend fun restoreThread(teamId: GenericId, threadId: UniqueId, groupId: GenericId? = null): String =
+        sendRequest<String, Unit>(
+            endpoint = "/teams/$teamId/groups/${groupId ?: "undefined"}/channels/$threadId/restore",
+            method = HttpMethod.Put
+        )
 }

@@ -7,6 +7,7 @@ import com.deck.core.DeckClient
 import com.deck.core.entity.Role
 import com.deck.core.entity.RolePermissions
 import com.deck.core.entity.RolePermissionsOverride
+import com.deck.core.stateless.StatelessTeam
 import kotlinx.datetime.Instant
 
 public data class DeckRole(
@@ -23,7 +24,7 @@ public data class DeckRole(
     override val discordSyncedAt: Instant?,
     override val priority: Int,
     override val botId: GenericId?,
-    override val teamId: GenericId,
+    override val team: StatelessTeam,
     override val updatedAt: Instant?,
     override val permissions: RolePermissions
 ) : Role
@@ -50,7 +51,7 @@ public data class DeckRolePermissions(
 ) : RolePermissions
 
 public data class DeckRolePermissionsOverride(
-    override val teamId: GenericId,
+    override val team: StatelessTeam,
     override val createdAt: Instant,
     override val updatedAt: Instant?,
     override val teamRoleId: IntGenericId,

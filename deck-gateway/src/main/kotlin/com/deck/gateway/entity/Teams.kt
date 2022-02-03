@@ -15,7 +15,7 @@ public data class RawTeamInfo(
     val subdomain: OptionalProperty<String> = OptionalProperty.NotPresent,
     val isPublic: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     val timezone: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val additionalGameInfo: OptionalProperty<Map<String, Map<String, String>>>
+    val additionalGameInfo: OptionalProperty<Map<String, Map<String, String>>> = OptionalProperty.NotPresent
 )
 
 /**

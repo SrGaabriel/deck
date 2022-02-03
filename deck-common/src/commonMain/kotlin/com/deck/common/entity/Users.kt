@@ -32,6 +32,17 @@ public data class RawUser(
 )
 
 @Serializable
+public data class RawSelfUser(
+    val updateMessage: String?,
+    val user: RawUser,
+    val teams: List<RawTeam>,
+    val customReactions: List<RawCustomReaction>,
+    val customEmojis: OptionalProperty<List<GenericId>> = OptionalProperty.NotPresent,
+    val landingUrl: Boolean,
+    val friends: List<RawFriend>
+)
+
+@Serializable
 public data class RawUserStatus(
     val content: RawMessageContent?,
     val customReactionId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,

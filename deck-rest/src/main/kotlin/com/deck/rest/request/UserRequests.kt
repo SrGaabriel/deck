@@ -2,20 +2,8 @@ package com.deck.rest.request
 
 import com.deck.common.entity.*
 import com.deck.common.util.GenericId
-import com.deck.common.util.OptionalProperty
 import com.deck.common.util.RawUserPresenceType
 import kotlinx.serialization.Serializable
-
-@Serializable
-public data class SelfUserResponse(
-    val updateMessage: String?,
-    val user: RawUser,
-    val teams: List<RawTeam>,
-    val customReactions: List<RawCustomReaction>,
-    val customEmojis: OptionalProperty<List<GenericId>> = OptionalProperty.NotPresent,
-    val landingUrl: Boolean,
-    val friends: List<RawFriend>
-)
 
 @Serializable
 public data class UserResponse(

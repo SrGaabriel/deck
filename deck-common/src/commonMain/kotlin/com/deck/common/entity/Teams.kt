@@ -115,3 +115,29 @@ public data class RawTeamSubscriptionPlan(
     val createdAt: Instant,
     val deletedAt: Instant?
 )
+
+@Serializable
+public enum class RawTeamType {
+    @SerialName("team")
+    Team,
+    @SerialName("organization")
+    Organization,
+    @SerialName("community")
+    Community,
+    @SerialName("clan")
+    Clan,
+    @SerialName("guild")
+    Guild,
+    @SerialName("friends")
+    Friends,
+    @SerialName("streaming")
+    Streaming,
+    @SerialName("other")
+    Other
+}
+
+@Serializable
+public enum class RawNotificationSettingsType {
+    Mentions,
+    AllNewContent
+}
