@@ -8,11 +8,11 @@ import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.core.builder.DeckMessageBuilder
 import com.deck.core.entity.Message
+import com.deck.core.entity.channel.ForumPost
 import com.deck.core.entity.channel.ForumThread
-import com.deck.core.entity.channel.ForumThreadReply
 import com.deck.core.stateless.StatelessMessage
 import com.deck.core.stateless.channel.StatelessForumChannel
-import com.deck.core.stateless.channel.StatelessForumThread
+import com.deck.core.stateless.channel.StatelessForumPost
 import com.deck.core.stateless.channel.StatelessMessageChannel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -57,16 +57,16 @@ public suspend fun StatelessForumChannel.createThread(title: String, content: Co
     this.content(content)
 }
 
-public suspend fun StatelessForumThread.createReplyOfContent(builder: ContentBuilder.() -> Unit): ForumThreadReply = createReply {
+public suspend fun StatelessForumPost.createReplyOfContent(builder: ContentBuilder.() -> Unit): ForumPost = createReply {
     content(builder)
 }
 
-internal suspend fun StatelessForumThread.createQuotingReply(
+internal suspend fun StatelessForumPost.createQuotingReply(
     postId: IntGenericId,
     postContent: Content,
     postCreatedBy: GenericId,
     builder: ContentBuilder.() -> Unit
-): ForumThreadReply = createReplyOfContent {
+): ForumPost = createReplyOfContent {
     quote {
         paragraph {
             +Node.Quote.ReplyingToUserHeader(postId, postCreatedBy)
@@ -79,8 +79,8 @@ internal suspend fun StatelessForumThread.createQuotingReply(
     builder(this)
 }
 
-public suspend fun ForumThread.createQuotingReplyToMainPost(builder: ContentBuilder.() -> Unit): ForumThreadReply =
-    createQuotingReply(id, content, createdBy.id, builder)
+public suspend fun ForumPost.createQuotingReply(builder: ContentBuilder.() -> Unit): ForumPost =
+    createQuotingReply(id, content, author.id, builder)
 
-public suspend fun ForumThreadReply.createQuotingReply(builder: ContentBuilder.() -> Unit): ForumThreadReply =
-    thread.createQuotingReply(id, content, createdBy, builder)
+public suspend fun ForumThread.createQuotingReply(builder: ContentBuilder.() -> Unit): ForumPost =
+    originalPost.createQuotingReply(builder)

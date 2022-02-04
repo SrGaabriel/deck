@@ -229,21 +229,33 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
 
     override fun decodeForumThread(raw: RawChannelForumThread): ForumThread {
         val team = BlankStatelessTeam(client, raw.teamId)
+        val author = BlankStatelessUser(client, raw.createdBy)
+        val channel = BlankStatelessForumChannel(client, raw.channelId.mapToBuiltin(), team)
+        val statelessThread = BlankStatelessForumThread(client, raw.id, team, channel)
 
         return DeckForumThread(
             client = client,
             id = raw.id,
             title = raw.title,
-            content = raw.message.decode(),
-            channel = BlankStatelessForumChannel(client, raw.channelId.mapToBuiltin(), team),
-            createdAt = raw.createdAt,
-            createdBy = BlankStatelessUser(client, raw.createdBy),
+            originalPost = DeckForumPost(
+                client = client,
+                id = raw.id,
+                content = raw.message.decode(),
+                thread = statelessThread,
+                team = team,
+                channel = channel,
+                author = author,
+                createdAt = raw.createdAt
+            ),
+            channel = channel,
+            team = team,
+            author = author,
             editedAt = raw.editedAt,
             isSticky = raw.isSticky,
             isShare = raw.isShare,
             isLocked = raw.isLocked,
             isDeleted = raw.isDeleted,
-            team = team
+            createdAt = raw.createdAt
         )
     }
 }

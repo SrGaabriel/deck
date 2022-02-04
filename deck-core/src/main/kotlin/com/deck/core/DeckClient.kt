@@ -18,6 +18,8 @@ import com.deck.core.module.GatewayModule
 import com.deck.core.module.RestModule
 import com.deck.core.service.AuthService
 import com.deck.core.service.DefaultAuthService
+import com.deck.core.stateless.StatelessUser
+import com.deck.core.util.BlankStatelessUser
 import com.deck.core.util.WrappedEventSupplier
 import com.deck.core.util.WrappedEventSupplierData
 import com.deck.gateway.util.EventSupplier
@@ -43,6 +45,7 @@ public class DeckClient(
     public val entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityDecoder, entityCacheManager)
 
     public val selfId: GenericId by rest.restClient::selfId
+    public val self: StatelessUser by lazy { BlankStatelessUser(this, selfId) }
 
     public suspend fun login() {
         authenticationResults = authenticationService.login(auth).also { result ->

@@ -14,6 +14,8 @@ public class ClientBuilder {
     public var email: String? = null
     public var password: String? = null
 
+    public var debugMode: Boolean by gatewayModule::logPayloadsJson
+
     public fun build(): DeckClient {
         require(email != null && password != null) {
             "Tried to build a client without providing neither an email nor a password."
