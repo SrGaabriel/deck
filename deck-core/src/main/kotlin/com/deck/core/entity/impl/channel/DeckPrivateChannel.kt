@@ -1,6 +1,5 @@
 package com.deck.core.entity.impl.channel
 
-import com.deck.common.util.GenericId
 import com.deck.core.DeckClient
 import com.deck.core.entity.channel.MessageChannel
 import com.deck.core.entity.misc.ChannelContentType
@@ -23,7 +22,6 @@ public data class DeckPrivateChannel(
     override val archivedBy: StatelessUser?,
     override val updatedAt: Instant?,
     override val deletedAt: Instant?,
-    override val team: StatelessTeam?
 ) : MessageChannel {
-    override val teamId: GenericId? get() = null
+    override val team: StatelessTeam? = null
 }

@@ -3,6 +3,7 @@ package com.deck.core.delegator
 import com.deck.common.util.GenericId
 import com.deck.common.util.mapToModel
 import com.deck.core.cache.CacheManager
+import com.deck.core.entity.Member
 import com.deck.core.entity.SelfUser
 import com.deck.core.entity.Team
 import com.deck.core.entity.User
@@ -59,6 +60,10 @@ public class DeckEntityDelegator(
         }
     }
 
+    override suspend fun getMember(id: GenericId, teamId: GenericId): Member? {
+        return getTeamMembers(teamId).firstOrNull { it.id == id }
+    }
+
     override suspend fun getTeamChannel(id: UUID, teamId: GenericId): TeamChannel? {
         val cachedChannel = cache.retrieveChannel(id)
         if (cachedChannel != null) return cachedChannel as? TeamChannel
@@ -70,6 +75,10 @@ public class DeckEntityDelegator(
         cache.updateChannel(id, decodedChannel)
 
         return decodedChannel
+    }
+
+    override suspend fun getTeamMembers(teamId: GenericId): List<Member> {
+        return rest.teamRoute.nullableRequest { getMembers(teamId) }?.map(decoder::decodeMember).orEmpty()
     }
 
     override suspend fun getPrivateChannel(id: UUID): Channel? {

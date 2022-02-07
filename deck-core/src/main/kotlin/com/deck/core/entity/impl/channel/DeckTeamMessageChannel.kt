@@ -1,6 +1,5 @@
 package com.deck.core.entity.impl.channel
 
-import com.deck.common.util.GenericId
 import com.deck.core.DeckClient
 import com.deck.core.entity.channel.MessageChannel
 import com.deck.core.entity.channel.TeamChannel
@@ -16,7 +15,6 @@ public class DeckTeamMessageChannel(
     override val id: UUID,
     override val name: String,
     override val description: String,
-    override val teamId: GenericId,
     override val type: ChannelType,
     override val contentType: ChannelContentType,
     override val createdAt: Instant,

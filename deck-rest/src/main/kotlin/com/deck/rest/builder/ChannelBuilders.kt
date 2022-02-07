@@ -2,12 +2,16 @@ package com.deck.rest.builder
 
 import com.deck.common.content.Content
 import com.deck.common.content.node.encode
+import com.deck.common.entity.RawChannelContentType
 import com.deck.common.util.IntGenericId
 import com.deck.common.util.mapToModel
+import com.deck.common.util.nullableOptional
 import com.deck.rest.request.CreateForumThreadReplyRequest
 import com.deck.rest.request.CreateForumThreadRequest
+import com.deck.rest.request.CreateTeamChannelRequest
 import com.deck.rest.request.SendMessageRequest
 import java.util.*
+import kotlin.properties.Delegates
 import kotlin.random.Random
 
 public class SendMessageRequestBuilder : RequestBuilder<SendMessageRequest> {
@@ -25,6 +29,21 @@ public class SendMessageRequestBuilder : RequestBuilder<SendMessageRequest> {
         isPrivate = private,
         isSilent = silent,
         repliesToIds = listOfNotNull(repliesTo?.mapToModel())
+    )
+}
+
+public class CreateTeamChannelBuilder: RequestBuilder<CreateTeamChannelRequest> {
+    public var name: String by Delegates.notNull()
+    public var type: RawChannelContentType = RawChannelContentType.Chat
+    public var public: Boolean = false
+
+    public var categoryId: IntGenericId? = null
+
+    override fun toRequest(): CreateTeamChannelRequest = CreateTeamChannelRequest(
+        name = name,
+        contentType = type,
+        isPublic = public,
+        channelCategoryId = categoryId.nullableOptional()
     )
 }
 

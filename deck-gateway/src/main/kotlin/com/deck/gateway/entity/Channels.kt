@@ -45,7 +45,7 @@ public data class RawPartialTeamChannel(
 public data class RawPartialPrivateChannel(
     val id: UniqueId,
     val name: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val voiceParticipants: OptionalProperty<List<RawUserIdObject>> = OptionalProperty.NotPresent
+    val voiceParticipants: OptionalProperty<List<RawGenericIdObject>> = OptionalProperty.NotPresent
 )
 
 // Received when deleting categories
@@ -63,7 +63,7 @@ public data class RawTeamCategoryChannel(
 public data class RawTeamCategoryChannelId(val id: UniqueId)
 
 @Serializable
-public data class RawPrivateChannelRemovedInfo(val user: RawUserIdObject)
+public data class RawPrivateChannelRemovedInfo(val user: RawGenericIdObject)
 
 @Serializable
 public data class RawChannelEvent(

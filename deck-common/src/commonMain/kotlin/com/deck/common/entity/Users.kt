@@ -114,6 +114,11 @@ public data class RawPostCreatedByInfo(
     val profileBannerBlur: String?
 )
 
+@Serializable
+public data class RawGenericIdObject(
+    val id: GenericId
+)
+
 @Serializable(RawUserPresenceStatus.Serializer::class)
 public enum class RawUserPresenceStatus(public val id: Int) {
     Online(1), Idle(2), Busy(3), Offline(4);

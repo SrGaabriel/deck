@@ -1,13 +1,9 @@
 package com.deck.rest.entity
 
-import com.deck.common.entity.RawBot
 import com.deck.common.entity.RawGroup
 import com.deck.common.entity.RawTeamMember
 import com.deck.common.entity.RawTeamPaymentInfo
-import com.deck.common.util.DeckUnknown
-import com.deck.common.util.GenericId
-import com.deck.common.util.OptionalProperty
-import com.deck.common.util.UniqueId
+import com.deck.common.util.*
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
@@ -27,7 +23,8 @@ public data class RawFetchedTeam(
     val members: List<RawTeamMember>,
     val memberCount: Int?,
     val webhooks: List<RawTeamWebhook>,
-    val bots: List<RawBot>,
+    // Unknown if this is really present:
+    // val bots: List<RawBot>,
     @DeckUnknown
     val rolesVersion: Int,
     val createdAt: Instant,
@@ -51,7 +48,7 @@ public data class RawFetchedTeam(
     val isUserApplicant: Boolean,
     val isUserInvited: Boolean,
     val isUserBannedFromTeam: Boolean,
-    val serverSubscriptionGateEnabled: Boolean,
+    val serverSubscriptionGateEnabled: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     val teamPaymentInfo: RawTeamPaymentInfo,
 )
 
@@ -67,6 +64,16 @@ public data class RawFetchedTeamMeasurements(
     val mostRecentMemberLastOnline: Long,
     val numMembersAddedInLastMonth: Int,
     val subscriptionMonthsRemaining: Int?
+)
+
+@Serializable
+public data class RawFetchedMember(
+    val id: GenericId,
+    val name: String,
+    val profilePicture: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val profileBannerBlur: String?,
+    val nickname: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val roleIds: List<IntGenericId>
 )
 
 @Serializable

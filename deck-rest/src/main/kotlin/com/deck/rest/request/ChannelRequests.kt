@@ -3,6 +3,7 @@ package com.deck.rest.request
 import com.deck.common.entity.*
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
+import com.deck.common.util.OptionalProperty
 import com.deck.common.util.UniqueId
 import kotlinx.serialization.Serializable
 
@@ -13,6 +14,24 @@ public data class SendMessageRequest(
     val repliesToIds: List<UniqueId>,
     val isSilent: Boolean,
     val isPrivate: Boolean
+)
+
+@Serializable
+public data class CreateTeamChannelRequest(
+    val name: String,
+    val contentType: RawChannelContentType,
+    val isPublic: Boolean,
+    val channelCategoryId: OptionalProperty<IntGenericId> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public data class CreatePrivateChannelRequest(
+    val users: List<RawGenericIdObject>
+)
+
+@Serializable
+public data class CreateChannelResponse(
+    val channel: RawChannel
 )
 
 @Serializable

@@ -1,10 +1,10 @@
 package com.deck.gateway.event.type
 
+import com.deck.common.entity.RawGenericIdObject
 import com.deck.common.entity.RawGroup
 import com.deck.common.util.GenericId
 import com.deck.common.util.OptionalProperty
 import com.deck.common.util.UniqueId
-import com.deck.gateway.entity.RawGroupIdObject
 import com.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -53,5 +53,5 @@ public data class GatewayTeamGroupDeletedEvent(
 public data class GatewayTeamUserGroupPrioritiesUpdated(
     val guildedClientId: UniqueId,
     val teamId: GenericId,
-    val groups: List<RawGroupIdObject>
+    val groups: List<RawGenericIdObject>
 ) : GatewayEvent()

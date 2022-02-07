@@ -7,6 +7,7 @@ import com.deck.core.entity.channel.Channel
 import com.deck.core.entity.channel.ForumThread
 import com.deck.core.entity.channel.PartialTeamChannel
 import com.deck.gateway.entity.RawPartialTeamChannel
+import com.deck.rest.entity.RawFetchedMember
 import com.deck.rest.entity.RawFetchedTeam
 import java.util.*
 
@@ -20,6 +21,10 @@ public interface EntityDecoder {
     public fun decodeChannel(raw: RawChannel): Channel
 
     public fun decodeRole(raw: RawRole): Role
+
+    public fun decodeGroup(raw: RawGroup): Group
+
+    public fun decodeMember(raw: RawFetchedMember): Member
 
     public fun decodeUserPermissionsOverride(teamId: GenericId, raw: RawUserPermission): UserPermissionsOverride
 

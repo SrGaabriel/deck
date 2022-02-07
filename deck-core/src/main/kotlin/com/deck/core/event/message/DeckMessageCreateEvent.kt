@@ -2,7 +2,6 @@ package com.deck.core.event.message
 
 import com.deck.common.content.node.decode
 import com.deck.common.util.asNullable
-import com.deck.common.util.map
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.Message
@@ -36,16 +35,17 @@ public data class DeckMessageCreateEvent(
 
     public companion object : EventMapper<GatewayChatMessageCreatedEvent, DeckMessageCreateEvent> {
         override suspend fun map(client: DeckClient, event: GatewayChatMessageCreatedEvent): DeckMessageCreateEvent {
+            val team = event.teamId.asNullable()?.let { BlankStatelessTeam(client, it) }
             val channel = BlankStatelessMessageChannel(
                 client = client,
                 id = event.channelId.mapToBuiltin(),
-                teamId = event.teamId.asNullable()
+                team = team
             )
             val message = DeckMessage(
                 client = client,
                 id = event.message.id.mapToBuiltin(),
                 content = event.message.content.decode(),
-                team = event.teamId.asNullable()?.let { BlankStatelessTeam(client, it) },
+                team = team,
                 repliesToId = event.message.repliesTo?.mapToBuiltin(),
                 createdAt = event.createdAt,
                 createdBy = event.createdBy,
@@ -60,7 +60,7 @@ public data class DeckMessageCreateEvent(
                 gatewayId = event.gatewayId,
                 message = message,
                 sender = BlankStatelessUser(client, event.createdBy),
-                team = event.teamId.map { BlankStatelessTeam(client, it) }.asNullable(),
+                team = team,
                 channel = channel
             )
         }

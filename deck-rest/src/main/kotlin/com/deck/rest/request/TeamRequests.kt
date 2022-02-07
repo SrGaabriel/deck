@@ -2,6 +2,7 @@ package com.deck.rest.request
 
 import com.deck.common.entity.*
 import com.deck.common.util.GenericId
+import com.deck.rest.entity.RawFetchedMember
 import com.deck.rest.entity.RawFetchedTeam
 import kotlinx.serialization.Serializable
 
@@ -114,4 +115,9 @@ public data class UpdateEmojiRequest(
 public data class CreateWebhookRequest(
     val name: String,
     val channelId: GenericId
+)
+
+@Serializable
+public data class GetTeamMembersResponse(
+    val members: List<RawFetchedMember>
 )

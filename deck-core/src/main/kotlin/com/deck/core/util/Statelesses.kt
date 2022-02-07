@@ -26,7 +26,7 @@ internal class BlankStatelessMessage(
 internal class BlankStatelessMessageChannel(
     override val client: DeckClient,
     override val id: UUID,
-    override val teamId: GenericId? = null
+    override val team: StatelessTeam?
 ): StatelessMessageChannel
 
 public class BlankStatelessForumChannel(

@@ -32,7 +32,7 @@ public data class GatewayTeamChannelUpdatedEvent(
 @SerialName("TeamChannelDeleted")
 public data class GatewayTeamChannelDeletedEvent(
     val channelId: UniqueId,
-    val guildedClientId: UniqueId,
+    val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
     val teamId: GenericId
 ) : GatewayEvent()
 
@@ -113,7 +113,7 @@ public data class GatewayTeamChannelVoiceParticipantAddedEvent(
     val channelType: RawChannelType,
     val teamId: GenericId?,
     val contentType: RawChannelContentType,
-    val user: RawUserIdObject
+    val user: RawGenericIdObject
 ) : GatewayEvent()
 
 @Serializable
@@ -124,7 +124,7 @@ public data class GatewayTeamChannelVoiceParticipantRemovedEvent(
     val channelType: RawChannelType,
     val teamId: GenericId?,
     val contentType: RawChannelContentType,
-    val user: RawUserIdObject
+    val user: RawGenericIdObject
 ) : GatewayEvent()
 
 @Serializable
@@ -148,7 +148,7 @@ public data class GatewayChatChannelUpdatedEvent(
 @SerialName("ChatChannelBroadcastCall")
 public data class GatewayChatChannelBroadcastCallEvent(
     val channelId: UniqueId,
-    val participants: List<RawUserIdObject>,
+    val participants: List<RawGenericIdObject>,
     val callStartTime: Instant,
     val callerName: String,
     val callType: RawChannelContentType
@@ -362,7 +362,7 @@ public data class GatewayTeamChannelStreamAddedEvent(
     val channelType: RawChannelType,
     val teamId: GenericId,
     val contentType: RawChannelContentType,
-    val user: RawUserIdObject
+    val user: RawGenericIdObject
 ) : GatewayEvent()
 
 @Serializable
@@ -374,7 +374,7 @@ public data class GatewayTeamChannelStreamActiveEvent(
     val teamId: GenericId,
     val contentType: RawChannelContentType,
     val groupId: GenericId,
-    val userStreams: List<RawUserIdObject>
+    val userStreams: List<RawGenericIdObject>
 ) : GatewayEvent()
 
 @Serializable
@@ -385,7 +385,7 @@ public data class GatewayTeamChannelStreamRemovedEvent(
     val channelType: RawChannelType,
     val teamId: GenericId,
     val contentType: RawChannelContentType,
-    val user: RawUserIdObject
+    val user: RawGenericIdObject
 ) : GatewayEvent()
 
 @Serializable
@@ -397,7 +397,7 @@ public data class GatewayTeamChannelStreamEndedEvent(
     val teamId: GenericId,
     val contentType: RawChannelContentType,
     val groupId: GenericId,
-    val userStreams: List<RawUserIdObject>
+    val userStreams: List<RawGenericIdObject>
 ) : GatewayEvent()
 
 /** @param nickname is null when nickname is being reset */

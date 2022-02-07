@@ -7,6 +7,7 @@ import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.rest.RestClient
 import com.deck.rest.builder.*
+import com.deck.rest.entity.RawFetchedMember
 import com.deck.rest.entity.RawFetchedTeam
 import com.deck.rest.request.*
 import com.deck.rest.util.Route
@@ -43,10 +44,10 @@ public class TeamRoute(client: RestClient) : Route(client) {
         method = HttpMethod.Delete
     )
 
-    public suspend fun getMembers(teamId: GenericId): String = sendRequest<String, Unit>(
+    public suspend fun getMembers(teamId: GenericId): List<RawFetchedMember> = sendRequest<GetTeamMembersResponse, Unit>(
         endpoint = "/teams/$teamId/members",
         method = HttpMethod.Get
-    )
+    ).members
 
     public suspend fun setNickname(
         teamId: GenericId,
