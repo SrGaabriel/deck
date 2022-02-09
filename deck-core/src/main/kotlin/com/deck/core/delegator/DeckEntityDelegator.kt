@@ -78,7 +78,7 @@ public class DeckEntityDelegator(
     }
 
     override suspend fun getTeamMembers(teamId: GenericId): List<Member> {
-        return rest.teamRoute.nullableRequest { getMembers(teamId) }?.map(decoder::decodeMember).orEmpty()
+        return rest.teamRoute.nullableRequest { getMembers(teamId) }?.map { decoder.decodeMember(teamId, it) }.orEmpty()
     }
 
     override suspend fun getPrivateChannel(id: UUID): Channel? {

@@ -24,7 +24,7 @@ public interface EntityDecoder {
 
     public fun decodeGroup(raw: RawGroup): Group
 
-    public fun decodeMember(raw: RawFetchedMember): Member
+    public fun decodeMember(teamId: GenericId, raw: RawFetchedMember): Member
 
     public fun decodeUserPermissionsOverride(teamId: GenericId, raw: RawUserPermission): UserPermissionsOverride
 

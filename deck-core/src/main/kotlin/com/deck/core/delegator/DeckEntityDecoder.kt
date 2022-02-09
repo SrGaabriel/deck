@@ -21,18 +21,21 @@ import com.deck.rest.entity.RawFetchedTeam
 import java.util.*
 
 public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
-    override fun decodeTeam(raw: RawFetchedTeam): Team = DeckTeam(
-        client = client,
-        id = raw.id,
-        name = raw.name,
-        description = raw.description,
-        owner = BlankStatelessUser(client, raw.ownerId),
-        baseGroup = decodeGroup(raw.baseGroup),
-        members = raw.members.map { BlankStatelessMember(client, it.id) },
-        createdAt = raw.createdAt,
-        discordGuildId = raw.discordGuildId,
-        discordGuildName = raw.discordServerName
-    )
+    override fun decodeTeam(raw: RawFetchedTeam): Team {
+        val puppetStatelessTeam: StatelessTeam = BlankStatelessTeam(client, raw.id)
+        return DeckTeam(
+            client = client,
+            id = raw.id,
+            name = raw.name,
+            description = raw.description,
+            owner = BlankStatelessUser(client, raw.ownerId),
+            baseGroup = decodeGroup(raw.baseGroup),
+            members = raw.members.map { BlankStatelessMember(client, it.id, puppetStatelessTeam) },
+            createdAt = raw.createdAt,
+            discordGuildId = raw.discordGuildId,
+            discordGuildName = raw.discordServerName
+        )
+    }
 
     override fun decodeUser(raw: RawUser): User = DeckUser(
         client = client,
@@ -149,13 +152,14 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
         team = BlankStatelessTeam(client, raw.teamId)
     )
 
-    override fun decodeMember(raw: RawFetchedMember): Member = DeckMember(
+    override fun decodeMember(teamId: GenericId, raw: RawFetchedMember): Member = DeckMember(
         client = client,
         id = raw.id,
         name = raw.name,
         nickname = raw.nickname.asNullable(),
         avatar = raw.profilePicture.asNullable(),
-        user = BlankStatelessUser(client, raw.id)
+        user = BlankStatelessUser(client, raw.id),
+        team = BlankStatelessTeam(client, teamId)
     )
 
     override fun decodeRolePermissions(raw: RawRolePermissions): RolePermissions = DeckRolePermissions(

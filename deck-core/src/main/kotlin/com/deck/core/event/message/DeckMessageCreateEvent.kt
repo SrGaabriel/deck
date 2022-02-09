@@ -11,9 +11,11 @@ import com.deck.core.entity.channel.Channel
 import com.deck.core.entity.impl.DeckMessage
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
+import com.deck.core.stateless.StatelessMember
 import com.deck.core.stateless.StatelessTeam
 import com.deck.core.stateless.StatelessUser
 import com.deck.core.stateless.channel.StatelessMessageChannel
+import com.deck.core.util.BlankStatelessMember
 import com.deck.core.util.BlankStatelessMessageChannel
 import com.deck.core.util.BlankStatelessTeam
 import com.deck.core.util.BlankStatelessUser
@@ -25,6 +27,7 @@ public data class DeckMessageCreateEvent(
     val message: Message,
     val channel: StatelessMessageChannel,
     val team: StatelessTeam?,
+    val member: StatelessMember?,
     val sender: StatelessUser
 ) : DeckEvent {
     public suspend fun getTeam(): Team? = team?.getState()
@@ -55,13 +58,15 @@ public data class DeckMessageCreateEvent(
                 isSilent = event.message.isSilent.asNullable() == true,
                 isPrivate = event.message.isPrivate.asNullable() == true
             )
+            val member = team?.let { memberTeam -> BlankStatelessMember(client, event.createdBy, memberTeam) }
             return DeckMessageCreateEvent(
                 client = client,
                 gatewayId = event.gatewayId,
                 message = message,
                 sender = BlankStatelessUser(client, event.createdBy),
                 team = team,
-                channel = channel
+                channel = channel,
+                member = member
             )
         }
     }

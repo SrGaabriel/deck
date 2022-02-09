@@ -1,10 +1,9 @@
 package com.deck.core.entity
 
-import com.deck.common.util.GenericId
+import com.deck.core.stateless.StatelessMember
 import com.deck.core.stateless.StatelessUser
 
-public interface Member: Entity {
-    public val id: GenericId
+public interface Member: Entity, StatelessMember {
     public val name: String
     public val nickname: String?
 

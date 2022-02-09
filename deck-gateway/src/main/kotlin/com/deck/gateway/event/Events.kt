@@ -26,7 +26,7 @@ private val serializationModule by lazy {
             subclass(GatewayChannelTypingEvent::class)
             subclass(GatewayChatMessageCreatedEvent::class)
             subclass(GatewayChatMessageUpdatedEvent::class)
-            subclass(GatewayChatMessageDeleteEvent::class)
+            subclass(GatewayChatMessageDeletedEvent::class)
             subclass(GatewayTeamChannelCreatedEvent::class)
             subclass(GatewayTeamChannelUpdatedEvent::class)
             subclass(GatewayTeamChannelDeletedEvent::class)

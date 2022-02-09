@@ -53,7 +53,7 @@ public class TeamRoute(client: RestClient) : Route(client) {
         teamId: GenericId,
         memberId: GenericId,
         nickname: String
-    ): Unit = sendRequest<Unit, SetNicknameRequest>(
+    ): Unit = sendRequest(
         endpoint = "/teams/$teamId/members/$memberId/nickname",
         method = HttpMethod.Put,
         body = SetNicknameRequest(nickname)
@@ -68,7 +68,7 @@ public class TeamRoute(client: RestClient) : Route(client) {
         teamId: GenericId,
         memberId: GenericId,
         amount: Long
-    ): Unit = sendRequest<Unit, SetMemberXPRequest>(
+    ): Unit = sendRequest(
         endpoint = "/teams/$teamId/members/$memberId/xp",
         method = HttpMethod.Put,
         body = SetMemberXPRequest(amount)
@@ -89,7 +89,7 @@ public class TeamRoute(client: RestClient) : Route(client) {
         memberId: GenericId,
         builder: BanMemberBuilder.() -> Unit = {}
     ): Unit =
-        sendRequest<Unit, BanMemberRequest>(
+        sendRequest(
             endpoint = "/teams/$teamId/members/$memberId/ban",
             method = HttpMethod.Delete,
             body = BanMemberBuilder().apply(builder).toRequest()
@@ -128,7 +128,7 @@ public class TeamRoute(client: RestClient) : Route(client) {
     )
 
     public suspend fun createGroup(teamId: GenericId, builder: CreateGroupBuilder.() -> Unit): CreateGroupResponse =
-        sendRequest<CreateGroupResponse, CreateGroupRequest>(
+        sendRequest(
             endpoint = "/teams/$teamId/groups",
             method = HttpMethod.Post,
             body = CreateGroupBuilder().apply(builder).toRequest()
@@ -150,7 +150,7 @@ public class TeamRoute(client: RestClient) : Route(client) {
     )
 
     public suspend fun createEmoji(teamId: GenericId, builder: CreateEmojiBuilder.() -> Unit): RawEmoji =
-        sendRequest<RawEmoji, CreateEmojiRequest>(
+        sendRequest(
             endpoint = "/teams/$teamId/customReaction",
             method = HttpMethod.Put,
             body = CreateEmojiBuilder().apply(builder).toRequest()
@@ -165,21 +165,21 @@ public class TeamRoute(client: RestClient) : Route(client) {
         teamId: GenericId,
         emojiId: IntGenericId,
         newName: String
-    ): Unit = sendRequest<Unit, UpdateEmojiRequest>(
+    ): Unit = sendRequest(
         endpoint = "/teams/$teamId/customReactions/$emojiId",
         method = HttpMethod.Put,
         body = UpdateEmojiRequest(newName)
     )
 
     public suspend fun createWebhook(builder: CreateWebhookBuilder.() -> Unit): RawWebhook =
-        sendRequest<RawWebhook, CreateWebhookRequest>(
+        sendRequest(
             endpoint = "/webhooks",
             method = HttpMethod.Post,
             body = CreateWebhookBuilder().apply(builder).toRequest()
         )
 
     public suspend fun editWebhook(webhookId: String, builder: CreateWebhookBuilder.() -> Unit): RawWebhook =
-        sendRequest<RawWebhook, CreateWebhookRequest>(
+        sendRequest(
             endpoint = "/webhooks/$webhookId",
             method = HttpMethod.Put,
             body = CreateWebhookBuilder().apply(builder).toRequest()

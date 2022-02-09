@@ -10,7 +10,9 @@ import com.deck.core.builder.DeckMessageBuilder
 import com.deck.core.entity.Message
 import com.deck.core.entity.channel.ForumPost
 import com.deck.core.entity.channel.ForumThread
+import com.deck.core.stateless.StatelessMember
 import com.deck.core.stateless.StatelessMessage
+import com.deck.core.stateless.StatelessRole
 import com.deck.core.stateless.channel.StatelessForumChannel
 import com.deck.core.stateless.channel.StatelessForumPost
 import com.deck.core.stateless.channel.StatelessMessageChannel
@@ -84,3 +86,7 @@ public suspend fun ForumPost.createQuotingReply(builder: ContentBuilder.() -> Un
 
 public suspend fun ForumThread.createQuotingReply(builder: ContentBuilder.() -> Unit): ForumPost =
     originalPost.createQuotingReply(builder)
+
+public suspend fun StatelessMember.addRole(role: StatelessRole): Unit = addRole(role.id)
+
+public suspend fun StatelessMember.removeRole(role: StatelessRole): Unit = removeRole(role.id)

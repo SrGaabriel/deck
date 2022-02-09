@@ -53,7 +53,7 @@ public data class GatewayChatMessageUpdatedEvent(
 
 @Serializable
 @SerialName("ChatMessageDeleted")
-public data class GatewayChatMessageDeleteEvent(
+public data class GatewayChatMessageDeletedEvent(
     val channelId: UniqueId,
     val channelCategoryId: IntGenericId?,
     val channelType: RawChannelType,

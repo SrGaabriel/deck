@@ -2,6 +2,8 @@ package com.deck.core.module
 
 import com.deck.rest.RestClient
 import com.deck.rest.route.*
+import io.ktor.http.*
+import kotlin.system.measureTimeMillis
 
 public interface RestModule {
     public val restClient: RestClient
@@ -22,4 +24,11 @@ public class DefaultRestModule : RestModule {
     override val mediaRoute: MediaRoute = MediaRoute(restClient)
     override val groupRoute: GroupRoute = GroupRoute(restClient)
     override val channelRoute: ChannelRoute = ChannelRoute(restClient)
+
+    public suspend fun getPing(): Long = measureTimeMillis {
+        authRoute.sendRequest<Unit, Unit>(
+            endpoint = "/users/me/ping",
+            method = HttpMethod.Put
+        )
+    }
 }

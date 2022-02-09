@@ -1,7 +1,6 @@
 package com.deck.core.cache
 
 import com.deck.common.util.GenericId
-import com.deck.common.util.UniqueId
 import com.deck.core.entity.Message
 import com.deck.core.entity.Team
 import com.deck.core.entity.User
@@ -15,7 +14,7 @@ public class DeckCacheManager : CacheManager {
     override val channels: Cache<UUID, Channel> = Caffeine.newBuilder().build()
     override val users: Cache<GenericId, User> = Caffeine.newBuilder().build()
     override val teams: Cache<GenericId, Team> = Caffeine.newBuilder().build()
-    override val messages: Cache<UniqueId, Message> = Caffeine.newBuilder().build()
+    override val messages: Cache<UUID, Message> = Caffeine.newBuilder().build()
 
     override fun updateChannel(id: UUID, channel: Channel?) {
         channels.putOrInvalidate(id, channel)
@@ -41,11 +40,11 @@ public class DeckCacheManager : CacheManager {
         return teams.getIfPresent(id)
     }
 
-    override fun updateMessage(id: UniqueId, message: Message?) {
+    override fun updateMessage(id: UUID, message: Message?) {
         messages.putOrInvalidate(id, message)
     }
 
-    override fun retrieveMessage(id: UniqueId): Message? {
+    override fun retrieveMessage(id: UUID): Message? {
         return messages.getIfPresent(id)
     }
 }

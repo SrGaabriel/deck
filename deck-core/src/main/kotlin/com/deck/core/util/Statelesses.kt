@@ -15,7 +15,14 @@ import java.util.*
 internal class BlankStatelessMember(
     override val client: DeckClient,
     override val id: GenericId,
+    override val team: StatelessTeam
 ): StatelessMember
+
+public fun StatelessMember(
+    client: DeckClient,
+    id: GenericId,
+    team: StatelessTeam
+): StatelessMember = BlankStatelessMember(client, id, team)
 
 internal class BlankStatelessMessage(
     override val client: DeckClient,
@@ -23,17 +30,35 @@ internal class BlankStatelessMessage(
     override val channel: StatelessMessageChannel
 ): StatelessMessage
 
+public fun StatelessMessage(
+    client: DeckClient,
+    id: UUID,
+    channel: StatelessMessageChannel
+): StatelessMessage = BlankStatelessMessage(client, id, channel)
+
 internal class BlankStatelessMessageChannel(
     override val client: DeckClient,
     override val id: UUID,
     override val team: StatelessTeam?
 ): StatelessMessageChannel
 
+public fun StatelessMessageChannel(
+    client: DeckClient,
+    id: UUID,
+    team: StatelessTeam?
+): StatelessMessageChannel = BlankStatelessMessageChannel(client, id, team)
+
 public class BlankStatelessForumChannel(
     override val client: DeckClient,
     override val id: UUID,
     override val team: StatelessTeam
 ): StatelessForumChannel
+
+public fun StatelessForumChannel(
+    client: DeckClient,
+    id: UUID,
+    team: StatelessTeam
+): StatelessForumChannel = BlankStatelessForumChannel(client, id, team)
 
 public class BlankStatelessForumThread(
     override val client: DeckClient,
@@ -42,12 +67,29 @@ public class BlankStatelessForumThread(
     override val channel: StatelessForumChannel
 ): StatelessForumThread
 
+public fun StatelessForumThread(
+    client: DeckClient,
+    id: IntGenericId,
+    team: StatelessTeam,
+    channel: StatelessForumChannel
+): StatelessForumThread = BlankStatelessForumThread(client, id, team, channel)
+
 internal class BlankStatelessTeam(
     override val client: DeckClient,
     override val id: GenericId
 ): StatelessTeam
 
+public fun StatelessTeam(
+    client: DeckClient,
+    id: GenericId
+): StatelessTeam = BlankStatelessTeam(client, id)
+
 internal class BlankStatelessUser(
     override val client: DeckClient,
     override val id: GenericId
 ): StatelessUser
+
+public fun StatelessUser(
+    client: DeckClient,
+    id: GenericId
+): StatelessUser = BlankStatelessUser(client, id)
