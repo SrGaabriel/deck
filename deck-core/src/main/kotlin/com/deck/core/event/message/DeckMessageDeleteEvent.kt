@@ -35,7 +35,7 @@ public data class DeckMessageDeleteEvent(
                 messageDeletedAt = event.message.deletedAt,
                 channel = BlankStatelessMessageChannel(client, event.channelId.mapToBuiltin(), team),
                 team = team,
-                oldMessage = client.entityCacheManager.retrieveMessage(messageId)
+                oldMessage = client.cache.retrieveMessage(messageId)
             )
         }
     }

@@ -19,6 +19,11 @@ import com.deck.core.stateless.channel.StatelessMessageChannel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
+public data class MemberData(
+    public val id: GenericId,
+    public val teamId: GenericId
+)
+
 public suspend fun StatelessMessageChannel.sendMessage(text: String): Message = sendContent {
     + text
 }

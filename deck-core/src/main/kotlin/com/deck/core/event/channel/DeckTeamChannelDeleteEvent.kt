@@ -23,7 +23,7 @@ public data class DeckTeamChannelDeleteEvent(
                 gatewayId = event.gatewayId,
                 channelId = event.channelId.mapToBuiltin(),
                 teamId = event.teamId,
-                old = client.entityCacheManager.retrieveChannel(event.channelId.mapToBuiltin()) as TeamChannel?
+                old = client.cache.retrieveChannel(event.channelId.mapToBuiltin()) as TeamChannel?
             )
     }
 }

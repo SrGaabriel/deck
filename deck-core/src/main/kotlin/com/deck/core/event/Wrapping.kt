@@ -28,7 +28,7 @@ public interface DeckEvent {
 public interface EventService : WrappedEventSupplier {
     public val eventWrappingFlow: SharedFlow<DeckEvent>
 
-    public fun startListeningAndConveying(): Job
+    public fun startListening(): Job
 }
 
 public class DefaultEventService(private val client: DeckClient) : EventService {
@@ -39,7 +39,7 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         sharedFlow = eventWrappingFlow
     )
 
-    override fun startListeningAndConveying(): Job = client.gateway.orchestrator.on<GatewayEvent> {
+    override fun startListening(): Job = client.gateway.orchestrator.on<GatewayEvent> {
         val deckEvent: DeckEvent = when (this) {
             is GatewayChatMessageCreatedEvent -> DeckMessageCreateEvent.map(client, this)
             is GatewayChatMessageUpdatedEvent -> DeckMessageUpdateEvent.map(client, this)

@@ -6,11 +6,11 @@ import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.Message
 import com.deck.core.entity.Team
-import com.deck.core.entity.User
 import com.deck.core.entity.channel.Channel
 import com.deck.core.entity.impl.DeckMessage
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
+import com.deck.core.event.UserEvent
 import com.deck.core.stateless.StatelessMember
 import com.deck.core.stateless.StatelessTeam
 import com.deck.core.stateless.StatelessUser
@@ -28,11 +28,9 @@ public data class DeckMessageCreateEvent(
     val channel: StatelessMessageChannel,
     val team: StatelessTeam?,
     val member: StatelessMember?,
-    val sender: StatelessUser
-) : DeckEvent {
+    override val user: StatelessUser,
+) : DeckEvent, UserEvent {
     public suspend fun getTeam(): Team? = team?.getState()
-
-    public suspend fun getSender(): User = sender.getState()
 
     public suspend fun getChannel(): Channel = channel.getState()
 
@@ -62,7 +60,7 @@ public data class DeckMessageCreateEvent(
                 client = client,
                 gatewayId = event.gatewayId,
                 message = message,
-                sender = BlankStatelessUser(client, event.createdBy),
+                user = BlankStatelessUser(client, event.createdBy),
                 team = team,
                 channel = channel,
                 member = member

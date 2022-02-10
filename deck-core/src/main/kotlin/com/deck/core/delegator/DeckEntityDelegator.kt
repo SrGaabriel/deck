@@ -61,7 +61,8 @@ public class DeckEntityDelegator(
     }
 
     override suspend fun getMember(id: GenericId, teamId: GenericId): Member? {
-        return getTeamMembers(teamId).firstOrNull { it.id == id }
+        val members = getTeamMembers(teamId)
+        return members.firstOrNull { it.id == id }
     }
 
     override suspend fun getTeamChannel(id: UUID, teamId: GenericId): TeamChannel? {
@@ -78,7 +79,14 @@ public class DeckEntityDelegator(
     }
 
     override suspend fun getTeamMembers(teamId: GenericId): List<Member> {
-        return rest.teamRoute.nullableRequest { getMembers(teamId) }?.map { decoder.decodeMember(teamId, it) }.orEmpty()
+        val cachedMembers = cache.retrieveMembers(teamId)
+        if (cachedMembers != null) return cachedMembers
+
+        val members = rest.teamRoute.nullableRequest { getMembers(teamId) }?.map { decoder.decodeMember(teamId, it) }.orEmpty()
+        for (member in members) {
+            cache.updateMember(id = member.id, teamId = teamId, member = member)
+        }
+        return members
     }
 
     override suspend fun getPrivateChannel(id: UUID): Channel? {

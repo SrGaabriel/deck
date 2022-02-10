@@ -1,6 +1,7 @@
 package com.deck.core.cache
 
 import com.deck.common.util.GenericId
+import com.deck.core.entity.Member
 import com.deck.core.entity.Message
 import com.deck.core.entity.Team
 import com.deck.core.entity.User
@@ -13,6 +14,7 @@ public interface CacheManager {
     public val users: Cache<GenericId, User>
     public val teams: Cache<GenericId, Team>
     public val messages: Cache<UUID, Message>
+    public val members: Cache<GenericId, Map<GenericId, Member>>
 
     public fun updateChannel(id: UUID, channel: Channel?)
 
@@ -29,4 +31,12 @@ public interface CacheManager {
     public fun updateMessage(id: UUID, message: Message?)
 
     public fun retrieveMessage(id: UUID): Message?
+
+    public fun updateMember(id: GenericId, teamId: GenericId, member: Member?)
+
+    public fun retrieveMember(id: GenericId, teamId: GenericId): Member?
+
+    public fun updateMembers(teamId: GenericId, members: Map<GenericId, Member>)
+
+    public fun retrieveMembers(teamId: GenericId): List<Member>?
 }

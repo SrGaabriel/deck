@@ -22,7 +22,7 @@ public data class DeckTeamChannelsDeleteEvent(
                 gatewayId = event.gatewayId,
                 teamId = event.teamId,
                 channels = event.channelIds.map { it.mapToBuiltin() }
-                    .associateWith { client.entityCacheManager.retrieveChannel(it) as TeamChannel? }
+                    .associateWith { client.cache.retrieveChannel(it) as TeamChannel? }
             )
     }
 }

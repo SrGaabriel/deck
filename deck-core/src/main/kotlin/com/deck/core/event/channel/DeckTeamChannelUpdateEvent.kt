@@ -25,7 +25,7 @@ public data class DeckTeamChannelUpdateEvent(
                 client = client,
                 gatewayId = event.gatewayId,
                 channel = channel,
-                old = client.entityCacheManager.retrieveChannel(channel.id) as TeamChannel?
+                old = client.cache.retrieveChannel(channel.id) as TeamChannel?
             )
         }
     }

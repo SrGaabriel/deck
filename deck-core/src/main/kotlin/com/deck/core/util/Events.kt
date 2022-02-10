@@ -1,7 +1,6 @@
 package com.deck.core.util
 
 import com.deck.common.util.DeckDSL
-import com.deck.common.util.DeckExperimental
 import com.deck.core.event.DeckEvent
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -18,14 +17,12 @@ public data class WrappedEventSupplierData(
 )
 
 @DeckDSL
-@DeckExperimental
 public inline fun <reified T : DeckEvent> WrappedEventSupplier.on(
     scope: CoroutineScope = wrappedEventSupplierData.scope,
     gatewayId: Int? = wrappedEventSupplierData.listeningGatewayId,
     noinline callback: suspend T.() -> Unit
 ): Job = on(gatewayId, scope, wrappedEventSupplierData.sharedFlow, callback)
 
-@DeckExperimental
 public suspend inline fun <reified T : DeckEvent> WrappedEventSupplier.await(
     timeout: Long = 4000,
     scope: CoroutineScope = wrappedEventSupplierData.scope,

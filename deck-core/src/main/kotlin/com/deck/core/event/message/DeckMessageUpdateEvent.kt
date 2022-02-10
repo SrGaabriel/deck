@@ -62,7 +62,7 @@ public data class DeckMessageUpdateEvent(
                 team = team,
                 channel = channel,
                 member = member,
-                oldMessage = client.entityCacheManager.retrieveMessage(event.message.id.mapToBuiltin())
+                oldMessage = client.cache.retrieveMessage(event.message.id.mapToBuiltin())
             )
         }
     }
