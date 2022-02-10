@@ -11,6 +11,9 @@ import java.util.*
 public interface StatelessTeam: StatelessEntity<Team> {
     public val id: GenericId
 
+    public suspend fun getChannel(channelId: UUID): TeamChannel? =
+        client.entityDelegator.getTeamChannel(channelId, id)
+
     public suspend fun getMember(memberId: GenericId): Member? =
         client.entityDelegator.getTeamMembers(id)?.firstOrNull { it.id == memberId }
 

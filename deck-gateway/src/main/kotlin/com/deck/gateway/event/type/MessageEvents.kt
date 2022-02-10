@@ -42,9 +42,9 @@ public data class GatewayChatMessageCreatedEvent(
 public data class GatewayChatMessageUpdatedEvent(
     val guildedClientId: UniqueId,
     val channelId: UniqueId,
-    val channelCategoryId: IntGenericId?,
+    val channelCategoryId: OptionalProperty<IntGenericId?> = OptionalProperty.NotPresent,
     val channelType: RawChannelType,
-    val teamId: GenericId?,
+    val teamId: OptionalProperty<GenericId?> = OptionalProperty.NotPresent,
     val contentType: RawChannelContentType?,
     val updatedBy: GenericId,
     val contentId: UniqueId,

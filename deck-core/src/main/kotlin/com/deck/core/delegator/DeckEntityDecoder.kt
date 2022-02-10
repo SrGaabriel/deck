@@ -210,10 +210,9 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
             content = raw.content.decode(),
             channel = BlankStatelessMessageChannel(client, channelId, team),
             createdAt = raw.createdAt,
-            createdBy = raw.createdBy,
+            author = BlankStatelessUser(client, raw.createdBy),
             updatedAt = null,
-            updatedBy = null,
-            isSilent = raw.isSilent,
+            editor = null,
             isPrivate = raw.isPrivate,
             team = team,
             repliesToId = raw.repliesToIds.firstOrNull()?.mapToBuiltin()

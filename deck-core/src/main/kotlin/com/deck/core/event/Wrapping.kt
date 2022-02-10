@@ -10,6 +10,7 @@ import com.deck.core.event.channel.content.DeckTeamChannelContentDeleteEvent
 import com.deck.core.event.channel.content.DeckTeamChannelContentReplyCreateEvent
 import com.deck.core.event.message.DeckMessageCreateEvent
 import com.deck.core.event.message.DeckMessageDeleteEvent
+import com.deck.core.event.message.DeckMessageUpdateEvent
 import com.deck.core.util.WrappedEventSupplier
 import com.deck.core.util.WrappedEventSupplierData
 import com.deck.gateway.event.GatewayEvent
@@ -41,6 +42,7 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
     override fun startListeningAndConveying(): Job = client.gateway.orchestrator.on<GatewayEvent> {
         val deckEvent: DeckEvent = when (this) {
             is GatewayChatMessageCreatedEvent -> DeckMessageCreateEvent.map(client, this)
+            is GatewayChatMessageUpdatedEvent -> DeckMessageUpdateEvent.map(client, this)
             is GatewayChatMessageDeletedEvent -> DeckMessageDeleteEvent.map(client, this)
             is GatewayTeamChannelCreatedEvent -> DeckTeamChannelCreateEvent.map(client, this)
             is GatewayTeamChannelDeletedEvent -> DeckTeamChannelDeleteEvent.map(client, this)
