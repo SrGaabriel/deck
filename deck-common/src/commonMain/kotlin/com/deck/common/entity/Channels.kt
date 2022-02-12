@@ -40,7 +40,7 @@ public data class RawChannel(
     @DeckUnknown val groupType: String = "",
     val rolesById: Dictionary<String, RawRolePermissionsOverride>,
     @DeckUnknown val tournamentsRolesById: OptionalProperty<Unit?> = OptionalProperty.NotPresent,
-    @DeckUnsupported val createdByInfo: OptionalProperty<Unit?> = OptionalProperty.NotPresent
+    @property:DeckUnsupported val createdByInfo: OptionalProperty<Unit?> = OptionalProperty.NotPresent
 )
 
 /** @param voiceParticipants is not present on DMChatChannelCreated events */

@@ -14,18 +14,16 @@ import java.net.URL
  * Accesses and reads the specified URL,
  * then uploads the read bytes, also closing the stream.
  *
- * @param name the file name with the extension
  * @param url image url
  */
 public suspend fun DeckClient.uploadFile(
-    name: String,
     url: String,
     type: DynamicMediaType
 ): GuildedMedia = coroutineScope {
     async(Dispatchers.IO) {
         val connection = URL(url).openConnection().also { it.connect() }
         connection.getInputStream().let { stream ->
-            uploadFile(name, stream, type).also {
+            uploadFile(connection.url.file.ifEmpty { "image" }, stream, type).also {
                 stream.close()
             }
         }

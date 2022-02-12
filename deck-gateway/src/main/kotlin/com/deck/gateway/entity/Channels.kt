@@ -38,7 +38,7 @@ public data class RawPartialTeamChannel(
     @DeckUnknown val groupType: OptionalProperty<String> = OptionalProperty.NotPresent,
     val rolesById: OptionalProperty<Dictionary<String, RawRolePermissionsOverride>> = OptionalProperty.NotPresent,
     @DeckUnknown val tournamentsRolesById: OptionalProperty<Unit?> = OptionalProperty.NotPresent,
-    @DeckUnsupported val createdByInfo: OptionalProperty<Unit?> = OptionalProperty.NotPresent
+    @property:DeckUnsupported val createdByInfo: OptionalProperty<Unit?> = OptionalProperty.NotPresent
 )
 
 @Serializable

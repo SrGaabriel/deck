@@ -129,7 +129,7 @@ public class DefaultGateway(
     override suspend fun startHeartbeat(): Job = scope.launch {
         hello = await(8000, gatewayId = gatewayId) ?: return@launch logger.error { "Gateway hello payload wasn't sent in time in gateway $gatewayId." }
         val tickerChannel = ticker(hello.pingInterval, hello.pingTimeout)
-        logger.info { "[DECK Gateway #${gatewayId}] Created ticker channel, now starting to send heartbeats to guilded." }
+        logger.info { "[DECK Gateway #${gatewayId}] Created ticker channel, now starting to send heartbeats.." }
         tickerChannel.consumeAsFlow().collect {
             webSocketSession.send(Constants.GatewayPingContent)
         }
