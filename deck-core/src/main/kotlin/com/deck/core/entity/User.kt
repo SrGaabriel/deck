@@ -17,7 +17,7 @@ public interface User : Entity {
     /** Null when user doesn't have a banner set (empty) */
     public val banner: String?
 
-    public val aboutInfo: DeckUserAboutInfo?
+    public val aboutInfo: DeckUserAboutInfo
 
     public val creationTime: Instant
     public val lastLoginTime: Instant

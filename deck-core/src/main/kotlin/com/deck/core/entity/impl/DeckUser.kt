@@ -17,7 +17,7 @@ public data class DeckUser(
     override val subdomain: String?,
     override val avatar: String?,
     override val banner: String?,
-    override val aboutInfo: DeckUserAboutInfo?,
+    override val aboutInfo: DeckUserAboutInfo,
     override val creationTime: Instant,
     override val lastLoginTime: Instant
 ) : User

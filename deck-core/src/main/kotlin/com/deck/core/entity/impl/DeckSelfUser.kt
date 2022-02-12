@@ -14,7 +14,7 @@ public data class DeckSelfUser constructor(
     override var subdomain: String?,
     override var avatar: String?,
     override var banner: String?,
-    override var aboutInfo: DeckUserAboutInfo?,
+    override var aboutInfo: DeckUserAboutInfo,
     override val creationTime: Instant,
     override val lastLoginTime: Instant,
     override val teams: List<StatelessTeam>

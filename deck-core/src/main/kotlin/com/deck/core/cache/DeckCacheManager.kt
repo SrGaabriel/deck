@@ -51,20 +51,21 @@ public class DeckCacheManager : CacheManager {
     }
 
     override fun updateMember(id: GenericId, teamId: GenericId, member: Member?) {
-        val members = retrieveMembers(teamId).orEmpty().associateBy { it.id }.toMutableMap()
-        if (member == null) members.remove(id) else members[id] = member
+        val members = retrieveMembers(teamId).orEmpty().toMutableMap()
+        if (member == null)
+            members.remove(id) else members[id] = member
         updateMembers(teamId, members)
     }
 
     override fun retrieveMember(id: GenericId, teamId: GenericId): Member? {
-        return retrieveMembers(teamId)?.firstOrNull { it.id == id }
+        return retrieveMembers(teamId)?.get(id)
     }
 
     override fun updateMembers(teamId: GenericId, members: Map<GenericId, Member>) {
         this.members.putOrInvalidate(teamId, members)
     }
 
-    override fun retrieveMembers(teamId: GenericId): List<Member>? {
-        return members.getIfPresent(teamId)?.values?.toList()
+    override fun retrieveMembers(teamId: GenericId): Map<GenericId, Member>? {
+        return members.getIfPresent(teamId)
     }
 }

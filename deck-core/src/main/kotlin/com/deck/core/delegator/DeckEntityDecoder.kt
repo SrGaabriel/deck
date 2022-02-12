@@ -44,7 +44,7 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
         subdomain = raw.subdomain.asNullable(),
         avatar = raw.profilePicture.asNullable(),
         banner = raw.profileBannerSm.asNullable(),
-        aboutInfo = raw.aboutInfo.asNullable()?.let { DeckUserAboutInfo.from(it) },
+        aboutInfo = DeckUserAboutInfo.from(raw.aboutInfo.asNullable()),
         creationTime = raw.joinDate.asNullable()!!,
         lastLoginTime = raw.lastOnline.asNullable()!!,
     )
@@ -56,7 +56,7 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
         subdomain = raw.user.subdomain.asNullable(),
         avatar = raw.user.profilePicture.asNullable(),
         banner = raw.user.profileBannerLg.asNullable(),
-        aboutInfo = raw.user.aboutInfo.asNullable()?.let { DeckUserAboutInfo.from(it) },
+        aboutInfo = DeckUserAboutInfo.from(raw.user.aboutInfo.asNullable()),
         creationTime = raw.user.joinDate.asNullable()!!,
         lastLoginTime = raw.user.lastOnline.asNullable()!!,
         teams = raw.teams.map { BlankStatelessTeam(client, it.id) }

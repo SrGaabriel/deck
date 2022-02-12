@@ -27,7 +27,7 @@ public suspend fun DeckClient.getChannel(id: UUID, teamId: GenericId? = null): C
 public suspend fun DeckClient.getTeamChannel(id: UUID, teamId: GenericId): Channel? =
     entityDelegator.getTeamChannel(id, teamId)
 
-public suspend fun DeckClient.getTeamMembers(teamId: GenericId): List<Member>? =
+public suspend fun DeckClient.getTeamMembers(teamId: GenericId): Collection<Member>? =
     entityDelegator.getTeamMembers(teamId)
 
 public suspend fun DeckClient.getPrivateChannel(id: UUID): Channel? =

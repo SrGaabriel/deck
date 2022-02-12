@@ -5,8 +5,8 @@ import com.deck.common.util.AuthenticationResult
 import com.deck.common.util.GenericId
 import com.deck.core.cache.CacheManager
 import com.deck.core.cache.DeckCacheManager
-import com.deck.core.cache.observer.CacheEntityObserver
-import com.deck.core.cache.observer.DefaultCacheEntityObserver
+import com.deck.core.cache.observer.CacheUpdater
+import com.deck.core.cache.observer.DefaultCacheUpdater
 import com.deck.core.delegator.DeckEntityDecoder
 import com.deck.core.delegator.DeckEntityDelegator
 import com.deck.core.delegator.EntityDecoder
@@ -41,8 +41,9 @@ public class DeckClient(
     public val cache: CacheManager = DeckCacheManager()
 
     public val entityDecoder: EntityDecoder = DeckEntityDecoder(this)
-    public val entityCacheObserver : CacheEntityObserver = DefaultCacheEntityObserver(this, cache, entityDecoder)
     public val entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityDecoder, cache)
+
+    public val cacheUpdater : CacheUpdater = DefaultCacheUpdater(this, cache, entityDecoder)
 
     public val selfId: GenericId by rest.restClient::selfId
     public val self: StatelessUser by lazy { BlankStatelessUser(this, selfId) }
@@ -52,10 +53,10 @@ public class DeckClient(
             gateway.auth = result
             rest.restClient.token = result.token
             rest.restClient.selfId = result.self.user.id
+            cache.updateUser(result.self.user.id, entityDecoder.decodeSelf(result.self))
         }
         gateway.openTeamGateways(*authenticationResults.self.teams.map { it.id }.toTypedArray())
         gateway.start()
         eventService.startListening()
-        entityCacheObserver.startObserving()
     }
 }

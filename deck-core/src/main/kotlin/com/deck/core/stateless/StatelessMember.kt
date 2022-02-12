@@ -21,6 +21,7 @@ public interface StatelessMember: StatelessEntity<Member> {
         client.rest.teamRoute.removeRole(team.id, roleId, id)
 
     override suspend fun getState(): Member {
-        TODO("Not yet implemented")
+        return client.entityDelegator.getMember(id = id, teamId = team.id)
+            ?: error("Tried to access an invalid user state")
     }
 }

@@ -78,9 +78,9 @@ public class DeckEntityDelegator(
         return decodedChannel
     }
 
-    override suspend fun getTeamMembers(teamId: GenericId): List<Member> {
+    override suspend fun getTeamMembers(teamId: GenericId): Collection<Member> {
         val cachedMembers = cache.retrieveMembers(teamId)
-        if (cachedMembers != null) return cachedMembers
+        if (cachedMembers != null) return cachedMembers.values
 
         val members = rest.teamRoute.nullableRequest { getMembers(teamId) }?.map { decoder.decodeMember(teamId, it) }.orEmpty()
         for (member in members) {

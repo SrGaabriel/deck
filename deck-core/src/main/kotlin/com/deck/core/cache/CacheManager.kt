@@ -38,5 +38,5 @@ public interface CacheManager {
 
     public fun updateMembers(teamId: GenericId, members: Map<GenericId, Member>)
 
-    public fun retrieveMembers(teamId: GenericId): List<Member>?
+    public fun retrieveMembers(teamId: GenericId): Map<GenericId, Member>?
 }

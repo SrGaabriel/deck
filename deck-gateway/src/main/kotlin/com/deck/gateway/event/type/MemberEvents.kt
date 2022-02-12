@@ -2,7 +2,10 @@ package com.deck.gateway.event.type
 
 import com.deck.common.entity.RawApplication
 import com.deck.common.entity.RawTeamMember
-import com.deck.common.util.*
+import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
+import com.deck.common.util.OptionalProperty
+import com.deck.common.util.UniqueId
 import com.deck.gateway.entity.RawPartialApplication
 import com.deck.gateway.entity.RawTeamMemberUserInfo
 import com.deck.gateway.event.GatewayEvent
@@ -47,7 +50,6 @@ public data class GatewayTeamApplicationRemovedEvent(
 
 /** Incredibly enough, [guildedClientId] and [updatedBy] are missing when webhooks update other members */
 @Serializable
-@DeckExperimental
 @SerialName("TeamMemberUpdated")
 public data class GatewayTeamMemberUpdatedEvent(
     val guildedClientId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,

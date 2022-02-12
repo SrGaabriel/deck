@@ -30,7 +30,7 @@ public interface EntityDelegator : CoroutineScope {
 
     public suspend fun getTeamChannel(id: UUID, teamId: GenericId): TeamChannel?
 
-    public suspend fun getTeamMembers(teamId: GenericId): List<Member>?
+    public suspend fun getTeamMembers(teamId: GenericId): Collection<Member>?
 
     public suspend fun getPrivateChannel(id: UUID): Channel?
 

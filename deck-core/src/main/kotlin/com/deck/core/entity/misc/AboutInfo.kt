@@ -15,11 +15,11 @@ public data class DeckUserAboutInfo(
     val tagline: String?
 ) {
     public companion object {
-        public val Empty: DeckUserAboutInfo = DeckUserAboutInfo("", "")
+        public val Empty: DeckUserAboutInfo = DeckUserAboutInfo(null, null)
 
-        public fun from(raw: RawUserAboutInfo): DeckUserAboutInfo = DeckUserAboutInfo(
+        public fun from(raw: RawUserAboutInfo?): DeckUserAboutInfo = if (raw != null) DeckUserAboutInfo(
             biography = raw.bio,
             tagline = raw.tagLine.asNullable()
-        )
+        ) else Empty
     }
 }

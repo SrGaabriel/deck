@@ -73,7 +73,9 @@ public data class RawFetchedMember(
     val profilePicture: OptionalProperty<String> = OptionalProperty.NotPresent,
     val profileBannerBlur: String?,
     val nickname: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val roleIds: List<IntGenericId>
+    val roleIds: OptionalProperty<List<IntGenericId>> = OptionalProperty.NotPresent,
+    @DeckObsoleteApi
+    val type: OptionalProperty<String> = OptionalProperty.NotPresent
 )
 
 @Serializable
