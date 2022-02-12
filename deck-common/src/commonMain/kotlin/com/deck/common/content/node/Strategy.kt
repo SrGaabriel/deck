@@ -7,6 +7,7 @@ import com.deck.common.content.from
 import com.deck.common.entity.*
 import com.deck.common.util.OptionalProperty
 import com.deck.common.util.asNullable
+import com.deck.common.util.getValue
 import com.deck.common.util.optional
 
 public fun Content.encode(): RawMessageContent = RawMessageContent(
@@ -80,9 +81,9 @@ public fun RawMessageContentNode.decode(): Node? {
         RawMessageContentNodeType.MARKDOWN_PLAIN_TEXT ->
             Node.Paragraph(content = nodes.mapNotNull(RawMessageContentNode::decode))
         RawMessageContentNodeType.LINK ->
-            Node.Paragraph.Link(data.href.asNullable()!!)
+            Node.Paragraph.Link(data.href.getValue())
         RawMessageContentNodeType.REACTION ->
-            Node.Paragraph.Reaction(data.reaction.asNullable()!!.customReactionId)
+            Node.Paragraph.Reaction(data.reaction.getValue().customReactionId)
         RawMessageContentNodeType.WEBHOOK_MESSAGE ->
             Node.Embed(embeds = embeds.orEmpty())
         RawMessageContentNodeType.IMAGE ->
@@ -96,7 +97,7 @@ public fun RawMessageContentNode.decode(): Node? {
         RawMessageContentNodeType.BLANK ->
             Node.Paragraph.Text(leaves ?: return null)
         RawMessageContentNodeType.CODE_BLOCK ->
-            Node.CodeBlock(data.language.asNullable()!!, nodes.mapNotNull(RawMessageContentNode::decode).filterIsInstance<Node.CodeBlock.Line>())
+            Node.CodeBlock(data.language.getValue(), nodes.mapNotNull(RawMessageContentNode::decode).filterIsInstance<Node.CodeBlock.Line>())
         RawMessageContentNodeType.CODE_LINE ->
             Node.CodeBlock.Line(nodes.firstOrNull()?.decode()?.data?.leaves?.firstOrNull()?.text ?: return null)
         RawMessageContentNodeType.BULLETED_LIST ->
@@ -110,6 +111,6 @@ public fun RawMessageContentNode.decode(): Node? {
         RawMessageContentNodeType.MENTION ->
             data.mention.asNullable()?.let { Node.Mention(it.id, it.type) }!!
         RawMessageContentNodeType.MENTION_CHANNEL ->
-            Node.Mention.Channel(data.channel.asNullable()!!.id)
+            Node.Mention.Channel(data.channel.getValue().id)
     }
 }

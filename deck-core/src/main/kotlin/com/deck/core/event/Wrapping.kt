@@ -10,6 +10,7 @@ import com.deck.core.event.channel.content.DeckTeamChannelContentDeleteEvent
 import com.deck.core.event.channel.content.DeckTeamChannelContentReplyCreateEvent
 import com.deck.core.event.message.DeckMessageCreateEvent
 import com.deck.core.event.message.DeckMessageDeleteEvent
+import com.deck.core.event.message.DeckMessageReactionAddEvent
 import com.deck.core.event.message.DeckMessageUpdateEvent
 import com.deck.core.event.team.DeckMemberLeaveEvent
 import com.deck.core.event.team.DeckMemberUpdateEvent
@@ -46,6 +47,7 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
             is GatewayChatMessageCreatedEvent -> DeckMessageCreateEvent.map(client, this)
             is GatewayChatMessageUpdatedEvent -> DeckMessageUpdateEvent.map(client, this)
             is GatewayChatMessageDeletedEvent -> DeckMessageDeleteEvent.map(client, this)
+            is GatewayChatMessageReactionAddedEvent -> DeckMessageReactionAddEvent.map(client, this)
             is GatewayTeamChannelCreatedEvent -> DeckTeamChannelCreateEvent.map(client, this)
             is GatewayTeamChannelDeletedEvent -> DeckTeamChannelDeleteEvent.map(client, this)
             is GatewayTeamChannelUpdatedEvent -> DeckTeamChannelUpdateEvent.map(client, this)

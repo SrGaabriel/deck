@@ -13,8 +13,8 @@ public annotation class DeckUnknown
  * meaning that it's known but was not adapted and isn't ready for use.
  */
 @Retention(AnnotationRetention.BINARY)
-@Target(AnnotationTarget.PROPERTY)
-@RequiresOptIn(level = RequiresOptIn.Level.WARNING)
+@Target(AnnotationTarget.PROPERTY, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
+@RequiresOptIn(level = RequiresOptIn.Level.ERROR)
 public annotation class DeckUnsupported
 
 /**

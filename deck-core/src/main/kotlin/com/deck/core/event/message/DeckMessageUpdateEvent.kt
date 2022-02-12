@@ -8,6 +8,7 @@ import com.deck.core.entity.Message
 import com.deck.core.entity.impl.DeckMessage
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
+import com.deck.core.event.MessageEvent
 import com.deck.core.stateless.StatelessMember
 import com.deck.core.stateless.StatelessTeam
 import com.deck.core.stateless.StatelessUser
@@ -21,14 +22,14 @@ import com.deck.gateway.event.type.GatewayChatMessageUpdatedEvent
 public data class DeckMessageUpdateEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
-    val message: Message,
+    override val message: Message,
     val channel: StatelessMessageChannel,
     val team: StatelessTeam?,
     val member: StatelessMember?,
     val sender: StatelessUser,
     val editor: StatelessUser,
     val oldMessage: Message?
-): DeckEvent {
+): DeckEvent, MessageEvent {
     public companion object: EventMapper<GatewayChatMessageUpdatedEvent, DeckMessageUpdateEvent> {
         override suspend fun map(client: DeckClient, event: GatewayChatMessageUpdatedEvent): DeckMessageUpdateEvent {
             val team = event.teamId.asNullable()?.let { BlankStatelessTeam(client, it) }

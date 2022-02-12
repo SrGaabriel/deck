@@ -1,6 +1,6 @@
 package com.deck.core.event.channel.content
 
-import com.deck.common.util.asNullable
+import com.deck.common.util.getValue
 import com.deck.core.DeckClient
 import com.deck.core.entity.channel.ForumThread
 import com.deck.core.event.EventMapper
@@ -22,7 +22,7 @@ public class DeckForumThreadCreateEvent(
             client: DeckClient,
             event: GatewayTeamChannelContentCreatedEvent
         ): DeckForumThreadCreateEvent {
-            val thread = client.entityDecoder.decodeForumThread(event.thread.asNullable()!!)
+            val thread = client.entityDecoder.decodeForumThread(event.thread.getValue())
             return DeckForumThreadCreateEvent(
                 client = client,
                 gatewayId = event.gatewayId,

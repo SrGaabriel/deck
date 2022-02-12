@@ -40,6 +40,11 @@ public fun <T> T.optional(): OptionalProperty.Present<T> = OptionalProperty.Pres
 public fun <T> T?.nullableOptional(): OptionalProperty<T> =
     if (this == null) OptionalProperty.NotPresent else OptionalProperty.Present(this)
 
+public fun <T> OptionalProperty<T>.getValue(): T = when(this) {
+    is OptionalProperty.NotPresent -> error("Tried to access a missing property value")
+    is OptionalProperty.Present<T> -> value
+}
+
 public fun <T> OptionalProperty<T>.asNullable(): T? = when (this) {
     is OptionalProperty.NotPresent -> null
     is OptionalProperty.Present<T> -> value

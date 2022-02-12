@@ -4,6 +4,7 @@ import com.deck.common.content.node.decode
 import com.deck.common.entity.*
 import com.deck.common.util.GenericId
 import com.deck.common.util.asNullable
+import com.deck.common.util.getValue
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.*
@@ -45,8 +46,8 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
         avatar = raw.profilePicture.asNullable(),
         banner = raw.profileBannerSm.asNullable(),
         aboutInfo = DeckUserAboutInfo.from(raw.aboutInfo.asNullable()),
-        creationTime = raw.joinDate.asNullable()!!,
-        lastLoginTime = raw.lastOnline.asNullable()!!,
+        creationTime = raw.joinDate.getValue(),
+        lastLoginTime = raw.lastOnline.getValue(),
     )
 
     override fun decodeSelf(raw: RawSelfUser): SelfUser = DeckSelfUser(
@@ -57,8 +58,8 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
         avatar = raw.user.profilePicture.asNullable(),
         banner = raw.user.profileBannerLg.asNullable(),
         aboutInfo = DeckUserAboutInfo.from(raw.user.aboutInfo.asNullable()),
-        creationTime = raw.user.joinDate.asNullable()!!,
-        lastLoginTime = raw.user.lastOnline.asNullable()!!,
+        creationTime = raw.user.joinDate.getValue(),
+        lastLoginTime = raw.user.lastOnline.getValue(),
         teams = raw.teams.map { BlankStatelessTeam(client, it.id) }
     )
 
@@ -225,9 +226,9 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
         name = raw.name,
         description = raw.description.orEmpty(),
         type = RawChannelType.Team,
-        contentType = raw.contentType.asNullable()!!,
-        createdAt = raw.createdAt.asNullable()!!,
-        createdBy = BlankStatelessUser(client, raw.createdBy.asNullable()!!),
+        contentType = raw.contentType.getValue(),
+        createdAt = raw.createdAt.getValue(),
+        createdBy = BlankStatelessUser(client, raw.createdBy.getValue()),
         archivedAt = raw.archivedAt.asNullable(),
         archivedBy = raw.archivedBy.asNullable()?.let { archievedBy -> BlankStatelessUser(client, archievedBy) } ,
         updatedAt = raw.updatedAt.asNullable(),

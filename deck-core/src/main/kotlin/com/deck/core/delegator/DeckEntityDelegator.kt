@@ -93,7 +93,7 @@ public class DeckEntityDelegator(
         val cachedChannel = cache.retrieveChannel(id)
         if (cachedChannel != null) return cachedChannel
 
-        val channel = rest.channelRoute.nullableRequest { getChannel(id.mapToModel()) } ?: return null
+        val channel = rest.channelRoute.nullableRequest { getChannel(id) } ?: return null
         val decodedChannel = decoder.decodeChannel(channel)
         cache.updateChannel(id, decodedChannel)
 

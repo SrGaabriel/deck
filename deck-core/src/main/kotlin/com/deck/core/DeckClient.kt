@@ -32,7 +32,7 @@ public class DeckClient(
 ) : EventSupplier, WrappedEventSupplier {
     public var eventService: EventService = DefaultEventService(this)
 
-    public var authenticationService: AuthService = DefaultAuthService(rest.authRoute)
+    public var authenticationService: AuthService = DefaultAuthService(this)
     public var authenticationResults: AuthenticationResult by Delegates.notNull()
 
     override val eventSupplierData: EventSupplierData by gateway::eventSupplierData
@@ -49,12 +49,7 @@ public class DeckClient(
     public val self: StatelessUser by lazy { BlankStatelessUser(this, selfId) }
 
     public suspend fun login() {
-        authenticationResults = authenticationService.login(auth).also { result ->
-            gateway.auth = result
-            rest.restClient.token = result.token
-            rest.restClient.selfId = result.self.user.id
-            cache.updateUser(result.self.user.id, entityDecoder.decodeSelf(result.self))
-        }
+        authenticationResults = authenticationService.login(auth)
         gateway.openTeamGateways(*authenticationResults.self.teams.map { it.id }.toTypedArray())
         gateway.start()
         eventService.startListening()

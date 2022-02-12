@@ -81,8 +81,8 @@ public class DefaultGateway(
     override lateinit var hello: GatewayHelloEvent
     override lateinit var webSocketSession: DefaultWebSocketSession
 
-    private lateinit var listeningJob: Job
-    private lateinit var heartbeatJob: Job
+    public lateinit var listeningJob: Job
+    public lateinit var heartbeatJob: Job
 
     override val logger: KLogger = logger("Gateway $gatewayId Logger")
 

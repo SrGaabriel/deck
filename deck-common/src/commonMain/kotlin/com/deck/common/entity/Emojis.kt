@@ -27,7 +27,8 @@ public data class RawEmoji(
 public data class RawReaction(
     val id: OptionalProperty<IntGenericId> = OptionalProperty.NotPresent,
     val customReaction: OptionalProperty<RawCustomReaction> = OptionalProperty.NotPresent,
-    val customReactionId: IntGenericId
+    val customReactionId: IntGenericId,
+    val createdBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent
 )
 
 @Serializable

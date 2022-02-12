@@ -1,20 +1,13 @@
 plugins {
-    kotlin("multiplatform")
+    kotlin("jvm")
 }
 
 repositories {
     mavenCentral()
 }
 
-kotlin {
-    jvm()
-    sourceSets {
-        val commonMain by getting {
-            dependencies {
-                api(project(":deck-common"))
-                implementation(kotlin("stdlib-common"))
-            }
-            explicitApi()
-        }
-    }
+dependencies {
+    implementation(kotlin("stdlib"))
+    implementation(project(":deck-core"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Dependencies.KotlinVersion}")
 }

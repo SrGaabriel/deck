@@ -1,5 +1,13 @@
 package com.deck.common.util
 
+public data class CustomReaction(
+    val id: IntGenericId,
+    val name: String,
+    val png: String?,
+    val webp: String?,
+    val apng: String?
+)
+
 // Todo: Improve Support
 public data class Emoji(
     public val id: Int,
