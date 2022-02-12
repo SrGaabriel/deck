@@ -34,8 +34,8 @@ public class GatewayOrchestrator: EventSupplier, CoroutineScope {
 
     // When enabled prints payloads json
     public var debugPayloads: Boolean = false
-    public val gateways: MutableList<Gateway> = mutableListOf<Gateway>()
-    public val globalEventsFlow: MutableSharedFlow<GatewayEvent> = MutableSharedFlow<GatewayEvent>()
+    public val gateways: MutableList<Gateway> = mutableListOf()
+    public val globalEventsFlow: MutableSharedFlow<GatewayEvent> = MutableSharedFlow()
 
     // We'll use a different counter since we don't want a previously closed gateway and a new one having same IDs
     private var gatewayCurrentId = 0
@@ -52,6 +52,9 @@ public class GatewayOrchestrator: EventSupplier, CoroutineScope {
 
     public fun openTeamGateway(teamId: GenericId): Gateway =
         openGateway(GatewayParameters(teamId = teamId, guildedClientId = authentication.midSession))
+
+    public suspend fun closeGateway(gatewayId: Int): Unit =
+        closeGateway(gateways.first { it.gatewayId == gatewayId })
 
     public suspend fun closeGateway(teamId: GenericId): Unit =
         closeGateway(gateways.first { it.parameters.teamId == teamId })

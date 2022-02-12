@@ -11,6 +11,11 @@ import com.deck.core.util.sendMessage
 public interface StatelessMessageChannel: StatelessEntity<MessageChannel>, StandardStatelessChannel {
     public val team: StatelessTeam?
 
+    /**
+     * Sends a message to this message channel
+     *
+     * @param builder message builder
+     */
     public suspend fun sendMessage(builder: DeckMessageBuilder.() -> Unit): Message =
         client.entityDecoder.decodePartialSentMessage(
             id,

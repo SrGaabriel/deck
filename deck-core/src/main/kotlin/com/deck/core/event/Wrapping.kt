@@ -31,6 +31,12 @@ public interface DeckEvent {
 public interface EventService : WrappedEventSupplier {
     public val eventWrappingFlow: SharedFlow<DeckEvent>
 
+    /**
+     * Starts listening to all gateway events, wraps them if possible
+     * and then emit into the [eventWrappingFlow] flow.
+     *
+     * @return listening job
+     */
     public fun startListening(): Job
 }
 
@@ -64,6 +70,12 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
     }
 }
 
+// TODO: To be reformulated
 public interface EventMapper<F : GatewayEvent, T : DeckEvent> {
+    /**
+     * Method that simply maps the [F] gateway event into [F] deck event.
+     *
+     * @return new event or null if not applicable (won't be emitted)
+     */
     public suspend fun map(client: DeckClient, event: F): T?
 }

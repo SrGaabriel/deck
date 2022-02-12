@@ -1,5 +1,6 @@
 package com.deck.core.util
 
+// TODO: Redesign
 public sealed class Patch {
     public data class Member(
         val name: Difference<String>,

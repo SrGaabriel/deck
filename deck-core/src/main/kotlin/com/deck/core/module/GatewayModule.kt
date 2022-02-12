@@ -17,13 +17,41 @@ public interface GatewayModule : EventSupplier {
     public var auth: AuthenticationResult
     public var logPayloadsJson: Boolean
 
+    /**
+     * Creates a global gateway and starts
+     * to listen to all previously created gateways (including the global one)
+     */
     public suspend fun start()
 
+    /**
+     * Opens a gateway (global if [teamId] is null, or team)
+     *
+     * @param teamId null if gateway is global
+     *
+     * @return the created gateway
+     */
     public suspend fun openGateway(teamId: GenericId? = null): Gateway
 
+    /**
+     * Creates gateways for each [teamIds].
+     *
+     * @param teamIds all team ids
+     */
     public suspend fun openTeamGateways(vararg teamIds: GenericId)
 
+    /**
+     * Closes the gateway with the specified [teamId], or the global gateway if not provided.
+     *
+     * @param teamId team id
+     */
     public suspend fun closeGateway(teamId: GenericId? = null)
+
+    /**
+     * Closes the gateway with the specified [gatewayId].
+     *
+     * @param gatewayId gateway id
+     */
+    public suspend fun closeGateway(gatewayId: Int)
 }
 
 public class DefaultGatewayModule : GatewayModule {
@@ -55,5 +83,9 @@ public class DefaultGatewayModule : GatewayModule {
 
     override suspend fun closeGateway(teamId: GenericId?) {
         if (teamId == null) orchestrator.closeGateway(globalGateway) else orchestrator.closeGateway(teamId)
+    }
+
+    override suspend fun closeGateway(gatewayId: Int) {
+        orchestrator.closeGateway(gatewayId)
     }
 }

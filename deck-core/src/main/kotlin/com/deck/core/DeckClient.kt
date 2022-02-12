@@ -25,6 +25,14 @@ import com.deck.gateway.util.EventSupplier
 import com.deck.gateway.util.EventSupplierData
 import kotlin.properties.Delegates
 
+/**
+ * Main class of the core module, used to centralize
+ * both gateway and rest modules.
+ *
+ * @param auth email and password
+ * @param rest rest module implementation
+ * @param gateway gateway module implementation
+ */
 public class DeckClient(
     private val auth: Authentication,
     public val rest: RestModule,
@@ -48,6 +56,10 @@ public class DeckClient(
     public val selfId: GenericId by rest.restClient::selfId
     public val self: StatelessUser by lazy { BlankStatelessUser(this, selfId) }
 
+    /**
+     * Logins into Guilded with provided [auth] (email, password) and
+     * opens all team gateways before starting listening to their events.
+     */
     public suspend fun login() {
         authenticationResults = authenticationService.login(auth)
         gateway.openTeamGateways(*authenticationResults.self.teams.map { it.id }.toTypedArray())

@@ -10,6 +10,12 @@ import com.deck.rest.builder.CreateForumThreadBuilder
 public interface StatelessForumChannel: StatelessEntity<ForumChannel>, StandardStatelessTeamChannel {
     public override val team: StatelessTeam
 
+    /**
+     * Creates a thread in this forum channel.
+     *
+     * @param builder thread builder
+     * @return the created thread
+     */
     public suspend fun createThread(builder: CreateForumThreadBuilder.() -> Unit): ForumThread =
         client.entityDecoder.decodeForumThread(client.rest.channelRoute.createForumThread(id, builder))
 

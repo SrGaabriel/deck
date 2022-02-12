@@ -16,6 +16,7 @@ public interface RestModule {
     public val channelRoute: ChannelRoute
 }
 
+// TODO: To be reformulated
 public class DefaultRestModule : RestModule {
     override val restClient: RestClient = RestClient()
     override val authRoute: AuthRoute = AuthRoute(restClient)

@@ -17,6 +17,12 @@ public interface StatelessForumPost: StatelessEntity<ForumChannel> {
     public val team: StatelessTeam
     public val channel: StatelessForumChannel
 
+    /**
+     * Creates a reply to this post.
+     *
+     * @param builder post builder
+     * @return the created post
+     */
     public suspend fun createReply(builder: CreateForumThreadReplyBuilder.() -> Unit): ForumPost {
         val replica = CreateForumThreadReplyBuilder().apply(builder)
         return DeckForumPost(
@@ -31,9 +37,20 @@ public interface StatelessForumPost: StatelessEntity<ForumChannel> {
         )
     }
 
+    /**
+     * Adds a reaction to this post.
+     *
+     * @param reactionId reaction id
+     */
     public suspend fun addReaction(reactionId: IntGenericId): Unit =
         client.rest.channelRoute.addReactionToForumThreadReply(team.id, id, reactionId)
 
+    /**
+     * Removes a reaction from the post. You can only remove reactions
+     * added by yourself/your account.
+     *
+     * @param reactionId reaction id
+     */
     public suspend fun removeReaction(reactionId: IntGenericId): Unit =
         client.rest.channelRoute.removeReactionFromForumThreadReply(team.id, id, reactionId)
 

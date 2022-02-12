@@ -11,9 +11,17 @@ public interface StatelessForumThread: StatelessEntity<ForumThread> {
     public val team: StatelessTeam
     public val channel: StatelessForumChannel
 
+    /**
+     * Updates your forum thread.
+     *
+     * @param builder update builder
+     */
     public suspend fun update(builder: CreateForumThreadBuilder.() -> Unit): Unit =
         client.rest.channelRoute.updateForumThread(channel.id, id, builder)
 
+    /**
+     * Deletes your forum thread.
+     */
     public suspend fun delete(): Unit =
         client.rest.channelRoute.deleteForumThread(channel.id, id)
 
