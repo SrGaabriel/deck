@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    `deck-publishing`
 }
 
 repositories {

@@ -16,15 +16,6 @@ subprojects {
             jvmTarget = "1.8"
         }
     }
-    publishing {
-        publications {
-            create<MavenPublication>("maven") {
-                groupId = project.group.toString()
-                artifactId = project.name
-                version = project.version.toString()
-            }
-        }
-    }
 }
 
 repositories {
