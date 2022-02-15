@@ -5,6 +5,7 @@ import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.common.util.OptionalProperty
 import com.deck.common.util.UniqueId
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -84,4 +85,16 @@ public data class GetChannelMessagesResponse(
 @Serializable
 public data class PinMessageRequest(
     val messageId: UniqueId
+)
+
+@Serializable
+public data class CreateScheduleAvailabilityRequest(
+    val startDate: Instant,
+    val endDate: Instant
+)
+
+@Serializable
+public data class CreateScheduleAvailabilityResponse(
+    val id: IntGenericId,
+    val availabilities: List<RawChannelAvailability>
 )

@@ -3,13 +3,10 @@ package com.deck.core.stateless.channel
 import com.deck.core.entity.channel.ForumChannel
 import com.deck.core.entity.channel.ForumThread
 import com.deck.core.stateless.StatelessEntity
-import com.deck.core.stateless.StatelessTeam
 import com.deck.core.stateless.standard.StandardStatelessTeamChannel
 import com.deck.rest.builder.CreateForumThreadBuilder
 
 public interface StatelessForumChannel: StatelessEntity<ForumChannel>, StandardStatelessTeamChannel {
-    public override val team: StatelessTeam
-
     /**
      * Creates a thread in this forum channel.
      *

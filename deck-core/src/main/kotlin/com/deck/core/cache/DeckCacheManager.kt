@@ -10,13 +10,14 @@ import com.deck.core.util.putOrInvalidate
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 public class DeckCacheManager : CacheManager {
-    override val channels: Cache<UUID, Channel> = Caffeine.newBuilder().build()
-    override val users: Cache<GenericId, User> = Caffeine.newBuilder().build()
-    override val teams: Cache<GenericId, Team> = Caffeine.newBuilder().build()
-    override val messages: Cache<UUID, Message> = Caffeine.newBuilder().build()
-    override val members: Cache<GenericId, Map<GenericId, Member>> = Caffeine.newBuilder().build()
+    private val channels: Cache<UUID, Channel> = buildStandardCache()
+    private val users: Cache<GenericId, User> = buildStandardCache()
+    private val teams: Cache<GenericId, Team> = buildStandardCache()
+    private val messages: Cache<UUID, Message> = buildStandardCache()
+    private val members: Cache<GenericId, Map<GenericId, Member>> = buildStandardCache()
 
     override fun updateChannel(id: UUID, channel: Channel?) {
         channels.putOrInvalidate(id, channel)
@@ -68,4 +69,15 @@ public class DeckCacheManager : CacheManager {
     override fun retrieveMembers(teamId: GenericId): Map<GenericId, Member>? {
         return members.getIfPresent(teamId)
     }
+
+    override fun retrieveAllMembersOfId(id: GenericId): List<Member> {
+        return members.asMap()
+            .flatMap { it.value.values }
+            .filter { it.id == id }
+    }
+
+    private fun <K, V> buildStandardCache(): Cache<K, V> = Caffeine
+        .newBuilder()
+        .expireAfterWrite(1, TimeUnit.HOURS)
+        .build()
 }

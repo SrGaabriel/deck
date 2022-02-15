@@ -73,7 +73,7 @@ public suspend inline fun <reified G> RequestService.constructNullableRateLimite
     crossinline block: suspend () -> HttpStatement
 ): G? = constructRateLimitedRequest<G>(failureHandler = FailureHandler.Nullable, block = block)
 
-public sealed class FailureHandler {
+public abstract class FailureHandler {
     public object Nullable: FailureHandler() {
         override suspend fun <G> onFailure(response: HttpResponse): G? {
             return null

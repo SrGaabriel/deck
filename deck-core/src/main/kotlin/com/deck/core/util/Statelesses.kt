@@ -7,9 +7,7 @@ import com.deck.core.stateless.StatelessMember
 import com.deck.core.stateless.StatelessMessage
 import com.deck.core.stateless.StatelessTeam
 import com.deck.core.stateless.StatelessUser
-import com.deck.core.stateless.channel.StatelessForumChannel
-import com.deck.core.stateless.channel.StatelessForumThread
-import com.deck.core.stateless.channel.StatelessMessageChannel
+import com.deck.core.stateless.channel.*
 import java.util.*
 
 internal data class BlankStatelessMember(
@@ -93,3 +91,29 @@ public fun StatelessUser(
     client: DeckClient,
     id: GenericId
 ): StatelessUser = BlankStatelessUser(client, id)
+
+internal data class BlankStatelessSchedulingChannel(
+    override val client: DeckClient,
+    override val id: UUID,
+    override val team: StatelessTeam
+): StatelessSchedulingChannel
+
+public fun StatelessSchedulingChannel(
+    client: DeckClient,
+    id: UUID,
+    team: StatelessTeam
+): StatelessSchedulingChannel = BlankStatelessSchedulingChannel(client, id, team)
+
+internal data class BlankStatelessScheduleAvailability(
+    override val client: DeckClient,
+    override val id: IntGenericId,
+    override val team: StatelessTeam,
+    override val channel: StatelessSchedulingChannel
+): StatelessScheduleAvailability
+
+public fun StatelessScheduleAvailability(
+    client: DeckClient,
+    id: IntGenericId,
+    team: StatelessTeam,
+    channel: StatelessSchedulingChannel
+): StatelessScheduleAvailability = BlankStatelessScheduleAvailability(client, id, team, channel)

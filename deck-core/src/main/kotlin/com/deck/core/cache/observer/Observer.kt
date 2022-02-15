@@ -69,7 +69,7 @@ public open class DefaultCacheUpdater(
 
     override fun onMemberUpdate(event: DeckMemberUpdateEvent) {
         val inCacheUser = cache.retrieveUser(event.user.id)
-        val inCacheMembers = cache.members.asMap().values.flatMap { it.values }
+        val inCacheMembers = cache.retrieveAllMembersOfId(event.user.id)
         if (inCacheUser != null)
             cache.updateUser(event.user.id, DeckUser(
                 client = event.client,

@@ -1,6 +1,7 @@
 package com.deck.rest.route
 
 import com.deck.common.entity.RawChannel
+import com.deck.common.entity.RawChannelAvailability
 import com.deck.common.entity.RawChannelForumThread
 import com.deck.common.entity.RawMessage
 import com.deck.common.util.GenericId
@@ -9,6 +10,7 @@ import com.deck.common.util.mapToModel
 import com.deck.rest.RestClient
 import com.deck.rest.builder.CreateForumThreadBuilder
 import com.deck.rest.builder.CreateForumThreadReplyBuilder
+import com.deck.rest.builder.CreateScheduleAvailabilityBuilder
 import com.deck.rest.builder.SendMessageRequestBuilder
 import com.deck.rest.request.*
 import com.deck.rest.util.Route
@@ -161,4 +163,36 @@ public class ChannelRoute(client: RestClient) : Route(client) {
             endpoint = "/teams/$teamId/groups/${groupId ?: "undefined"}/channels/$threadId/restore",
             method = HttpMethod.Put
         )
+
+    public suspend fun createAvailability(
+        channelId: UUID,
+        builder: CreateScheduleAvailabilityBuilder.() -> Unit
+    ): Pair<IntGenericId, List<RawChannelAvailability>> = sendRequest<CreateScheduleAvailabilityResponse, CreateScheduleAvailabilityRequest>(
+        endpoint = "/channels/$channelId/availability",
+        method = HttpMethod.Post,
+        body = CreateScheduleAvailabilityBuilder().apply(builder).toRequest()
+    ).let { response -> response.id to response.availabilities }
+
+    public suspend fun retrieveAvailabilities(channelId: UUID): List<RawChannelAvailability> = sendRequest<List<RawChannelAvailability>, Unit>(
+        endpoint = "channels/$channelId/availability",
+        method = HttpMethod.Get
+    )
+
+    public suspend fun updateAvailability(
+        channelId: UUID,
+        availabilityId: IntGenericId,
+        builder: CreateScheduleAvailabilityBuilder.() -> Unit
+    ): Pair<IntGenericId, List<RawChannelAvailability>> = sendRequest<CreateScheduleAvailabilityResponse, CreateScheduleAvailabilityRequest>(
+        endpoint = "/channels/$channelId/availability/$availabilityId",
+        method = HttpMethod.Put,
+        body = CreateScheduleAvailabilityBuilder().apply(builder).toRequest()
+    ).let { response -> response.id to response.availabilities }
+
+    public suspend fun deleteAvailability(
+        channelId: UUID,
+        availabilityId: IntGenericId
+    ): Unit = sendRequest<Unit, Unit>(
+        endpoint = "/channels/$channelId/availability/$availabilityId",
+        method = HttpMethod.Delete,
+    )
 }

@@ -46,12 +46,12 @@ public class DeckClient(
     override val eventSupplierData: EventSupplierData by gateway::eventSupplierData
     override val wrappedEventSupplierData: WrappedEventSupplierData by eventService::wrappedEventSupplierData
 
-    public val cache: CacheManager = DeckCacheManager()
+    public var cache: CacheManager = DeckCacheManager()
 
-    public val entityDecoder: EntityDecoder = DeckEntityDecoder(this)
-    public val entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityDecoder, cache)
+    public var entityDecoder: EntityDecoder = DeckEntityDecoder(this)
+    public var entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityDecoder, cache)
 
-    public val cacheUpdater : CacheUpdater = DefaultCacheUpdater(this, cache, entityDecoder)
+    public var cacheUpdater: CacheUpdater = DefaultCacheUpdater(this, cache, entityDecoder)
 
     public val selfId: GenericId by rest.restClient::selfId
     public val self: StatelessUser by lazy { BlankStatelessUser(this, selfId) }

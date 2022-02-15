@@ -6,6 +6,7 @@ import com.deck.core.entity.*
 import com.deck.core.entity.channel.Channel
 import com.deck.core.entity.channel.ForumThread
 import com.deck.core.entity.channel.PartialTeamChannel
+import com.deck.core.entity.channel.ScheduleAvailability
 import com.deck.gateway.entity.RawPartialTeamChannel
 import com.deck.rest.entity.RawFetchedMember
 import com.deck.rest.entity.RawFetchedTeam
@@ -37,4 +38,6 @@ public interface EntityDecoder {
     public fun decodePartialTeamChannel(teamId: GenericId, raw: RawPartialTeamChannel): PartialTeamChannel
 
     public fun decodeForumThread(raw: RawChannelForumThread): ForumThread
+
+    public fun decodeScheduleAvailability(raw: RawChannelAvailability): ScheduleAvailability
 }

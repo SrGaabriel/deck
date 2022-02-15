@@ -1,6 +1,7 @@
 package com.deck.core.delegator
 
 import com.deck.common.util.GenericId
+import com.deck.common.util.IntGenericId
 import com.deck.common.util.mapToModel
 import com.deck.core.cache.CacheManager
 import com.deck.core.entity.Member
@@ -8,6 +9,7 @@ import com.deck.core.entity.SelfUser
 import com.deck.core.entity.Team
 import com.deck.core.entity.User
 import com.deck.core.entity.channel.Channel
+import com.deck.core.entity.channel.ScheduleAvailability
 import com.deck.core.entity.channel.TeamChannel
 import com.deck.core.module.RestModule
 import kotlinx.coroutines.Dispatchers
@@ -88,6 +90,13 @@ public class DeckEntityDelegator(
         }
         return members
     }
+
+    override suspend fun getSchedulingChannelAvailability(id: IntGenericId, channelId: UUID): ScheduleAvailability? =
+        getSchedulingChannelAvailabilities(channelId)?.firstOrNull { it.id == id }
+
+    override suspend fun getSchedulingChannelAvailabilities(channelId: UUID): Collection<ScheduleAvailability>? =
+        rest.channelRoute.nullableRequest { retrieveAvailabilities(channelId) }
+            ?.map(decoder::decodeScheduleAvailability)
 
     override suspend fun getPrivateChannel(id: UUID): Channel? {
         val cachedChannel = cache.retrieveChannel(id)

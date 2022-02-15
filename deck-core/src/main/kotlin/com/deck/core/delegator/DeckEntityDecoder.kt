@@ -11,6 +11,7 @@ import com.deck.core.entity.*
 import com.deck.core.entity.channel.Channel
 import com.deck.core.entity.channel.ForumThread
 import com.deck.core.entity.channel.PartialTeamChannel
+import com.deck.core.entity.channel.ScheduleAvailability
 import com.deck.core.entity.impl.*
 import com.deck.core.entity.impl.channel.*
 import com.deck.core.entity.misc.DeckUserAboutInfo
@@ -96,6 +97,21 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
                 team = BlankStatelessTeam(client, teamId!!)
             )
             RawChannelContentType.Forum -> DeckForumChannel(
+                client = client,
+                id = id.mapToBuiltin(),
+                name = name,
+                description = description.orEmpty(),
+                type = type,
+                contentType = contentType,
+                createdAt = createdAt,
+                createdBy = BlankStatelessUser(client, createdBy),
+                archivedAt = archivedAt,
+                archivedBy = archivedBy?.let { BlankStatelessUser(client, it) },
+                updatedAt = updatedAt,
+                deletedAt = deletedAt,
+                team = BlankStatelessTeam(client, teamId!!)
+            )
+            RawChannelContentType.Scheduling -> DeckSchedulingChannel(
                 client = client,
                 id = id.mapToBuiltin(),
                 name = name,
@@ -278,6 +294,16 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
             isLocked = raw.isLocked,
             isDeleted = raw.isDeleted,
             createdAt = raw.createdAt
+        )
+    }
+
+    override fun decodeScheduleAvailability(raw: RawChannelAvailability): ScheduleAvailability {
+        val team = BlankStatelessTeam(client, raw.teamId)
+        return DeckScheduleAvailability(
+            client = client,
+            id = raw.id,
+            team = team,
+            channel = BlankStatelessSchedulingChannel(client, raw.channelId.mapToBuiltin(), team)
         )
     }
 }

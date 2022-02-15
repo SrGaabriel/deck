@@ -163,3 +163,15 @@ public data class RawChannelForumThread(
     val title: String,
     val visibility: String
 )
+
+@Serializable
+public data class RawChannelAvailability(
+    val id: IntGenericId,
+    val channelId: UniqueId,
+    val createdAt: Instant,
+    val endDate: Instant,
+    val startDate: Instant,
+    val teamId: GenericId,
+    val updatedAt: Instant,
+    val userId: GenericId
+)

@@ -6,13 +6,14 @@ import com.deck.common.entity.RawChannelContentType
 import com.deck.common.util.IntGenericId
 import com.deck.common.util.mapToModel
 import com.deck.common.util.nullableOptional
-import com.deck.rest.request.CreateForumThreadReplyRequest
-import com.deck.rest.request.CreateForumThreadRequest
-import com.deck.rest.request.CreateTeamChannelRequest
-import com.deck.rest.request.SendMessageRequest
+import com.deck.rest.request.*
+import kotlinx.datetime.*
+import kotlinx.datetime.TimeZone
+import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.properties.Delegates
 import kotlin.random.Random
+
 
 public class SendMessageRequestBuilder : RequestBuilder<SendMessageRequest> {
     public var uniqueId: UUID = UUID.randomUUID()
@@ -66,5 +67,29 @@ public class CreateForumThreadReplyBuilder: RequestBuilder<CreateForumThreadRepl
     override fun toRequest(): CreateForumThreadReplyRequest = CreateForumThreadReplyRequest(
         id = id,
         message = content.encode()
+    )
+}
+
+public class CreateScheduleAvailabilityBuilder: RequestBuilder<CreateScheduleAvailabilityRequest> {
+    public var start: Instant by Delegates.notNull()
+    public var ending: Instant by Delegates.notNull()
+
+    public fun now(): Instant = Clock.System.now()
+
+    @JvmName("instantTruncateToThirtyMinutes")
+    public fun Instant.truncateToThirtyMinutes(timeZone: TimeZone = TimeZone.currentSystemDefault()): Instant =
+        truncateToThirtyMinutes(this, timeZone)
+
+    public fun truncateToThirtyMinutes(instant: Instant = Clock.System.now(), timeZone: TimeZone = TimeZone.currentSystemDefault()): Instant {
+        val javaInstant = instant.toJavaInstant()
+        return javaInstant
+            .truncatedTo(ChronoUnit.MINUTES)
+            .minus(javaInstant.atZone(timeZone.toJavaZoneId()).minute % 30L, ChronoUnit.MINUTES)
+            .toKotlinInstant()
+    }
+
+    override fun toRequest(): CreateScheduleAvailabilityRequest = CreateScheduleAvailabilityRequest(
+        startDate = start,
+        endDate = ending
     )
 }
