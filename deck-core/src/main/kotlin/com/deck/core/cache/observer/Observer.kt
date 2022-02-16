@@ -19,7 +19,7 @@ import com.deck.core.util.WrappedEventSupplier
 import com.deck.core.util.nullableOr
 import com.deck.core.util.or
 
-public interface CacheUpdater {
+public interface CacheObserver {
     public val supplier: WrappedEventSupplier
     public val cache: CacheManager
     public val decoder: EntityDecoder
@@ -50,11 +50,11 @@ public interface CacheUpdater {
     }
 }
 
-public open class DefaultCacheUpdater(
+public open class DefaultCacheObserver(
     override val supplier: WrappedEventSupplier,
     override val cache: CacheManager,
     override val decoder: EntityDecoder
-): CacheUpdater {
+): CacheObserver {
     override fun onMessageCreate(event: DeckMessageCreateEvent) {
         cache.updateMessage(event.message.id, event.message)
     }

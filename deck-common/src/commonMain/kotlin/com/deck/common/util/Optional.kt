@@ -10,27 +10,21 @@ import kotlinx.serialization.encoding.Encoder
 /**
  * https://medium.com/livefront/kotlinx-serialization-de-serializing-jsons-nullable-optional-properties-442c7f0c2614
  */
-@Serializable(OptionalPropertySerializer::class)
+@Serializable(OptionalProperty.Serializer::class)
 public sealed class OptionalProperty<out T> {
     public object NotPresent : OptionalProperty<Nothing>()
+
     public data class Present<T>(val value: T) : OptionalProperty<T>()
-}
 
-public open class OptionalPropertySerializer<T>(
-    private val valueSerializer: KSerializer<T>
-) : KSerializer<OptionalProperty<T>> {
-    final override val descriptor: SerialDescriptor = valueSerializer.descriptor
+    public class Serializer<T>(private val valueSerializer: KSerializer<T>) : KSerializer<OptionalProperty<T>> {
+        override val descriptor: SerialDescriptor = valueSerializer.descriptor
 
-    final override fun deserialize(decoder: Decoder): OptionalProperty<T> =
-        OptionalProperty.Present(valueSerializer.deserialize(decoder))
+        override fun deserialize(decoder: Decoder): OptionalProperty<T> =
+            Present(valueSerializer.deserialize(decoder))
 
-    final override fun serialize(encoder: Encoder, value: OptionalProperty<T>) {
-        when (value) {
-            OptionalProperty.NotPresent -> throw SerializationException(
-                "Tried to serialize an optional property that had no value present."
-            )
-            is OptionalProperty.Present ->
-                valueSerializer.serialize(encoder, value.value)
+        override fun serialize(encoder: Encoder, value: OptionalProperty<T>): Unit = when (value) {
+            NotPresent -> throw SerializationException("Tried to serialize an optional property that had no value present.")
+            is Present -> valueSerializer.serialize(encoder, value.value)
         }
     }
 }

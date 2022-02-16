@@ -1,11 +1,19 @@
 package com.deck.core.util
 
 import com.deck.common.util.OptionalProperty
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 /**
  * A more formal class to represent patches/differences
  * between values.
  */
+@Serializable(Difference.Serializer::class)
 public sealed class Difference<out T> {
     /**
      * Value was not specified, so it stays the same.
@@ -28,6 +36,23 @@ public sealed class Difference<out T> {
         is Unchanged -> "Unchanged"
         is Null -> "Reset"
         is Value<*> -> value.toString()
+    }
+
+    public class Serializer<T>(private val valueSerializer: KSerializer<T>): KSerializer<Difference<T>> {
+        override val descriptor: SerialDescriptor = valueSerializer.descriptor
+
+        @OptIn(ExperimentalSerializationApi::class)
+        override fun deserialize(decoder: Decoder): Difference<T> = when {
+            decoder.decodeNotNullMark() -> Null
+            else -> Value(decoder.decodeSerializableValue(valueSerializer))
+        }
+
+        @OptIn(ExperimentalSerializationApi::class)
+        override fun serialize(encoder: Encoder, value: Difference<T>): Unit = when (value) {
+            is Unchanged -> throw SerializationException("Tried to serialize an optional property that had no value present.")
+            is Null -> encoder.encodeNull()
+            is Value<T> -> encoder.encodeSerializableValue(valueSerializer, value.value)
+        }
     }
 }
 

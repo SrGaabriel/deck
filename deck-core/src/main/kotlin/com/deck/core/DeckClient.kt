@@ -5,8 +5,8 @@ import com.deck.common.util.AuthenticationResult
 import com.deck.common.util.GenericId
 import com.deck.core.cache.CacheManager
 import com.deck.core.cache.DeckCacheManager
-import com.deck.core.cache.observer.CacheUpdater
-import com.deck.core.cache.observer.DefaultCacheUpdater
+import com.deck.core.cache.observer.CacheObserver
+import com.deck.core.cache.observer.DefaultCacheObserver
 import com.deck.core.delegator.DeckEntityDecoder
 import com.deck.core.delegator.DeckEntityDelegator
 import com.deck.core.delegator.EntityDecoder
@@ -18,9 +18,7 @@ import com.deck.core.module.RestModule
 import com.deck.core.service.AuthService
 import com.deck.core.service.DefaultAuthService
 import com.deck.core.stateless.StatelessUser
-import com.deck.core.util.BlankStatelessUser
-import com.deck.core.util.WrappedEventSupplier
-import com.deck.core.util.WrappedEventSupplierData
+import com.deck.core.util.*
 import com.deck.gateway.util.EventSupplier
 import com.deck.gateway.util.EventSupplierData
 import kotlin.properties.Delegates
@@ -51,7 +49,7 @@ public class DeckClient(
     public var entityDecoder: EntityDecoder = DeckEntityDecoder(this)
     public var entityDelegator: EntityDelegator = DeckEntityDelegator(rest, entityDecoder, cache)
 
-    public var cacheUpdater: CacheUpdater = DefaultCacheUpdater(this, cache, entityDecoder)
+    public var cacheObserver: CacheObserver = DefaultCacheObserver(this, cache, entityDecoder)
 
     public val selfId: GenericId by rest.restClient::selfId
     public val self: StatelessUser by lazy { BlankStatelessUser(this, selfId) }
@@ -65,5 +63,9 @@ public class DeckClient(
         gateway.openTeamGateways(*authenticationResults.self.teams.map { it.id }.toTypedArray())
         gateway.start()
         eventService.startListening()
+    }
+
+    public companion object {
+        public operator fun invoke(builder: ClientBuilder.() -> Unit): DeckClient = client(builder)
     }
 }

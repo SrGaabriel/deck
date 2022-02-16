@@ -65,7 +65,7 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
             is GatewayTeamChannelContentReplyCreatedEvent -> DeckTeamChannelContentReplyCreateEvent.map(client, this)
             else -> return@on
         } ?: return@on
-        client.cacheUpdater.handleEvent(deckEvent)
+        client.cacheObserver.handleEvent(deckEvent)
         eventWrappingFlow.emit(deckEvent)
     }
 }
