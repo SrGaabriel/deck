@@ -8,12 +8,14 @@ import kotlinx.serialization.json.JsonPrimitive
 
 // TODO: refactor this shit
 public class Content(public val nodes: List<Node> = emptyList()) {
+    public val paragraphs: List<Node.Paragraph>
+        get() = nodes.filterIsInstance<Node.Paragraph>()
     public val leaves: List<Node.Paragraph.Text.Leaf>
-        get() = nodes.filterIsInstance<Node.Paragraph>().flatMap { it.data.children }.filter { it.data.leaves != null }.flatMap { it.data.leaves!! }
+        get() = paragraphs.flatMap { it.data.children }.filter { it.data.leaves != null }.flatMap { it.data.leaves!! }
     public val links: List<String>
-        get() = nodes.filterIsInstance<Node.Paragraph>().flatMap { it.data.children }.filterIsInstance<Node.Paragraph.Link>().map { it.link }
+        get() = paragraphs.flatMap { it.data.children }.filterIsInstance<Node.Paragraph.Link>().map { it.link }
     public val reactions: List<IntGenericId>
-        get() = nodes.filterIsInstance<Node.Paragraph>().flatMap { it.data.children }.filterIsInstance<Node.Paragraph.Reaction>().map { it.id }
+        get() = paragraphs.flatMap { it.data.children }.filterIsInstance<Node.Paragraph.Reaction>().map { it.id }
     public val texts: List<String>
         get() = leaves.map { it.text }
     public val images: List<String>
@@ -29,7 +31,7 @@ public class Content(public val nodes: List<Node> = emptyList()) {
     public val text: String
         get() = texts.joinToString("\n")
     public val mentions: List<Node.Mention>
-        get() = nodes.filterIsInstance<Node.Mention>()
+        get() = paragraphs.flatMap { it.data.children }.filterIsInstance<Node.Mention>()
 }
 
 public class ContentBuilder(private val quoteContainer: Boolean = false): Markable {

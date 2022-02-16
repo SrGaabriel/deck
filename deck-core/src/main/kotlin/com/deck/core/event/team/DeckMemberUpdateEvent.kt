@@ -6,7 +6,7 @@ import com.deck.core.event.EventMapper
 import com.deck.core.event.UserEvent
 import com.deck.core.stateless.StatelessUser
 import com.deck.core.util.BlankStatelessUser
-import com.deck.core.util.Patch
+import com.deck.core.util.MemberPatch
 import com.deck.core.util.asDifference
 import com.deck.gateway.event.type.GatewayTeamMemberUpdatedEvent
 
@@ -14,7 +14,7 @@ public data class DeckMemberUpdateEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
     override val user: StatelessUser,
-    val patch: Patch.Member,
+    val patch: MemberPatch,
 ): DeckEvent, UserEvent {
     public companion object: EventMapper<GatewayTeamMemberUpdatedEvent, DeckMemberUpdateEvent> {
         override suspend fun map(client: DeckClient, event: GatewayTeamMemberUpdatedEvent): DeckMemberUpdateEvent {
@@ -22,7 +22,7 @@ public data class DeckMemberUpdateEvent(
                 client = client,
                 gatewayId = event.gatewayId,
                 user = BlankStatelessUser(client, event.userId),
-                patch = Patch.Member(
+                patch = MemberPatch(
                     name = event.userInfo.name.asDifference(),
                     nickname = event.userInfo.nickname.asDifference(),
                     biography = event.userInfo.biography.asDifference(),
