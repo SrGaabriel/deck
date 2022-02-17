@@ -98,3 +98,7 @@ public data class CreateScheduleAvailabilityResponse(
     val id: IntGenericId,
     val availabilities: List<RawChannelAvailability>
 )
+
+public data class GetForumThreadsResponse(
+    val threads: List<RawChannelForumThread>
+)

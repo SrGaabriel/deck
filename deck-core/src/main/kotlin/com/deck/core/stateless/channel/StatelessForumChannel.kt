@@ -1,5 +1,6 @@
 package com.deck.core.stateless.channel
 
+import com.deck.common.util.IntGenericId
 import com.deck.core.entity.channel.ForumChannel
 import com.deck.core.entity.channel.ForumThread
 import com.deck.core.stateless.StatelessEntity
@@ -15,6 +16,12 @@ public interface StatelessForumChannel: StatelessEntity<ForumChannel>, StandardS
      */
     public suspend fun createThread(builder: CreateForumThreadBuilder.() -> Unit): ForumThread =
         client.entityDecoder.decodeForumThread(client.rest.channelRoute.createForumThread(id, builder))
+
+    public suspend fun retrieveThreads(): List<ForumThread> =
+        client.rest.channelRoute.retrieveForumThreads(id).map(client.entityDecoder::decodeForumThread)
+
+    public suspend fun deleteThread(threadId: IntGenericId): Unit =
+        client.rest.channelRoute.deleteForumThread(id, threadId)
 
     override suspend fun getState(): ForumChannel {
         return client.entityDelegator.getTeamChannel(id, team.id) as? ForumChannel

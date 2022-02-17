@@ -9,6 +9,7 @@ import com.deck.core.entity.SelfUser
 import com.deck.core.entity.Team
 import com.deck.core.entity.User
 import com.deck.core.entity.channel.Channel
+import com.deck.core.entity.channel.ForumThread
 import com.deck.core.entity.channel.ScheduleAvailability
 import com.deck.core.entity.channel.TeamChannel
 import com.deck.core.module.RestModule
@@ -90,6 +91,12 @@ public class DeckEntityDelegator(
         }
         return members
     }
+
+    override suspend fun getForumChannelThread(threadId: IntGenericId, channelId: UUID): ForumThread? =
+        getForumChannelThreads(channelId)?.firstOrNull { it.id == threadId }
+
+    override suspend fun getForumChannelThreads(channelId: UUID): List<ForumThread>? =
+        rest.channelRoute.nullableRequest { retrieveForumThreads(channelId) }?.map(decoder::decodeForumThread)
 
     override suspend fun getSchedulingChannelAvailability(id: IntGenericId, channelId: UUID): ScheduleAvailability? =
         getSchedulingChannelAvailabilities(channelId)?.firstOrNull { it.id == id }

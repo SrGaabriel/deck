@@ -46,6 +46,29 @@ public class ChannelRoute(client: RestClient) : Route(client) {
         body = CreateForumThreadBuilder().apply(builder).toRequest()
     )
 
+    public suspend fun retrieveForumThreads(
+        channelId: UUID
+    ): List<RawChannelForumThread> = sendRequest<GetForumThreadsResponse, Unit>(
+        endpoint = "/channels/$channelId/forums",
+        method = HttpMethod.Get
+    ).threads
+
+    public suspend fun lockForumThread(
+        channelId: UUID,
+        threadId: IntGenericId
+    ): Unit = sendRequest<Unit, Unit>(
+        endpoint = "/channels/$channelId/forums/$threadId/lock",
+        method = HttpMethod.Put
+    )
+
+    public suspend fun pinForumThread(
+        channelId: UUID,
+        threadId: IntGenericId,
+    ): Unit = sendRequest<Unit, Unit>(
+        endpoint = "/channels/$channelId/forums/$threadId/sticky",
+        method = HttpMethod.Put
+    )
+
     public suspend fun updateForumThread(
         channelId: UUID,
         threadId: IntGenericId,

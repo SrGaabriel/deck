@@ -8,6 +8,7 @@ import com.deck.core.entity.SelfUser
 import com.deck.core.entity.Team
 import com.deck.core.entity.User
 import com.deck.core.entity.channel.Channel
+import com.deck.core.entity.channel.ForumThread
 import com.deck.core.entity.channel.ScheduleAvailability
 import com.deck.core.entity.channel.TeamChannel
 import com.deck.core.module.RestModule
@@ -33,6 +34,10 @@ public interface EntityDelegator : CoroutineScope {
     public suspend fun getTeamChannel(id: UUID, teamId: GenericId): TeamChannel?
 
     public suspend fun getTeamMembers(teamId: GenericId): Collection<Member>?
+
+    public suspend fun getForumChannelThread(threadId: IntGenericId, channelId: UUID): ForumThread?
+
+    public suspend fun getForumChannelThreads(channelId: UUID): List<ForumThread>?
 
     public suspend fun getSchedulingChannelAvailability(id: IntGenericId, channelId: UUID): ScheduleAvailability?
 

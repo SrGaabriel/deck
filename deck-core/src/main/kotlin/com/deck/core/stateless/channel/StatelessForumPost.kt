@@ -1,7 +1,6 @@
 package com.deck.core.stateless.channel
 
 import com.deck.common.util.IntGenericId
-import com.deck.core.entity.channel.ForumChannel
 import com.deck.core.entity.channel.ForumPost
 import com.deck.core.entity.impl.channel.DeckForumPost
 import com.deck.core.stateless.StatelessEntity
@@ -10,7 +9,7 @@ import com.deck.core.util.BlankStatelessUser
 import com.deck.rest.builder.CreateForumThreadReplyBuilder
 import kotlinx.datetime.Clock
 
-public interface StatelessForumPost: StatelessEntity<ForumChannel> {
+public interface StatelessForumPost: StatelessEntity<ForumPost> {
     public val id: IntGenericId
 
     public val thread: StatelessForumThread
@@ -54,7 +53,9 @@ public interface StatelessForumPost: StatelessEntity<ForumChannel> {
     public suspend fun removeReaction(reactionId: IntGenericId): Unit =
         client.rest.channelRoute.removeReactionFromForumThreadReply(team.id, id, reactionId)
 
-    override suspend fun getState(): ForumChannel {
+    override suspend fun getState(): ForumPost {
+        if (this.id == thread.id)
+            return thread.getState().originalPost
         TODO("Not yet implemented")
     }
 }
