@@ -12,6 +12,7 @@ import com.deck.rest.builder.CreateForumThreadBuilder
 import com.deck.rest.builder.CreateForumThreadReplyBuilder
 import com.deck.rest.builder.CreateScheduleAvailabilityBuilder
 import com.deck.rest.builder.SendMessageRequestBuilder
+import com.deck.rest.entity.RawChannelForumThreadReply
 import com.deck.rest.request.*
 import com.deck.rest.util.Route
 import io.ktor.http.*
@@ -96,6 +97,14 @@ public class ChannelRoute(client: RestClient) : Route(client) {
         method = HttpMethod.Post,
         body = CreateForumThreadReplyBuilder().apply(builder).toRequest()
     )
+
+    public suspend fun retrieveForumThreadReplies(
+        channelId: UUID,
+        threadId: IntGenericId
+    ): List<RawChannelForumThreadReply> = sendRequest<GetForumThreadRepliesResponse, Unit>(
+        endpoint = "/channels/$channelId/forums/$threadId/replies",
+        method = HttpMethod.Get
+    ).replies
 
     public suspend fun addReactionToForumThreadReply(
         teamId: GenericId,

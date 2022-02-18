@@ -8,10 +8,7 @@ import com.deck.core.entity.Member
 import com.deck.core.entity.SelfUser
 import com.deck.core.entity.Team
 import com.deck.core.entity.User
-import com.deck.core.entity.channel.Channel
-import com.deck.core.entity.channel.ForumThread
-import com.deck.core.entity.channel.ScheduleAvailability
-import com.deck.core.entity.channel.TeamChannel
+import com.deck.core.entity.channel.*
 import com.deck.core.module.RestModule
 import kotlinx.coroutines.Dispatchers
 import java.util.*
@@ -97,6 +94,12 @@ public class DeckEntityDelegator(
 
     override suspend fun getForumChannelThreads(channelId: UUID): List<ForumThread>? =
         rest.channelRoute.nullableRequest { retrieveForumThreads(channelId) }?.map(decoder::decodeForumThread)
+
+    override suspend fun getForumChannelReply(replyId: IntGenericId, threadId: IntGenericId, channelId: UUID): ForumPost? =
+        getForumChannelReplies(threadId, channelId)?.firstOrNull { it.id == replyId }
+
+    override suspend fun getForumChannelReplies(threadId: IntGenericId, channelId: UUID): List<ForumPost>? =
+        rest.channelRoute.nullableRequest { retrieveForumThreadReplies(channelId, threadId) }?.map { decoder.decodeForumThreadReply(channelId, it) }
 
     override suspend fun getSchedulingChannelAvailability(id: IntGenericId, channelId: UUID): ScheduleAvailability? =
         getSchedulingChannelAvailabilities(channelId)?.firstOrNull { it.id == id }

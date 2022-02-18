@@ -7,10 +7,7 @@ import com.deck.core.entity.Member
 import com.deck.core.entity.SelfUser
 import com.deck.core.entity.Team
 import com.deck.core.entity.User
-import com.deck.core.entity.channel.Channel
-import com.deck.core.entity.channel.ForumThread
-import com.deck.core.entity.channel.ScheduleAvailability
-import com.deck.core.entity.channel.TeamChannel
+import com.deck.core.entity.channel.*
 import com.deck.core.module.RestModule
 import com.deck.rest.util.Route
 import kotlinx.coroutines.CoroutineScope
@@ -38,6 +35,10 @@ public interface EntityDelegator : CoroutineScope {
     public suspend fun getForumChannelThread(threadId: IntGenericId, channelId: UUID): ForumThread?
 
     public suspend fun getForumChannelThreads(channelId: UUID): List<ForumThread>?
+
+    public suspend fun getForumChannelReply(replyId: IntGenericId, threadId: IntGenericId, channelId: UUID): ForumPost?
+
+    public suspend fun getForumChannelReplies(threadId: IntGenericId, channelId: UUID): List<ForumPost>?
 
     public suspend fun getSchedulingChannelAvailability(id: IntGenericId, channelId: UUID): ScheduleAvailability?
 

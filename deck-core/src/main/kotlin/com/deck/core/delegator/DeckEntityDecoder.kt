@@ -8,16 +8,14 @@ import com.deck.common.util.getValue
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.*
-import com.deck.core.entity.channel.Channel
-import com.deck.core.entity.channel.ForumThread
-import com.deck.core.entity.channel.PartialTeamChannel
-import com.deck.core.entity.channel.ScheduleAvailability
+import com.deck.core.entity.channel.*
 import com.deck.core.entity.impl.*
 import com.deck.core.entity.impl.channel.*
 import com.deck.core.entity.misc.DeckUserAboutInfo
 import com.deck.core.stateless.StatelessTeam
 import com.deck.core.util.*
 import com.deck.gateway.entity.RawPartialTeamChannel
+import com.deck.rest.entity.RawChannelForumThreadReply
 import com.deck.rest.entity.RawFetchedMember
 import com.deck.rest.entity.RawFetchedTeam
 import java.util.*
@@ -293,6 +291,21 @@ public class DeckEntityDecoder(private val client: DeckClient) : EntityDecoder {
             isShare = raw.isShare,
             isLocked = raw.isLocked,
             isDeleted = raw.isDeleted,
+            createdAt = raw.createdAt
+        )
+    }
+
+    override fun decodeForumThreadReply(channelId: UUID, raw: RawChannelForumThreadReply): ForumPost {
+        val team = InvalidStatelessTeam(client)
+        val channel = BlankStatelessForumChannel(client, channelId, team)
+        return DeckForumPost(
+            client = client,
+            id = raw.id,
+            content = raw.content.decode(),
+            thread = BlankStatelessForumThread(client, raw.repliesTo, team, channel),
+            team = team,
+            channel = channel,
+            author = BlankStatelessUser(client, raw.createdBy),
             createdAt = raw.createdAt
         )
     }
