@@ -4,6 +4,7 @@ import com.deck.common.content.Content
 import com.deck.common.content.ContentBuilder
 import com.deck.common.content.EmbedBuilder
 import com.deck.common.content.node.Node
+import com.deck.common.entity.RawMessageNodeReplyToUserHeaderType
 import com.deck.common.util.Emoji
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
@@ -100,18 +101,17 @@ internal suspend fun StatelessForumPost.createQuotingReply(
 ): ForumPost = createReplyOfContent {
     quote {
         paragraph {
-            +Node.Quote.ReplyingToUserHeader(postId, postCreatedBy)
+            + Node.ReplyHeader(RawMessageNodeReplyToUserHeaderType.QUOTE, postId, postCreatedBy)
         }
-        postContent.nodes.toList()
-            .filter { it !is Node.Quote }
-            .map { if (it is Node.Paragraph) Node.Paragraph(it.data.children, true) else it }
-            .forEach { it.unaryPlus() }
+        + postContent.nodes.toList()
+            .filterIsInstance<Node.Paragraph>()
+            .map { Node.Paragraph(it.data.children, true) }
     }
     builder(this)
 }
 
 /**
- * Creates a quoting reply for a defined forum post, already specifying for
+ * Creates a quoting reply to a defined forum post, already specifying for
  * you the post's id ([ForumPost.id]), content ([ForumPost.content]) and ([ForumPost.author]).
  *
  * @see createQuotingReply
@@ -132,6 +132,47 @@ public suspend fun ForumPost.createQuotingReply(builder: ContentBuilder.() -> Un
  */
 public suspend fun ForumThread.createQuotingReply(builder: ContentBuilder.() -> Unit): ForumPost =
     originalPost.createQuotingReply(builder)
+
+/**
+ * Creates a forum post reply referencing the specified post.
+ *
+ * @param postId quoted post id
+ * @param postCreatedBy quote author
+ * @param builder reply content after nodes
+ *
+ * @return the created forum post
+ */
+internal suspend fun StatelessForumPost.createReferencingReply(
+    postId: IntGenericId,
+    postCreatedBy: GenericId,
+    builder: ContentBuilder.() -> Unit
+): ForumPost = createReplyOfContent {
+    + Node.ReplyHeader(RawMessageNodeReplyToUserHeaderType.REFERENCE, postId, postCreatedBy)
+    builder(this)
+}
+
+/**
+ * Creates a reply with a reference to this forum post, already specifying for
+ * you the post's id ([ForumPost.id]) and ([ForumPost.author]).
+ *
+ * @see createQuotingReply
+ * @param builder content
+ *
+ * @return the created forum post
+ */
+public suspend fun ForumPost.createReferencingReply(builder: ContentBuilder.() -> Unit): ForumPost =
+    createReferencingReply(id, author.id, builder)
+
+/**
+ * Shortcut to create a reply referencing the original post [ForumThread.originalPost].
+ *
+ * @see createQuotingReply
+ * @param builder content
+ *
+ * @return the created forum post
+ */
+public suspend fun ForumThread.createReferencingReply(builder: ContentBuilder.() -> Unit): ForumPost =
+    originalPost.createReferencingReply(builder)
 
 /**
  * Adds the [role] to the member by calling [StatelessMember.addRole] with the specified role id.

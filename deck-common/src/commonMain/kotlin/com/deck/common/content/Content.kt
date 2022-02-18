@@ -41,6 +41,10 @@ public class ContentBuilder(private val quoteContainer: Boolean = false): Markab
         nodes.add(this)
     }
 
+    public operator fun Iterable<Node>.unaryPlus() {
+        nodes.addAll(this)
+    }
+
     override fun Node.Paragraph.Text.Leaf.unaryPlus() {
         nodes.add(Node.Paragraph(content = listOf(Node.Paragraph.Text(listOf(this))), insideQuoteBlock = quoteContainer))
     }

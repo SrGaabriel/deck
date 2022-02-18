@@ -3,6 +3,7 @@ package com.deck.common.content.node
 import com.deck.common.entity.RawMentionType
 import com.deck.common.entity.RawMessageContentNodeLeavesMarkType
 import com.deck.common.entity.RawMessageContentNodeType
+import com.deck.common.entity.RawMessageNodeReplyToUserHeaderType
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.common.util.UniqueId
@@ -59,13 +60,7 @@ public sealed class Node(
         `object` = "block",
         type = RawMessageContentNodeType.BLOCK_QUOTE_CONTAINER,
         data = NodeData(leaves = null, children = lines)
-    ) {
-        public class ReplyingToUserHeader(public val postId: IntGenericId, public val postAuthor: GenericId): Node(
-            `object` = "block",
-            type = RawMessageContentNodeType.REPLYING_TO_USER_HEADER,
-            data = NodeData(leaves = null, children = listOf(Paragraph.Text(emptyList())))
-        )
-    }
+    )
 
     public interface Lists {
         public class Bulleted(override val items: List<Item>): Node(
@@ -109,6 +104,12 @@ public sealed class Node(
             data = NodeData(children = listOf(Paragraph.Text(leaves = listOf(Paragraph.Text.Leaf("#MentionTest")))))
         )
     }
+
+    public class ReplyHeader(public val headerType: RawMessageNodeReplyToUserHeaderType, public val postId: IntGenericId, public val postAuthor: GenericId): Node(
+        `object` = "block",
+        type = RawMessageContentNodeType.REPLYING_TO_USER_HEADER,
+        data = NodeData(leaves = null, children = listOf(Paragraph.Text(emptyList())))
+    )
 }
 
 public data class NodeData(

@@ -26,7 +26,7 @@ public interface StatelessForumPost: StatelessEntity<ForumPost> {
         val replica = CreateForumThreadReplyBuilder().apply(builder)
         return DeckForumPost(
             client = client,
-            id = client.rest.channelRoute.createForumThreadReply(channel.id, id, builder).replyId,
+            id = client.rest.channelRoute.createForumThreadReply(channel.id, thread.id, builder).replyId,
             content = replica.content,
             thread = thread,
             team = team,

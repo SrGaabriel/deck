@@ -34,7 +34,7 @@ public fun Node.encode(): RawMessageContentNode {
         is Node.Lists.Item -> RawMessageContentData()
         is Node.Lists.Bulleted -> RawMessageContentData(isList = true.optional())
         is Node.Lists.Numbered -> RawMessageContentData(isList = true.optional())
-        is Node.Quote.ReplyingToUserHeader -> RawMessageContentData(postId = postId.optional(), type = "block-quote".optional(), createdBy = postAuthor.optional())
+        is Node.ReplyHeader -> RawMessageContentData(postId = postId.optional(), type = headerType.serialName.optional(), createdBy = postAuthor.optional())
         is Node.Mention -> RawMessageContentData(mention = RawMentionData(id = id, type = mentionType, name = "MentionTest".optional(), matcher = "@MentionTest".optional()).optional())
         is Node.Mention.Channel -> RawMessageContentData(channel = RawMentionedChannel(id = id).optional())
     }
