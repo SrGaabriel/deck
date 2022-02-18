@@ -12,8 +12,8 @@ public class Content(public val nodes: List<Node> = emptyList()) {
         get() = nodes.filterIsInstance<Node.Paragraph>()
     public val leaves: List<Node.Paragraph.Text.Leaf>
         get() = paragraphs.flatMap { it.data.children }.filter { it.data.leaves != null }.flatMap { it.data.leaves!! }
-    public val links: List<String>
-        get() = paragraphs.flatMap { it.data.children }.filterIsInstance<Node.Paragraph.Link>().map { it.link }
+    public val links: List<Node.Paragraph.Link>
+        get() = paragraphs.flatMap { it.data.children }.filterIsInstance<Node.Paragraph.Link>()
     public val reactions: List<IntGenericId>
         get() = paragraphs.flatMap { it.data.children }.filterIsInstance<Node.Paragraph.Reaction>().map { it.id }
     public val texts: List<String>
@@ -32,6 +32,8 @@ public class Content(public val nodes: List<Node> = emptyList()) {
         get() = texts.joinToString("\n")
     public val mentions: List<Node.Mention>
         get() = paragraphs.flatMap { it.data.children }.filterIsInstance<Node.Mention>()
+    public val rawLinks: List<String>
+        get() = links.map { it.link }
 }
 
 public class ContentBuilder(private val quoteContainer: Boolean = false): Markable {
@@ -152,8 +154,8 @@ public class ContentBuilder(private val quoteContainer: Boolean = false): Markab
     public fun reaction(before: String = "", id: Int, after: String = ""): Node.Paragraph =
         Node.Paragraph(content = listOf(text(before), Node.Paragraph.Reaction(id = id), text(after)), insideQuoteBlock = quoteContainer)
 
-    public fun link(before: String = "", url: String, after: String = ""): Node.Paragraph =
-        Node.Paragraph(content = listOf(text(before), Node.Paragraph.Link(link = url), text(after)), insideQuoteBlock = quoteContainer)
+    public fun link(before: String = "", url: String, after: String = "", text: String = url): Node.Paragraph =
+        Node.Paragraph(content = listOf(text(before), Node.Paragraph.Link(link = url, text), text(after)), insideQuoteBlock = quoteContainer)
 
     public operator fun invoke(builder: ContentBuilder.() -> Unit): Unit =
         this.let(builder)
@@ -199,7 +201,7 @@ public class ParagraphBuilder: Markable {
         )
     }
 
-    public fun link(url: String): Node.Paragraph.Link = Node.Paragraph.Link(link = url)
+    public fun link(url: String, text: String = url): Node.Paragraph.Link = Node.Paragraph.Link(link = url, text = text)
 
     public fun reaction(id: Int): Node.Paragraph.Reaction = Node.Paragraph.Reaction(id = id)
 
@@ -214,8 +216,8 @@ public class ParagraphBuilder: Markable {
         listOf(text(before), Node.Paragraph.Reaction(id = id), text(after))
 
     @Deprecated("This method requires you to provide text before and after the link", replaceWith = ReplaceWith("link(string)"))
-    public fun link(before: String = "", url: String, after: String = ""): List<Node> =
-        listOf(Node.Paragraph(content = listOf(text(before), Node.Paragraph.Link(link = url), text(after))))
+    public fun link(before: String = "", url: String, after: String = "", text: String = url): List<Node> =
+        listOf(Node.Paragraph(content = listOf(text(before), Node.Paragraph.Link(link = url, text = text), text(after))))
 
     @Deprecated("This method requires you to provide an id before and after the mention", replaceWith = ReplaceWith("user(id)"))
     public fun user(before: String = "", id: GenericId, after: String = ""): List<Node> =
@@ -292,7 +294,7 @@ public interface Markable {
         return Node.Paragraph.Text.Leaf(this, marks.toList())
     }
     public fun Node.Paragraph.Link.mark(vararg marks: RawMessageContentNodeLeavesMarkType): Node.Paragraph.Link {
-        return Node.Paragraph.Link(link, Node.Paragraph.Text.Leaf(leaf.text, leaf.marks + marks))
+        return Node.Paragraph.Link(link, text, Node.Paragraph.Text.Leaf(leaf.text, leaf.marks + marks))
     }
     public fun Node.Paragraph.Text.Leaf.mark(vararg marks: RawMessageContentNodeLeavesMarkType): Node.Paragraph.Text.Leaf {
         return Node.Paragraph.Text.Leaf(this.text, this.marks + marks)

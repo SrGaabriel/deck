@@ -16,10 +16,26 @@ If problems arise while using the API, you can either open a [GitHub Issue](http
 
 ## Implementating
 
-We do not have an official repository/artifact yet, so the only available way is to compile the library yourself and implement it.
+You can implement and use deck in your project by adding Jitpack to your build repositories in your `build.gradle.kts`...
+
+```kotlin
+repositories {
+    maven("https://jitpack.io")
+}
+```
+
+And then add deck dependency with the latest version: `0.0.2-BETA`.
+
+```kotlin
+dependencies {
+    implementation("com.github.SrGaabriel.deck:deck-core:$deckVersion")
+}
+```
+
+Just by adding these to your build script, you'll already be able to use deck in your project.
 
 ## Thanks
 
 We want to specially thank the discord Kotlin wrapper library [Kord](https://github.com/kordlib/kord), since deck's structure was inspired/based around it.
 
-There's also [Guilded API](https://guildedapi.com/), the unofficial documentation for Guilded's API. It's all thanks to them that Deck has many features with a very young age.
+There's also [Guilded API](https://guildedapi.com/), the unofficial documentation for Guilded's API. It's all thanks to them that Deck has many features at a very young age.

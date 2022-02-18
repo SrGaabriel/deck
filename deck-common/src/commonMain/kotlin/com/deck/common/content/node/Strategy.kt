@@ -81,7 +81,7 @@ public fun RawMessageContentNode.decode(): Node? {
         RawMessageContentNodeType.MARKDOWN_PLAIN_TEXT ->
             Node.Paragraph(content = nodes.mapNotNull(RawMessageContentNode::decode))
         RawMessageContentNodeType.LINK ->
-            Node.Paragraph.Link(data.href.getValue())
+            Node.Paragraph.Link(data.href.getValue(), leaves?.joinToString { it.text } ?: return null)
         RawMessageContentNodeType.REACTION ->
             Node.Paragraph.Reaction(data.reaction.getValue().customReactionId)
         RawMessageContentNodeType.WEBHOOK_MESSAGE ->

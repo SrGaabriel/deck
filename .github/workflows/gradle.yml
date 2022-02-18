@@ -44,5 +44,11 @@ jobs:
       - uses: actions/upload-artifact@v2
         name: Upload Extras
         with:
-          name: Gateway
+          name: Extras
           path: deck-extras/build/libs/
+
+      - uses: actions/upload-artifact@v2
+        name: Upload Core
+        with:
+          name: Core
+          path: deck-core/build/libs/

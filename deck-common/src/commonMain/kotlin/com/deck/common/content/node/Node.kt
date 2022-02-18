@@ -26,10 +26,10 @@ public sealed class Node(
         ) {
             public data class Leaf(val text: String, val marks: List<RawMessageContentNodeLeavesMarkType> = emptyList())
         }
-        public class Link(public val link: String, public val leaf: Text.Leaf = Text.Leaf(link)): Node(
+        public class Link(public val link: String, public val text: String, internal val leaf: Text.Leaf = Text.Leaf(text)): Node(
             `object` = "inline",
             type = RawMessageContentNodeType.LINK,
-            data = NodeData(children = listOf(Text(listOf(leaf))), leaves = null)
+            data = NodeData(children = listOf(Text(listOf(leaf))), leaves = listOf(leaf))
         )
         public class Reaction(public val id: Int): Node(
             `object` = "inline",
