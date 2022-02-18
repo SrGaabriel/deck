@@ -5,7 +5,9 @@ import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.common.util.OptionalProperty
 import com.deck.common.util.UniqueId
+import com.deck.rest.entity.RawChannelForumThreadReply
 import kotlinx.datetime.Instant
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -101,4 +103,8 @@ public data class CreateScheduleAvailabilityResponse(
 
 public data class GetForumThreadsResponse(
     val threads: List<RawChannelForumThread>
+)
+
+public data class GetForumThreadRepliesResponse(
+    @SerialName("threadReplies") val replies: List<RawChannelForumThreadReply>
 )

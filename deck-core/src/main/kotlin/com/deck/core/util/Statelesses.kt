@@ -77,6 +77,10 @@ internal data class BlankStatelessTeam(
     override val id: GenericId
 ): StatelessTeam
 
+internal data class InvalidStatelessTeam(override val client: DeckClient): StatelessTeam {
+    override val id: GenericId get() = error("You can't obtain an invalid team's id nor state. If you're getting this error, the reason is probably because the team property you're trying to access was not specified by guilded's API, and this is just an shell.")
+}
+
 public fun StatelessTeam(
     client: DeckClient,
     id: GenericId

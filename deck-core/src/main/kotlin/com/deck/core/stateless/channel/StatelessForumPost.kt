@@ -54,8 +54,9 @@ public interface StatelessForumPost: StatelessEntity<ForumPost> {
         client.rest.channelRoute.removeReactionFromForumThreadReply(team.id, id, reactionId)
 
     override suspend fun getState(): ForumPost {
-        if (this.id == thread.id)
-            return thread.getState().originalPost
-        TODO("Not yet implemented")
+        return if (this.id == thread.id)
+            thread.getState().originalPost
+        else client.entityDelegator.getForumChannelReply(id, thread.id, channel.id)
+            ?: error("Tried to access an invalid forum reply state.")
     }
 }
