@@ -211,3 +211,9 @@ public enum class RawMentionType {
     @SerialName("person") USER,
     @SerialName("role") ROLE;
 }
+
+@Serializable
+public enum class RawMessageNodeReplyToUserHeaderType(public val serialName: String) {
+    QUOTE("block-quote"),
+    REFERENCE("reply");
+}
