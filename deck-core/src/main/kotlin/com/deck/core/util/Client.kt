@@ -11,9 +11,12 @@ public class ClientBuilder {
     public var restModule: RestModule = DefaultRestModule()
     public var gatewayModule: GatewayModule = DefaultGatewayModule()
 
+    /** Account email (not collected nor stored, just used to authenticate in guilded) */
     public var email: String? = null
+    /** Account password (not collected nor stored, just used to authenticate in guilded) */
     public var password: String? = null
 
+    /** When enabled starts to send gateway events JSON and other debugs */
     public var debugMode: Boolean by gatewayModule::logPayloadsJson
 
     public fun build(): DeckClient {

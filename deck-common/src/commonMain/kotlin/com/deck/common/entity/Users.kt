@@ -20,7 +20,7 @@ public data class RawUser(
     val profileBannerBlur: OptionalProperty<String?> = OptionalProperty.NotPresent,
     val joinDate: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     val steamId: OptionalProperty<String?> = OptionalProperty.NotPresent,
-    val userStatus: RawUserStatus,
+    val userStatus: OptionalProperty<RawUserStatus> = OptionalProperty.NotPresent,
     val userPresenceStatus: OptionalProperty<RawUserPresenceStatus> = OptionalProperty.NotPresent,
     val userTransientStatus: OptionalProperty<RawTransientStatus?> = OptionalProperty.NotPresent,
     @DeckUnknown

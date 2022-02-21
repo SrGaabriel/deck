@@ -27,7 +27,8 @@ public annotation class DeckUnsupported
     AnnotationTarget.FIELD,
     AnnotationTarget.FUNCTION,
     AnnotationTarget.CLASS,
-    AnnotationTarget.PROPERTY_SETTER
+    AnnotationTarget.PROPERTY_SETTER,
+    AnnotationTarget.VALUE_PARAMETER
 )
 @RequiresOptIn(level = RequiresOptIn.Level.WARNING)
 public annotation class DeckExperimental
