@@ -24,7 +24,7 @@ repositories {
 }
 ```
 
-And then add deck dependency with the latest version: `0.0.2-BETA`.
+And then add deck dependency with the latest version: `0.0.3-BETA`.
 
 ```kotlin
 dependencies {
