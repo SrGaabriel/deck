@@ -62,7 +62,7 @@ public data class RawTransientStatus(
 
 @Serializable
 public data class RawUserAboutInfo(
-    val bio: String?,
+    val bio: OptionalProperty<String?> = OptionalProperty.NotPresent,
     val tagLine: OptionalProperty<String> = OptionalProperty.NotPresent
 )
 
