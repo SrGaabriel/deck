@@ -18,7 +18,7 @@ public data class DeckUserAboutInfo(
         public val Empty: DeckUserAboutInfo = DeckUserAboutInfo(null, null)
 
         public fun from(raw: RawUserAboutInfo?): DeckUserAboutInfo = if (raw != null) DeckUserAboutInfo(
-            biography = raw.bio,
+            biography = raw.bio.asNullable(),
             tagline = raw.tagLine.asNullable()
         ) else Empty
     }

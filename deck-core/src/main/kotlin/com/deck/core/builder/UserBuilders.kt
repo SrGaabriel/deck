@@ -16,6 +16,6 @@ public class DeckModifySelfBuilder : RequestBuilder<ModifySelfUserRequest> {
         name = name,
         avatar = avatar,
         subdomain = subdomain,
-        aboutInfo = RawUserAboutInfo(aboutInfo?.biography, aboutInfo?.tagline.nullableOptional())
+        aboutInfo = RawUserAboutInfo(aboutInfo?.biography.nullableOptional(), aboutInfo?.tagline.nullableOptional())
     )
 }
