@@ -7,11 +7,11 @@ import com.deck.core.entity.Role
 import com.deck.core.entity.RolePermissionsOverride
 import com.deck.core.entity.UserPermissionsOverride
 import com.deck.core.stateless.StatelessTeam
-import com.deck.core.stateless.standard.StandardStatelessTeamChannel
+import com.deck.core.stateless.generic.GenericStatelessTeamChannel
 import kotlinx.datetime.Instant
 import java.util.*
 
-public interface TeamChannel : Channel, StandardStatelessTeamChannel {
+public interface TeamChannel : Channel, GenericStatelessTeamChannel {
     override val team: StatelessTeam
 }
 

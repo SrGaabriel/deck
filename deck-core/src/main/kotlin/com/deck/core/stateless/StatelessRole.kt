@@ -9,6 +9,7 @@ import kotlinx.serialization.json.JsonPrimitive
 
 public interface StatelessRole: StatelessEntity<Role>, Mentionable {
     public val id: IntGenericId
+    public val team: StatelessTeam
 
     override fun getMentionNode(): Node = Node.Mention(JsonPrimitive(id), RawMentionType.ROLE)
 

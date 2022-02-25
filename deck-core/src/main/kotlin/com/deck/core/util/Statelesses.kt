@@ -1,14 +1,34 @@
 package com.deck.core.util
 
+import com.deck.common.util.DeckObsoleteApi
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.core.DeckClient
-import com.deck.core.stateless.StatelessMember
-import com.deck.core.stateless.StatelessMessage
-import com.deck.core.stateless.StatelessTeam
-import com.deck.core.stateless.StatelessUser
+import com.deck.core.stateless.*
 import com.deck.core.stateless.channel.*
+import com.deck.core.stateless.generic.GenericStatelessChannel
 import java.util.*
+
+internal data class BlankStatelessChannel(
+    override val client: DeckClient,
+    override val id: UUID,
+    override val team: StatelessTeam?
+): GenericStatelessChannel
+
+/**
+ * This method is obsolete and should be replaced with
+ * specific alternatives, like [StatelessForumChannel], [StatelessMessageChannel], etc...
+ *
+ * It should only be used to reference obtainable channels, of which you can mention
+ * or fetch states.
+ */
+@DeckObsoleteApi
+@Suppress("FunctionName")
+public fun StatelessChannel(
+    client: DeckClient,
+    id: UUID,
+    team: StatelessTeam?
+): GenericStatelessChannel = BlankStatelessChannel(client, id, team)
 
 internal data class BlankStatelessMember(
     override val client: DeckClient,
@@ -95,6 +115,18 @@ public fun StatelessUser(
     client: DeckClient,
     id: GenericId
 ): StatelessUser = BlankStatelessUser(client, id)
+
+internal data class BlankStatelessRole(
+    override val client: DeckClient,
+    override val id: IntGenericId,
+    override val team: StatelessTeam
+): StatelessRole
+
+public fun StatelessRole(
+    client: DeckClient,
+    id: IntGenericId,
+    team: StatelessTeam
+): StatelessRole = BlankStatelessRole(client, id, team)
 
 internal data class BlankStatelessSchedulingChannel(
     override val client: DeckClient,

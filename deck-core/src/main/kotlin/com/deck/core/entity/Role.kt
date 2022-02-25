@@ -20,7 +20,6 @@ public interface Role : Entity, StatelessRole {
     public val discordSyncedAt: Instant?
     public val priority: Int
     public val botId: GenericId?
-    public val team: StatelessTeam
     public val updatedAt: Instant?
     public val permissions: RolePermissions
 }

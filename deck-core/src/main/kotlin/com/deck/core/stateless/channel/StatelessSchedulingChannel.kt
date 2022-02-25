@@ -4,11 +4,11 @@ import com.deck.common.util.IntGenericId
 import com.deck.core.entity.channel.ScheduleAvailability
 import com.deck.core.entity.channel.SchedulingChannel
 import com.deck.core.stateless.StatelessEntity
-import com.deck.core.stateless.standard.StandardStatelessTeamChannel
+import com.deck.core.stateless.generic.GenericStatelessTeamChannel
 import com.deck.core.util.BlankStatelessScheduleAvailability
 import com.deck.rest.builder.CreateScheduleAvailabilityBuilder
 
-public interface StatelessSchedulingChannel: StatelessEntity<SchedulingChannel>, StandardStatelessTeamChannel {
+public interface StatelessSchedulingChannel: StatelessEntity<SchedulingChannel>, GenericStatelessTeamChannel {
     /**
      * Creates an availability in this scheduling channel, requires a [CreateScheduleAvailabilityBuilder.start] date
      * and an [CreateScheduleAvailabilityBuilder.ending] date.

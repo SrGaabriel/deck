@@ -4,10 +4,10 @@ import com.deck.common.util.IntGenericId
 import com.deck.core.entity.channel.ForumChannel
 import com.deck.core.entity.channel.ForumThread
 import com.deck.core.stateless.StatelessEntity
-import com.deck.core.stateless.standard.StandardStatelessTeamChannel
+import com.deck.core.stateless.generic.GenericStatelessTeamChannel
 import com.deck.rest.builder.CreateForumThreadBuilder
 
-public interface StatelessForumChannel: StatelessEntity<ForumChannel>, StandardStatelessTeamChannel {
+public interface StatelessForumChannel: StatelessEntity<ForumChannel>, GenericStatelessTeamChannel {
     /**
      * Creates a thread in this forum channel.
      *
