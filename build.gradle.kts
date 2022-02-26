@@ -1,12 +1,14 @@
 plugins {
     kotlin("jvm") version Dependencies.KotlinVersion
     kotlin("plugin.serialization") version Dependencies.KotlinVersion
+    `maven-publish`
 }
 
 subprojects {
     group = "com.deck"
     version = Dependencies.Version
     plugins.apply("org.jetbrains.kotlin.plugin.serialization")
+    apply<MavenPublishPlugin>()
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class) {
         kotlinOptions {
