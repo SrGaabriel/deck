@@ -17,7 +17,7 @@ tasks {
             }
         }
         publications.withType<MavenPublication>().all {
-            artifactId = "client-${project.name}"
+            artifactId = "bot-${project.name}"
         }
     }
 }
