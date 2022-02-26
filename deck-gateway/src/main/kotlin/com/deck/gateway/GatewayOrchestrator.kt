@@ -19,7 +19,7 @@ public class GatewayOrchestrator(private val token: String): EventSupplier, Coro
     private val httpClient = HttpClient(CIO.create()) {
         install(WebSockets)
     }
-    private val globalEventsFlow: MutableSharedFlow<GatewayEvent> = MutableSharedFlow()
+    public val globalEventsFlow: MutableSharedFlow<GatewayEvent> = MutableSharedFlow()
     override val eventSupplierData: EventSupplierData by lazy {
         EventSupplierData(
             scope = this,
