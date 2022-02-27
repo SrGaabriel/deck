@@ -19,4 +19,5 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging-jvm:${Dependencies.KotlinLoggingVersion}")
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("com.github.ben-manes.caffeine:caffeine:3.0.5")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Dependencies.KotlinVersion}")
 }

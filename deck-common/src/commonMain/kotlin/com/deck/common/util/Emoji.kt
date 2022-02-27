@@ -28,4 +28,6 @@ public data class Emoji(
         result = 31 * result + isAnimated.hashCode()
         return result
     }
+
+    override fun toString(): String = ":$name:"
 }
