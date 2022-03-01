@@ -2,6 +2,7 @@ package com.deck.core.util
 
 import com.deck.common.util.GenericId
 import com.deck.core.DeckClient
+import com.deck.core.stateless.StatelessMember
 import com.deck.core.stateless.StatelessMessage
 import com.deck.core.stateless.StatelessServer
 import com.deck.core.stateless.StatelessUser
@@ -16,7 +17,7 @@ public fun StatelessMessage(
     channel: StatelessMessageChannel
 ): StatelessMessage = BlankStatelessMessage(client, id, channel)
 
-internal class BlankStatelessMessage(
+internal data class BlankStatelessMessage(
     override val client: DeckClient,
     override val id: UUID,
     override val channel: StatelessMessageChannel
@@ -28,7 +29,7 @@ public fun StatelessMessageChannel(
     server: StatelessServer?
 ): StatelessMessageChannel = BlankStatelessMessageChannel(client, id, server)
 
-internal class BlankStatelessMessageChannel(
+internal data class BlankStatelessMessageChannel(
     override val client: DeckClient,
     override val id: UUID,
     override val server: StatelessServer?
@@ -40,7 +41,7 @@ public fun StatelessDocumentationChannel(
     server: StatelessServer
 ): StatelessDocumentationChannel = BlankStatelessDocumentationChannel(client, id, server)
 
-internal class BlankStatelessDocumentationChannel(
+internal data class BlankStatelessDocumentationChannel(
     override val client: DeckClient,
     override val id: UUID,
     override val server: StatelessServer
@@ -52,7 +53,7 @@ public fun StatelessListChannel(
     server: StatelessServer
 ): StatelessListChannel = BlankStatelessListChannel(client, id, server)
 
-internal class BlankStatelessListChannel(
+internal data class BlankStatelessListChannel(
     override val client: DeckClient,
     override val id: UUID,
     override val server: StatelessServer
@@ -63,7 +64,7 @@ public fun StatelessServer(
     id: GenericId,
 ): StatelessServer = BlankStatelessServer(client, id)
 
-internal class BlankStatelessServer(
+internal data class BlankStatelessServer(
     override val client: DeckClient,
     override val id: GenericId
 ): StatelessServer
@@ -73,7 +74,19 @@ public fun StatelessUser(
     id: GenericId,
 ): StatelessUser = BlankStatelessUser(client, id)
 
-internal class BlankStatelessUser(
+internal data class BlankStatelessUser(
     override val client: DeckClient,
     override val id: GenericId
 ): StatelessUser
+
+public fun StatelessMember(
+    client: DeckClient,
+    id: GenericId,
+    server: StatelessServer
+): StatelessMember = BlankStatelessMember(client, id, server)
+
+internal data class BlankStatelessMember(
+    override val client: DeckClient,
+    override val id: GenericId,
+    override val server: StatelessServer
+): StatelessMember

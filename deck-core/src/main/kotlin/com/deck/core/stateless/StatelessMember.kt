@@ -7,6 +7,14 @@ public interface StatelessMember: StatelessEntity {
     public val id: GenericId
     public val server: StatelessServer
 
+    /**
+     * Sets the nickname for this member, or removes it if the provided
+     * [nickname] is null.
+     *
+     * @param nickname new nickname, null to reset
+     *
+     * @return this member's new nickname
+     */
     public suspend fun setNickname(nickname: String?): String? = when(nickname) {
         null -> client.rest.memberRoute.removeMemberNickname(id, server.id).let { null }
         else -> client.rest.memberRoute.updateMemberNickname(id, server.id, nickname)
