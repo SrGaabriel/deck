@@ -15,61 +15,63 @@ import java.util.*
 public fun StatelessMessage(
     client: DeckClient,
     id: UUID,
-    channel: StatelessMessageChannel
-): StatelessMessage = BlankStatelessMessage(client, id, channel)
+    channelId: UUID,
+    serverId: GenericId?
+): StatelessMessage = BlankStatelessMessage(client, id, channelId, serverId)
 
 internal data class BlankStatelessMessage(
     override val client: DeckClient,
     override val id: UUID,
-    override val channel: StatelessMessageChannel
+    override val channelId: UUID,
+    override val serverId: GenericId?
 ): StatelessMessage
 
 public fun StatelessMessageChannel(
     client: DeckClient,
     id: UUID,
-    server: StatelessServer?
-): StatelessMessageChannel = BlankStatelessMessageChannel(client, id, server)
+    serverId: GenericId?
+): StatelessMessageChannel = BlankStatelessMessageChannel(client, id, serverId)
 
 internal data class BlankStatelessMessageChannel(
     override val client: DeckClient,
     override val id: UUID,
-    override val server: StatelessServer?
+    override val serverId: GenericId?
 ): StatelessMessageChannel
 
 public fun StatelessDocumentationChannel(
     client: DeckClient,
     id: UUID,
-    server: StatelessServer
-): StatelessDocumentationChannel = BlankStatelessDocumentationChannel(client, id, server)
+    serverId: GenericId
+): StatelessDocumentationChannel = BlankStatelessDocumentationChannel(client, id, serverId)
 
 internal data class BlankStatelessDocumentationChannel(
     override val client: DeckClient,
     override val id: UUID,
-    override val server: StatelessServer
+    override val serverId: GenericId
 ): StatelessDocumentationChannel
 
 public fun StatelessListChannel(
     client: DeckClient,
     id: UUID,
-    server: StatelessServer
-): StatelessListChannel = BlankStatelessListChannel(client, id, server)
+    serverId: GenericId
+): StatelessListChannel = BlankStatelessListChannel(client, id, serverId)
 
 internal data class BlankStatelessListChannel(
     override val client: DeckClient,
     override val id: UUID,
-    override val server: StatelessServer
+    override val serverId: GenericId
 ): StatelessListChannel
 
 public fun StatelessForumChannel(
     client: DeckClient,
     id: UUID,
-    server: StatelessServer
-): StatelessForumChannel = BlankStatelessForumChannel(client, id, server)
+    serverId: GenericId
+): StatelessForumChannel = BlankStatelessForumChannel(client, id, serverId)
 
 internal class BlankStatelessForumChannel(
     override val client: DeckClient,
     override val id: UUID,
-    override val server: StatelessServer
+    override val serverId: GenericId
 ): StatelessForumChannel
 
 public fun StatelessServer(

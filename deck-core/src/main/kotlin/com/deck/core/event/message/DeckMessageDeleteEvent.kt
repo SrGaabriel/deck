@@ -8,8 +8,6 @@ import com.deck.core.stateless.StatelessMessage
 import com.deck.core.stateless.StatelessServer
 import com.deck.core.stateless.channel.StatelessMessageChannel
 import com.deck.core.util.BlankStatelessMessage
-import com.deck.core.util.BlankStatelessMessageChannel
-import com.deck.core.util.BlankStatelessServer
 import com.deck.gateway.event.type.GatewayChatMessageDeletedEvent
 import kotlinx.datetime.Instant
 
@@ -26,7 +24,8 @@ public data class DeckMessageDeleteEvent(
             val message = BlankStatelessMessage(
                 client = client,
                 id = event.message.id.mapToBuiltin(),
-                channel = BlankStatelessMessageChannel(client, event.message.channelId.mapToBuiltin(), BlankStatelessServer(client, event.message.serverId))
+                channelId = event.message.channelId.mapToBuiltin(),
+                serverId = event.serverId
             )
             return DeckMessageDeleteEvent(
                 client = client,

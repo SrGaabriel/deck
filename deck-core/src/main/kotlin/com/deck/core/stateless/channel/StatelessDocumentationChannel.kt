@@ -1,15 +1,15 @@
 package com.deck.core.stateless.channel
 
+import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.core.entity.Documentation
 import com.deck.core.stateless.StatelessEntity
-import com.deck.core.stateless.StatelessServer
 import com.deck.rest.builder.CreateDocumentationRequestBuilder
 import java.util.*
 
 public interface StatelessDocumentationChannel: StatelessEntity {
     public val id: UUID
-    public val server: StatelessServer
+    public val serverId: GenericId
 
     public suspend fun createDocumentation(builder: CreateDocumentationRequestBuilder.() -> Unit): Documentation =
         client.entityDecoder.decodeDocumentation(

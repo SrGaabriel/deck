@@ -15,68 +15,55 @@ import com.deck.core.entity.impl.DeckDocumentation
 import com.deck.core.entity.impl.DeckForumThread
 import com.deck.core.entity.impl.DeckListItem
 import com.deck.core.entity.impl.DeckMessage
-import com.deck.core.stateless.StatelessServer
-import com.deck.core.util.*
+import com.deck.core.util.BlankStatelessUser
 
 public class DeckEntityDecoder(private val client: DeckClient): EntityDecoder {
-    override fun decodeMessage(raw: RawMessage): Message {
-        val server: StatelessServer? = raw.serverId.asNullable()?.let { BlankStatelessServer(client, it) }
-        return DeckMessage(
-            client = client,
-            id = raw.id.mapToBuiltin(),
-            content = raw.content,
-            author = BlankStatelessUser(client, raw.createdBy),
-            channel = BlankStatelessMessageChannel(client, raw.channelId.mapToBuiltin(), server),
-            server = server,
-            createdAt = raw.createdAt,
-            updatedAt = raw.updatedAt.asNullable(),
-            repliesTo = raw.replyMessageIds.asNullable()?.map { it.mapToBuiltin() }.orEmpty(),
-            isPrivate = raw.isPrivate.asNullable() == true
-        )
-    }
+    override fun decodeMessage(raw: RawMessage): Message = DeckMessage(
+        client = client,
+        id = raw.id.mapToBuiltin(),
+        content = raw.content,
+        authorId = raw.createdBy,
+        channelId = raw.channelId.mapToBuiltin(),
+        serverId = raw.serverId.asNullable(),
+        createdAt = raw.createdAt,
+        updatedAt = raw.updatedAt.asNullable(),
+        repliesTo = raw.replyMessageIds.asNullable()?.map { it.mapToBuiltin() }.orEmpty(),
+        isPrivate = raw.isPrivate.asNullable() == true
+    )
 
-    override fun decodeListItem(raw: RawListItem): ListItem {
-        val server: StatelessServer = BlankStatelessServer(client, raw.serverId)
-        return DeckListItem(
-            client = client,
-            id = raw.id.mapToBuiltin(),
-            server = server,
-            channel = BlankStatelessListChannel(client, raw.channelId.mapToBuiltin(), server),
-            label = raw.message,
-            note = raw.note.asNullable(),
-            createdBy = BlankStatelessUser(client, raw.createdBy),
-            createdAt = raw.createdAt
-        )
-    }
+    override fun decodeListItem(raw: RawListItem): ListItem = DeckListItem(
+        client = client,
+        id = raw.id.mapToBuiltin(),
+        serverId = raw.serverId,
+        channelId = raw.channelId.mapToBuiltin(),
+        label = raw.message,
+        note = raw.note.asNullable(),
+        authorId = raw.createdBy,
+        createdAt = raw.createdAt
+    )
 
-    override fun decodeForumThread(raw: RawForumThread): ForumThread {
-        val server: StatelessServer = BlankStatelessServer(client, raw.serverId)
-        return DeckForumThread(
-            client = client,
-            id = raw.id,
-            server = server,
-            channel = BlankStatelessForumChannel(client, raw.channelId.mapToBuiltin(), server),
-            title = raw.title.asNullable()!!,
-            content = raw.content.asNullable()!!,
-            createdBy = BlankStatelessUser(client, raw.createdBy),
-            createdAt = raw.createdAt,
-            updatedAt = raw.updatedAt
-        )
-    }
+    override fun decodeForumThread(raw: RawForumThread): ForumThread = DeckForumThread(
+        client = client,
+        id = raw.id,
+        serverId = raw.serverId,
+        channelId = raw.channelId.mapToBuiltin(),
+        title = raw.title.asNullable()!!,
+        content = raw.content.asNullable()!!,
+        createdBy = BlankStatelessUser(client, raw.createdBy),
+        createdAt = raw.createdAt,
+        updatedAt = raw.updatedAt
+    )
 
-    override fun decodeDocumentation(raw: RawDocumentation): Documentation {
-        val server: StatelessServer = BlankStatelessServer(client, raw.serverId)
-        return DeckDocumentation(
-            client = client,
-            id = raw.id,
-            title = raw.title,
-            content = raw.content,
-            server = server,
-            channel = BlankStatelessDocumentationChannel(client, raw.channelId.mapToBuiltin(), server),
-            createdAt = raw.createdAt,
-            updatedAt = raw.updatedAt,
-            createdBy = BlankStatelessUser(client, raw.createdBy),
-            updatedBy = BlankStatelessUser(client, raw.updatedBy),
-        )
-    }
+    override fun decodeDocumentation(raw: RawDocumentation): Documentation = DeckDocumentation(
+        client = client,
+        id = raw.id,
+        title = raw.title,
+        content = raw.content,
+        serverId = raw.serverId,
+        channelId = raw.channelId.mapToBuiltin(),
+        createdAt = raw.createdAt,
+        updatedAt = raw.updatedAt,
+        authorId = raw.createdBy,
+        editorId = raw.updatedBy
+    )
 }

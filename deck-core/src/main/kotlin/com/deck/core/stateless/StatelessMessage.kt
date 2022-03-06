@@ -1,16 +1,23 @@
 package com.deck.core.stateless
 
 import com.deck.common.util.DeckObsoleteApi
+import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.core.entity.Message
 import com.deck.core.stateless.channel.StatelessMessageChannel
+import com.deck.core.util.BlankStatelessMessageChannel
+import com.deck.core.util.BlankStatelessServer
 import com.deck.core.util.ReactionHolder
 import com.deck.rest.builder.SendMessageRequestBuilder
 import java.util.*
 
 public interface StatelessMessage: StatelessEntity, ReactionHolder {
     public val id: UUID
-    public val channel: StatelessMessageChannel
+    public val channelId: UUID
+    public val serverId: GenericId?
+
+    public val channel: StatelessMessageChannel get() = BlankStatelessMessageChannel(client, channelId, serverId)
+    public val server: StatelessServer? get() = serverId?.let { BlankStatelessServer(client, it) }
 
     public suspend fun sendReply(builder: SendMessageRequestBuilder.() -> Unit): Message = channel.sendMessage {
         builder(this)
