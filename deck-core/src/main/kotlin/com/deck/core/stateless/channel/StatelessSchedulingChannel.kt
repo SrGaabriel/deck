@@ -19,7 +19,7 @@ public interface StatelessSchedulingChannel: StatelessEntity<SchedulingChannel>,
      */
     public suspend fun createAvailability(builder: CreateScheduleAvailabilityBuilder.() -> Unit): Pair<StatelessScheduleAvailability, List<ScheduleAvailability>> =
         client.rest.channelRoute.createAvailability(id, builder).let { (availabilityId, availabilities) ->
-            BlankStatelessScheduleAvailability(client, availabilityId, team, this) to availabilities.map(client.entityDecoder::decodeScheduleAvailability)
+            BlankStatelessScheduleAvailability(client, availabilityId, teamId, this.id) to availabilities.map(client.entityDecoder::decodeScheduleAvailability)
         }
 
     /**
@@ -32,7 +32,7 @@ public interface StatelessSchedulingChannel: StatelessEntity<SchedulingChannel>,
      */
     public suspend fun updateAvailability(availabilityId: IntGenericId, builder: CreateScheduleAvailabilityBuilder.() -> Unit): Pair<StatelessScheduleAvailability, List<ScheduleAvailability>> =
         client.rest.channelRoute.updateAvailability(id, availabilityId, builder).let { (availabilityId, availabilities) ->
-            BlankStatelessScheduleAvailability(client, availabilityId, team, this) to availabilities.map(client.entityDecoder::decodeScheduleAvailability)
+            BlankStatelessScheduleAvailability(client, availabilityId, teamId, this.id) to availabilities.map(client.entityDecoder::decodeScheduleAvailability)
         }
 
     /**

@@ -5,14 +5,11 @@ import com.deck.core.builder.DeckMessageBuilder
 import com.deck.core.entity.Message
 import com.deck.core.entity.channel.MessageChannel
 import com.deck.core.stateless.StatelessEntity
-import com.deck.core.stateless.StatelessTeam
 import com.deck.core.stateless.generic.GenericStatelessChannel
 import com.deck.core.util.sendMessage
 import com.deck.gateway.event.GatewayTypingCommand
 
 public interface StatelessMessageChannel: StatelessEntity<MessageChannel>, GenericStatelessChannel {
-    override val team: StatelessTeam?
-
     /**
      * Sends a message to this message channel
      *

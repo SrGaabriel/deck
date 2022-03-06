@@ -4,7 +4,6 @@ import com.deck.core.cache.CacheManager
 import com.deck.core.delegator.EntityDecoder
 import com.deck.core.entity.impl.DeckMember
 import com.deck.core.entity.impl.DeckUser
-import com.deck.core.entity.misc.DeckUserAboutInfo
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.channel.DeckTeamChannelCreateEvent
 import com.deck.core.event.channel.DeckTeamChannelDeleteEvent
@@ -78,10 +77,8 @@ public open class DefaultCacheObserver(
                 subdomain = inCacheUser.subdomain,
                 avatar = event.patch.avatar nullableOr inCacheUser.avatar,
                 banner = event.patch.banner nullableOr inCacheUser.banner,
-                aboutInfo = DeckUserAboutInfo(
-                    biography = event.patch.biography nullableOr inCacheUser.aboutInfo.biography,
-                    tagline = event.patch.tagline nullableOr inCacheUser.aboutInfo.tagline,
-                ),
+                biography = event.patch.biography nullableOr inCacheUser.biography,
+                tagline = event.patch.tagline nullableOr inCacheUser.tagline,
                 creationTime = inCacheUser.creationTime,
                 lastLoginTime = inCacheUser.lastLoginTime
             ))
@@ -94,8 +91,8 @@ public open class DefaultCacheObserver(
                 name = event.patch.name or member.name,
                 nickname = event.patch.nickname nullableOr member.nickname,
                 avatar = event.patch.avatar nullableOr member.avatar,
-                user = member.user,
-                team = member.team
+                userId = member.userId,
+                teamId = member.teamId
             ))
         }
     }

@@ -1,5 +1,6 @@
 package com.deck.core.event.team
 
+import com.deck.common.util.GenericId
 import com.deck.core.DeckClient
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
@@ -13,15 +14,17 @@ import com.deck.gateway.event.type.GatewayTeamMemberUpdatedEvent
 public data class DeckMemberUpdateEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
-    override val user: StatelessUser,
+    val userId: GenericId,
     val patch: MemberPatch,
 ): DeckEvent, UserEvent {
+    override val user: StatelessUser get() = BlankStatelessUser(client, userId)
+
     public companion object: EventMapper<GatewayTeamMemberUpdatedEvent, DeckMemberUpdateEvent> {
         override suspend fun map(client: DeckClient, event: GatewayTeamMemberUpdatedEvent): DeckMemberUpdateEvent {
             return DeckMemberUpdateEvent(
                 client = client,
                 gatewayId = event.gatewayId,
-                user = BlankStatelessUser(client, event.userId),
+                userId = event.userId,
                 patch = MemberPatch(
                     name = event.userInfo.name.asDifference(),
                     nickname = event.userInfo.nickname.asDifference(),

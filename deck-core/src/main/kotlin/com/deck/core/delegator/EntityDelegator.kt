@@ -36,9 +36,9 @@ public interface EntityDelegator : CoroutineScope {
 
     public suspend fun getForumChannelThreads(channelId: UUID): List<ForumThread>?
 
-    public suspend fun getForumChannelReply(replyId: IntGenericId, threadId: IntGenericId, channelId: UUID): ForumPost?
+    public suspend fun getForumChannelReply(replyId: IntGenericId, threadId: IntGenericId, teamId: GenericId, channelId: UUID): ForumPost?
 
-    public suspend fun getForumChannelReplies(threadId: IntGenericId, channelId: UUID): List<ForumPost>?
+    public suspend fun getForumChannelReplies(threadId: IntGenericId, teamId: GenericId, channelId: UUID): List<ForumPost>?
 
     public suspend fun getSchedulingChannelAvailability(id: IntGenericId, channelId: UUID): ScheduleAvailability?
 

@@ -6,6 +6,4 @@ import com.deck.core.stateless.channel.StatelessSchedulingChannel
 
 public interface SchedulingChannel: TeamChannel, StatelessSchedulingChannel
 
-public interface ScheduleAvailability: Entity, StatelessScheduleAvailability {
-
-}
+public interface ScheduleAvailability: Entity, StatelessScheduleAvailability

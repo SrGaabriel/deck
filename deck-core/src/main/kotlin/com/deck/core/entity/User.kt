@@ -1,13 +1,10 @@
 package com.deck.core.entity
 
-import com.deck.common.util.GenericId
-import com.deck.core.entity.misc.DeckUserAboutInfo
 import com.deck.core.stateless.StatelessUser
 import kotlinx.datetime.Instant
 import java.util.*
 
-public interface User : Entity {
-    public val id: GenericId
+public interface User : Entity, StatelessUser {
     public val name: String
     public val subdomain: String?
 
@@ -17,14 +14,14 @@ public interface User : Entity {
     /** Null when user doesn't have a banner set (empty) */
     public val banner: String?
 
-    public val aboutInfo: DeckUserAboutInfo
+    public val biography: String?
+    public val tagline: String?
 
     public val creationTime: Instant
     public val lastLoginTime: Instant
 }
 
 public interface UserPermissionsOverride {
-    public val user: StatelessUser
     /** Missing when override is in a category, not a channel */
     public val channelId: UUID?
 

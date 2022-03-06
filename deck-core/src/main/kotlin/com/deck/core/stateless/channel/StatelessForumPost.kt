@@ -1,20 +1,20 @@
 package com.deck.core.stateless.channel
 
+import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.core.entity.channel.ForumPost
 import com.deck.core.entity.impl.channel.DeckForumPost
 import com.deck.core.stateless.StatelessEntity
-import com.deck.core.stateless.StatelessTeam
-import com.deck.core.util.BlankStatelessUser
 import com.deck.rest.builder.CreateForumThreadReplyBuilder
 import kotlinx.datetime.Clock
+import java.util.*
 
 public interface StatelessForumPost: StatelessEntity<ForumPost> {
     public val id: IntGenericId
 
-    public val thread: StatelessForumThread
-    public val team: StatelessTeam
-    public val channel: StatelessForumChannel
+    public val threadId: IntGenericId
+    public val teamId: GenericId
+    public val channelId: UUID
 
     /**
      * Creates a reply to this post.
@@ -26,12 +26,12 @@ public interface StatelessForumPost: StatelessEntity<ForumPost> {
         val replica = CreateForumThreadReplyBuilder().apply(builder)
         return DeckForumPost(
             client = client,
-            id = client.rest.channelRoute.createForumThreadReply(channel.id, thread.id, builder).replyId,
+            id = client.rest.channelRoute.createForumThreadReply(channelId, threadId, builder).replyId,
             content = replica.content,
-            thread = thread,
-            team = team,
-            channel = channel,
-            author = BlankStatelessUser(client, client.selfId),
+            threadId = threadId,
+            channelId = channelId,
+            authorId = client.selfId,
+            teamId = teamId,
             createdAt = Clock.System.now()
         )
     }
@@ -42,7 +42,7 @@ public interface StatelessForumPost: StatelessEntity<ForumPost> {
      * @param reactionId reaction id
      */
     public suspend fun addReaction(reactionId: IntGenericId): Unit =
-        client.rest.channelRoute.addReactionToForumThreadReply(team.id, id, reactionId)
+        client.rest.channelRoute.addReactionToForumThreadReply(teamId, id, reactionId)
 
     /**
      * Removes a reaction from the post. You can only remove reactions
@@ -51,12 +51,12 @@ public interface StatelessForumPost: StatelessEntity<ForumPost> {
      * @param reactionId reaction id
      */
     public suspend fun removeReaction(reactionId: IntGenericId): Unit =
-        client.rest.channelRoute.removeReactionFromForumThreadReply(team.id, id, reactionId)
+        client.rest.channelRoute.removeReactionFromForumThreadReply(teamId, id, reactionId)
 
     override suspend fun getState(): ForumPost {
-        return if (this.id == thread.id)
-            thread.getState().originalPost
-        else client.entityDelegator.getForumChannelReply(id, thread.id, channel.id)
+        return (if (this.id == threadId)
+            client.entityDelegator.getForumChannelThread(threadId, channelId)?.originalPost
+        else client.entityDelegator.getForumChannelReply(id, threadId, teamId, channelId))
             ?: error("Tried to access an invalid forum reply state.")
     }
 }

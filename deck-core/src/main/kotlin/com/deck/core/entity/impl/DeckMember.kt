@@ -3,8 +3,6 @@ package com.deck.core.entity.impl
 import com.deck.common.util.GenericId
 import com.deck.core.DeckClient
 import com.deck.core.entity.Member
-import com.deck.core.stateless.StatelessTeam
-import com.deck.core.stateless.StatelessUser
 
 public data class DeckMember(
     override val client: DeckClient,
@@ -12,6 +10,6 @@ public data class DeckMember(
     override val name: String,
     override val nickname: String?,
     override val avatar: String?,
-    override val user: StatelessUser,
-    override val team: StatelessTeam
+    override val userId: GenericId,
+    override val teamId: GenericId,
 ): Member

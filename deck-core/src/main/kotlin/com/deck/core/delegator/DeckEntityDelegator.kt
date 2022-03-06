@@ -95,11 +95,11 @@ public class DeckEntityDelegator(
     override suspend fun getForumChannelThreads(channelId: UUID): List<ForumThread>? =
         rest.channelRoute.nullableRequest { retrieveForumThreads(channelId) }?.map(decoder::decodeForumThread)
 
-    override suspend fun getForumChannelReply(replyId: IntGenericId, threadId: IntGenericId, channelId: UUID): ForumPost? =
-        getForumChannelReplies(threadId, channelId)?.firstOrNull { it.id == replyId }
+    override suspend fun getForumChannelReply(replyId: IntGenericId, threadId: IntGenericId, teamId: GenericId, channelId: UUID): ForumPost? =
+        getForumChannelReplies(threadId, teamId, channelId)?.firstOrNull { it.id == replyId }
 
-    override suspend fun getForumChannelReplies(threadId: IntGenericId, channelId: UUID): List<ForumPost>? =
-        rest.channelRoute.nullableRequest { retrieveForumThreadReplies(channelId, threadId) }?.map { decoder.decodeForumThreadReply(channelId, it) }
+    override suspend fun getForumChannelReplies(threadId: IntGenericId, teamId: GenericId, channelId: UUID): List<ForumPost>? =
+        rest.channelRoute.nullableRequest { retrieveForumThreadReplies(channelId, threadId) }?.map { decoder.decodeForumThreadReply(channelId, teamId, it) }
 
     override suspend fun getSchedulingChannelAvailability(id: IntGenericId, channelId: UUID): ScheduleAvailability? =
         getSchedulingChannelAvailabilities(channelId)?.firstOrNull { it.id == id }

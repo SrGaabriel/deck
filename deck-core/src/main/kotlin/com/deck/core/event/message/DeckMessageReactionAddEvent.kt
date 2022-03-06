@@ -15,40 +15,42 @@ import com.deck.core.util.BlankStatelessMessageChannel
 import com.deck.core.util.BlankStatelessTeam
 import com.deck.core.util.BlankStatelessUser
 import com.deck.gateway.event.type.GatewayChatMessageReactionAddedEvent
+import java.util.*
 
 public data class DeckMessageReactionAddEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
-    override val user: StatelessUser,
-    override val message: StatelessMessage,
-    val team: StatelessTeam?,
-    val channel: StatelessMessageChannel,
+    val userId: GenericId,
+    val messageId: UUID,
+    val teamId: GenericId?,
+    val channelId: UUID,
     val reaction: CustomReaction,
 ): DeckEvent, UserEvent, MessageEvent {
-    public companion object: EventMapper<GatewayChatMessageReactionAddedEvent, DeckMessageReactionAddEvent> {
+    val team: StatelessTeam? get() = teamId?.let { BlankStatelessTeam(client, it) }
+    val channel: StatelessMessageChannel get() = BlankStatelessMessageChannel(client, channelId, teamId)
+    override val user: StatelessUser get() = BlankStatelessUser(client, userId)
+    override val message: StatelessMessage get() = BlankStatelessMessage(client, messageId, channelId, teamId)
+
+    public companion object : EventMapper<GatewayChatMessageReactionAddedEvent, DeckMessageReactionAddEvent> {
         override suspend fun map(
             client: DeckClient,
             event: GatewayChatMessageReactionAddedEvent,
-        ): DeckMessageReactionAddEvent {
-            val team: StatelessTeam? = event.teamId.asNullable()?.let { teamId -> BlankStatelessTeam(client, teamId) }
-            val channel = BlankStatelessMessageChannel(client, event.channelId.mapToBuiltin(), team)
-            return DeckMessageReactionAddEvent(
-                client = client,
-                gatewayId = event.gatewayId,
-                user = BlankStatelessUser(client, event.reaction.createdBy.getValue()),
-                team = team,
-                channel = channel,
-                reaction = event.reaction.customReaction.map { reaction ->
-                    CustomReaction(
-                        id = reaction.id,
-                        name = reaction.name,
-                        png = reaction.png,
-                        webp = reaction.webp,
-                        apng = reaction.apgn.asNullable()
-                    )
-                }.getValue(),
-                message = BlankStatelessMessage(client, event.message.id.mapToBuiltin(), channel)
-            )
-        }
+        ): DeckMessageReactionAddEvent = DeckMessageReactionAddEvent(
+            client = client,
+            gatewayId = event.gatewayId,
+            userId = event.reaction.createdBy.getValue(),
+            teamId = event.teamId.asNullable(),
+            channelId = event.channelId.mapToBuiltin(),
+            reaction = event.reaction.customReaction.map { reaction ->
+                CustomReaction(
+                    id = reaction.id,
+                    name = reaction.name,
+                    png = reaction.png,
+                    webp = reaction.webp,
+                    apng = reaction.apgn.asNullable()
+                )
+            }.getValue(),
+            messageId = event.message.id.mapToBuiltin()
+        )
     }
 }

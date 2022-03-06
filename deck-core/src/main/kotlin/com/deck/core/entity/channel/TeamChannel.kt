@@ -1,19 +1,15 @@
 package com.deck.core.entity.channel
 
-import com.deck.common.util.Dictionary
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.core.entity.Role
 import com.deck.core.entity.RolePermissionsOverride
 import com.deck.core.entity.UserPermissionsOverride
-import com.deck.core.stateless.StatelessTeam
 import com.deck.core.stateless.generic.GenericStatelessTeamChannel
 import kotlinx.datetime.Instant
 import java.util.*
 
-public interface TeamChannel : Channel, GenericStatelessTeamChannel {
-    override val team: StatelessTeam
-}
+public interface TeamChannel : Channel, GenericStatelessTeamChannel
 
 public interface PartialTeamChannel : TeamChannel {
     public val parentChannelId: UUID?
@@ -33,5 +29,5 @@ public interface PartialTeamChannel : TeamChannel {
     public val userPermissionOverrides: List<UserPermissionsOverride>?
 
     public val roles: List<Role>?
-    public val rolePermissionsOverrideById: Dictionary<String, RolePermissionsOverride>
+    public val rolePermissionsOverrideById: Map<String, RolePermissionsOverride>
 }

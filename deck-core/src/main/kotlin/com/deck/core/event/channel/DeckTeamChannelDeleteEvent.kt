@@ -6,6 +6,8 @@ import com.deck.core.DeckClient
 import com.deck.core.entity.channel.TeamChannel
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
+import com.deck.core.stateless.StatelessTeam
+import com.deck.core.util.BlankStatelessTeam
 import com.deck.gateway.event.type.GatewayTeamChannelDeletedEvent
 import java.util.*
 
@@ -16,6 +18,8 @@ public data class DeckTeamChannelDeleteEvent(
     val teamId: GenericId,
     val old: TeamChannel?
 ) : DeckEvent {
+    public val team: StatelessTeam get() = BlankStatelessTeam(client, teamId)
+
     public companion object : EventMapper<GatewayTeamChannelDeletedEvent, DeckTeamChannelDeleteEvent> {
         override suspend fun map(client: DeckClient, event: GatewayTeamChannelDeletedEvent): DeckTeamChannelDeleteEvent =
             DeckTeamChannelDeleteEvent(

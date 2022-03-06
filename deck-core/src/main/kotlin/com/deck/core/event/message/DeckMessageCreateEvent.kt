@@ -1,6 +1,7 @@
 package com.deck.core.event.message
 
 import com.deck.common.content.node.decode
+import com.deck.common.util.GenericId
 import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
@@ -21,50 +22,48 @@ import com.deck.core.util.BlankStatelessMessageChannel
 import com.deck.core.util.BlankStatelessTeam
 import com.deck.core.util.BlankStatelessUser
 import com.deck.gateway.event.type.GatewayChatMessageCreatedEvent
+import java.util.*
 
 public data class DeckMessageCreateEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
     override val message: Message,
-    val channel: StatelessMessageChannel,
-    val team: StatelessTeam?,
-    val member: StatelessMember?,
-    override val user: StatelessUser,
+    val channelId: UUID,
+    val teamId: GenericId?,
+    val userId: GenericId,
 ) : DeckEvent, UserEvent, MessageEvent {
+    val channel: StatelessMessageChannel get() = BlankStatelessMessageChannel(client, channelId, teamId)
+    val team: StatelessTeam? get() = teamId?.let { BlankStatelessTeam(client, it) }
+    val member: StatelessMember? get() = teamId?.let { BlankStatelessMember(client, userId, it) }
+    override val user: StatelessUser get() = BlankStatelessUser(client, userId)
+
     public suspend fun getTeam(): Team? = team?.getState()
 
     public suspend fun getChannel(): Channel = channel.getState()
 
     public companion object : EventMapper<GatewayChatMessageCreatedEvent, DeckMessageCreateEvent> {
         override suspend fun map(client: DeckClient, event: GatewayChatMessageCreatedEvent): DeckMessageCreateEvent {
-            val team = event.teamId.asNullable()?.let { BlankStatelessTeam(client, it) }
-            val channel = BlankStatelessMessageChannel(
-                client = client,
-                id = event.channelId.mapToBuiltin(),
-                team = team
-            )
+            val channelId = event.channelId.mapToBuiltin()
             val message = DeckMessage(
                 client = client,
                 id = event.message.id.mapToBuiltin(),
                 content = event.message.content.decode(),
-                team = team,
+                teamId = event.teamId.asNullable(),
                 repliesToId = event.message.repliesTo?.mapToBuiltin(),
                 createdAt = event.createdAt,
-                author = BlankStatelessUser(client, event.createdBy),
+                authorId = event.createdBy,
                 updatedAt = null,
-                editor = null,
-                channel = channel,
+                editorId = null,
+                channelId = channelId,
                 isPrivate = event.message.isPrivate.asNullable() == true
             )
-            val member = team?.let { memberTeam -> BlankStatelessMember(client, event.createdBy, memberTeam) }
             return DeckMessageCreateEvent(
                 client = client,
                 gatewayId = event.gatewayId,
                 message = message,
-                user = BlankStatelessUser(client, event.createdBy),
-                team = team,
-                channel = channel,
-                member = member
+                userId = event.createdBy,
+                teamId = event.teamId.asNullable(),
+                channelId = channelId
             )
         }
     }

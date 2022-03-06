@@ -37,7 +37,7 @@ public interface EntityDecoder {
 
     public fun decodeForumThread(raw: RawChannelForumThread): ForumThread
 
-    public fun decodeForumThreadReply(channelId: UUID, raw: RawChannelForumThreadReply): ForumPost
+    public fun decodeForumThreadReply(channelId: UUID, teamId: GenericId, raw: RawChannelForumThreadReply): ForumPost
 
     public fun decodeScheduleAvailability(raw: RawChannelAvailability): ScheduleAvailability
 }

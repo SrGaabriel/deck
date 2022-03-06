@@ -12,7 +12,7 @@ import java.util.*
 internal data class BlankStatelessChannel(
     override val client: DeckClient,
     override val id: UUID,
-    override val team: StatelessTeam?
+    override val teamId: GenericId?
 ): GenericStatelessChannel
 
 /**
@@ -27,79 +27,85 @@ internal data class BlankStatelessChannel(
 public fun StatelessChannel(
     client: DeckClient,
     id: UUID,
-    team: StatelessTeam?
-): GenericStatelessChannel = BlankStatelessChannel(client, id, team)
+    teamId: GenericId?
+): GenericStatelessChannel = BlankStatelessChannel(client, id, teamId)
 
 internal data class BlankStatelessMember(
     override val client: DeckClient,
     override val id: GenericId,
-    override val team: StatelessTeam
+    override val teamId: GenericId
 ): StatelessMember
 
 public fun StatelessMember(
     client: DeckClient,
     id: GenericId,
-    team: StatelessTeam
-): StatelessMember = BlankStatelessMember(client, id, team)
+    teamId: GenericId
+): StatelessMember = BlankStatelessMember(client, id, teamId)
 
 internal data class BlankStatelessMessage(
     override val client: DeckClient,
     override val id: UUID,
-    override val channel: StatelessMessageChannel
+    override val channelId: UUID,
+    override val teamId: GenericId?
 ): StatelessMessage
 
 public fun StatelessMessage(
     client: DeckClient,
     id: UUID,
-    channel: StatelessMessageChannel
-): StatelessMessage = BlankStatelessMessage(client, id, channel)
+    channelId: UUID,
+    teamId: GenericId?
+): StatelessMessage = BlankStatelessMessage(client, id, channelId, teamId)
 
 internal data class BlankStatelessMessageChannel(
     override val client: DeckClient,
     override val id: UUID,
-    override val team: StatelessTeam?
+    override val teamId: GenericId?
 ): StatelessMessageChannel
 
 public fun StatelessMessageChannel(
     client: DeckClient,
     id: UUID,
-    team: StatelessTeam?
-): StatelessMessageChannel = BlankStatelessMessageChannel(client, id, team)
+    teamId: GenericId?
+): StatelessMessageChannel = BlankStatelessMessageChannel(client, id, teamId)
 
 internal data class BlankStatelessForumChannel(
     override val client: DeckClient,
     override val id: UUID,
-    override val team: StatelessTeam
+    override val teamId: GenericId
 ): StatelessForumChannel
 
 public fun StatelessForumChannel(
     client: DeckClient,
     id: UUID,
-    team: StatelessTeam
-): StatelessForumChannel = BlankStatelessForumChannel(client, id, team)
+    teamId: GenericId
+): StatelessForumChannel = BlankStatelessForumChannel(client, id, teamId)
 
 internal data class BlankStatelessForumThread(
     override val client: DeckClient,
     override val id: IntGenericId,
-    override val team: StatelessTeam,
-    override val channel: StatelessForumChannel
+    override val teamId: GenericId,
+    override val channelId: UUID
 ): StatelessForumThread
 
 public fun StatelessForumThread(
     client: DeckClient,
     id: IntGenericId,
-    team: StatelessTeam,
-    channel: StatelessForumChannel
-): StatelessForumThread = BlankStatelessForumThread(client, id, team, channel)
+    teamId: GenericId,
+    channelId: UUID
+): StatelessForumThread = BlankStatelessForumThread(client, id, teamId, channelId)
+
+internal data class BlankStatelessForumPost(
+    override val client: DeckClient,
+    override val id: IntGenericId,
+    override val threadId: IntGenericId,
+    override val teamId: GenericId,
+    override val channelId: UUID
+): StatelessForumPost
 
 internal data class BlankStatelessTeam(
     override val client: DeckClient,
     override val id: GenericId
 ): StatelessTeam
-
-internal data class InvalidStatelessTeam(override val client: DeckClient): StatelessTeam {
-    override val id: GenericId get() = error("You can't obtain an invalid team's id nor state. If you're getting this error, the reason is probably because the team property you're trying to access was not specified by guilded's API, and this is just an shell.")
-}
 
 public fun StatelessTeam(
     client: DeckClient,
@@ -119,37 +125,37 @@ public fun StatelessUser(
 internal data class BlankStatelessRole(
     override val client: DeckClient,
     override val id: IntGenericId,
-    override val team: StatelessTeam
+    override val teamId: GenericId
 ): StatelessRole
 
 public fun StatelessRole(
     client: DeckClient,
     id: IntGenericId,
-    team: StatelessTeam
-): StatelessRole = BlankStatelessRole(client, id, team)
+    teamId: GenericId
+): StatelessRole = BlankStatelessRole(client, id, teamId)
 
 internal data class BlankStatelessSchedulingChannel(
     override val client: DeckClient,
     override val id: UUID,
-    override val team: StatelessTeam
+    override val teamId: GenericId
 ): StatelessSchedulingChannel
 
 public fun StatelessSchedulingChannel(
     client: DeckClient,
     id: UUID,
-    team: StatelessTeam
-): StatelessSchedulingChannel = BlankStatelessSchedulingChannel(client, id, team)
+    teamId: GenericId
+): StatelessSchedulingChannel = BlankStatelessSchedulingChannel(client, id, teamId)
 
 internal data class BlankStatelessScheduleAvailability(
     override val client: DeckClient,
     override val id: IntGenericId,
-    override val team: StatelessTeam,
-    override val channel: StatelessSchedulingChannel
+    override val teamId: GenericId,
+    override val channelId: UUID
 ): StatelessScheduleAvailability
 
 public fun StatelessScheduleAvailability(
     client: DeckClient,
     id: IntGenericId,
-    team: StatelessTeam,
-    channel: StatelessSchedulingChannel
-): StatelessScheduleAvailability = BlankStatelessScheduleAvailability(client, id, team, channel)
+    teamId: GenericId,
+    channelId: UUID
+): StatelessScheduleAvailability = BlankStatelessScheduleAvailability(client, id, teamId, channelId)
