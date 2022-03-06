@@ -11,11 +11,11 @@ public interface Documentation: Entity, StatelessDocumentation {
     public val content: String
 
     public val createdAt: Instant
-    public val updatedAt: Instant
+    public val updatedAt: Instant?
 
     public val authorId: GenericId
-    public val editorId: GenericId
+    public val editorId: GenericId?
 
     public val author: StatelessUser get() = BlankStatelessUser(client, authorId)
-    public val editor: StatelessUser get() = BlankStatelessUser(client, editorId)
+    public val editor: StatelessUser? get() = editorId?.let { BlankStatelessUser(client, it) }
 }

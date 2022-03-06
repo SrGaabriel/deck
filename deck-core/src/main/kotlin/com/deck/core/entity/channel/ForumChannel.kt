@@ -25,5 +25,5 @@ public interface ForumThread: Entity {
     public val createdAt: Instant
     public val createdBy: StatelessUser
 
-    public val updatedAt: Instant
+    public val updatedAt: Instant?
 }

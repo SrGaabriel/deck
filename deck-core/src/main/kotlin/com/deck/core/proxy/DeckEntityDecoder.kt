@@ -39,7 +39,9 @@ public class DeckEntityDecoder(private val client: DeckClient): EntityDecoder {
         label = raw.message,
         note = raw.note.asNullable(),
         authorId = raw.createdBy,
-        createdAt = raw.createdAt
+        createdAt = raw.createdAt,
+        updatedAt = raw.updatedAt.asNullable(),
+        editorId = raw.updatedBy.asNullable()
     )
 
     override fun decodeForumThread(raw: RawForumThread): ForumThread = DeckForumThread(
@@ -51,7 +53,7 @@ public class DeckEntityDecoder(private val client: DeckClient): EntityDecoder {
         content = raw.content.asNullable()!!,
         createdBy = BlankStatelessUser(client, raw.createdBy),
         createdAt = raw.createdAt,
-        updatedAt = raw.updatedAt
+        updatedAt = raw.updatedAt.asNullable()
     )
 
     override fun decodeDocumentation(raw: RawDocumentation): Documentation = DeckDocumentation(
@@ -62,8 +64,8 @@ public class DeckEntityDecoder(private val client: DeckClient): EntityDecoder {
         serverId = raw.serverId,
         channelId = raw.channelId.mapToBuiltin(),
         createdAt = raw.createdAt,
-        updatedAt = raw.updatedAt,
+        updatedAt = raw.updatedAt.asNullable(),
         authorId = raw.createdBy,
-        editorId = raw.updatedBy
+        editorId = raw.updatedBy.asNullable()
     )
 }

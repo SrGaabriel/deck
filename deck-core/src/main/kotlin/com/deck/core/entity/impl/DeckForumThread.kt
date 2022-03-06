@@ -16,5 +16,5 @@ public data class DeckForumThread(
     override val content: String,
     override val createdAt: Instant,
     override val createdBy: StatelessUser,
-    override val updatedAt: Instant
+    override val updatedAt: Instant?
 ): ForumThread

@@ -14,5 +14,7 @@ public data class DeckListItem(
     override val channelId: UUID,
     override val label: String,
     override val note: String?,
-    override val createdAt: Instant
+    override val createdAt: Instant,
+    override val updatedAt: Instant?,
+    override val editorId: GenericId?
 ): ListItem

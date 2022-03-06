@@ -16,8 +16,8 @@ public data class RawDocumentation(
     public val content: String,
     public val createdAt: Instant,
     public val createdBy: GenericId,
-    public val updatedAt: Instant,
-    public val updatedBy: GenericId
+    public val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    public val updatedBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent
 )
 
 @Serializable
@@ -30,6 +30,8 @@ public data class RawListItem(
     public val createdAt: Instant,
     public val createdBy: GenericId,
     public val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+    public val updatedBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+    public val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent
 )
 
 @Serializable
@@ -42,5 +44,5 @@ public data class RawForumThread(
     val createdAt: Instant,
     val createdBy: GenericId,
     val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
-    val updatedAt: Instant
+    val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent
 )

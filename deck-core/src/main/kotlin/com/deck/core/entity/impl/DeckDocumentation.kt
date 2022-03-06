@@ -16,9 +16,9 @@ public data class DeckDocumentation(
     override val serverId: GenericId,
     override val channelId: UUID,
     override val createdAt: Instant,
-    override val updatedAt: Instant,
+    override val updatedAt: Instant?,
     override val authorId: GenericId,
-    override val editorId: GenericId
+    override val editorId: GenericId?
 ): Documentation {
     override suspend fun update(builder: CreateDocumentationRequestBuilder.() -> Unit): Documentation {
         return super.update {

@@ -25,4 +25,8 @@ public interface ListItem: Entity {
     public val note: String?
 
     public val createdAt: Instant
+    public val updatedAt: Instant?
+
+    public val editorId: GenericId?
+    public val editor: StatelessUser? get() = editorId?.let { BlankStatelessUser(client, it) }
 }
