@@ -1,12 +1,14 @@
 package com.deck.rest.route
 
 import com.deck.common.entity.RawDocumentation
+import com.deck.common.entity.RawForumThread
 import com.deck.common.entity.RawListItem
 import com.deck.common.entity.RawMessage
 import com.deck.common.util.DeckObsoleteApi
 import com.deck.common.util.IntGenericId
 import com.deck.rest.RestClient
 import com.deck.rest.builder.CreateDocumentationRequestBuilder
+import com.deck.rest.builder.CreateForumThreadRequestBuilder
 import com.deck.rest.builder.CreateListItemRequestBuilder
 import com.deck.rest.builder.SendMessageRequestBuilder
 import com.deck.rest.request.*
@@ -128,4 +130,13 @@ public class ChannelRoute(client: RestClient): Route(client) {
         method = HttpMethod.Post,
         body = CreateListItemRequestBuilder().apply(builder).toRequest()
     ).listItem
+
+    public suspend fun createForumThread(
+        channelId: UUID,
+        builder: CreateForumThreadRequestBuilder.() -> Unit
+    ): RawForumThread = sendRequest<CreateForumThreadResponse, CreateForumThreadRequest>(
+        endpoint = "/channels/$channelId/forum",
+        method = HttpMethod.Post,
+        body = CreateForumThreadRequestBuilder().apply(builder).toRequest()
+    ).forumThread
 }

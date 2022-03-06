@@ -7,6 +7,7 @@ import com.deck.core.stateless.StatelessMessage
 import com.deck.core.stateless.StatelessServer
 import com.deck.core.stateless.StatelessUser
 import com.deck.core.stateless.channel.StatelessDocumentationChannel
+import com.deck.core.stateless.channel.StatelessForumChannel
 import com.deck.core.stateless.channel.StatelessListChannel
 import com.deck.core.stateless.channel.StatelessMessageChannel
 import java.util.*
@@ -58,6 +59,18 @@ internal data class BlankStatelessListChannel(
     override val id: UUID,
     override val server: StatelessServer
 ): StatelessListChannel
+
+public fun StatelessForumChannel(
+    client: DeckClient,
+    id: UUID,
+    server: StatelessServer
+): StatelessForumChannel = BlankStatelessForumChannel(client, id, server)
+
+internal class BlankStatelessForumChannel(
+    override val client: DeckClient,
+    override val id: UUID,
+    override val server: StatelessServer
+): StatelessForumChannel
 
 public fun StatelessServer(
     client: DeckClient,

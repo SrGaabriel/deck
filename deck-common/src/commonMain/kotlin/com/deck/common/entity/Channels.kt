@@ -31,3 +31,16 @@ public data class RawListItem(
     public val createdBy: GenericId,
     public val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
 )
+
+@Serializable
+public data class RawForumThread(
+    val id: IntGenericId,
+    val serverId: GenericId,
+    val channelId: UniqueId,
+    val title: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val content: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val createdAt: Instant,
+    val createdBy: GenericId,
+    val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+    val updatedAt: Instant
+)

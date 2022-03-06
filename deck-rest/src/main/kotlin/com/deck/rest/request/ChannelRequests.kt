@@ -1,6 +1,7 @@
 package com.deck.rest.request
 
 import com.deck.common.entity.RawDocumentation
+import com.deck.common.entity.RawForumThread
 import com.deck.common.entity.RawListItem
 import com.deck.common.entity.RawMessage
 import com.deck.common.util.OptionalProperty
@@ -57,4 +58,15 @@ public data class CreateListItemRequest(
 @Serializable
 public data class CreateListItemResponse(
     public val listItem: RawListItem
+)
+
+@Serializable
+public data class CreateForumThreadRequest(
+    val title: String,
+    val content: String
+)
+
+@Serializable
+public data class CreateForumThreadResponse(
+    val forumThread: RawForumThread
 )
