@@ -126,7 +126,7 @@ public class ChannelRoute(client: RestClient): Route(client) {
         channelId: UUID,
         builder: CreateListItemRequestBuilder.() -> Unit
     ): RawListItem = sendRequest<CreateListItemResponse, CreateListItemRequest>(
-        endpoint = "/channels/$channelId/list",
+        endpoint = "/channels/$channelId/items",
         method = HttpMethod.Post,
         body = CreateListItemRequestBuilder().apply(builder).toRequest()
     ).listItem
