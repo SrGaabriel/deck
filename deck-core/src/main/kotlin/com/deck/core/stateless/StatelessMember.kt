@@ -1,9 +1,11 @@
 package com.deck.core.stateless
 
+import com.deck.common.util.DeckObsoleteApi
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.core.entity.ServerBan
 import com.deck.core.util.BlankStatelessServer
+import com.deck.rest.util.GuildedRequestException
 
 public interface StatelessMember: StatelessEntity {
     public val id: GenericId
@@ -39,8 +41,10 @@ public interface StatelessMember: StatelessEntity {
     public suspend fun ban(): Unit =
         client.rest.memberRoute.banMember(id, serverId)
 
-    public suspend fun getBan(): ServerBan? =
-        client.rest.memberRoute.getBan(id, serverId)?.let(client.entityDecoder::decodeBan)
+    @DeckObsoleteApi
+    /** @throws [GuildedRequestException] if not found */
+    public suspend fun getBan(): ServerBan =
+        client.rest.memberRoute.getBan(id, serverId).let(client.entityDecoder::decodeBan)
 
     public suspend fun unban(): Unit =
         client.rest.memberRoute.unbanMember(id, serverId)

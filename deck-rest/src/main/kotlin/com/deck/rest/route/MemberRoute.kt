@@ -6,6 +6,7 @@ import com.deck.common.util.IntGenericId
 import com.deck.common.util.SocialLinkType
 import com.deck.rest.RestClient
 import com.deck.rest.request.GetMemberRolesResponse
+import com.deck.rest.request.GetServerMemberBanResponse
 import com.deck.rest.request.MemberAwardXpRequest
 import com.deck.rest.request.UpdateMemberNicknameRequest
 import com.deck.rest.util.Route
@@ -92,10 +93,10 @@ public class MemberRoute(client: RestClient): Route(client) {
     public suspend fun getBan(
         userId: GenericId,
         serverId: GenericId
-    ): RawServerBan? = sendNullableRequest<RawServerBan, Unit>(
+    ): RawServerBan = sendRequest<GetServerMemberBanResponse, Unit>(
         endpoint = "/servers/$serverId/bans/$userId",
         method = HttpMethod.Get
-    )
+    ).serverMemberBan
 
     public suspend fun unbanMember(
         userId: GenericId,

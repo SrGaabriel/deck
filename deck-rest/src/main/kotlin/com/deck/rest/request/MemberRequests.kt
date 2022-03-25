@@ -1,5 +1,6 @@
 package com.deck.rest.request
 
+import com.deck.common.entity.RawServerBan
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
@@ -12,6 +13,11 @@ public data class UpdateMemberNicknameRequest(
 @Serializable
 public data class GetMemberRolesResponse(
     val roleIds: List<Int>
+)
+
+@Serializable
+public data class GetServerMemberBanResponse(
+    val serverMemberBan: RawServerBan
 )
 
 @Serializable

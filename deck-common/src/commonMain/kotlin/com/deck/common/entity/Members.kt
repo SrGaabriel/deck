@@ -6,6 +6,14 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
+public data class RawServerMember(
+    val user: RawUser,
+    val roleIds: List<Int>,
+    val nickname: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val joinedAt: Instant
+)
+
+@Serializable
 public data class RawServerBan(
     val user: RawUserSummary,
     val reason: OptionalProperty<String> = OptionalProperty.NotPresent,
