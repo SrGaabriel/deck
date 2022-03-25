@@ -97,11 +97,11 @@ internal data class BlankStatelessUser(
 public fun StatelessMember(
     client: DeckClient,
     id: GenericId,
-    server: StatelessServer
-): StatelessMember = BlankStatelessMember(client, id, server)
+    serverId: GenericId
+): StatelessMember = BlankStatelessMember(client, id, serverId)
 
 internal data class BlankStatelessMember(
     override val client: DeckClient,
     override val id: GenericId,
-    override val server: StatelessServer
+    override val serverId: GenericId
 ): StatelessMember

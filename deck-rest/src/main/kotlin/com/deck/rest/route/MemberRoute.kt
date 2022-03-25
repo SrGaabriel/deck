@@ -1,5 +1,6 @@
 package com.deck.rest.route
 
+import com.deck.common.entity.RawServerBan
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.common.util.SocialLinkType
@@ -71,4 +72,36 @@ public class MemberRoute(client: RestClient): Route(client) {
         serverId: GenericId,
         type: SocialLinkType
     ): JsonObject = TODO("Not yet implemented")
+
+    public suspend fun kickMember(
+        userId: GenericId,
+        serverId: GenericId
+    ): Unit = sendRequest<Unit, Unit>(
+        endpoint = "/servers/$serverId/members/$userId",
+        method = HttpMethod.Delete
+    )
+
+    public suspend fun banMember(
+        userId: GenericId,
+        serverId: GenericId
+    ): Unit = sendRequest<Unit, Unit>(
+        endpoint = "/servers/$serverId/bans/$userId",
+        method = HttpMethod.Post
+    )
+
+    public suspend fun getBan(
+        userId: GenericId,
+        serverId: GenericId
+    ): RawServerBan? = sendNullableRequest<RawServerBan, Unit>(
+        endpoint = "/servers/$serverId/bans/$userId",
+        method = HttpMethod.Get
+    )
+
+    public suspend fun unbanMember(
+        userId: GenericId,
+        serverId: GenericId
+    ): Unit = sendRequest<Unit, Unit>(
+        endpoint = "/servers/$serverId/bans/$userId",
+        method = HttpMethod.Delete
+    )
 }

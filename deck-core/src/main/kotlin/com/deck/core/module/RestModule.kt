@@ -1,10 +1,7 @@
 package com.deck.core.module
 
 import com.deck.rest.RestClient
-import com.deck.rest.route.ChannelRoute
-import com.deck.rest.route.GroupRoute
-import com.deck.rest.route.MemberRoute
-import com.deck.rest.route.RoleRoute
+import com.deck.rest.route.*
 
 public interface RestModule {
     public val restClient: RestClient
@@ -13,6 +10,7 @@ public interface RestModule {
     public val groupRoute: GroupRoute
     public val memberRoute: MemberRoute
     public val roleRoute: RoleRoute
+    public val serverRoute: ServerRoute
 }
 
 public class DefaultRestModule(token: String): RestModule {
@@ -22,4 +20,5 @@ public class DefaultRestModule(token: String): RestModule {
     override val groupRoute: GroupRoute = GroupRoute(restClient)
     override val memberRoute: MemberRoute = MemberRoute(restClient)
     override val roleRoute: RoleRoute = RoleRoute(restClient)
+    override val serverRoute: ServerRoute = ServerRoute(restClient)
 }

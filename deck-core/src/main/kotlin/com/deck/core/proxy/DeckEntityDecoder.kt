@@ -1,15 +1,10 @@
 package com.deck.core.proxy
 
-import com.deck.common.entity.RawDocumentation
-import com.deck.common.entity.RawForumThread
-import com.deck.common.entity.RawListItem
-import com.deck.common.entity.RawMessage
+import com.deck.common.entity.*
 import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
-import com.deck.core.entity.Documentation
-import com.deck.core.entity.ListItem
-import com.deck.core.entity.Message
+import com.deck.core.entity.*
 import com.deck.core.entity.channel.ForumThread
 import com.deck.core.entity.impl.DeckDocumentation
 import com.deck.core.entity.impl.DeckForumThread
@@ -29,6 +24,14 @@ public class DeckEntityDecoder(private val client: DeckClient): EntityDecoder {
         updatedAt = raw.updatedAt.asNullable(),
         repliesTo = raw.replyMessageIds.asNullable()?.map { it.mapToBuiltin() }.orEmpty(),
         isPrivate = raw.isPrivate.asNullable() == true
+    )
+
+    override fun decodeBan(raw: RawServerBan): ServerBan = ServerBan(
+        client = client,
+        userData = ServerBannedUser(raw.user.id, raw.user.type, raw.user.name),
+        reason = raw.reason.asNullable(),
+        authorId = raw.createdBy,
+        timestamp = raw.createdAt
     )
 
     override fun decodeListItem(raw: RawListItem): ListItem = DeckListItem(
