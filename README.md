@@ -12,7 +12,7 @@ This library is meant for the Client API (self-bots), it does not cover the earl
 
 You can find deck's documentation [here](https://github.com/SrGaabriel/deck/wiki). Although incomplete, it covers some little more complex topics. If you want to contribute with the wiki, feel more than free to do so.
 
-If problems arise while using the API, you can either open a [GitHub Issue](https://github.com/SrGaabriel/deck/issues/new), or contact me in either my Discord (Gaabriel#1911) or my Guilded (SrGaabriel).
+If problems arise while using the API, you can either open a [GitHub Issue](https://github.com/SrGaabriel/deck/issues/new), or contact me in either my Discord (gaabriel#1911) or my Guilded (SrGaabriel).
 
 ## Implementating
 
