@@ -30,11 +30,11 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
     override val eventWrappingFlow: MutableSharedFlow<DeckEvent> = MutableSharedFlow()
 
     override val wrappedEventSupplierData: WrappedEventSupplierData = WrappedEventSupplierData(
-        scope = client.gateway.orchestrator,
+        scope = client.gateway,
         sharedFlow = eventWrappingFlow
     )
 
-    override fun startListening(): Job = client.gateway.orchestrator.on<GatewayEvent> {
+    override fun startListening(): Job = client.gateway.on<GatewayEvent> {
         val deckEvent: DeckEvent = when (this) {
             is GatewayHelloEvent -> DeckHelloEvent.map(client, this)
             is GatewayServerXpAddedEvent -> DeckServerXpAddEvent.map(client, this)

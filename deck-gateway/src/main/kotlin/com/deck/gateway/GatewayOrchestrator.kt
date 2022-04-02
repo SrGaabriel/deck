@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
 import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.CoroutineContext
 
 public class GatewayOrchestrator(private val token: String): EventSupplier, CoroutineScope {
@@ -28,17 +29,25 @@ public class GatewayOrchestrator(private val token: String): EventSupplier, Coro
     }
 
     public var debugPayloads: Boolean = false
-    public val gateways: MutableList<Gateway> = mutableListOf()
+    public val gateways: MutableMap<Int, Gateway> = mutableMapOf()
+    private val gatewayAtomicId: AtomicInteger = AtomicInteger(0)
 
     public fun openGateway(): Gateway = DefaultGateway(
         token = token,
         debugPayloads = debugPayloads,
-        gatewayId = gateways.size,
+        gatewayId = gatewayAtomicId.getAndIncrement(),
         scope = this,
         client = httpClient,
         eventSharedFlow = globalEventsFlow
-    ).also { gateways.add(it) }
+    ).also { gateways[it.gatewayId] = it }
 
-    public suspend fun closeGateway(gateway: Gateway): Unit =
-        gateways.remove(gateway.also { gateway.disconnect(false) }).let {}
+    public suspend fun closeGateway(id: Int) {
+        gateways[id]?.disconnect(false)
+    }
+
+    public suspend fun ditchGateway(id: Int) {
+        val gateway = gateways[id] ?: return
+        gateway.disconnect()
+        gateways.remove(id)
+    }
 }

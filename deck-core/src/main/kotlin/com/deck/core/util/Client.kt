@@ -1,16 +1,14 @@
 package com.deck.core.util
 
 import com.deck.core.DeckClient
-import com.deck.core.module.DefaultGatewayModule
-import com.deck.core.module.DefaultRestModule
-import com.deck.core.module.GatewayModule
-import com.deck.core.module.RestModule
+import com.deck.gateway.GatewayOrchestrator
+import com.deck.rest.RestClient
 
-public class ClientBuilder(private val token: String) {
-    public var restModule: RestModule = DefaultRestModule(token)
-    public var gatewayModule: GatewayModule = DefaultGatewayModule(token)
+public class ClientBuilder(token: String) {
+    public var rest: RestClient = RestClient(token)
+    public var gateway: GatewayOrchestrator = GatewayOrchestrator(token)
 
     public fun build(): DeckClient {
-        return DeckClient(restModule, gatewayModule, token)
+        return DeckClient(rest, gateway)
     }
 }

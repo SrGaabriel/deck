@@ -25,11 +25,11 @@ public interface StatelessMessage: StatelessEntity, ReactionHolder {
     }
 
     override suspend fun addReaction(reactionId: IntGenericId): Unit =
-        client.rest.channelRoute.addReactionToContent(channel.id, id, reactionId)
+        client.rest.channel.addReactionToContent(channel.id, id, reactionId)
 
     @DeckObsoleteApi
     override suspend fun removeReaction(reactionId: IntGenericId): Unit =
-        client.rest.channelRoute.removeReactionFromContent(channel.id, id, reactionId)
+        client.rest.channel.removeReactionFromContent(channel.id, id, reactionId)
 
     public suspend fun update(content: String): Message =
         channel.updateMessage(id, content)

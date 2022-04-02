@@ -16,6 +16,6 @@ public interface StatelessListChannel: StatelessEntity {
 
     public suspend fun createItem(builder: CreateListItemRequestBuilder.() -> Unit): ListItem =
         client.entityDecoder.decodeListItem(
-            client.rest.channelRoute.createListItem(id, builder)
+            client.rest.channel.createListItem(id, builder)
         )
 }

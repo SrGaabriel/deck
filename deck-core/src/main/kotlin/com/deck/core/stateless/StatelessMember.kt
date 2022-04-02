@@ -22,33 +22,33 @@ public interface StatelessMember: StatelessEntity {
      * @return this member's new nickname
      */
     public suspend fun setNickname(nickname: String?): String? = when(nickname) {
-        null -> client.rest.memberRoute.removeMemberNickname(id, serverId).let { null }
-        else -> client.rest.memberRoute.updateMemberNickname(id, serverId, nickname)
+        null -> client.rest.member.removeMemberNickname(id, serverId).let { null }
+        else -> client.rest.member.updateMemberNickname(id, serverId, nickname)
     }
 
     public suspend fun addRole(role: StatelessRole): Unit =
-        client.rest.memberRoute.addRole(id, serverId, role.id)
+        client.rest.member.addRole(id, serverId, role.id)
 
     public suspend fun getRoleIds(): List<IntGenericId> =
-        client.rest.memberRoute.getMemberRoles(id, serverId)
+        client.rest.member.getMemberRoles(id, serverId)
 
     public suspend fun removeRole(role: StatelessRole): Unit =
-        client.rest.memberRoute.removeRole(id, serverId, role.id)
+        client.rest.member.removeRole(id, serverId, role.id)
 
     public suspend fun kick(): Unit =
-        client.rest.memberRoute.kickMember(id, serverId)
+        client.rest.member.kickMember(id, serverId)
 
     public suspend fun ban(): Unit =
-        client.rest.memberRoute.banMember(id, serverId)
+        client.rest.member.banMember(id, serverId)
 
     @DeckObsoleteApi
     /** @throws [GuildedRequestException] if not found */
     public suspend fun getBan(): ServerBan =
-        client.rest.memberRoute.getBan(id, serverId).let(client.entityDecoder::decodeBan)
+        client.rest.member.getBan(id, serverId).let(client.entityDecoder::decodeBan)
 
     public suspend fun unban(): Unit =
-        client.rest.memberRoute.unbanMember(id, serverId)
+        client.rest.member.unbanMember(id, serverId)
 
     public suspend fun awardXp(amount: Int): Int =
-        client.rest.memberRoute.awardXpToMember(id, serverId, amount)
+        client.rest.member.awardXpToMember(id, serverId, amount)
 }

@@ -13,14 +13,14 @@ public interface StatelessDocumentationChannel: StatelessEntity {
 
     public suspend fun createDocumentation(builder: CreateDocumentationRequestBuilder.() -> Unit): Documentation =
         client.entityDecoder.decodeDocumentation(
-            client.rest.channelRoute.createDocumentation(id, builder)
+            client.rest.channel.createDocumentation(id, builder)
         )
 
     public suspend fun getDocumentation(documentationId: IntGenericId): Documentation =
         client.entityDecoder.decodeDocumentation(
-            client.rest.channelRoute.getDocumentation(id, documentationId)
+            client.rest.channel.getDocumentation(id, documentationId)
         )
 
     public suspend fun getDocumentations(): List<Documentation> =
-        client.rest.channelRoute.getDocumentations(id).map(client.entityDecoder::decodeDocumentation)
+        client.rest.channel.getDocumentations(id).map(client.entityDecoder::decodeDocumentation)
 }

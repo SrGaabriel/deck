@@ -16,6 +16,6 @@ public interface StatelessForumChannel: StatelessEntity {
 
     public suspend fun createThread(builder: CreateForumThreadRequestBuilder.() -> Unit): ForumThread =
         client.entityDecoder.decodeForumThread(
-            client.rest.channelRoute.createForumThread(id, builder)
+            client.rest.channel.createForumThread(id, builder)
         )
 }

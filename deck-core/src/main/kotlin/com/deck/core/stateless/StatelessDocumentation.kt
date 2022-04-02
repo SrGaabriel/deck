@@ -19,9 +19,9 @@ public interface StatelessDocumentation: StatelessEntity {
 
     public suspend fun update(builder: CreateDocumentationRequestBuilder.() -> Unit): Documentation =
         client.entityDecoder.decodeDocumentation(
-            client.rest.channelRoute.updateDocumentation(channel.id, id, builder)
+            client.rest.channel.updateDocumentation(channel.id, id, builder)
         )
 
     public suspend fun delete(): Unit =
-        client.rest.channelRoute.deleteDocumentation(channel.id, id)
+        client.rest.channel.deleteDocumentation(channel.id, id)
 }
