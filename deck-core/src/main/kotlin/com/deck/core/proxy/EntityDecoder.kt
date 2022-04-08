@@ -1,16 +1,15 @@
 package com.deck.core.proxy
 
 import com.deck.common.entity.*
-import com.deck.core.entity.Documentation
-import com.deck.core.entity.ListItem
-import com.deck.core.entity.Message
-import com.deck.core.entity.ServerBan
+import com.deck.core.entity.*
 import com.deck.core.entity.channel.ForumThread
 
 public interface EntityDecoder {
     public fun decodeMessage(raw: RawMessage): Message
 
     public fun decodeBan(raw: RawServerBan): ServerBan
+
+    public fun decodeWebhook(raw: RawWebhook): Webhook
 
     public fun decodeListItem(raw: RawListItem): ListItem
 

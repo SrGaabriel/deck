@@ -6,6 +6,8 @@ import com.deck.core.event.message.DeckMessageDeleteEvent
 import com.deck.core.event.message.DeckMessageUpdateEvent
 import com.deck.core.event.server.DeckServerXpAddEvent
 import com.deck.core.event.user.DeckHelloEvent
+import com.deck.core.event.webhook.DeckServerWebhookCreateEvent
+import com.deck.core.event.webhook.DeckServerWebhookUpdateEvent
 import com.deck.core.util.WrappedEventSupplier
 import com.deck.core.util.WrappedEventSupplierData
 import com.deck.gateway.event.GatewayEvent
@@ -41,6 +43,8 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
             is GatewayChatMessageCreatedEvent -> DeckMessageCreateEvent.map(client, this)
             is GatewayChatMessageUpdatedEvent -> DeckMessageUpdateEvent.map(client, this)
             is GatewayChatMessageDeletedEvent -> DeckMessageDeleteEvent.map(client, this)
+            is GatewayServerWebhookCreatedEvent -> DeckServerWebhookCreateEvent.map(client, this)
+            is GatewayServerWebhookUpdatedEvent -> DeckServerWebhookUpdateEvent.map(client, this)
             else -> return@on
         }
         eventWrappingFlow.emit(deckEvent)

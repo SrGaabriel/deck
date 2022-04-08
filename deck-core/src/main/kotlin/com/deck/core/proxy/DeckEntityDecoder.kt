@@ -6,10 +6,7 @@ import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.*
 import com.deck.core.entity.channel.ForumThread
-import com.deck.core.entity.impl.DeckDocumentation
-import com.deck.core.entity.impl.DeckForumThread
-import com.deck.core.entity.impl.DeckListItem
-import com.deck.core.entity.impl.DeckMessage
+import com.deck.core.entity.impl.*
 import com.deck.core.util.BlankStatelessUser
 
 public class DeckEntityDecoder(private val client: DeckClient): EntityDecoder {
@@ -32,6 +29,18 @@ public class DeckEntityDecoder(private val client: DeckClient): EntityDecoder {
         reason = raw.reason.asNullable(),
         authorId = raw.createdBy,
         timestamp = raw.createdAt
+    )
+
+    override fun decodeWebhook(raw: RawWebhook): Webhook = DeckWebhook(
+        client = client,
+        id = raw.id.mapToBuiltin(),
+        serverId = raw.serverId,
+        name = raw.name,
+        channelId = raw.channelId.mapToBuiltin(),
+        createdAt = raw.createdAt,
+        deletedAt = raw.deletedAt.asNullable(),
+        creatorId = raw.createdBy,
+        token = raw.token.asNullable()
     )
 
     override fun decodeListItem(raw: RawListItem): ListItem = DeckListItem(

@@ -16,3 +16,5 @@ public class RequiredRequestField<A> {
 }
 
 public fun <A> RequestBuilder<*>.required(): RequiredRequestField<A> = RequiredRequestField()
+
+internal fun String.plusIf(text: String, condition: () -> Boolean): String = if (condition()) this + text else this

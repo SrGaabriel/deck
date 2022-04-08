@@ -14,4 +14,5 @@ public class RestClient(public val token: String) {
     public val member: MemberRoute = MemberRoute(this)
     public val role: RoleRoute = RoleRoute(this)
     public val server: ServerRoute = ServerRoute(this)
+    public val webhook: WebhookRoute = WebhookRoute(this)
 }
