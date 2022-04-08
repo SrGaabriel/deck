@@ -7,6 +7,8 @@ import com.deck.core.entity.channel.ForumThread
 public interface EntityDecoder {
     public fun decodeMessage(raw: RawMessage): Message
 
+    public fun decodeMember(raw: RawServerMember): Member
+
     public fun decodeBan(raw: RawServerBan): ServerBan
 
     public fun decodeWebhook(raw: RawWebhook): Webhook

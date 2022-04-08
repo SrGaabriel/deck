@@ -22,7 +22,11 @@ private val polymorphicJson by lazy {
             polymorphic(GatewayEvent::class) {
                 subclass(GatewayHelloEvent::class)
                 subclass(GatewayServerXpAddedEvent::class)
+                subclass(GatewayTeamMemberJoinedEvent::class)
                 subclass(GatewayTeamMemberUpdatedEvent::class)
+                subclass(GatewayTeamMemberRemovedEvent::class)
+                subclass(GatewayTeamMemberBannedEvent::class)
+                subclass(GatewayTeamMemberUnbannedEvent::class)
                 subclass(GatewayChatMessageCreatedEvent::class)
                 subclass(GatewayChatMessageUpdatedEvent::class)
                 subclass(GatewayChatMessageDeletedEvent::class)

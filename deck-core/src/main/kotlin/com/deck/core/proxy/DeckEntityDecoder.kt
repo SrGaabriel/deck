@@ -23,6 +23,17 @@ public class DeckEntityDecoder(private val client: DeckClient): EntityDecoder {
         isPrivate = raw.isPrivate.asNullable() == true
     )
 
+    override fun decodeMember(raw: RawServerMember): Member = DeckMember(
+        client = client,
+        id = raw.user.id,
+        name = raw.user.name,
+        type = raw.user.type,
+        nickname = raw.nickname.asNullable(),
+        roleIds = raw.roleIds,
+        createdAt = raw.user.createdAt,
+        joinedAt = raw.joinedAt
+    )
+
     override fun decodeBan(raw: RawServerBan): ServerBan = ServerBan(
         client = client,
         userData = ServerBannedUser(raw.user.id, raw.user.type, raw.user.name),
