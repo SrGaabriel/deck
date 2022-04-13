@@ -21,7 +21,7 @@ public interface StatelessMessage: StatelessEntity, ReactionHolder {
 
     public suspend fun sendReply(builder: SendMessageRequestBuilder.() -> Unit): Message = channel.sendMessage {
         builder(this)
-        addReplyTarget(this@StatelessMessage.id)
+        replyTo(this@StatelessMessage.id)
     }
 
     override suspend fun addReaction(reactionId: IntGenericId): Unit =
