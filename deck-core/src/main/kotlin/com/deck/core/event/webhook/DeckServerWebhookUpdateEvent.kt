@@ -3,6 +3,7 @@ package com.deck.core.event.webhook
 import com.deck.common.util.GenericId
 import com.deck.core.DeckClient
 import com.deck.core.entity.Webhook
+import com.deck.core.entity.impl.DeckWebhook
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
 import com.deck.core.stateless.StatelessServer
@@ -24,7 +25,7 @@ public data class DeckServerWebhookUpdateEvent(
         ): DeckServerWebhookUpdateEvent = DeckServerWebhookUpdateEvent(
             client = client,
             gatewayId = event.gatewayId,
-            webhook = client.entityDecoder.decodeWebhook(event.webhook),
+            webhook = DeckWebhook.strategize(client, event.webhook),
             serverId = event.serverId
         )
     }

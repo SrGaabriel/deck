@@ -3,7 +3,10 @@ package com.deck.extras.conversation
 import com.deck.core.entity.Message
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 public class ConversationMessage(
     public val conversation: Conversation,

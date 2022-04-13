@@ -1,8 +1,12 @@
 package com.deck.core.entity.impl
 
+import com.deck.common.entity.RawMessage
 import com.deck.common.util.GenericId
+import com.deck.common.util.asNullable
+import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.Message
+import com.deck.core.util.EntityStrategy
 import kotlinx.datetime.Instant
 import java.util.*
 
@@ -17,4 +21,19 @@ public data class DeckMessage(
     override val updatedAt: Instant?,
     override val repliesTo: List<UUID>,
     override val isPrivate: Boolean
-): Message
+): Message {
+    public companion object: EntityStrategy<RawMessage, DeckMessage> {
+        override fun strategize(client: DeckClient, raw: RawMessage): DeckMessage = DeckMessage(
+            client = client,
+            id = raw.id.mapToBuiltin(),
+            content = raw.content,
+            authorId = raw.createdBy,
+            channelId = raw.channelId.mapToBuiltin(),
+            serverId = raw.serverId.asNullable(),
+            createdAt = raw.createdAt,
+            updatedAt = raw.updatedAt.asNullable(),
+            repliesTo = raw.replyMessageIds.asNullable()?.map { it.mapToBuiltin() }.orEmpty(),
+            isPrivate = raw.isPrivate.asNullable() == true
+        )
+    }
+}

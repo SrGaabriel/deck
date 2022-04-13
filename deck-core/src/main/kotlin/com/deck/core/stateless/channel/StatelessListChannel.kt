@@ -2,6 +2,7 @@ package com.deck.core.stateless.channel
 
 import com.deck.common.util.GenericId
 import com.deck.core.entity.ListItem
+import com.deck.core.entity.impl.DeckListItem
 import com.deck.core.stateless.StatelessEntity
 import com.deck.core.stateless.StatelessServer
 import com.deck.core.util.BlankStatelessServer
@@ -15,7 +16,5 @@ public interface StatelessListChannel: StatelessEntity {
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 
     public suspend fun createItem(builder: CreateListItemRequestBuilder.() -> Unit): ListItem =
-        client.entityDecoder.decodeListItem(
-            client.rest.channel.createListItem(id, builder)
-        )
+        DeckListItem.strategize(client, client.rest.channel.createListItem(id, builder))
 }

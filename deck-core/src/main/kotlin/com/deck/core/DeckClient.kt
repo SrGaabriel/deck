@@ -1,10 +1,7 @@
 package com.deck.core
 
-import com.deck.common.util.DeckExperimental
 import com.deck.core.event.DefaultEventService
 import com.deck.core.event.EventService
-import com.deck.core.proxy.DeckEntityDecoder
-import com.deck.core.proxy.EntityDecoder
 import com.deck.core.util.ClientBuilder
 import com.deck.core.util.WrappedEventSupplier
 import com.deck.core.util.WrappedEventSupplierData
@@ -18,13 +15,11 @@ public class DeckClient internal constructor(
     public val rest: RestClient,
     public val gateway: GatewayOrchestrator
 ) : EventSupplier, WrappedEventSupplier {
-    @DeckExperimental
     public var eventService: EventService = DefaultEventService(this)
 
     override val eventSupplierData: EventSupplierData by gateway::eventSupplierData
     override val wrappedEventSupplierData: WrappedEventSupplierData by eventService::wrappedEventSupplierData
 
-    public val entityDecoder: EntityDecoder = DeckEntityDecoder(this)
     // public val entityDelegator: EntityDelegator = DeckEntityDelegator()
 
     public suspend fun login() {

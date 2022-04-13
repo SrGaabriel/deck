@@ -2,6 +2,7 @@ package com.deck.core.stateless.channel
 
 import com.deck.common.util.GenericId
 import com.deck.core.entity.Message
+import com.deck.core.entity.impl.DeckMessage
 import com.deck.core.stateless.StatelessEntity
 import com.deck.core.stateless.StatelessServer
 import com.deck.core.util.BlankStatelessServer
@@ -15,24 +16,16 @@ public interface StatelessMessageChannel: StatelessEntity {
     public val server: StatelessServer? get() = serverId?.let { BlankStatelessServer(client, it) }
 
     public suspend fun sendMessage(builder: SendMessageRequestBuilder.() -> Unit): Message =
-        client.entityDecoder.decodeMessage(
-            client.rest.channel.sendMessage(id, builder)
-        )
+        DeckMessage.strategize(client, client.rest.channel.sendMessage(id, builder))
 
     public suspend fun getMessage(messageId: UUID): Message? =
-        client.rest.channel.getMessage(id, messageId)?.let {
-            client.entityDecoder.decodeMessage(
-                it
-            )
-        }
+        DeckMessage.strategize(client, client.rest.channel.getMessage(id, messageId))
 
     public suspend fun getMessages(includePrivate: Boolean = false): List<Message> =
-        client.rest.channel.getChannelMessages(id, includePrivate).map(client.entityDecoder::decodeMessage)
+        client.rest.channel.getChannelMessages(id, includePrivate).map { DeckMessage.strategize(client, it) }
 
     public suspend fun updateMessage(messageId: UUID, content: String): Message =
-        client.entityDecoder.decodeMessage(
-            client.rest.channel.updateMessage(id, messageId, content)
-        )
+        DeckMessage.strategize(client, client.rest.channel.updateMessage(id, messageId, content))
 
     public suspend fun deleteMessage(messageId: UUID): Unit =
         client.rest.channel.deleteMessage(id, messageId)

@@ -28,7 +28,7 @@ public data class DeckMemberBanEvent(
             client = client,
             gatewayId = event.gatewayId,
             serverId = event.serverId,
-            serverBan = client.entityDecoder.decodeBan(event.serverMemberBan)
+            serverBan = ServerBan.strategize(client, event.serverMemberBan)
         )
     }
 }

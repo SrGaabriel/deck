@@ -1,9 +1,13 @@
 package com.deck.core.entity.impl
 
+import com.deck.common.entity.RawDocumentation
 import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
+import com.deck.common.util.asNullable
+import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.Documentation
+import com.deck.core.util.EntityStrategy
 import com.deck.rest.builder.CreateDocumentationRequestBuilder
 import kotlinx.datetime.Instant
 import java.util.*
@@ -26,5 +30,20 @@ public data class DeckDocumentation(
             content = this@DeckDocumentation.content
             builder(this)
         }
+    }
+
+    public companion object: EntityStrategy<RawDocumentation, DeckDocumentation> {
+        override fun strategize(client: DeckClient, raw: RawDocumentation): DeckDocumentation = DeckDocumentation(
+            client = client,
+            id = raw.id,
+            title = raw.title,
+            content = raw.content,
+            serverId = raw.serverId,
+            channelId = raw.channelId.mapToBuiltin(),
+            createdAt = raw.createdAt,
+            updatedAt = raw.updatedAt.asNullable(),
+            authorId = raw.createdBy,
+            editorId = raw.updatedBy.asNullable()
+        )
     }
 }

@@ -62,6 +62,20 @@ public annotation class DeckDelicateApi
 @RequiresOptIn(level = RequiresOptIn.Level.WARNING)
 public annotation class DeckObsoleteApi
 
+/**
+ * Marks the feature as internal, in other words, you should only use this feature
+ * if there's no public replacement.
+ */
+@Retention(AnnotationRetention.BINARY)
+@Target(
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.FIELD,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.CLASS,
+    AnnotationTarget.PROPERTY_SETTER
+)
+@RequiresOptIn(level = RequiresOptIn.Level.ERROR)
+public annotation class DeckInternalApi
 
 @DslMarker
 public annotation class DeckDSL

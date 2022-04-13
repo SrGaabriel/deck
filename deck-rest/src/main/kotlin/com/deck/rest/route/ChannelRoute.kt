@@ -47,10 +47,10 @@ public class ChannelRoute(client: RestClient): Route(client) {
     public suspend fun getMessage(
         channelId: UUID,
         messageId: UUID
-    ): RawMessage? = sendNullableRequest<SendMessageResponse, UUID>(
+    ): RawMessage = sendRequest<SendMessageResponse, UUID>(
         endpoint = "/channels/$channelId/messages/$messageId",
         method = HttpMethod.Get
-    )?.message
+    ).message
 
     public suspend fun getChannelMessages(
         channelId: UUID,

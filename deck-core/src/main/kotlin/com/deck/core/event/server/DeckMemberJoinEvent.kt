@@ -3,6 +3,7 @@ package com.deck.core.event.server
 import com.deck.common.util.GenericId
 import com.deck.core.DeckClient
 import com.deck.core.entity.Member
+import com.deck.core.entity.impl.DeckMember
 import com.deck.core.event.DeckEvent
 import com.deck.core.event.EventMapper
 import com.deck.core.stateless.StatelessServer
@@ -25,7 +26,7 @@ public data class DeckMemberJoinEvent(
             client = client,
             gatewayId = event.gatewayId,
             serverId = event.serverId,
-            member = client.entityDecoder.decodeMember(event.member)
+            member = DeckMember.strategize(client, event.member)
         )
     }
 }
