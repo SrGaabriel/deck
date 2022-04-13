@@ -14,5 +14,6 @@ public data class RawGuildedRequestException(
 )
 
 // We inline the function, so it doesn't appear in stack traces.
+@Suppress("NOTHING_TO_INLINE")
 public inline fun RawGuildedRequestException.toException(): GuildedRequestException =
     GuildedRequestException(code, message)

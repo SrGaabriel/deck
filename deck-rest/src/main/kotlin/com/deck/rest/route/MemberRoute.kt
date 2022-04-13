@@ -9,16 +9,16 @@ import com.deck.rest.request.GetMemberRolesResponse
 import com.deck.rest.request.GetServerMemberBanResponse
 import com.deck.rest.request.MemberAwardXpRequest
 import com.deck.rest.request.UpdateMemberNicknameRequest
-import com.deck.rest.util.Route
+import com.deck.rest.util.sendRequest
 import io.ktor.http.*
 import kotlinx.serialization.json.JsonObject
 
-public class MemberRoute(client: RestClient): Route(client) {
+public class MemberRoute(private val client: RestClient) {
     public suspend fun awardXpToMember(
         userId: GenericId,
         serverId: GenericId,
         amount: Int
-    ): Int = sendRequest<MemberAwardXpRequest, MemberAwardXpRequest>(
+    ): Int = client.sendRequest<MemberAwardXpRequest, MemberAwardXpRequest>(
         endpoint = "/servers/$serverId/members/$userId/xp",
         method = HttpMethod.Post,
         body = MemberAwardXpRequest(amount)
@@ -28,7 +28,7 @@ public class MemberRoute(client: RestClient): Route(client) {
         userId: GenericId,
         serverId: GenericId,
         roleId: IntGenericId
-    ): Unit = sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest<Unit, Unit>(
         endpoint = "/servers/$serverId/members/$userId/roles/$roleId",
         method = HttpMethod.Put
     )
@@ -37,7 +37,7 @@ public class MemberRoute(client: RestClient): Route(client) {
         userId: GenericId,
         serverId: GenericId,
         roleId: IntGenericId
-    ): Unit = sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest<Unit, Unit>(
         endpoint = "/servers/$serverId/members/$userId/roles/$roleId",
         method = HttpMethod.Delete
     )
@@ -46,7 +46,7 @@ public class MemberRoute(client: RestClient): Route(client) {
         userId: GenericId,
         serverId: GenericId,
         nickname: String
-    ): String = sendRequest<UpdateMemberNicknameRequest, UpdateMemberNicknameRequest>(
+    ): String = client.sendRequest<UpdateMemberNicknameRequest, UpdateMemberNicknameRequest>(
         endpoint = "/servers/$serverId/members/$userId/nickname",
         method = HttpMethod.Put,
         body = UpdateMemberNicknameRequest(nickname)
@@ -55,7 +55,7 @@ public class MemberRoute(client: RestClient): Route(client) {
     public suspend fun removeMemberNickname(
         userId: GenericId,
         serverId: GenericId
-    ): Unit = sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest<Unit, Unit>(
         endpoint = "/servers/$serverId/members/$userId/nickname",
         method = HttpMethod.Delete
     )
@@ -63,7 +63,7 @@ public class MemberRoute(client: RestClient): Route(client) {
     public suspend fun getMemberRoles(
         userId: GenericId,
         serverId: GenericId
-    ): List<IntGenericId> = sendRequest<GetMemberRolesResponse, Unit>(
+    ): List<IntGenericId> = client.sendRequest<GetMemberRolesResponse, Unit>(
         endpoint = "/servers/$serverId/members/$userId/roles",
         method = HttpMethod.Get
     ).roleIds
@@ -77,7 +77,7 @@ public class MemberRoute(client: RestClient): Route(client) {
     public suspend fun kickMember(
         userId: GenericId,
         serverId: GenericId
-    ): Unit = sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest<Unit, Unit>(
         endpoint = "/servers/$serverId/members/$userId",
         method = HttpMethod.Delete
     )
@@ -85,7 +85,7 @@ public class MemberRoute(client: RestClient): Route(client) {
     public suspend fun banMember(
         userId: GenericId,
         serverId: GenericId
-    ): Unit = sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest<Unit, Unit>(
         endpoint = "/servers/$serverId/bans/$userId",
         method = HttpMethod.Post
     )
@@ -93,7 +93,7 @@ public class MemberRoute(client: RestClient): Route(client) {
     public suspend fun getBan(
         userId: GenericId,
         serverId: GenericId
-    ): RawServerBan = sendRequest<GetServerMemberBanResponse, Unit>(
+    ): RawServerBan = client.sendRequest<GetServerMemberBanResponse, Unit>(
         endpoint = "/servers/$serverId/bans/$userId",
         method = HttpMethod.Get
     ).serverMemberBan
@@ -101,7 +101,7 @@ public class MemberRoute(client: RestClient): Route(client) {
     public suspend fun unbanMember(
         userId: GenericId,
         serverId: GenericId
-    ): Unit = sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest<Unit, Unit>(
         endpoint = "/servers/$serverId/bans/$userId",
         method = HttpMethod.Delete
     )

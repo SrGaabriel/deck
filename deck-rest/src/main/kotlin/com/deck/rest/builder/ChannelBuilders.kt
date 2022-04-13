@@ -15,7 +15,7 @@ public class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
 
     public val repliesTo: MutableList<UUID> = mutableListOf()
 
-    public fun addReplyTarget(vararg messageIds: UUID): Unit =
+    public fun replyTo(vararg messageIds: UUID): Unit =
         repliesTo.addAll(messageIds).let {}
 
     override fun toRequest(): SendMessageRequest = SendMessageRequest(

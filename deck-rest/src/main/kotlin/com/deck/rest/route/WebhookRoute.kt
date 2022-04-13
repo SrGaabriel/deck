@@ -9,16 +9,16 @@ import com.deck.rest.request.CreateWebhookRequest
 import com.deck.rest.request.CreateWebhookResponse
 import com.deck.rest.request.GetServerWebhooksResponse
 import com.deck.rest.request.UpdateWebhookRequest
-import com.deck.rest.util.Route
 import com.deck.rest.util.plusIf
+import com.deck.rest.util.sendRequest
 import io.ktor.http.*
 import java.util.*
 
-public class WebhookRoute(client: RestClient): Route(client) {
+public class WebhookRoute(private val client: RestClient) {
     public suspend fun createWebhook(
         serverId: GenericId,
         builder: CreateWebhookRequestBuilder.() -> Unit
-    ): RawWebhook = sendRequest<CreateWebhookResponse, CreateWebhookRequest>(
+    ): RawWebhook = client.sendRequest<CreateWebhookResponse, CreateWebhookRequest>(
         endpoint = "/servers/${serverId}/webhooks",
         method = HttpMethod.Post,
         body = CreateWebhookRequestBuilder().apply(builder).toRequest()
@@ -27,7 +27,7 @@ public class WebhookRoute(client: RestClient): Route(client) {
     public suspend fun retrieveWebhook(
         webhookId: UUID,
         serverId: GenericId
-    ): RawWebhook = sendRequest<CreateWebhookResponse, Unit>(
+    ): RawWebhook = client.sendRequest<CreateWebhookResponse, Unit>(
         endpoint = "/servers/${serverId}/webhooks/$webhookId",
         method = HttpMethod.Get
     ).webhook
@@ -35,7 +35,7 @@ public class WebhookRoute(client: RestClient): Route(client) {
     public suspend fun retrieveServerWebhooks(
         serverId: GenericId,
         channelId: UUID? = null
-    ): List<RawWebhook> = sendRequest<GetServerWebhooksResponse, Unit>(
+    ): List<RawWebhook> = client.sendRequest<GetServerWebhooksResponse, Unit>(
         endpoint = "/servers/${serverId}/webhooks".plusIf("?channelId=$channelId") { channelId != null },
         method = HttpMethod.Get
     ).webhooks
@@ -44,7 +44,7 @@ public class WebhookRoute(client: RestClient): Route(client) {
         webhookId: UUID,
         serverId: GenericId,
         builder: UpdateWebhookRequestBuilder.() -> Unit
-    ): RawWebhook = sendRequest<CreateWebhookResponse, UpdateWebhookRequest>(
+    ): RawWebhook = client.sendRequest<CreateWebhookResponse, UpdateWebhookRequest>(
         endpoint = "/servers/${serverId}/webhooks/$webhookId",
         method = HttpMethod.Put,
         body = UpdateWebhookRequestBuilder().apply(builder).toRequest()
@@ -53,7 +53,7 @@ public class WebhookRoute(client: RestClient): Route(client) {
     public suspend fun deleteWebhook(
         webhookId: UUID,
         serverId: GenericId
-    ): Unit = sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest<Unit, Unit>(
         endpoint = "/servers/${serverId}/webhooks/${webhookId}",
         method = HttpMethod.Delete
     )
