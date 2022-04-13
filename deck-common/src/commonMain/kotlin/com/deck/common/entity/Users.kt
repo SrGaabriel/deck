@@ -1,6 +1,8 @@
 package com.deck.common.entity
 
 import com.deck.common.util.GenericId
+import com.deck.common.util.OptionalProperty
+import com.deck.common.util.SocialLinkType
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -18,6 +20,13 @@ public data class RawUserSummary(
     val id: GenericId,
     val type: RawUserType = RawUserType.USER,
     val name: String
+)
+
+@Serializable
+public data class RawUserSocialLink(
+    val handle: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val serviceId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+    val type: SocialLinkType
 )
 
 @Serializable

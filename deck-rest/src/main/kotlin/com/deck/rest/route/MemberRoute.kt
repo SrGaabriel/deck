@@ -5,13 +5,9 @@ import com.deck.common.util.GenericId
 import com.deck.common.util.IntGenericId
 import com.deck.common.util.SocialLinkType
 import com.deck.rest.RestClient
-import com.deck.rest.request.GetMemberRolesResponse
-import com.deck.rest.request.GetServerMemberBanResponse
-import com.deck.rest.request.MemberAwardXpRequest
-import com.deck.rest.request.UpdateMemberNicknameRequest
+import com.deck.rest.request.*
 import com.deck.rest.util.sendRequest
 import io.ktor.http.*
-import kotlinx.serialization.json.JsonObject
 
 public class MemberRoute(private val client: RestClient) {
     public suspend fun awardXpToMember(
@@ -68,11 +64,14 @@ public class MemberRoute(private val client: RestClient) {
         method = HttpMethod.Get
     ).roleIds
 
-    public fun getMemberSocialLinks(
+    public suspend fun getMemberSocialLinks(
         userId: GenericId,
         serverId: GenericId,
         type: SocialLinkType
-    ): JsonObject = TODO("Not yet implemented")
+    ): GetMemberSocialLinkResponse = client.sendRequest<GetMemberSocialLinkResponse, Unit>(
+        endpoint = "/servers/$serverId/members/$userId/social-links/${type.officialName}",
+        method = HttpMethod.Get
+    )
 
     public suspend fun kickMember(
         userId: GenericId,
