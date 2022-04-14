@@ -13,11 +13,11 @@ public interface StatelessDocumentationChannel: StatelessEntity {
     public val serverId: GenericId
 
     public suspend fun createDocumentation(builder: CreateDocumentationRequestBuilder.() -> Unit): Documentation =
-        DeckDocumentation.strategize(client, client.rest.channel.createDocumentation(id, builder))
+        DeckDocumentation.from(client, client.rest.channel.createDocumentation(id, builder))
 
     public suspend fun getDocumentation(documentationId: IntGenericId): Documentation =
-        DeckDocumentation.strategize(client, client.rest.channel.getDocumentation(id, documentationId))
+        DeckDocumentation.from(client, client.rest.channel.getDocumentation(id, documentationId))
 
     public suspend fun getDocumentations(): List<Documentation> =
-        client.rest.channel.getDocumentations(id).map { DeckDocumentation.strategize(client, it) }
+        client.rest.channel.getDocumentations(id).map { DeckDocumentation.from(client, it) }
 }

@@ -1,7 +1,7 @@
 package com.deck.core.entity.channel
 
 import com.deck.common.util.GenericId
-import com.deck.core.entity.Entity
+import com.deck.core.DeckClient
 import com.deck.core.stateless.StatelessServer
 import com.deck.core.stateless.StatelessUser
 import com.deck.core.stateless.channel.StatelessForumChannel
@@ -11,7 +11,8 @@ import com.deck.core.util.BlankStatelessUser
 import kotlinx.datetime.Instant
 import java.util.*
 
-public interface ForumThread: Entity {
+public interface ForumThread {
+    public val client: DeckClient
     public val id: Int
 
     public val authorId: GenericId

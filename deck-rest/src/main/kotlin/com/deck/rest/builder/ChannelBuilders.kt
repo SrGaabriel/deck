@@ -45,6 +45,8 @@ public class CreateListItemRequestBuilder: RequestBuilder<CreateListItemRequest>
     )
 }
 
+public typealias UpdateListItemRequestBuilder = CreateListItemRequestBuilder
+
 public class CreateForumThreadRequestBuilder: RequestBuilder<CreateForumThreadRequest> {
     public var title: String by required()
     public var content: String by required()

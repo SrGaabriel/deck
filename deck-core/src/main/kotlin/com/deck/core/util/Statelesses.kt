@@ -2,10 +2,7 @@ package com.deck.core.util
 
 import com.deck.common.util.GenericId
 import com.deck.core.DeckClient
-import com.deck.core.stateless.StatelessMember
-import com.deck.core.stateless.StatelessMessage
-import com.deck.core.stateless.StatelessServer
-import com.deck.core.stateless.StatelessUser
+import com.deck.core.stateless.*
 import com.deck.core.stateless.channel.StatelessDocumentationChannel
 import com.deck.core.stateless.channel.StatelessForumChannel
 import com.deck.core.stateless.channel.StatelessListChannel
@@ -105,3 +102,17 @@ internal data class BlankStatelessMember(
     override val id: GenericId,
     override val serverId: GenericId
 ): StatelessMember
+
+public fun StatelessListItem(
+    client: DeckClient,
+    id: UUID,
+    serverId: GenericId,
+    channelId: UUID
+): StatelessListItem = BlankStatelessListItem(client, id, serverId, channelId)
+
+internal data class BlankStatelessListItem(
+    override val client: DeckClient,
+    override val id: UUID,
+    override val serverId: GenericId,
+    override val channelId: UUID
+): StatelessListItem

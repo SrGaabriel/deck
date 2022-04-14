@@ -16,16 +16,16 @@ public interface StatelessMessageChannel: StatelessEntity {
     public val server: StatelessServer? get() = serverId?.let { BlankStatelessServer(client, it) }
 
     public suspend fun sendMessage(builder: SendMessageRequestBuilder.() -> Unit): Message =
-        DeckMessage.strategize(client, client.rest.channel.sendMessage(id, builder))
+        DeckMessage.from(client, client.rest.channel.sendMessage(id, builder))
 
     public suspend fun getMessage(messageId: UUID): Message? =
-        DeckMessage.strategize(client, client.rest.channel.getMessage(id, messageId))
+        DeckMessage.from(client, client.rest.channel.getMessage(id, messageId))
 
     public suspend fun getMessages(includePrivate: Boolean = false): List<Message> =
-        client.rest.channel.getChannelMessages(id, includePrivate).map { DeckMessage.strategize(client, it) }
+        client.rest.channel.getChannelMessages(id, includePrivate).map { DeckMessage.from(client, it) }
 
     public suspend fun updateMessage(messageId: UUID, content: String): Message =
-        DeckMessage.strategize(client, client.rest.channel.updateMessage(id, messageId, content))
+        DeckMessage.from(client, client.rest.channel.updateMessage(id, messageId, content))
 
     public suspend fun deleteMessage(messageId: UUID): Unit =
         client.rest.channel.deleteMessage(id, messageId)

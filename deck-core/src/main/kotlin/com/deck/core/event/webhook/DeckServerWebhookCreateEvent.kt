@@ -25,7 +25,7 @@ public data class DeckServerWebhookCreateEvent(
         ): DeckServerWebhookCreateEvent = DeckServerWebhookCreateEvent(
             client = client,
             gatewayId = event.gatewayId,
-            webhook = DeckWebhook.strategize(client, event.webhook),
+            webhook = DeckWebhook.from(client, event.webhook),
             serverId = event.serverId
         )
     }

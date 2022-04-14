@@ -7,7 +7,6 @@ import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.Documentation
-import com.deck.core.util.EntityStrategy
 import com.deck.rest.builder.CreateDocumentationRequestBuilder
 import kotlinx.datetime.Instant
 import java.util.*
@@ -32,8 +31,8 @@ public data class DeckDocumentation(
         }
     }
 
-    public companion object: EntityStrategy<RawDocumentation, DeckDocumentation> {
-        override fun strategize(client: DeckClient, raw: RawDocumentation): DeckDocumentation = DeckDocumentation(
+    public companion object {
+        public fun from(client: DeckClient, raw: RawDocumentation): DeckDocumentation = DeckDocumentation(
             client = client,
             id = raw.id,
             title = raw.title,

@@ -27,7 +27,7 @@ public data class DeckMemberUnbanEvent(
             client = client,
             gatewayId = event.gatewayId,
             serverId = event.serverId,
-            serverBan = ServerBan.strategize(client, event.serverMemberBan)
+            serverBan = ServerBan.from(client, event.serverMemberBan)
         )
     }
 }

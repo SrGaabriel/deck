@@ -16,5 +16,5 @@ public interface StatelessForumChannel: StatelessEntity {
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 
     public suspend fun createThread(builder: CreateForumThreadRequestBuilder.() -> Unit): ForumThread =
-        DeckForumThread.strategize(client, client.rest.channel.createForumThread(id, builder))
+        DeckForumThread.from(client, client.rest.channel.createForumThread(id, builder))
 }

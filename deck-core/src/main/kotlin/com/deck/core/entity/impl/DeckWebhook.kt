@@ -6,7 +6,6 @@ import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.Webhook
-import com.deck.core.util.EntityStrategy
 import kotlinx.datetime.Instant
 import java.util.*
 
@@ -21,8 +20,8 @@ public data class DeckWebhook(
     override val creatorId: GenericId,
     override val token: String?
 ) : Webhook {
-    public companion object: EntityStrategy<RawWebhook, DeckWebhook> {
-        override fun strategize(client: DeckClient, raw: RawWebhook): DeckWebhook = DeckWebhook(
+    public companion object {
+        public fun from(client: DeckClient, raw: RawWebhook): DeckWebhook = DeckWebhook(
             client = client,
             id = raw.id.mapToBuiltin(),
             serverId = raw.serverId,

@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class RawUser(
     val id: GenericId,
-    val type: RawUserType,
+    val type: UserType,
     val name: String,
     val createdAt: Instant
 )
@@ -18,7 +18,7 @@ public data class RawUser(
 @Serializable
 public data class RawUserSummary(
     val id: GenericId,
-    val type: RawUserType = RawUserType.USER,
+    val type: UserType = UserType.USER,
     val name: String
 )
 
@@ -30,7 +30,7 @@ public data class RawUserSocialLink(
 )
 
 @Serializable
-public enum class RawUserType {
+public enum class UserType {
     @SerialName("user")
     USER,
     @SerialName("bot")

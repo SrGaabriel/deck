@@ -14,7 +14,7 @@ public interface StatelessWebhook: StatelessEntity {
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 
     public suspend fun update(callback: UpdateWebhookRequestBuilder.() -> Unit): Webhook =
-        DeckWebhook.strategize(client, client.rest.webhook.updateWebhook(id, serverId, callback))
+        DeckWebhook.from(client, client.rest.webhook.updateWebhook(id, serverId, callback))
 
     public suspend fun delete(): Unit =
         client.rest.webhook.deleteWebhook(id, serverId)

@@ -29,7 +29,7 @@ public data class DeckMessageUpdateEvent(
 
     public companion object: EventMapper<GatewayChatMessageUpdatedEvent, DeckMessageUpdateEvent> {
         override suspend fun map(client: DeckClient, event: GatewayChatMessageUpdatedEvent): DeckMessageUpdateEvent {
-            val message = DeckMessage.strategize(client, event.message)
+            val message = DeckMessage.from(client, event.message)
             return DeckMessageUpdateEvent(
                 client = client,
                 gatewayId = event.gatewayId,

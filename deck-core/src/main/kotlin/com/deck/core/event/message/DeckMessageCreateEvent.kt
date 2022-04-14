@@ -34,7 +34,7 @@ public data class DeckMessageCreateEvent(
             DeckMessageCreateEvent(
                 client = client,
                 gatewayId = event.gatewayId,
-                message = DeckMessage.strategize(client, event.message),
+                message = DeckMessage.from(client, event.message),
                 channelId = event.message.channelId.mapToBuiltin(),
                 authorId = event.message.createdBy,
                 serverId = event.message.serverId.asNullable()

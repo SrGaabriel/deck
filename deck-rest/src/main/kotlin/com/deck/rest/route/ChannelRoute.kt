@@ -7,10 +7,7 @@ import com.deck.common.entity.RawMessage
 import com.deck.common.util.DeckObsoleteApi
 import com.deck.common.util.IntGenericId
 import com.deck.rest.RestClient
-import com.deck.rest.builder.CreateDocumentationRequestBuilder
-import com.deck.rest.builder.CreateForumThreadRequestBuilder
-import com.deck.rest.builder.CreateListItemRequestBuilder
-import com.deck.rest.builder.SendMessageRequestBuilder
+import com.deck.rest.builder.*
 import com.deck.rest.request.*
 import com.deck.rest.util.sendRequest
 import io.ktor.http.*
@@ -130,6 +127,37 @@ public class ChannelRoute(private val client: RestClient) {
         method = HttpMethod.Post,
         body = CreateListItemRequestBuilder().apply(builder).toRequest()
     ).listItem
+
+    public suspend fun retrieveListItem(
+        channelId: UUID,
+        listItemId: UUID,
+    ): RawListItem = client.sendRequest<CreateListItemResponse, Unit>(
+        endpoint = "/channels/$channelId/items/$listItemId",
+        method = HttpMethod.Get
+    ).listItem
+
+    public suspend fun retrieveListChannelItems(channelId: UUID): List<RawListItem> = client.sendRequest<GetListChannelItemsResponse, Unit>(
+        endpoint = "/channels/$channelId/items",
+        method = HttpMethod.Get
+    ).listItems
+
+    public suspend fun updateListItem(
+        channelId: UUID,
+        listItemId: UUID,
+        builder: UpdateListItemRequestBuilder.() -> Unit
+    ): RawListItem = client.sendRequest<CreateListItemResponse, CreateListItemRequest>(
+        endpoint = "/channels/$channelId/items/$listItemId",
+        method = HttpMethod.Put,
+        body = UpdateListItemRequestBuilder().apply(builder).toRequest()
+    ).listItem
+
+    public suspend fun deleteListItem(
+        channelId: UUID,
+        listItemId: UUID
+    ): Unit = client.sendRequest<Unit, Unit>(
+        endpoint = "/channels/$channelId/items/$listItemId",
+        method = HttpMethod.Delete
+    )
 
     public suspend fun createForumThread(
         channelId: UUID,

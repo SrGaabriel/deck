@@ -44,7 +44,7 @@ public interface StatelessMember: StatelessEntity {
     @DeckObsoleteApi
     /** @throws [GuildedRequestException] if not found */
     public suspend fun getBan(): ServerBan =
-        ServerBan.strategize(client, client.rest.member.getBan(id, serverId))
+        ServerBan.from(client, client.rest.member.getBan(id, serverId))
 
     public suspend fun unban(): Unit =
         client.rest.member.unbanMember(id, serverId)

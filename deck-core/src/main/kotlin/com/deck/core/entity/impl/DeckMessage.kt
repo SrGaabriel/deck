@@ -6,7 +6,6 @@ import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.Message
-import com.deck.core.util.EntityStrategy
 import kotlinx.datetime.Instant
 import java.util.*
 
@@ -22,8 +21,8 @@ public data class DeckMessage(
     override val repliesTo: List<UUID>,
     override val isPrivate: Boolean
 ): Message {
-    public companion object: EntityStrategy<RawMessage, DeckMessage> {
-        override fun strategize(client: DeckClient, raw: RawMessage): DeckMessage = DeckMessage(
+    public companion object {
+        public fun from(client: DeckClient, raw: RawMessage): DeckMessage = DeckMessage(
             client = client,
             id = raw.id.mapToBuiltin(),
             content = raw.content,

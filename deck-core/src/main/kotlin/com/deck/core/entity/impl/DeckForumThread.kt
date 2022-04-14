@@ -6,7 +6,6 @@ import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.channel.ForumThread
-import com.deck.core.util.EntityStrategy
 import kotlinx.datetime.Instant
 import java.util.*
 
@@ -21,8 +20,8 @@ public data class DeckForumThread(
     override val createdAt: Instant,
     override val updatedAt: Instant?
 ): ForumThread {
-    public companion object: EntityStrategy<RawForumThread, DeckForumThread> {
-        override fun strategize(client: DeckClient, raw: RawForumThread): DeckForumThread = DeckForumThread(
+    public companion object {
+        public fun from(client: DeckClient, raw: RawForumThread): DeckForumThread = DeckForumThread(
             client = client,
             id = raw.id,
             authorId = raw.createdBy,

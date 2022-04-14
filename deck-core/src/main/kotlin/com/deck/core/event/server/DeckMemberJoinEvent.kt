@@ -26,7 +26,7 @@ public data class DeckMemberJoinEvent(
             client = client,
             gatewayId = event.gatewayId,
             serverId = event.serverId,
-            member = DeckMember.strategize(client, event.member)
+            member = DeckMember.from(client, event.serverId, event.member)
         )
     }
 }

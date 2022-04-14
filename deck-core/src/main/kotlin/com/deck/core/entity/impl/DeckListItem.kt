@@ -6,7 +6,6 @@ import com.deck.common.util.asNullable
 import com.deck.common.util.mapToBuiltin
 import com.deck.core.DeckClient
 import com.deck.core.entity.ListItem
-import com.deck.core.util.EntityStrategy
 import kotlinx.datetime.Instant
 import java.util.*
 
@@ -22,8 +21,8 @@ public data class DeckListItem(
     override val updatedAt: Instant?,
     override val editorId: GenericId?
 ): ListItem {
-    public companion object: EntityStrategy<RawListItem, DeckListItem> {
-        override fun strategize(client: DeckClient, raw: RawListItem): DeckListItem = DeckListItem(
+    public companion object {
+        public fun from(client: DeckClient, raw: RawListItem): DeckListItem = DeckListItem(
             client = client,
             id = raw.id.mapToBuiltin(),
             serverId = raw.serverId,

@@ -6,7 +6,7 @@ import com.deck.core.stateless.StatelessUser
 import com.deck.core.util.BlankStatelessUser
 import kotlinx.datetime.Instant
 
-public interface Documentation: Entity, StatelessDocumentation {
+public interface Documentation: StatelessDocumentation {
     public val title: String
     public val content: String
 

@@ -61,6 +61,11 @@ public data class CreateListItemResponse(
 )
 
 @Serializable
+public data class GetListChannelItemsResponse(
+    public val listItems: List<RawListItem>
+)
+
+@Serializable
 public data class CreateForumThreadRequest(
     val title: String,
     val content: String
