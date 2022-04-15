@@ -4,10 +4,12 @@ import com.deck.common.util.Constants
 import com.deck.rest.RestClient
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 
 /**
  * This will fire a request and throw an [GuildedRequestException] in case of failure.
@@ -28,7 +30,7 @@ public suspend inline fun <reified R, reified B> RestClient.sendRequest(
     method: HttpMethod,
     body: B? = null,
     authenticated: Boolean = true
-): R = requestService.scheduleRequest(
+): R = requestService.superviseRequest(
     request = Request(
         method,
         Constants.GuildedRestApi + endpoint,
@@ -38,11 +40,19 @@ public suspend inline fun <reified R, reified B> RestClient.sendRequest(
 )
 
 internal val DEFAULT_HTTP_CLIENT = HttpClient(CIO.create()) {
-    install(JsonFeature) {
-        serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
+    install(ContentNegotiation) {
+        json(Json {
             encodeDefaults = false
         })
-        acceptContentTypes = acceptContentTypes + ContentType("application", "json")
+    }
+    install(HttpRequestRetry) {
+        maxRetries = 5
+        retryIf { request, response ->
+            response.status == HttpStatusCode.TooManyRequests
+        }
+        delayMillis(respectRetryAfterHeader = true) {
+            8_000
+        }
     }
     expectSuccess = false
 }

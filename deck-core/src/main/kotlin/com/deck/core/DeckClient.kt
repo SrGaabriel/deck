@@ -1,5 +1,6 @@
 package com.deck.core
 
+import com.deck.common.util.GenericId
 import com.deck.core.event.DefaultEventService
 import com.deck.core.event.EventService
 import com.deck.core.util.ClientBuilder
@@ -22,10 +23,12 @@ public class DeckClient internal constructor(
 
     // public val entityDelegator: EntityDelegator = DeckEntityDelegator()
 
+    // workaround
+    private val masterGateway = gateway.openGateway()
+    public val selfId: GenericId get() = masterGateway.hello.self.id
+
     public suspend fun login() {
-        gateway
-            .openGateway()
-            .start()
+        masterGateway.start()
         eventService.startListening()
     }
 
