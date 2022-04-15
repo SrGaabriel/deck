@@ -13,9 +13,19 @@ public interface StatelessWebhook: StatelessEntity {
 
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 
-    public suspend fun update(callback: UpdateWebhookRequestBuilder.() -> Unit): Webhook =
-        DeckWebhook.from(client, client.rest.webhook.updateWebhook(id, serverId, callback))
+    /**
+     * Overwrites this webhook with the new data provided
+     * inside the [builder]. It's not a [PATCH](https://tools.ietf.org/html/rfc5789) operation but instead a [PUT](https://tools.ietf.org/html/rfc7231#section-4.3.4) one.
+     *
+     * @param builder update builder
+     * @return updated webhook containing new data
+     */
+    public suspend fun update(builder: UpdateWebhookRequestBuilder.() -> Unit): Webhook =
+        DeckWebhook.from(client, client.rest.webhook.updateWebhook(id, serverId, builder))
 
+    /**
+     * Deletes this webhook
+     */
     public suspend fun delete(): Unit =
         client.rest.webhook.deleteWebhook(id, serverId)
 }

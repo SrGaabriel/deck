@@ -20,4 +20,10 @@ public interface StatelessDocumentationChannel: StatelessEntity {
 
     public suspend fun getDocumentations(): List<Documentation> =
         client.rest.channel.getDocumentations(id).map { DeckDocumentation.from(client, it) }
+
+    public suspend fun updateDocumentation(documentationId: IntGenericId, builder: CreateDocumentationRequestBuilder.() -> Unit): Documentation =
+        DeckDocumentation.from(client, client.rest.channel.updateDocumentation(id, documentationId, builder))
+
+    public suspend fun deleteDocumentation(documentationId: IntGenericId): Unit =
+        client.rest.channel.deleteDocumentation(id, documentationId)
 }

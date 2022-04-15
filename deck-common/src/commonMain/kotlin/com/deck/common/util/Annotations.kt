@@ -13,8 +13,8 @@ public annotation class DeckUnknown
  * meaning that it's known but was not adapted and isn't ready for use.
  */
 @Retention(AnnotationRetention.BINARY)
-@Target(AnnotationTarget.PROPERTY)
-@RequiresOptIn(level = RequiresOptIn.Level.WARNING)
+@Target(AnnotationTarget.PROPERTY, AnnotationTarget.FUNCTION)
+@RequiresOptIn(level = RequiresOptIn.Level.ERROR)
 public annotation class DeckUnsupported
 
 /**
@@ -76,6 +76,16 @@ public annotation class DeckObsoleteApi
 )
 @RequiresOptIn(level = RequiresOptIn.Level.ERROR)
 public annotation class DeckInternalApi
+
+@Retention(AnnotationRetention.SOURCE)
+@Target(
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.FIELD,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.CLASS,
+    AnnotationTarget.PROPERTY_SETTER
+)
+public annotation class DeckLackingDocumentation
 
 @DslMarker
 public annotation class DeckDSL

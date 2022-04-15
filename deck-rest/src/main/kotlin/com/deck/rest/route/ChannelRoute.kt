@@ -4,7 +4,7 @@ import com.deck.common.entity.RawDocumentation
 import com.deck.common.entity.RawForumThread
 import com.deck.common.entity.RawListItem
 import com.deck.common.entity.RawMessage
-import com.deck.common.util.DeckObsoleteApi
+import com.deck.common.util.DeckUnsupported
 import com.deck.common.util.IntGenericId
 import com.deck.rest.RestClient
 import com.deck.rest.builder.*
@@ -66,7 +66,7 @@ public class ChannelRoute(private val client: RestClient) {
         method = HttpMethod.Put
     )
 
-    @DeckObsoleteApi
+    @DeckUnsupported
     // Not yet supported
     public suspend fun removeReactionFromContent(
         channelId: UUID,

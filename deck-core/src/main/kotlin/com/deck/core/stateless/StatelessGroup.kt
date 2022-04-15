@@ -5,9 +5,19 @@ import com.deck.common.util.GenericId
 public interface StatelessGroup: StatelessEntity {
     public val id: GenericId
 
-    public suspend fun addMember(member: StatelessMember): Unit =
-        client.rest.group.addMember(member.id, id)
+    /**
+     * Adds the specified member to this group
+     *
+     * @param memberId member's id
+     */
+    public suspend fun addMember(memberId: GenericId): Unit =
+        client.rest.group.addMember(memberId, id)
 
-    public suspend fun removeMember(member: StatelessMember): Unit =
-        client.rest.group.removeMember(member.id, id)
+    /**
+     * Adds the specified member to this group
+     *
+     * @param memberId member's id
+     */
+    public suspend fun removeMember(memberId: GenericId): Unit =
+        client.rest.group.removeMember(memberId, id)
 }
