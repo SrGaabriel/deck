@@ -1,5 +1,6 @@
 package com.deck.extras.conversation
 
+import com.deck.common.util.DeckExperimental
 import com.deck.core.entity.Message
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -8,6 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@DeckExperimental
 public class ConversationMessage(
     public val conversation: Conversation,
     public val replyingTo: Message

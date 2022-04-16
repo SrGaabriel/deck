@@ -1,5 +1,6 @@
 package com.deck.extras.conversation
 
+import com.deck.common.util.DeckExperimental
 import com.deck.core.entity.Message
 import com.deck.core.stateless.channel.StatelessMessageChannel
 import com.deck.core.util.sendMessage
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.isActive
 import kotlin.coroutines.CoroutineContext
 
+@DeckExperimental
 public abstract class AbstractMessageChannelConversation: Conversation {
     override val coroutineContext: CoroutineContext = Dispatchers.Unconfined
     override val responseFlow: MutableSharedFlow<Message> = MutableSharedFlow()

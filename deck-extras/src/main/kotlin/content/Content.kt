@@ -68,10 +68,6 @@ public class ContentBuilder(private val quoteContainer: Boolean = false): Markab
         nodes.add(Node.Paragraph.Reaction(id))
     }
 
-    public operator fun Mentionable.unaryPlus() {
-        nodes.add(Node.Paragraph(content = listOf(text(""), this.getMentionNode(), text(""))))
-    }
-
     public fun codeblock(language: String, text: String) {
         nodes.add(Node.CodeBlock(lines = text.lines().map { Node.CodeBlock.Line(it) }, language = language.lowercase()))
     }
@@ -181,10 +177,6 @@ public class ParagraphBuilder: Markable {
 
     public operator fun Emoji.unaryPlus() {
         nodes.add(Node.Paragraph.Reaction(id))
-    }
-
-    public operator fun Mentionable.unaryPlus() {
-        nodes.add(this.getMentionNode())
     }
 
     public fun text(text: String, marks: List<RawMessageContentNodeLeavesMarkType> = emptyList()): Node.Paragraph.Text =

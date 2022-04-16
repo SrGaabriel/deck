@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class RawUser(
     val id: GenericId,
-    val type: UserType,
+    val type: UserType = UserType.USER,
     val name: String,
     val createdAt: Instant
 )

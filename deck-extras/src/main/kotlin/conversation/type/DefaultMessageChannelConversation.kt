@@ -1,5 +1,6 @@
 package com.deck.extras.conversation.type
 
+import com.deck.common.util.DeckExperimental
 import com.deck.core.event.message.DeckMessageCreateEvent
 import com.deck.core.stateless.StatelessUser
 import com.deck.core.stateless.channel.StatelessMessageChannel
@@ -7,6 +8,7 @@ import com.deck.core.util.on
 import com.deck.extras.conversation.AbstractMessageChannelConversation
 import kotlinx.coroutines.Job
 
+@DeckExperimental
 public class DefaultMessageChannelConversation(
     override val user: StatelessUser,
     override val messageChannel: StatelessMessageChannel
@@ -30,6 +32,7 @@ public class DefaultMessageChannelConversation(
     override fun end(): Unit = listeningJob.cancel().also { active = false }
 }
 
+@DeckExperimental
 public suspend fun StatelessUser.conversate(
     channel: StatelessMessageChannel,
     scope: suspend AbstractMessageChannelConversation.() -> Unit

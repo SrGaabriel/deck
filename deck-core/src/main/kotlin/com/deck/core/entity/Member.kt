@@ -43,4 +43,6 @@ public interface MemberSummary: StatelessMember {
 
     /** A list of all role ids assigned to this member */
     public val roleIds: List<IntGenericId>
+
+    public suspend fun getMember(): Member
 }
