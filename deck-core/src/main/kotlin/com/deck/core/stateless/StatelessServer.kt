@@ -2,8 +2,12 @@ package com.deck.core.stateless
 
 import com.deck.common.util.DeckLackingDocumentation
 import com.deck.common.util.GenericId
+import com.deck.core.entity.Member
+import com.deck.core.entity.MemberSummary
 import com.deck.core.entity.ServerBan
 import com.deck.core.entity.Webhook
+import com.deck.core.entity.impl.DeckMember
+import com.deck.core.entity.impl.DeckMemberSummary
 import com.deck.core.entity.impl.DeckWebhook
 import com.deck.rest.builder.CreateWebhookRequestBuilder
 import com.deck.rest.builder.UpdateWebhookRequestBuilder
@@ -14,13 +18,31 @@ public interface StatelessServer: StatelessEntity {
     public val id: GenericId
 
     /**
+     * Retrieves a member from this server, throws exception
+     * if not found (to be fixed).
+     *
+     * @param memberId user's id
+     * @return found member
+     */
+    public suspend fun getMember(memberId: GenericId): Member =
+        DeckMember.from(client, id, client.rest.server.getServerMember(memberId, id))
+
+    /**
+     * Retrieves all members from this server.
+     *
+     * @return all found members
+     */
+    public suspend fun getMembers(): List<MemberSummary> =
+        client.rest.server.getServerMembers(id).map { rawServerMemberSummary -> DeckMemberSummary.from(client, this.id, rawServerMemberSummary) }
+
+    /**
      * Kicks the member from this server, meaning that they'll leave
      * but can come back again at any time.
      *
      * @param memberId member's id
      */
     public suspend fun kickMember(memberId: GenericId): Unit =
-        client.rest.member.kickMember(memberId, id)
+        client.rest.server.kickMember(memberId, id)
 
     /**
      * Bans the member from this server, meaning that they'll leave
@@ -29,7 +51,7 @@ public interface StatelessServer: StatelessEntity {
      * @param memberId member's id
      */
     public suspend fun banMember(memberId: GenericId): Unit =
-        client.rest.member.banMember(memberId, id)
+        client.rest.server.banMember(memberId, id)
 
     /**
      * Retrieves the user's ban data, throws an exception
@@ -40,7 +62,7 @@ public interface StatelessServer: StatelessEntity {
      * @return user's punishment data
      */
     public suspend fun getBan(memberId: GenericId): ServerBan =
-        ServerBan.from(client, client.rest.member.getBan(memberId, id))
+        ServerBan.from(client, client.rest.server.getMemberBan(memberId, id))
 
     /**
      * Retrieves all bans in the server with their data.
@@ -57,7 +79,7 @@ public interface StatelessServer: StatelessEntity {
      */
     @DeckLackingDocumentation
     public suspend fun unbanMember(memberId: GenericId): Unit =
-        client.rest.member.unbanMember(memberId, id)
+        client.rest.server.unbanMember(memberId, id)
 
     /**
      * Creates a webhook in this server. The channel id is specified in the [builder].

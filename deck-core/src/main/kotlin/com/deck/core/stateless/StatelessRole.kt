@@ -11,5 +11,5 @@ public interface StatelessRole: StatelessEntity {
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 
     public suspend fun awardXp(amount: Int): Unit =
-        client.rest.role.awardXpToRole(id, serverId, amount)
+        client.rest.server.awardXpToRole(id, serverId, amount)
 }

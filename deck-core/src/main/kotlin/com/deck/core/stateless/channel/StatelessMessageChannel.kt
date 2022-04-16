@@ -29,6 +29,4 @@ public interface StatelessMessageChannel: StatelessEntity {
 
     public suspend fun deleteMessage(messageId: UUID): Unit =
         client.rest.channel.deleteMessage(id, messageId)
-
-
 }

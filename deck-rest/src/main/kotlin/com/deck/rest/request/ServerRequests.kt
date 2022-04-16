@@ -2,6 +2,7 @@ package com.deck.rest.request
 
 import com.deck.common.entity.RawServerBan
 import com.deck.common.entity.RawServerMember
+import com.deck.common.entity.RawServerMemberSummary
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,7 +12,7 @@ public data class GetServerMemberResponse(
 
 @Serializable
 public data class GetServerMembersResponse(
-    val members: List<RawServerMember>
+    val members: List<RawServerMemberSummary>
 )
 
 @Serializable

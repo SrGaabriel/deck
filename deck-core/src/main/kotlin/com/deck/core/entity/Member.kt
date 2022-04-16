@@ -31,3 +31,16 @@ public interface Member: StatelessMember {
     /** The instant the user joined the server */
     public val joinedAt: Instant
 }
+
+public interface MemberSummary: StatelessMember {
+    /** The user's name, not to be confused with his nickname (which is not available information) */
+    public val name: String
+    /** Whether this member is a bot or an actual user */
+    public val type: UserType
+
+    /** A stateless user instance of this user */
+    public val user: StatelessUser get() = BlankStatelessUser(client, id)
+
+    /** A list of all role ids assigned to this member */
+    public val roleIds: List<IntGenericId>
+}

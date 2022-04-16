@@ -14,6 +14,12 @@ public data class RawServerMember(
 )
 
 @Serializable
+public data class RawServerMemberSummary(
+    val user: RawUserSummary,
+    val roleIds: List<Int>,
+)
+
+@Serializable
 public data class RawServerBan(
     val user: RawUserSummary,
     val reason: OptionalProperty<String> = OptionalProperty.NotPresent,

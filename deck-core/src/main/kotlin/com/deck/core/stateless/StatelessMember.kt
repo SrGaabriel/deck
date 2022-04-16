@@ -22,8 +22,8 @@ public interface StatelessMember: StatelessEntity {
      * @return this member's new nickname
      */
     public suspend fun setNickname(nickname: String?): String? = when(nickname) {
-        null -> client.rest.member.removeMemberNickname(id, serverId).let { null }
-        else -> client.rest.member.updateMemberNickname(id, serverId, nickname)
+        null -> client.rest.server.removeMemberNickname(id, serverId).let { null }
+        else -> client.rest.server.updateMemberNickname(id, serverId, nickname)
     }
 
     /**
@@ -32,7 +32,7 @@ public interface StatelessMember: StatelessEntity {
      * @param roleId role to be assigned to this member
      */
     public suspend fun addRole(roleId: IntGenericId): Unit =
-        client.rest.member.addRole(id, serverId, roleId)
+        client.rest.server.assignRoleToMember(id, serverId, roleId)
 
     /**
      * Retrieves a list of all the ids of the roles this member is assigned to
@@ -40,7 +40,7 @@ public interface StatelessMember: StatelessEntity {
      * @return list of all the ids of the roles this member is assigned to
      */
     public suspend fun getRoleIds(): List<IntGenericId> =
-        client.rest.member.getMemberRoles(id, serverId)
+        client.rest.server.getMemberRoles(id, serverId)
 
     /**
      * Removes the specified role from this member
@@ -48,30 +48,30 @@ public interface StatelessMember: StatelessEntity {
      * @param roleId role to be removed from this member
      */
     public suspend fun removeRole(roleId: IntGenericId): Unit =
-        client.rest.member.removeRole(id, serverId, roleId)
+        client.rest.server.removeRoleFromMember(id, serverId, roleId)
 
     /**
      * Kicks this member from the server
      */
     public suspend fun kick(): Unit =
-        client.rest.member.kickMember(id, serverId)
+        client.rest.server.kickMember(id, serverId)
 
     /**
      * Bans this member from the server
      */
     public suspend fun ban(): Unit =
-        client.rest.member.banMember(id, serverId)
+        client.rest.server.banMember(id, serverId)
 
     @DeckDelicateApi
     /** @throws [GuildedRequestException] if not found */
     public suspend fun getBan(): ServerBan =
-        ServerBan.from(client, client.rest.member.getBan(id, serverId))
+        ServerBan.from(client, client.rest.server.getMemberBan(id, serverId))
 
     /**
      * Unbans this member from the server.
      */
     public suspend fun unban(): Unit =
-        client.rest.member.unbanMember(id, serverId)
+        client.rest.server.unbanMember(id, serverId)
 
     /**
      * Adds (not sets) xp to this member.
@@ -80,5 +80,5 @@ public interface StatelessMember: StatelessEntity {
      * @return user's new xp
      */
     public suspend fun awardXp(amount: Int): Int =
-        client.rest.member.awardXpToMember(id, serverId, amount)
+        client.rest.server.awardXpToMember(id, serverId, amount)
 }
