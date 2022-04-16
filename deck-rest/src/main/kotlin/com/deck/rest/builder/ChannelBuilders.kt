@@ -7,19 +7,25 @@ import com.deck.rest.request.CreateForumThreadRequest
 import com.deck.rest.request.CreateListItemRequest
 import com.deck.rest.request.SendMessageRequest
 import com.deck.rest.util.required
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.jsonPrimitive
 import java.util.*
 
 public class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
-    public var content: String by required()
     public var isPrivate: Boolean = false
-
     public val repliesTo: MutableList<UUID> = mutableListOf()
+
+    public var content: String?
+        set(value) { contentElement = JsonPrimitive(value) }
+        get() = contentElement.jsonPrimitive.content
+    public var contentElement: JsonElement by required()
 
     public fun replyTo(vararg messageIds: UUID): Unit =
         repliesTo.addAll(messageIds).let {}
 
     override fun toRequest(): SendMessageRequest = SendMessageRequest(
-        content = content,
+        content = contentElement,
         isPrivate = isPrivate,
         replyMessageIds = repliesTo.toList().map(UUID::mapToModel)
     )

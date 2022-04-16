@@ -8,10 +8,11 @@ import com.deck.common.util.OptionalProperty
 import com.deck.common.util.UniqueId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 @Serializable
 public data class SendMessageRequest(
-    public val content: String,
+    public val content: JsonElement,
     public val isPrivate: Boolean = false,
     public val replyMessageIds: List<UniqueId> = emptyList()
 )
