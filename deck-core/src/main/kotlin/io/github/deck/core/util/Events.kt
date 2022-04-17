@@ -1,6 +1,5 @@
 package io.github.deck.core.util
 
-import io.github.deck.common.util.DeckDSL
 import io.github.deck.core.event.DeckEvent
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -16,7 +15,6 @@ public data class WrappedEventSupplierData(
     val listeningGatewayId: Int? = null
 )
 
-@DeckDSL
 public inline fun <reified T : DeckEvent> WrappedEventSupplier.on(
     scope: CoroutineScope = wrappedEventSupplierData.scope,
     gatewayId: Int? = wrappedEventSupplierData.listeningGatewayId,

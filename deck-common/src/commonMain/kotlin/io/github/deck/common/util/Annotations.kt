@@ -86,6 +86,3 @@ public annotation class DeckInternalApi
     AnnotationTarget.PROPERTY_SETTER
 )
 public annotation class DeckLackingDocumentation
-
-@DslMarker
-public annotation class DeckDSL
