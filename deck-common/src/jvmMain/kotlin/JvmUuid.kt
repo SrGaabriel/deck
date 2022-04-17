@@ -1,4 +1,4 @@
-package com.deck.common.util
+package io.github.deck.common.util
 
 import java.util.*
 
