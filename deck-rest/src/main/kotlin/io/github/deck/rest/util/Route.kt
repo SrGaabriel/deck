@@ -43,6 +43,7 @@ internal val DEFAULT_HTTP_CLIENT = HttpClient(CIO.create()) {
     install(ContentNegotiation) {
         json(Json {
             encodeDefaults = false
+            ignoreUnknownKeys = true
         })
     }
     install(HttpRequestRetry) {
