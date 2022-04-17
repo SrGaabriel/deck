@@ -6,7 +6,7 @@ tasks {
     publishing {
         publications {
             create<MavenPublication>("Deck") {
-                groupId = "com.deck"
+                groupId = "io.github.deck"
                 version = Dependencies.Version
                 from(components["kotlin"])
 

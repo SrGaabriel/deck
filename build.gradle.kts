@@ -5,7 +5,7 @@ plugins {
 }
 
 subprojects {
-    group = "com.deck"
+    group = "io.github.deck"
     version = Dependencies.Version
     plugins.apply("org.jetbrains.kotlin.plugin.serialization")
     apply<MavenPublishPlugin>()
