@@ -9,11 +9,11 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 public data class SendMessageRequest(
-    public val content: JsonElement,
-    public val embeds: List<RawEmbed>,
-    public val isPrivate: Boolean = false,
-    public val isSilent: Boolean = false,
-    public val replyMessageIds: List<UniqueId> = emptyList()
+    public val content: JsonElement? = null,
+    public val embeds: List<RawEmbed> = emptyList(),
+    public val isPrivate: Boolean,
+    public val isSilent: Boolean,
+    public val replyMessageIds: List<UniqueId> = emptyList(),
 )
 
 @Serializable

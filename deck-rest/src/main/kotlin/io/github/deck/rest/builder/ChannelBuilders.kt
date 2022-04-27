@@ -16,9 +16,11 @@ public class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
     public val repliesTo: MutableList<UUID> = mutableListOf()
 
     public var content: String?
-        set(value) { contentElement = JsonPrimitive(value) }
-        get() = contentElement.jsonPrimitive.content
-    public var contentElement: JsonElement by required()
+        set(value) {
+            contentElement = if (value == null) null else JsonPrimitive(value)
+        }
+        get() = contentElement?.jsonPrimitive?.content
+    public var contentElement: JsonElement? = null
 
     public val embeds: MutableList<Embed> = mutableListOf()
     public val silent: Boolean = false

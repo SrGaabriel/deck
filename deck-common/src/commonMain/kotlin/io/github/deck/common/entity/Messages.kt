@@ -14,7 +14,7 @@ public data class RawMessage(
     public val serverId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     public val channelId: UniqueId,
     public val content: String,
-    public val embeds: List<RawEmbed>,
+    public val embeds: List<RawEmbed> = emptyList(),
     public val replyMessageIds: OptionalProperty<List<UniqueId>> = OptionalProperty.NotPresent,
     public val isPrivate: Boolean = false,
     public val createdAt: Instant,

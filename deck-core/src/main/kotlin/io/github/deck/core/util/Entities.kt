@@ -1,5 +1,6 @@
 package io.github.deck.core.util
 
+import io.github.deck.common.EmbedBuilder
 import io.github.deck.core.entity.Message
 import io.github.deck.core.stateless.StatelessGroup
 import io.github.deck.core.stateless.StatelessMember
@@ -25,4 +26,9 @@ public suspend fun StatelessMessage.sendReply(content: String): Message = sendRe
 
 public suspend fun StatelessMessageChannel.sendMessage(content: String): Message = sendMessage {
     this.content = content
+}
+
+public suspend fun StatelessMessageChannel.sendEmbed(content: String? = null, builder: EmbedBuilder.() -> Unit): Message = sendMessage {
+    this.content = content
+    embed(builder)
 }
