@@ -12,6 +12,8 @@ public data class RawUser(
     val id: GenericId,
     val type: UserType = UserType.USER,
     val name: String,
+    val avatar: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val banner: OptionalProperty<String> = OptionalProperty.NotPresent,
     val createdAt: Instant
 )
 
@@ -19,7 +21,8 @@ public data class RawUser(
 public data class RawUserSummary(
     val id: GenericId,
     val type: UserType = UserType.USER,
-    val name: String
+    val name: String,
+    val avatar: OptionalProperty<String> = OptionalProperty.NotPresent,
 )
 
 @Serializable

@@ -1,9 +1,6 @@
 package io.github.deck.rest.request
 
-import io.github.deck.common.entity.RawDocumentation
-import io.github.deck.common.entity.RawForumThread
-import io.github.deck.common.entity.RawListItem
-import io.github.deck.common.entity.RawMessage
+import io.github.deck.common.entity.*
 import io.github.deck.common.util.OptionalProperty
 import io.github.deck.common.util.UniqueId
 import kotlinx.serialization.SerialName
@@ -13,7 +10,9 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 public data class SendMessageRequest(
     public val content: JsonElement,
+    public val embeds: List<RawEmbed>,
     public val isPrivate: Boolean = false,
+    public val isSilent: Boolean = false,
     public val replyMessageIds: List<UniqueId> = emptyList()
 )
 
@@ -24,7 +23,8 @@ public data class SendMessageResponse(
 
 @Serializable
 public data class UpdateMessageRequest(
-    public val content: String
+    public val content: JsonElement,
+    public val embeds: List<RawEmbed>,
 )
 
 @Serializable

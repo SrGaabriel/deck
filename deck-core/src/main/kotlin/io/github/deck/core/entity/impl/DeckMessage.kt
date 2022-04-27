@@ -1,6 +1,8 @@
 package io.github.deck.core.entity.impl
 
+import io.github.deck.common.Embed
 import io.github.deck.common.entity.RawMessage
+import io.github.deck.common.from
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.asNullable
 import io.github.deck.common.util.mapToBuiltin
@@ -16,6 +18,7 @@ public data class DeckMessage(
     override val authorId: GenericId,
     override val serverId: GenericId?,
     override val channelId: UUID,
+    override val embeds: List<Embed>,
     override val createdAt: Instant,
     override val updatedAt: Instant?,
     override val repliesTo: List<UUID>,
@@ -27,12 +30,13 @@ public data class DeckMessage(
             id = raw.id.mapToBuiltin(),
             content = raw.content,
             authorId = raw.createdBy,
-            channelId = raw.channelId.mapToBuiltin(),
             serverId = raw.serverId.asNullable(),
+            channelId = raw.channelId.mapToBuiltin(),
+            embeds = raw.embeds.map { Embed.from(it) },
             createdAt = raw.createdAt,
             updatedAt = raw.updatedAt.asNullable(),
             repliesTo = raw.replyMessageIds.asNullable()?.map { it.mapToBuiltin() }.orEmpty(),
-            isPrivate = raw.isPrivate.asNullable() == true
+            isPrivate = raw.isPrivate
         )
     }
 }

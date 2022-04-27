@@ -1,10 +1,10 @@
 package io.github.deck.extras.content
 
+import io.github.deck.common.entity.RawEmbed
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.OptionalProperty
 import io.github.deck.common.util.UniqueId
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonPrimitive
@@ -151,55 +151,6 @@ public enum class RawMessageNodeReplyToUserHeaderType(public val serialName: Str
     QUOTE("block-quote"),
     REFERENCE("reply");
 }
-
-@Serializable
-public data class RawEmbed(
-    val title: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val description: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val url: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val timestamp: OptionalProperty<Instant> = OptionalProperty.NotPresent,
-    val color: OptionalProperty<Int> = OptionalProperty.NotPresent,
-    val footer: OptionalProperty<RawEmbedFooter> = OptionalProperty.NotPresent,
-    val image: OptionalProperty<RawEmbedImage> = OptionalProperty.NotPresent,
-    val thumbnail: OptionalProperty<RawEmbedImage> = OptionalProperty.NotPresent,
-    val video: OptionalProperty<RawEmbedImage> = OptionalProperty.NotPresent,
-    val provider: OptionalProperty<RawEmbedProvider> = OptionalProperty.NotPresent,
-    val author: OptionalProperty<RawEmbedAuthor> = OptionalProperty.NotPresent,
-    val fields: OptionalProperty<List<RawEmbedField>> = OptionalProperty.NotPresent
-)
-
-@Serializable
-public data class RawEmbedAuthor(
-    val name: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val url: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val iconUrl: OptionalProperty<String> = OptionalProperty.NotPresent,
-)
-
-@Serializable
-public data class RawEmbedProvider(
-    val name: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val url: OptionalProperty<String> = OptionalProperty.NotPresent
-)
-
-@Serializable
-public data class RawEmbedImage(
-    val url: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val height: OptionalProperty<Int> = OptionalProperty.NotPresent,
-    val width: OptionalProperty<Int> = OptionalProperty.NotPresent
-)
-
-@Serializable
-public data class RawEmbedField(
-    val name: String,
-    val value: String,
-    val inline: OptionalProperty<Boolean> = OptionalProperty.NotPresent
-)
-
-@Serializable
-public data class RawEmbedFooter(
-    val text: String,
-    val iconUrl: OptionalProperty<String> = OptionalProperty.NotPresent
-)
 
 @Serializable
 public data class RawReaction(

@@ -26,11 +26,11 @@ public class ChannelRoute(private val client: RestClient) {
     public suspend fun updateMessage(
         channelId: UUID,
         messageId: UUID,
-        content: String
+        builder: UpdateMessageRequestBuilder.() -> Unit
     ): RawMessage = client.sendRequest<SendMessageResponse, UpdateMessageRequest>(
         endpoint = "/channels/$channelId/messages/$messageId",
         method = HttpMethod.Put,
-        body = UpdateMessageRequest(content)
+        body = UpdateMessageRequestBuilder().apply(builder).toRequest()
     ).message
 
     public suspend fun deleteMessage(

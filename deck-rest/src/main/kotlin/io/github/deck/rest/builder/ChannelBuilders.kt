@@ -1,11 +1,10 @@
 package io.github.deck.rest.builder
 
+import io.github.deck.common.Embed
+import io.github.deck.common.EmbedBuilder
 import io.github.deck.common.util.mapToModel
 import io.github.deck.common.util.nullableOptional
-import io.github.deck.rest.request.CreateDocumentationRequest
-import io.github.deck.rest.request.CreateForumThreadRequest
-import io.github.deck.rest.request.CreateListItemRequest
-import io.github.deck.rest.request.SendMessageRequest
+import io.github.deck.rest.request.*
 import io.github.deck.rest.util.required
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
@@ -21,13 +20,40 @@ public class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
         get() = contentElement.jsonPrimitive.content
     public var contentElement: JsonElement by required()
 
+    public val embeds: MutableList<Embed> = mutableListOf()
+    public val silent: Boolean = false
+
     public fun replyTo(vararg messageIds: UUID): Unit =
         repliesTo.addAll(messageIds).let {}
 
+    public fun embed(builder: EmbedBuilder.() -> Unit) {
+        embeds.add(EmbedBuilder().apply(builder).build())
+    }
+
     override fun toRequest(): SendMessageRequest = SendMessageRequest(
         content = contentElement,
+        embeds = embeds.map { it.toSerializable() },
         isPrivate = isPrivate,
+        isSilent = silent,
         replyMessageIds = repliesTo.toList().map(UUID::mapToModel)
+    )
+}
+
+public class UpdateMessageRequestBuilder: RequestBuilder<UpdateMessageRequest> {
+    public var content: String?
+        set(value) { contentElement = JsonPrimitive(value) }
+        get() = contentElement.jsonPrimitive.content
+    public var contentElement: JsonElement by required()
+
+    public val embeds: MutableList<Embed> = mutableListOf()
+
+    public fun embed(builder: EmbedBuilder.() -> Unit) {
+        embeds.add(EmbedBuilder().apply(builder).build())
+    }
+
+    override fun toRequest(): UpdateMessageRequest = UpdateMessageRequest(
+        content = contentElement,
+        embeds = embeds.map { it.toSerializable() },
     )
 }
 

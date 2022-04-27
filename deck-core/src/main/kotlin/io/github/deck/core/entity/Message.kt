@@ -1,5 +1,6 @@
 package io.github.deck.core.entity
 
+import io.github.deck.common.Embed
 import io.github.deck.common.util.GenericId
 import io.github.deck.core.entity.impl.DeckMessage
 import io.github.deck.core.stateless.StatelessMessage
@@ -19,6 +20,9 @@ public interface Message : StatelessMessage {
     /** The id of this message's author */
     public val authorId: GenericId
     public val author: StatelessUser get() = BlankStatelessUser(client, authorId)
+
+    /** All embeds present on this message */
+    public val embeds: List<Embed>
 
     /** The instant this message was sent */
     public val createdAt: Instant

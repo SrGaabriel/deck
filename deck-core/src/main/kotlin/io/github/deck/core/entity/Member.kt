@@ -21,6 +21,11 @@ public interface Member: StatelessMember {
     /** A stateless user instance of this user */
     public val user: StatelessUser get() = BlankStatelessUser(client, id)
 
+    /** This user's avatar, null if not set (default doggo avatar) */
+    public val avatar: String?
+    /** This user's banner, null if not set */
+    public val banner: String?
+
     /** The user's nickname in this server */
     public val nickname: String?
     /** A list of all role ids assigned to this member */
@@ -37,6 +42,9 @@ public interface MemberSummary: StatelessMember {
     public val name: String
     /** Whether this member is a bot or an actual user */
     public val type: UserType
+
+    /** This user's avatar url, null if not set (default doggo avatar) */
+    public val avatar: String?
 
     /** A stateless user instance of this user */
     public val user: StatelessUser get() = BlankStatelessUser(client, id)

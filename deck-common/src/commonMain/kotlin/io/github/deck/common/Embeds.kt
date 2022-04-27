@@ -1,5 +1,6 @@
-package io.github.deck.extras.content
+package io.github.deck.common
 
+import io.github.deck.common.entity.*
 import io.github.deck.common.util.asNullable
 import io.github.deck.common.util.map
 import io.github.deck.common.util.nullableOptional
@@ -47,7 +48,7 @@ public data class Embed(
         image = image.nullableOptional().map { RawEmbedImage(url = it.optional()) },
         thumbnail = thumbnail.nullableOptional().map { RawEmbedImage(url = it.optional()) },
         author = author.nullableOptional().map { RawEmbedAuthor(it.title.nullableOptional(), it.url.nullableOptional(), it.iconUrl.nullableOptional()) },
-        fields = fields.nullableOptional().map { it.map { RawEmbedField(it.name, it.value, it.inline.optional()) } }
+        fields = fields.map { RawEmbedField(it.name, it.value, it.inline) }.optional()
     )
 
     public companion object
@@ -96,8 +97,8 @@ public class EmbedBuilder {
 
     public fun field(scope: Field.() -> Unit): Unit = Field().apply(scope).let {
         field(
-            it.name ?: error("Can't attribute an empty name to an embed field."),
-            it.value?: error("Can't attribute an empty value to an embed field."),
+            it.name.toString(),
+            it.value.toString(),
             it.inline
         )
     }
@@ -107,7 +108,7 @@ public class EmbedBuilder {
 
     public fun footer(scope: Footer.() -> Unit): Unit = Footer().apply(scope).let {
         this.footer = Embed.Footer(
-            it.text ?: error("Can't attribute an empty text to an embed footer."),
+            it.text.toString(),
             it.iconUrl
         )
     }
@@ -136,5 +137,5 @@ public fun Embed.Companion.from(raw: RawEmbed): Embed = Embed(
     image = raw.image.asNullable()?.url?.asNullable(),
     thumbnail = raw.thumbnail.asNullable()?.url?.asNullable(),
     author = raw.author.asNullable()?.let { Embed.Author(it.name.asNullable(), it.url.asNullable(), it.iconUrl.asNullable()) },
-    fields = raw.fields.asNullable()?.map { Embed.Field(it.name, it.value, it.inline.asNullable() == true) }.orEmpty()
+    fields = raw.fields.asNullable()?.map { Embed.Field(it.name, it.value, it.inline) }.orEmpty()
 )

@@ -18,6 +18,8 @@ public data class DeckMember(
     override val type: UserType,
     override val serverId: GenericId,
     override val nickname: String?,
+    override val avatar: String?,
+    override val banner: String?,
     override val roleIds: List<IntGenericId>,
     override val createdAt: Instant,
     override val joinedAt: Instant,
@@ -30,6 +32,8 @@ public data class DeckMember(
             type = raw.user.type,
             serverId = serverId,
             nickname = raw.nickname.asNullable(),
+            avatar = raw.user.avatar.asNullable(),
+            banner = raw.user.banner.asNullable(),
             roleIds = raw.roleIds,
             createdAt = raw.user.createdAt,
             joinedAt = raw.joinedAt
@@ -43,6 +47,7 @@ public data class DeckMemberSummary(
     override val serverId: GenericId,
     override val name: String,
     override val type: UserType,
+    override val avatar: String?,
     override val roleIds: List<IntGenericId>,
 ): MemberSummary {
     override suspend fun getMember(): Member =
@@ -54,6 +59,7 @@ public data class DeckMemberSummary(
             id = raw.user.id,
             name = raw.user.name,
             type = raw.user.type,
+            avatar = raw.user.avatar.asNullable(),
             serverId = serverId,
             roleIds = raw.roleIds
         )

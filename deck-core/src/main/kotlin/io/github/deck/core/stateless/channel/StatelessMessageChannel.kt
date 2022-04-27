@@ -7,6 +7,7 @@ import io.github.deck.core.stateless.StatelessEntity
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.rest.builder.SendMessageRequestBuilder
+import io.github.deck.rest.builder.UpdateMessageRequestBuilder
 import java.util.*
 
 public interface StatelessMessageChannel: StatelessEntity {
@@ -24,8 +25,8 @@ public interface StatelessMessageChannel: StatelessEntity {
     public suspend fun getMessages(includePrivate: Boolean = false): List<Message> =
         client.rest.channel.getChannelMessages(id, includePrivate).map { DeckMessage.from(client, it) }
 
-    public suspend fun updateMessage(messageId: UUID, content: String): Message =
-        DeckMessage.from(client, client.rest.channel.updateMessage(id, messageId, content))
+    public suspend fun updateMessage(messageId: UUID, builder: UpdateMessageRequestBuilder.() -> Unit): Message =
+        DeckMessage.from(client, client.rest.channel.updateMessage(id, messageId, builder))
 
     public suspend fun deleteMessage(messageId: UUID): Unit =
         client.rest.channel.deleteMessage(id, messageId)

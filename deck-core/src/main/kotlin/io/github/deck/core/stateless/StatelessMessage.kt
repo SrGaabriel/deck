@@ -4,11 +4,13 @@ import io.github.deck.common.util.DeckUnsupported
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.core.entity.Message
+import io.github.deck.core.entity.impl.DeckMessage
 import io.github.deck.core.stateless.channel.StatelessMessageChannel
 import io.github.deck.core.util.BlankStatelessMessageChannel
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.core.util.ReactionHolder
 import io.github.deck.rest.builder.SendMessageRequestBuilder
+import io.github.deck.rest.builder.UpdateMessageRequestBuilder
 import java.util.*
 
 public interface StatelessMessage: StatelessEntity, ReactionHolder {
@@ -45,17 +47,28 @@ public interface StatelessMessage: StatelessEntity, ReactionHolder {
         client.rest.channel.removeReactionFromContent(channel.id, id, reactionId)
 
     /**
-     * Overwrites this message's content
+     * Overwrites this message's written content
      *
      * @param content new content
      * @return new message with the new content
      */
     public suspend fun update(content: String): Message =
-        channel.updateMessage(id, content)
+        DeckMessage.from(client, client.rest.channel.updateMessage(channelId, id) {
+            this.content = content
+        })
+
+    /**
+     * Overwrites this message's content
+     *
+     * @param builder new content builder
+     * @return new message with the new content
+     */
+    public suspend fun update(builder: UpdateMessageRequestBuilder.() -> Unit): Message =
+        DeckMessage.from(client, client.rest.channel.updateMessage(channelId, id, builder))
 
     /**
      * Deletes this message
      */
     public suspend fun delete(): Unit =
-        channel.deleteMessage(id)
+        client.rest.channel.deleteMessage(channelId, id)
 }

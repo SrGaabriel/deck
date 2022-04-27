@@ -1,5 +1,7 @@
 package io.github.deck.extras.content.node
 
+import io.github.deck.common.Embed
+import io.github.deck.common.from
 import io.github.deck.common.util.*
 import io.github.deck.extras.content.*
 
@@ -62,7 +64,6 @@ public fun RawMessageContentNode.decode(): Node? {
     val leaves = leaves.asNullable()?.map { Node.Paragraph.Text.Leaf(it.text, it.marks.map { mark -> mark.type }) }
     val image = data.src.asNullable()
     val embeds = data.embeds.asNullable()?.map { Embed.from(it) }
-
     return when (type) {
         RawMessageContentNodeType.PARAGRAPH ->
             Node.Paragraph(content = nodes.mapNotNull(RawMessageContentNode::decode))

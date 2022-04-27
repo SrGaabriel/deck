@@ -5,7 +5,7 @@ import io.github.deck.extras.content.RawMessageContentNodeLeavesMarkType
 import io.github.deck.extras.content.RawMessageContentNodeType
 import kotlinx.serialization.json.JsonPrimitive
 import java.util.*
-import io.github.deck.extras.content.Embed as EmbedContent
+import io.github.deck.common.Embed as EmbedContent
 
 public sealed class Node(
     public val `object`: String,

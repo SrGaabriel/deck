@@ -1,5 +1,7 @@
 package io.github.deck.extras.content
 
+import io.github.deck.common.Embed
+import io.github.deck.common.EmbedBuilder
 import io.github.deck.common.util.DeckDelicateApi
 import io.github.deck.common.util.Emoji
 import io.github.deck.common.util.GenericId
