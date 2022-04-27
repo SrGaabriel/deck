@@ -24,6 +24,11 @@ public suspend fun StatelessMessage.sendReply(content: String): Message = sendRe
     this.content = content
 }
 
+public suspend fun StatelessMessage.replyWithEmbed(content: String? = null, builder: EmbedBuilder.() -> Unit): Message = sendReply {
+    this.content = content
+    embed(builder)
+}
+
 public suspend fun StatelessMessageChannel.sendMessage(content: String): Message = sendMessage {
     this.content = content
 }

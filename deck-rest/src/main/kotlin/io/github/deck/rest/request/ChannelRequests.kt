@@ -23,8 +23,8 @@ public data class SendMessageResponse(
 
 @Serializable
 public data class UpdateMessageRequest(
-    public val content: JsonElement,
-    public val embeds: List<RawEmbed>,
+    public val content: JsonElement? = null,
+    public val embeds: List<RawEmbed> = emptyList(),
 )
 
 @Serializable
