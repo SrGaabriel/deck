@@ -19,8 +19,8 @@ public interface StatelessDocumentation: StatelessEntity {
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 
     public suspend fun update(builder: CreateDocumentationRequestBuilder.() -> Unit): Documentation =
-        DeckDocumentation.from(client, client.rest.channel.updateDocumentation(channel.id, id, builder))
+        DeckDocumentation.from(client, client.rest.channel.updateDocumentation(channelId, id, builder))
 
     public suspend fun delete(): Unit =
-        client.rest.channel.deleteDocumentation(channel.id, id)
+        client.rest.channel.deleteDocumentation(channelId, id)
 }

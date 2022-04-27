@@ -5,12 +5,16 @@ import io.github.deck.common.util.IntGenericId
 import io.github.deck.core.entity.Documentation
 import io.github.deck.core.entity.impl.DeckDocumentation
 import io.github.deck.core.stateless.StatelessEntity
+import io.github.deck.core.stateless.StatelessServer
+import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.rest.builder.CreateDocumentationRequestBuilder
 import java.util.*
 
 public interface StatelessDocumentationChannel: StatelessEntity {
     public val id: UUID
     public val serverId: GenericId
+
+    public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 
     public suspend fun createDocumentation(builder: CreateDocumentationRequestBuilder.() -> Unit): Documentation =
         DeckDocumentation.from(client, client.rest.channel.createDocumentation(id, builder))

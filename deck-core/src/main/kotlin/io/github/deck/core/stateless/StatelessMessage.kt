@@ -27,10 +27,11 @@ public interface StatelessMessage: StatelessEntity, ReactionHolder {
      * @param builder reply builder
      * @return the created message
      */
-    public suspend fun sendReply(builder: SendMessageRequestBuilder.() -> Unit): Message = channel.sendMessage {
-        builder(this)
-        replyTo(this@StatelessMessage.id)
-    }
+    public suspend fun sendReply(builder: SendMessageRequestBuilder.() -> Unit): Message =
+        DeckMessage.from(client, client.rest.channel.sendMessage(channelId) {
+            builder(this)
+            replyTo(this@StatelessMessage.id)
+        })
 
     /**
      * Adds the specified reaction to this message.
@@ -39,12 +40,12 @@ public interface StatelessMessage: StatelessEntity, ReactionHolder {
      * @param reactionId
      */
     override suspend fun addReaction(reactionId: IntGenericId): Unit =
-        client.rest.channel.addReactionToContent(channel.id, id, reactionId)
+        client.rest.channel.addReactionToContent(channelId, id, reactionId)
 
     @DeckUnsupported
     /** Not yet supported */
     override suspend fun removeReaction(reactionId: IntGenericId): Unit =
-        client.rest.channel.removeReactionFromContent(channel.id, id, reactionId)
+        client.rest.channel.removeReactionFromContent(channelId, id, reactionId)
 
     /**
      * Overwrites this message's written content
