@@ -4,6 +4,7 @@ import io.github.deck.common.util.GenericId
 import io.github.deck.core.stateless.StatelessDocumentation
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessUser
+import io.github.deck.rest.builder.CreateDocumentationRequestBuilder
 import kotlinx.datetime.Instant
 
 public interface Documentation: StatelessDocumentation {
@@ -18,4 +19,11 @@ public interface Documentation: StatelessDocumentation {
 
     public val author: StatelessUser get() = BlankStatelessUser(client, authorId)
     public val editor: StatelessUser? get() = editorId?.let { BlankStatelessUser(client, it) }
+
+    public suspend fun patch(builder: CreateDocumentationRequestBuilder.() -> Unit): Documentation =
+        update {
+            title = this@Documentation.title
+            content = this@Documentation.content
+            builder()
+        }
 }

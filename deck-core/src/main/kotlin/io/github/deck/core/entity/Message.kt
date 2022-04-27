@@ -6,6 +6,7 @@ import io.github.deck.core.entity.impl.DeckMessage
 import io.github.deck.core.stateless.StatelessMessage
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessUser
+import io.github.deck.rest.builder.UpdateMessageRequestBuilder
 import kotlinx.datetime.Instant
 import java.util.*
 
@@ -33,4 +34,10 @@ public interface Message : StatelessMessage {
     public val repliesTo: List<UUID>
     /** Whether this message is a private reply */
     public val isPrivate: Boolean
+
+    public suspend fun patch(builder: UpdateMessageRequestBuilder.() -> Unit): Message = update {
+        content = this@Message.content
+        embeds = this@Message.embeds
+        builder()
+    }
 }

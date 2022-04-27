@@ -7,7 +7,6 @@ import io.github.deck.common.util.asNullable
 import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.Documentation
-import io.github.deck.rest.builder.CreateDocumentationRequestBuilder
 import kotlinx.datetime.Instant
 import java.util.*
 
@@ -23,14 +22,6 @@ public data class DeckDocumentation(
     override val authorId: GenericId,
     override val editorId: GenericId?
 ): Documentation {
-    override suspend fun update(builder: CreateDocumentationRequestBuilder.() -> Unit): Documentation {
-        return super.update {
-            title = this@DeckDocumentation.title
-            content = this@DeckDocumentation.content
-            builder(this)
-        }
-    }
-
     public companion object {
         public fun from(client: DeckClient, raw: RawDocumentation): DeckDocumentation = DeckDocumentation(
             client = client,

@@ -4,6 +4,7 @@ import io.github.deck.common.util.GenericId
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.stateless.StatelessWebhook
 import io.github.deck.core.util.BlankStatelessUser
+import io.github.deck.rest.builder.UpdateWebhookRequestBuilder
 import kotlinx.datetime.Instant
 import java.util.*
 
@@ -24,4 +25,9 @@ public interface Webhook: StatelessWebhook {
 
     /** This webhook's token */
     public val token: String?
+
+    public suspend fun patch(builder: UpdateWebhookRequestBuilder.() -> Unit): Webhook = update {
+        name = this@Webhook.name
+        channelId = this@Webhook.channelId
+    }
 }

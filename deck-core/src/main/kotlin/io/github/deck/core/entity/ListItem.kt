@@ -4,6 +4,7 @@ import io.github.deck.common.util.GenericId
 import io.github.deck.core.stateless.StatelessListItem
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessUser
+import io.github.deck.rest.builder.UpdateListItemRequestBuilder
 import kotlinx.datetime.Instant
 
 public interface ListItem: StatelessListItem {
@@ -18,4 +19,10 @@ public interface ListItem: StatelessListItem {
 
     public val editorId: GenericId?
     public val editor: StatelessUser? get() = editorId?.let { BlankStatelessUser(client, it) }
+
+    public suspend fun patch(builder: UpdateListItemRequestBuilder.() -> Unit): ListItem = update {
+        label = this@ListItem.label
+        note = this@ListItem.note
+        builder()
+    }
 }

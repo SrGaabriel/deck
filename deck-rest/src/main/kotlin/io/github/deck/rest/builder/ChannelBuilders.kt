@@ -22,14 +22,14 @@ public class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
         get() = contentElement?.jsonPrimitive?.content
     public var contentElement: JsonElement? = null
 
-    public val embeds: MutableList<Embed> = mutableListOf()
+    public var embeds: List<Embed> = listOf()
     public val silent: Boolean = false
 
     public fun replyTo(vararg messageIds: UUID): Unit =
         repliesTo.addAll(messageIds).let {}
 
     public fun embed(builder: EmbedBuilder.() -> Unit) {
-        embeds.add(EmbedBuilder().apply(builder).build())
+        embeds = embeds + EmbedBuilder().apply(builder).build()
     }
 
     override fun toRequest(): SendMessageRequest = SendMessageRequest(
@@ -48,10 +48,10 @@ public class UpdateMessageRequestBuilder: RequestBuilder<UpdateMessageRequest> {
         }
         get() = contentElement?.jsonPrimitive?.content
     public var contentElement: JsonElement? = null
-    public val embeds: MutableList<Embed> = mutableListOf()
+    public var embeds: List<Embed> = listOf()
 
     public fun embed(builder: EmbedBuilder.() -> Unit) {
-        embeds.add(EmbedBuilder().apply(builder).build())
+        embeds = embeds + EmbedBuilder().apply(builder).build()
     }
 
     override fun toRequest(): UpdateMessageRequest = UpdateMessageRequest(
@@ -72,7 +72,7 @@ public class CreateDocumentationRequestBuilder: RequestBuilder<CreateDocumentati
 
 public class CreateListItemRequestBuilder: RequestBuilder<CreateListItemRequest> {
     public var label: String by required()
-    public var note: String by required()
+    public var note: String? = null
 
     override fun toRequest(): CreateListItemRequest = CreateListItemRequest(
         message = label,
