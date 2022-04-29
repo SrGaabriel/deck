@@ -17,7 +17,7 @@ import io.github.deck.core.util.BlankStatelessUser
 import io.github.deck.gateway.event.type.GatewayChatMessageCreatedEvent
 import java.util.*
 
-public data class DeckMessageCreateEvent(
+public data class MessageCreateEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
     public val message: Message,
@@ -29,9 +29,9 @@ public data class DeckMessageCreateEvent(
     val author: StatelessUser get() = BlankStatelessUser(client, authorId)
     val server: StatelessServer? get() = serverId?.let { serverId -> BlankStatelessServer(client, serverId) }
 
-    public companion object: EventMapper<GatewayChatMessageCreatedEvent, DeckMessageCreateEvent> {
-        override suspend fun map(client: DeckClient, event: GatewayChatMessageCreatedEvent): DeckMessageCreateEvent =
-            DeckMessageCreateEvent(
+    public companion object: EventMapper<GatewayChatMessageCreatedEvent, MessageCreateEvent> {
+        override suspend fun map(client: DeckClient, event: GatewayChatMessageCreatedEvent): MessageCreateEvent =
+            MessageCreateEvent(
                 client = client,
                 gatewayId = event.gatewayId,
                 message = DeckMessage.from(client, event.message),

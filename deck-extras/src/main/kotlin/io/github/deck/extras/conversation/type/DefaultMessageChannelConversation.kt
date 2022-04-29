@@ -1,7 +1,7 @@
 package io.github.deck.extras.conversation.type
 
 import io.github.deck.common.util.DeckExperimental
-import io.github.deck.core.event.message.DeckMessageCreateEvent
+import io.github.deck.core.event.message.MessageCreateEvent
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.stateless.channel.StatelessMessageChannel
 import io.github.deck.core.util.on
@@ -18,7 +18,7 @@ public class DefaultMessageChannelConversation(
 
     override fun init() {
         active = true
-        listeningJob = messageChannel.client.on<DeckMessageCreateEvent> {
+        listeningJob = messageChannel.client.on<MessageCreateEvent> {
             if (author.id != user.id)
                 return@on
             if (channel.id != messageChannel.id)

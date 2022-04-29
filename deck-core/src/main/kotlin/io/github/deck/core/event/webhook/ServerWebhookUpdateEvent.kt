@@ -10,7 +10,7 @@ import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.type.GatewayServerWebhookUpdatedEvent
 
-public data class DeckServerWebhookUpdateEvent(
+public data class ServerWebhookUpdateEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
     val webhook: Webhook,
@@ -18,11 +18,11 @@ public data class DeckServerWebhookUpdateEvent(
 ) : DeckEvent {
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 
-    public companion object: EventMapper<GatewayServerWebhookUpdatedEvent, DeckServerWebhookUpdateEvent> {
+    public companion object: EventMapper<GatewayServerWebhookUpdatedEvent, ServerWebhookUpdateEvent> {
         override suspend fun map(
             client: DeckClient,
             event: GatewayServerWebhookUpdatedEvent,
-        ): DeckServerWebhookUpdateEvent = DeckServerWebhookUpdateEvent(
+        ): ServerWebhookUpdateEvent = ServerWebhookUpdateEvent(
             client = client,
             gatewayId = event.gatewayId,
             webhook = DeckWebhook.from(client, event.webhook),

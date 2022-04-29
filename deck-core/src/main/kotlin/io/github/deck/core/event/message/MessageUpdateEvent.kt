@@ -15,7 +15,7 @@ import io.github.deck.core.util.BlankStatelessUser
 import io.github.deck.gateway.event.type.GatewayChatMessageUpdatedEvent
 import java.util.*
 
-public data class DeckMessageUpdateEvent(
+public data class MessageUpdateEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
     public val message: Message,
@@ -27,10 +27,10 @@ public data class DeckMessageUpdateEvent(
     val author: StatelessUser get() = BlankStatelessUser(client, authorId)
     val server: StatelessServer? get() = serverId?.let { serverId -> BlankStatelessServer(client, serverId) }
 
-    public companion object: EventMapper<GatewayChatMessageUpdatedEvent, DeckMessageUpdateEvent> {
-        override suspend fun map(client: DeckClient, event: GatewayChatMessageUpdatedEvent): DeckMessageUpdateEvent {
+    public companion object: EventMapper<GatewayChatMessageUpdatedEvent, MessageUpdateEvent> {
+        override suspend fun map(client: DeckClient, event: GatewayChatMessageUpdatedEvent): MessageUpdateEvent {
             val message = DeckMessage.from(client, event.message)
-            return DeckMessageUpdateEvent(
+            return MessageUpdateEvent(
                 client = client,
                 gatewayId = event.gatewayId,
                 message = message,

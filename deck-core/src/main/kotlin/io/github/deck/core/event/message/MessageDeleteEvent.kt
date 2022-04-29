@@ -10,7 +10,7 @@ import io.github.deck.gateway.event.type.GatewayChatMessageDeletedEvent
 import kotlinx.datetime.Instant
 import java.util.*
 
-public data class DeckMessageDeleteEvent(
+public data class MessageDeleteEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
     public val messageId: UUID,
@@ -18,15 +18,15 @@ public data class DeckMessageDeleteEvent(
     public val serverId: GenericId?,
     public val deletedAt: Instant
 ): DeckEvent {
-    public companion object: EventMapper<GatewayChatMessageDeletedEvent, DeckMessageDeleteEvent> {
-        override suspend fun map(client: DeckClient, event: GatewayChatMessageDeletedEvent): DeckMessageDeleteEvent {
+    public companion object: EventMapper<GatewayChatMessageDeletedEvent, MessageDeleteEvent> {
+        override suspend fun map(client: DeckClient, event: GatewayChatMessageDeletedEvent): MessageDeleteEvent {
             val message = BlankStatelessMessage(
                 client = client,
                 id = event.message.id.mapToBuiltin(),
                 channelId = event.message.channelId.mapToBuiltin(),
                 serverId = event.serverId
             )
-            return DeckMessageDeleteEvent(
+            return MessageDeleteEvent(
                 client = client,
                 gatewayId = event.gatewayId,
                 messageId = message.id,

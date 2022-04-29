@@ -8,30 +8,25 @@ import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.core.util.BlankStatelessUser
-import io.github.deck.gateway.event.type.GatewayTeamMemberRemovedEvent
+import io.github.deck.gateway.event.type.GatewayServerXpAddedEvent
 
-public data class DeckMemberLeaveEvent(
+public data class ServerXpAddEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
+    public val userIds: List<GenericId>,
     public val serverId: GenericId,
-    public val userId: GenericId,
-    public val isKick: Boolean,
-    public val isBan: Boolean
-): DeckEvent {
+    public val amount: Int
+) : DeckEvent {
+    public val users: List<StatelessUser> get() = userIds.map { BlankStatelessUser(client, it) }
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
-    public val user: StatelessUser get() = BlankStatelessUser(client, userId)
 
-    public companion object: EventMapper<GatewayTeamMemberRemovedEvent, DeckMemberLeaveEvent> {
-        override suspend fun map(
-            client: DeckClient,
-            event: GatewayTeamMemberRemovedEvent
-        ): DeckMemberLeaveEvent = DeckMemberLeaveEvent(
+    public companion object: EventMapper<GatewayServerXpAddedEvent, ServerXpAddEvent> {
+        override suspend fun map(client: DeckClient, event: GatewayServerXpAddedEvent): ServerXpAddEvent = ServerXpAddEvent(
             client = client,
             gatewayId = event.gatewayId,
+            userIds = event.userIds,
             serverId = event.serverId,
-            userId = event.userId,
-            isKick = event.isKick,
-            isBan = event.isBan
+            amount = event.amount
         )
     }
 }
