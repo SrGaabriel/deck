@@ -19,6 +19,12 @@ public interface StatelessListChannel: StatelessEntity {
     public suspend fun createItem(builder: CreateListItemRequestBuilder.() -> Unit): ListItem =
         DeckListItem.from(client, client.rest.channel.createListItem(id, builder))
 
+    public suspend fun completeItem(itemId: UUID): Unit =
+        client.rest.channel.completeListItem(id, itemId)
+
+    public suspend fun uncompleteItem(itemId: UUID): Unit =
+        client.rest.channel.completeListItem(id, itemId)
+
     public suspend fun getItem(itemId: UUID): ListItem =
         DeckListItem.from(client, client.rest.channel.retrieveListItem(id, itemId))
 

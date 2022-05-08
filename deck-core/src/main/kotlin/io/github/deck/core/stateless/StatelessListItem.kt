@@ -28,6 +28,18 @@ public interface StatelessListItem: StatelessEntity {
         DeckListItem.from(client, client.rest.channel.updateListItem(channelId, id, builder))
 
     /**
+     * Marks this list item as 'completed' within this channel.
+     */
+    public suspend fun complete(): Unit =
+        client.rest.channel.completeListItem(channelId, id)
+
+    /**
+     * Marks this list item as 'uncompleted' within this channel.
+     */
+    public suspend fun uncomplete(): Unit =
+        client.rest.channel.uncompleteListItem(channelId, id)
+
+    /**
      * Deletes this item
      */
     public suspend fun delete(): Unit =

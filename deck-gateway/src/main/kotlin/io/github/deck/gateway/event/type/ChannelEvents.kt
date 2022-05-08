@@ -1,5 +1,6 @@
 package io.github.deck.gateway.event.type
 
+import io.github.deck.common.entity.RawDocumentation
 import io.github.deck.common.entity.RawListItem
 import io.github.deck.common.util.GenericId
 import io.github.deck.gateway.event.GatewayEvent
@@ -39,4 +40,28 @@ public data class GatewayListItemDeletedEvent(
 public data class GatewayListItemUncompletedEvent(
     val serverId: GenericId,
     val listItem: RawListItem
+): GatewayEvent()
+
+@Serializable
+@SerialName("DocCreated")
+public data class GatewayDocumentationCreatedEvent(
+    val serverId: String,
+    @SerialName("doc")
+    val documentation: RawDocumentation
+): GatewayEvent()
+
+@Serializable
+@SerialName("DocUpdateed")
+public data class GatewayDocumentationUpdatedEvent(
+    val serverId: String,
+    @SerialName("doc")
+    val documentation: RawDocumentation
+): GatewayEvent()
+
+@Serializable
+@SerialName("DocDeleted")
+public data class GatewayDocumentationDeletedEvent(
+    val serverId: String,
+    @SerialName("doc")
+    val documentation: RawDocumentation
 ): GatewayEvent()

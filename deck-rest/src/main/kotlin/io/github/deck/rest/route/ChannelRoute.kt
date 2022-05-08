@@ -128,6 +128,22 @@ public class ChannelRoute(private val client: RestClient) {
         body = CreateListItemRequestBuilder().apply(builder).toRequest()
     ).listItem
 
+    public suspend fun completeListItem(
+        channelId: UUID,
+        listItemId: UUID,
+    ): Unit = client.sendRequest<Unit, Unit>(
+        endpoint = "/channels/${channelId}/items/${listItemId}/complete",
+        method = HttpMethod.Post
+    )
+
+    public suspend fun uncompleteListItem(
+        channelId: UUID,
+        listItemId: UUID,
+    ): Unit = client.sendRequest<Unit, Unit>(
+        endpoint = "/channels/${channelId}/items/${listItemId}/complete",
+        method = HttpMethod.Delete
+    )
+
     public suspend fun retrieveListItem(
         channelId: UUID,
         listItemId: UUID,

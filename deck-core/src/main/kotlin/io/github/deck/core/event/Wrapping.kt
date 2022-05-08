@@ -1,6 +1,9 @@
 package io.github.deck.core.event
 
 import io.github.deck.core.DeckClient
+import io.github.deck.core.event.documentation.documentationCreateEvent
+import io.github.deck.core.event.documentation.documentationDeleteEvent
+import io.github.deck.core.event.documentation.documentationUpdateEvent
 import io.github.deck.core.event.list.*
 import io.github.deck.core.event.message.messageCreateEvent
 import io.github.deck.core.event.message.messageDeleteEvent
@@ -47,6 +50,9 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         registerMapper(listItemUpdateEvent)
         registerMapper(listItemDeleteEvent)
         registerMapper(listItemUncompleteEvent)
+        registerMapper(documentationCreateEvent)
+        registerMapper(documentationUpdateEvent)
+        registerMapper(documentationDeleteEvent)
         registerMapper(messageCreateEvent)
         registerMapper(messageDeleteEvent)
         registerMapper(messageUpdateEvent)
@@ -68,9 +74,10 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
 
     @Suppress("unchecked_cast")
     private inline fun <reified T : GatewayEvent> registerMapper(mapper: EventMapper<out T, out DeckEvent>) {
-        if (mappers.containsKey(T::class))
-            error("Tried to register duplicate event mapper. If you wish to override an event, try creating your own implementation of the EventService interface")
-        mappers[T::class] = mapper as EventMapper<GatewayEvent, DeckEvent>
+        val castedMapper = mapper as EventMapper<GatewayEvent, DeckEvent>
+        if (mappers.containsKey(T::class) || mappers.containsValue(castedMapper))
+            error("Tried to register duplicate event mapper for event '${T::class::simpleName}'. If you wish to override an event, try creating your own implementation of the EventService interface")
+        mappers[T::class] = castedMapper
     }
 }
 
