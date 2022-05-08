@@ -35,6 +35,6 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.deck:deck-core:$version")
+    implementation("com.github.SrGaabriel.deck:deck-core:$version")
 }
 ```
