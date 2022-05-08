@@ -16,8 +16,5 @@ tasks {
                 }
             }
         }
-        publications.withType<MavenPublication>().all {
-            artifactId = "bot-${project.name}"
-        }
     }
 }

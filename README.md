@@ -4,16 +4,16 @@
 
 # 🎲 deck [WIP]
 
-This is the official bot API deck implementation, which is still in an early and experimental phase. We do not recommend using this version of deck, but rather use the client API implementation, which can be found here[]
+This is the official bot API deck implementation, which is still in an early and experimental phase. We'll be adding and implementing features according to the API rhythm.
 
 ## Example
 
-We have supported and wrapped all existing routes within guilded's bot API, we are currently waiting API updates.
+Deck has a really powerful API, here is an example:
 
 ```kotlin
 suspend fun main() {
     val client = DeckClient("token")
-    client.on<DeckMessageCreateEvent> {
+    client.on<MessageCreateEvent> {
         if (!message.content.startsWith("+hello"))
             return@on
         val message: Message = channel.sendMessage("Hello, World!")
@@ -23,4 +23,18 @@ suspend fun main() {
 }
 ```
 
-As you may have already noticed, the syntax is pretty much the same as in the client API. We don't guarantee that this will hold forever, but we'll try to make the library as intuitive as possible.
+## Using
+
+To use deck in your project, you must have the `jitpack` repository added. Then, you're going to add the following dependency to your build file: `io.github.deck:deck-core:$version`.
+
+You can replace `deck-core` with the name of the module you wish to import, and for the version you may ues the latest one (`0.2.0`).
+
+```kotlin
+repositories {
+    maven("https://jitpack.io")
+}
+
+dependencies {
+    implementation("io.github.deck:deck-core:$version")
+}
+```
