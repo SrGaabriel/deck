@@ -5,6 +5,8 @@ import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.ServerBan
 import io.github.deck.core.event.DeckEvent
 import io.github.deck.core.event.EventMapper
+import io.github.deck.core.event.EventService
+import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessServer
@@ -19,16 +21,13 @@ public data class MemberBanEvent(
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
     public val user: StatelessUser get() = serverBan.user
     public val author: StatelessUser get() = serverBan.author
+}
 
-    public companion object: EventMapper<GatewayTeamMemberBannedEvent, MemberBanEvent> {
-        override suspend fun map(
-            client: DeckClient,
-            event: GatewayTeamMemberBannedEvent
-        ): MemberBanEvent = MemberBanEvent(
-            client = client,
-            gatewayId = event.gatewayId,
-            serverId = event.serverId,
-            serverBan = ServerBan.from(client, event.serverMemberBan)
-        )
-    }
+public val EventService.memberBanEvent: EventMapper<GatewayTeamMemberBannedEvent, MemberBanEvent> get() = mapper { client, event ->
+    MemberBanEvent(
+        client = client,
+        gatewayId = event.gatewayId,
+        serverId = event.serverId,
+        serverBan = ServerBan.from(client, event.serverMemberBan)
+    )
 }

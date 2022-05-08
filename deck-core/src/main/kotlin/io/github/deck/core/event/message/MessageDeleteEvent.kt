@@ -5,7 +5,12 @@ import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.event.DeckEvent
 import io.github.deck.core.event.EventMapper
-import io.github.deck.core.util.BlankStatelessMessage
+import io.github.deck.core.event.EventService
+import io.github.deck.core.event.mapper
+import io.github.deck.core.stateless.StatelessServer
+import io.github.deck.core.stateless.channel.StatelessMessageChannel
+import io.github.deck.core.util.BlankStatelessMessageChannel
+import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.type.GatewayChatMessageDeletedEvent
 import kotlinx.datetime.Instant
 import java.util.*
@@ -18,22 +23,17 @@ public data class MessageDeleteEvent(
     public val serverId: GenericId?,
     public val deletedAt: Instant
 ): DeckEvent {
-    public companion object: EventMapper<GatewayChatMessageDeletedEvent, MessageDeleteEvent> {
-        override suspend fun map(client: DeckClient, event: GatewayChatMessageDeletedEvent): MessageDeleteEvent {
-            val message = BlankStatelessMessage(
-                client = client,
-                id = event.message.id.mapToBuiltin(),
-                channelId = event.message.channelId.mapToBuiltin(),
-                serverId = event.serverId
-            )
-            return MessageDeleteEvent(
-                client = client,
-                gatewayId = event.gatewayId,
-                messageId = message.id,
-                serverId = message.serverId,
-                channelId = message.channelId,
-                deletedAt = event.message.deletedAt
-            )
-        }
-    }
+    public val channel: StatelessMessageChannel get() = BlankStatelessMessageChannel(client, channelId, serverId)
+    public val server: StatelessServer? get() = serverId?.let { BlankStatelessServer(client, it) }
+}
+
+public val EventService.messageDeleteEvent: EventMapper<GatewayChatMessageDeletedEvent, MessageDeleteEvent> get() = mapper { client, event ->
+    MessageDeleteEvent(
+        client = client,
+        gatewayId = event.gatewayId,
+        messageId = event.message.id.mapToBuiltin(),
+        serverId = event.serverId,
+        channelId = event.message.channelId.mapToBuiltin(),
+        deletedAt = event.message.deletedAt
+    )
 }

@@ -48,17 +48,6 @@ public interface StatelessMessage: StatelessEntity, ReactionHolder {
         client.rest.channel.removeReactionFromContent(channelId, id, reactionId)
 
     /**
-     * Overwrites this message's written content
-     *
-     * @param content new content
-     * @return new message with the new content
-     */
-    public suspend fun update(content: String): Message =
-        DeckMessage.from(client, client.rest.channel.updateMessage(channelId, id) {
-            this.content = content
-        })
-
-    /**
      * Overwrites this message's content
      *
      * @param builder new content builder

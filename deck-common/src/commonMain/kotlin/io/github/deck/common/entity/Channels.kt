@@ -26,12 +26,30 @@ public data class RawListItem(
     public val serverId: GenericId,
     public val channelId: UniqueId,
     public val message: String,
-    public val note: OptionalProperty<String> = OptionalProperty.NotPresent,
+    public val note: OptionalProperty<RawListItemNote> = OptionalProperty.NotPresent,
     public val createdAt: Instant,
     public val createdBy: GenericId,
     public val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     public val updatedBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     public val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public data class RawListItemNote(
+    public val content: OptionalProperty<String> = OptionalProperty.NotPresent,
+    public val createdAt: Instant,
+    public val createdBy: GenericId,
+    public val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    public val updatedBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+)
+
+@Serializable
+public data class RawListItemNoteSummary(
+    public val content: OptionalProperty<String> = OptionalProperty.NotPresent,
+    public val createdAt: Instant,
+    public val createdBy: GenericId,
+    public val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    public val updatedBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
 )
 
 @Serializable

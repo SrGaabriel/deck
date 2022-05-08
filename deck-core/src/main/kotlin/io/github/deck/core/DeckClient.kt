@@ -2,7 +2,6 @@ package io.github.deck.core
 
 import io.github.deck.common.util.GenericId
 import io.github.deck.core.event.DefaultEventService
-import io.github.deck.core.event.EventService
 import io.github.deck.core.util.ClientBuilder
 import io.github.deck.core.util.WrappedEventSupplier
 import io.github.deck.core.util.WrappedEventSupplierData
@@ -14,9 +13,9 @@ import io.github.deck.rest.RestClient
 
 public class DeckClient internal constructor(
     public val rest: RestClient,
-    public val gateway: GatewayOrchestrator
+    public val gateway: GatewayOrchestrator,
 ) : EventSupplier, WrappedEventSupplier {
-    public var eventService: EventService = DefaultEventService(this)
+    public var eventService: DefaultEventService = DefaultEventService(this)
 
     override val eventSupplierData: EventSupplierData by gateway::eventSupplierData
     override val wrappedEventSupplierData: WrappedEventSupplierData by eventService::wrappedEventSupplierData
@@ -29,7 +28,10 @@ public class DeckClient internal constructor(
 
     public suspend fun login() {
         masterGateway.start()
-        eventService.startListening()
+        eventService.let {
+            it.ready()
+            it.listen()
+        }
     }
 
     public companion object {

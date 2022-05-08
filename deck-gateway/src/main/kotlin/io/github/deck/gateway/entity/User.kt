@@ -1,6 +1,7 @@
 package io.github.deck.gateway.entity
 
 import io.github.deck.common.util.GenericId
+import io.github.deck.common.util.OptionalProperty
 import io.github.deck.common.util.UniqueId
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
@@ -17,5 +18,5 @@ public data class RawBot(
 @Serializable
 public data class RawTeamMemberInfo(
     val id: GenericId,
-    val nickname: String
+    val nickname: OptionalProperty<String> = OptionalProperty.NotPresent
 )

@@ -8,6 +8,8 @@ import io.github.deck.core.entity.Message
 import io.github.deck.core.entity.impl.DeckMessage
 import io.github.deck.core.event.DeckEvent
 import io.github.deck.core.event.EventMapper
+import io.github.deck.core.event.EventService
+import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.stateless.channel.StatelessMessageChannel
@@ -28,16 +30,15 @@ public data class MessageCreateEvent(
     val channel: StatelessMessageChannel get() = BlankStatelessMessageChannel(client, channelId, serverId)
     val author: StatelessUser get() = BlankStatelessUser(client, authorId)
     val server: StatelessServer? get() = serverId?.let { serverId -> BlankStatelessServer(client, serverId) }
+}
 
-    public companion object: EventMapper<GatewayChatMessageCreatedEvent, MessageCreateEvent> {
-        override suspend fun map(client: DeckClient, event: GatewayChatMessageCreatedEvent): MessageCreateEvent =
-            MessageCreateEvent(
-                client = client,
-                gatewayId = event.gatewayId,
-                message = DeckMessage.from(client, event.message),
-                channelId = event.message.channelId.mapToBuiltin(),
-                authorId = event.message.createdBy,
-                serverId = event.message.serverId.asNullable()
-            )
-    }
+public val EventService.messageCreateEvent: EventMapper<GatewayChatMessageCreatedEvent, MessageCreateEvent> get() = mapper { client, event ->
+    MessageCreateEvent(
+        client = client,
+        gatewayId = event.gatewayId,
+        message = DeckMessage.from(client, event.message),
+        channelId = event.message.channelId.mapToBuiltin(),
+        authorId = event.message.createdBy,
+        serverId = event.message.serverId.asNullable()
+    )
 }

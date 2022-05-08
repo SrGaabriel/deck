@@ -12,7 +12,10 @@ import kotlinx.serialization.modules.subclass
 
 @Serializable
 public abstract class GatewayEvent {
-    public open var gatewayId: Int = -1
+    internal var _type: String? = null
+    public val type: String get() = _type ?: error("Tried to infer event's type before it has been recognized")
+    internal var _gatewayId: Int? = null
+    public val gatewayId: Int get() = _gatewayId ?: error("Tried to access event's gateway id before it has been fired")
 }
 
 private val polymorphicJson by lazy {
@@ -32,6 +35,11 @@ private val polymorphicJson by lazy {
                 subclass(GatewayChatMessageDeletedEvent::class)
                 subclass(GatewayServerWebhookCreatedEvent::class)
                 subclass(GatewayServerWebhookUpdatedEvent::class)
+                subclass(GatewayListItemCompletedEvent::class)
+                subclass(GatewayListItemCreatedEvent::class)
+                subclass(GatewayListItemUpdatedEvent::class)
+                subclass(GatewayListItemDeletedEvent::class)
+                subclass(GatewayListItemUncompletedEvent::class)
             }
         }
     }
@@ -51,7 +59,8 @@ public class DefaultEventDecoder(private val gatewayId: Int) : EventDecoder {
             })
             polymorphicJson.decodeFromJsonElement<GatewayEvent>(newJsonObject)
         }.also {
-            it.gatewayId = gatewayId
+            it._type = payload.type
+            it._gatewayId = gatewayId
         }
     }.onFailure { it.printStackTrace() }.getOrNull()
 

@@ -1,21 +1,22 @@
 package io.github.deck.core.event
 
 import io.github.deck.core.DeckClient
-import io.github.deck.core.event.message.MessageCreateEvent
-import io.github.deck.core.event.message.MessageDeleteEvent
-import io.github.deck.core.event.message.MessageUpdateEvent
+import io.github.deck.core.event.list.*
+import io.github.deck.core.event.message.messageCreateEvent
+import io.github.deck.core.event.message.messageDeleteEvent
+import io.github.deck.core.event.message.messageUpdateEvent
 import io.github.deck.core.event.server.*
-import io.github.deck.core.event.user.HelloEvent
-import io.github.deck.core.event.webhook.ServerWebhookCreateEvent
-import io.github.deck.core.event.webhook.ServerWebhookUpdateEvent
+import io.github.deck.core.event.user.helloEvent
+import io.github.deck.core.event.webhook.webhookCreateEvent
+import io.github.deck.core.event.webhook.webhookUpdateEvent
 import io.github.deck.core.util.WrappedEventSupplier
 import io.github.deck.core.util.WrappedEventSupplierData
 import io.github.deck.gateway.event.GatewayEvent
-import io.github.deck.gateway.event.type.*
 import io.github.deck.gateway.util.on
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlin.reflect.KClass
 
 public interface DeckEvent {
     public val client: DeckClient
@@ -25,7 +26,9 @@ public interface DeckEvent {
 public interface EventService : WrappedEventSupplier {
     public val eventWrappingFlow: SharedFlow<DeckEvent>
 
-    public fun startListening(): Job
+    public fun ready()
+
+    public fun listen(): Job
 }
 
 public class DefaultEventService(private val client: DeckClient) : EventService {
@@ -35,26 +38,44 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         scope = client.gateway,
         sharedFlow = eventWrappingFlow
     )
+    @PublishedApi
+    internal val mappers: MutableMap<KClass<out GatewayEvent>, EventMapper<GatewayEvent, DeckEvent>> = mutableMapOf()
 
-    override fun startListening(): Job = client.gateway.on<GatewayEvent> {
-        val deckEvent: DeckEvent = when (this) {
-            is GatewayHelloEvent -> HelloEvent.map(client, this)
-            is GatewayServerXpAddedEvent -> ServerXpAddEvent.map(client, this)
-            is GatewayChatMessageCreatedEvent -> MessageCreateEvent.map(client, this)
-            is GatewayChatMessageUpdatedEvent -> MessageUpdateEvent.map(client, this)
-            is GatewayChatMessageDeletedEvent -> MessageDeleteEvent.map(client, this)
-            is GatewayServerWebhookCreatedEvent -> ServerWebhookCreateEvent.map(client, this)
-            is GatewayServerWebhookUpdatedEvent -> ServerWebhookUpdateEvent.map(client, this)
-            is GatewayTeamMemberJoinedEvent -> MemberJoinEvent.map(client, this)
-            is GatewayTeamMemberRemovedEvent -> MemberLeaveEvent.map(client, this)
-            is GatewayTeamMemberBannedEvent -> MemberBanEvent.map(client, this)
-            is GatewayTeamMemberUnbannedEvent -> MemberUnbanEvent.map(client, this)
-            else -> return@on
-        }
-        eventWrappingFlow.emit(deckEvent)
+    override fun ready() {
+        registerMapper(listItemCompleteEvent)
+        registerMapper(listItemCreateEvent)
+        registerMapper(listItemUpdateEvent)
+        registerMapper(listItemDeleteEvent)
+        registerMapper(listItemUncompleteEvent)
+        registerMapper(messageCreateEvent)
+        registerMapper(messageDeleteEvent)
+        registerMapper(messageUpdateEvent)
+        registerMapper(memberBanEvent)
+        registerMapper(memberJoinEvent)
+        registerMapper(memberLeaveEvent)
+        registerMapper(memberUnbanEvent)
+        registerMapper(memberUpdateEvent)
+        registerMapper(serverXpAddEvent)
+        registerMapper(helloEvent)
+        registerMapper(webhookCreateEvent)
+        registerMapper(webhookUpdateEvent)
+    }
+
+    override fun listen(): Job = client.gateway.on<GatewayEvent> {
+        val event: DeckEvent = mappers[this::class]?.map(client, this) ?: return@on
+        eventWrappingFlow.emit(event)
+    }
+
+    @Suppress("unchecked_cast")
+    private inline fun <reified T : GatewayEvent> registerMapper(mapper: EventMapper<out T, out DeckEvent>) {
+        if (mappers.containsKey(T::class))
+            error("Tried to register duplicate event mapper. If you wish to override an event, try creating your own implementation of the EventService interface")
+        mappers[T::class] = mapper as EventMapper<GatewayEvent, DeckEvent>
     }
 }
 
-public interface EventMapper<F : GatewayEvent, T : DeckEvent> {
+public fun <F : GatewayEvent, T : DeckEvent> EventService.mapper(mapper: EventMapper<F, T>): EventMapper<F, T> = mapper
+
+public fun interface EventMapper<F : GatewayEvent, T : DeckEvent> {
     public suspend fun map(client: DeckClient, event: F): T?
 }

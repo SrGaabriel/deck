@@ -8,7 +8,6 @@ public class ClientBuilder(token: String) {
     public var rest: RestClient = RestClient(token)
     public var gateway: GatewayOrchestrator = GatewayOrchestrator(token)
 
-    public fun build(): DeckClient {
-        return DeckClient(rest, gateway)
-    }
+    public fun build(): DeckClient =
+        DeckClient(rest, gateway)
 }

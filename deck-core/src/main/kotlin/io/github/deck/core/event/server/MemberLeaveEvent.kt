@@ -4,6 +4,8 @@ import io.github.deck.common.util.GenericId
 import io.github.deck.core.DeckClient
 import io.github.deck.core.event.DeckEvent
 import io.github.deck.core.event.EventMapper
+import io.github.deck.core.event.EventService
+import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessServer
@@ -20,18 +22,15 @@ public data class MemberLeaveEvent(
 ): DeckEvent {
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
     public val user: StatelessUser get() = BlankStatelessUser(client, userId)
+}
 
-    public companion object: EventMapper<GatewayTeamMemberRemovedEvent, MemberLeaveEvent> {
-        override suspend fun map(
-            client: DeckClient,
-            event: GatewayTeamMemberRemovedEvent
-        ): MemberLeaveEvent = MemberLeaveEvent(
-            client = client,
-            gatewayId = event.gatewayId,
-            serverId = event.serverId,
-            userId = event.userId,
-            isKick = event.isKick,
-            isBan = event.isBan
-        )
-    }
+public val EventService.memberLeaveEvent: EventMapper<GatewayTeamMemberRemovedEvent, MemberLeaveEvent> get() = mapper { client, event ->
+    MemberLeaveEvent(
+        client = client,
+        gatewayId = event.gatewayId,
+        serverId = event.serverId,
+        userId = event.userId,
+        isKick = event.isKick,
+        isBan = event.isBan
+    )
 }

@@ -6,27 +6,26 @@ import io.github.deck.core.entity.Webhook
 import io.github.deck.core.entity.impl.DeckWebhook
 import io.github.deck.core.event.DeckEvent
 import io.github.deck.core.event.EventMapper
+import io.github.deck.core.event.EventService
+import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.util.BlankStatelessServer
-import io.github.deck.gateway.event.type.GatewayServerWebhookCreatedEvent
+import io.github.deck.gateway.event.type.GatewayServerWebhookUpdatedEvent
 
-public data class ServerWebhookCreateEvent(
+public data class WebhookUpdateEvent(
     override val client: DeckClient,
     override val gatewayId: Int,
     val webhook: Webhook,
     val serverId: GenericId
 ) : DeckEvent {
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
+}
 
-    public companion object: EventMapper<GatewayServerWebhookCreatedEvent, ServerWebhookCreateEvent> {
-        override suspend fun map(
-            client: DeckClient,
-            event: GatewayServerWebhookCreatedEvent,
-        ): ServerWebhookCreateEvent = ServerWebhookCreateEvent(
-            client = client,
-            gatewayId = event.gatewayId,
-            webhook = DeckWebhook.from(client, event.webhook),
-            serverId = event.serverId
-        )
-    }
+public val EventService.webhookUpdateEvent: EventMapper<GatewayServerWebhookUpdatedEvent, WebhookUpdateEvent> get() = mapper { client, event ->
+    WebhookUpdateEvent(
+        client = client,
+        gatewayId = event.gatewayId,
+        webhook = DeckWebhook.from(client, event.webhook),
+        serverId = event.serverId
+    )
 }
