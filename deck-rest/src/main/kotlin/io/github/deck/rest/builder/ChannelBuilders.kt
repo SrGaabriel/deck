@@ -2,14 +2,37 @@ package io.github.deck.rest.builder
 
 import io.github.deck.common.Embed
 import io.github.deck.common.EmbedBuilder
-import io.github.deck.common.util.mapToModel
-import io.github.deck.common.util.nullableOptional
+import io.github.deck.common.entity.RawServerChannelType
+import io.github.deck.common.util.*
 import io.github.deck.rest.request.*
 import io.github.deck.rest.util.required
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
 import java.util.*
+
+public class CreateChannelRequestBuilder: RequestBuilder<CreateChannelRequest> {
+    public var name: String by required()
+    public var topic: String? = null
+
+    public var type: RawServerChannelType by required()
+    public var isPublic: Boolean = false
+
+    // You must choose at least one of those to provide
+    public var serverId: GenericId? = null
+    public var groupId: GenericId? = null
+    public var categoryId: IntGenericId? = null
+
+    override fun toRequest(): CreateChannelRequest = CreateChannelRequest(
+        name = name.optional(),
+        topic = topic.nullableOptional(),
+        isPublic = isPublic,
+        type = type.optional(),
+        serverId = serverId.nullableOptional(),
+        groupId = groupId.nullableOptional(),
+        categoryId = categoryId.nullableOptional()
+    )
+}
 
 public class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
     public var isPrivate: Boolean = false

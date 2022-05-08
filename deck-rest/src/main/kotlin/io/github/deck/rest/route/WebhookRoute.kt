@@ -36,7 +36,7 @@ public class WebhookRoute(private val client: RestClient) {
         serverId: GenericId,
         channelId: UUID? = null
     ): List<RawWebhook> = client.sendRequest<GetServerWebhooksResponse, Unit>(
-        endpoint = "/servers/${serverId}/webhooks".plusIf("?channelId=$channelId") { channelId != null },
+        endpoint = "/servers/${serverId}/webhooks".plusIf(channelId != null) { "?channelId=$channelId" },
         method = HttpMethod.Get
     ).webhooks
 
@@ -53,7 +53,7 @@ public class WebhookRoute(private val client: RestClient) {
     public suspend fun deleteWebhook(
         webhookId: UUID,
         serverId: GenericId
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/servers/${serverId}/webhooks/${webhookId}",
         method = HttpMethod.Delete
     )

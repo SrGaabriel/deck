@@ -1,19 +1,34 @@
 package io.github.deck.rest.route
 
-import io.github.deck.common.entity.RawDocumentation
-import io.github.deck.common.entity.RawForumThread
-import io.github.deck.common.entity.RawListItem
-import io.github.deck.common.entity.RawMessage
+import io.github.deck.common.entity.*
 import io.github.deck.common.util.DeckUnsupported
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.rest.RestClient
 import io.github.deck.rest.builder.*
 import io.github.deck.rest.request.*
+import io.github.deck.rest.util.plusIf
 import io.github.deck.rest.util.sendRequest
 import io.ktor.http.*
+import kotlinx.datetime.Instant
 import java.util.*
 
 public class ChannelRoute(private val client: RestClient) {
+    public suspend fun createChannel(builder: CreateChannelRequestBuilder.() -> Unit): RawServerChannel = client.sendRequest<CreateChannelResponse, CreateChannelRequest>(
+        endpoint = "/channels",
+        method = HttpMethod.Post,
+        body = CreateChannelRequestBuilder().apply(builder).toRequest()
+    ).channel
+
+    public suspend fun retrieveChannel(channelId: UUID): RawServerChannel = client.sendRequest<CreateChannelResponse>(
+        endpoint = "/channels/${channelId}",
+        method = HttpMethod.Get,
+    ).channel
+
+    public suspend fun deleteChannel(channelId: UUID): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}",
+        method = HttpMethod.Delete,
+    )
+
     public suspend fun sendMessage(
         channelId: UUID,
         builder: SendMessageRequestBuilder.() -> Unit
@@ -36,7 +51,7 @@ public class ChannelRoute(private val client: RestClient) {
     public suspend fun deleteMessage(
         channelId: UUID,
         messageId: UUID,
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/channels/$channelId/messages/$messageId",
         method = HttpMethod.Delete,
     )
@@ -51,9 +66,16 @@ public class ChannelRoute(private val client: RestClient) {
 
     public suspend fun getChannelMessages(
         channelId: UUID,
+        before: Instant? = null,
+        after: Instant? = null,
+        limit: Int = 50,
         includePrivate: Boolean = false
-    ): List<RawMessage> = client.sendRequest<GetChannelMessagesResponse, Unit>(
-        endpoint = "/channels/$channelId/messages?includePrivate=$includePrivate",
+    ): List<RawMessage> = client.sendRequest<GetChannelMessagesResponse>(
+        endpoint = "/channels/$channelId/messages"
+            .plusIf(includePrivate) { "?includePrivate=true" }
+            .plusIf(before != null) { "?before=$before" }
+            .plusIf(after != null) { "?after=$before" }
+            .plusIf(limit != 50) { "?limit=$limit" },
         method = HttpMethod.Get,
     ).messages
 
@@ -61,7 +83,7 @@ public class ChannelRoute(private val client: RestClient) {
         channelId: UUID,
         messageId: UUID,
         emoteId: IntGenericId
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/channels/$channelId/content/$messageId/emotes/$emoteId",
         method = HttpMethod.Put
     )
@@ -72,7 +94,7 @@ public class ChannelRoute(private val client: RestClient) {
         channelId: UUID,
         messageId: UUID,
         emoteId: IntGenericId
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/channels/$channelId/content/$messageId/emotes/$emoteId",
         method = HttpMethod.Delete
     )
@@ -89,14 +111,14 @@ public class ChannelRoute(private val client: RestClient) {
     public suspend fun getDocumentation(
         channelId: UUID,
         documentationId: IntGenericId
-    ): RawDocumentation = client.sendRequest<CreateDocumentationResponse, Unit>(
+    ): RawDocumentation = client.sendRequest<CreateDocumentationResponse>(
         endpoint = "/channels/$channelId/docs/$documentationId",
         method = HttpMethod.Get
     ).documentation
 
     public suspend fun getDocumentations(
         channelId: UUID
-    ): List<RawDocumentation> = client.sendRequest<GetDocumentationsResponse, Unit>(
+    ): List<RawDocumentation> = client.sendRequest<GetDocumentationsResponse>(
         endpoint = "/channels/$channelId/docs",
         method = HttpMethod.Get
     ).documentations
@@ -114,7 +136,7 @@ public class ChannelRoute(private val client: RestClient) {
     public suspend fun deleteDocumentation(
         channelId: UUID,
         documentationId: IntGenericId
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/channels/$channelId/docs/$documentationId",
         method = HttpMethod.Delete
     )
@@ -131,7 +153,7 @@ public class ChannelRoute(private val client: RestClient) {
     public suspend fun completeListItem(
         channelId: UUID,
         listItemId: UUID,
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/channels/${channelId}/items/${listItemId}/complete",
         method = HttpMethod.Post
     )
@@ -139,7 +161,7 @@ public class ChannelRoute(private val client: RestClient) {
     public suspend fun uncompleteListItem(
         channelId: UUID,
         listItemId: UUID,
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/channels/${channelId}/items/${listItemId}/complete",
         method = HttpMethod.Delete
     )
@@ -170,7 +192,7 @@ public class ChannelRoute(private val client: RestClient) {
     public suspend fun deleteListItem(
         channelId: UUID,
         listItemId: UUID
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/channels/$channelId/items/$listItemId",
         method = HttpMethod.Delete
     )

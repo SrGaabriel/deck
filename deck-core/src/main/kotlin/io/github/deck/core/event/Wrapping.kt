@@ -1,6 +1,9 @@
 package io.github.deck.core.event
 
 import io.github.deck.core.DeckClient
+import io.github.deck.core.event.channel.serverChannelCreateEvent
+import io.github.deck.core.event.channel.serverChannelDeleteEvent
+import io.github.deck.core.event.channel.serverChannelUpdateEvent
 import io.github.deck.core.event.documentation.documentationCreateEvent
 import io.github.deck.core.event.documentation.documentationDeleteEvent
 import io.github.deck.core.event.documentation.documentationUpdateEvent
@@ -45,6 +48,9 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
     internal val mappers: MutableMap<KClass<out GatewayEvent>, EventMapper<GatewayEvent, DeckEvent>> = mutableMapOf()
 
     override fun ready() {
+        registerMapper(serverChannelCreateEvent)
+        registerMapper(serverChannelUpdateEvent)
+        registerMapper(serverChannelDeleteEvent)
         registerMapper(listItemCompleteEvent)
         registerMapper(listItemCreateEvent)
         registerMapper(listItemUpdateEvent)
@@ -61,7 +67,6 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         registerMapper(memberLeaveEvent)
         registerMapper(memberUnbanEvent)
         registerMapper(memberUpdateEvent)
-        registerMapper(serverXpAddEvent)
         registerMapper(helloEvent)
         registerMapper(webhookCreateEvent)
         registerMapper(webhookUpdateEvent)
@@ -81,6 +86,7 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
     }
 }
 
+@Suppress("unused")
 public fun <F : GatewayEvent, T : DeckEvent> EventService.mapper(mapper: EventMapper<F, T>): EventMapper<F, T> = mapper
 
 public fun interface EventMapper<F : GatewayEvent, T : DeckEvent> {

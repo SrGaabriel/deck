@@ -6,9 +6,12 @@ import io.github.deck.core.entity.Member
 import io.github.deck.core.entity.MemberSummary
 import io.github.deck.core.entity.ServerBan
 import io.github.deck.core.entity.Webhook
+import io.github.deck.core.entity.channel.ServerChannel
 import io.github.deck.core.entity.impl.DeckMember
 import io.github.deck.core.entity.impl.DeckMemberSummary
+import io.github.deck.core.entity.impl.DeckServerChannel
 import io.github.deck.core.entity.impl.DeckWebhook
+import io.github.deck.rest.builder.CreateChannelRequestBuilder
 import io.github.deck.rest.builder.CreateWebhookRequestBuilder
 import io.github.deck.rest.builder.UpdateWebhookRequestBuilder
 import io.github.deck.rest.util.GuildedRequestException
@@ -16,6 +19,29 @@ import java.util.*
 
 public interface StatelessServer: StatelessEntity {
     public val id: GenericId
+
+    /**
+     * Creates a channel within this server
+     *
+     * @param builder channel builder
+     * @return created channel
+     */
+    public suspend fun createChannel(builder: CreateChannelRequestBuilder.() -> Unit): ServerChannel =
+        DeckServerChannel.from(client, client.rest.channel.createChannel {
+            builder()
+            this.serverId = this@StatelessServer.id
+        })
+
+    /**
+     * Creates a channel within this server and tries to cast it to [T]
+     *
+     * @param builder channel builder
+     *
+     * @throws IllegalStateException if created channel type doesn't match reported type [T]
+     */
+    @Suppress("unchecked_cast")
+    public suspend fun <T : ServerChannel> createChannelCasting(builder: CreateChannelRequestBuilder.() -> Unit): T =
+        (createChannel(builder) as? T) ?: error("Reported type and actual channel type didn't match when calling method 'createdChannelOf'")
 
     /**
      * Retrieves a member from this server, throws exception

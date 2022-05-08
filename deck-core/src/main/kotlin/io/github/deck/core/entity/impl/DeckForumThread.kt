@@ -5,7 +5,7 @@ import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.asNullable
 import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
-import io.github.deck.core.entity.channel.ForumThread
+import io.github.deck.core.entity.ForumThread
 import kotlinx.datetime.Instant
 import java.util.*
 

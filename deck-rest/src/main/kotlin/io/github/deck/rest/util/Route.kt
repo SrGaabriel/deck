@@ -12,7 +12,33 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
 /**
- * This will fire a request and throw an [GuildedRequestException] in case of failure.
+ * This will fire a request to Guilded's API and throw an [GuildedRequestException] in case of failure.
+ * This method sends a blank request expecting [R] as a response.
+ *
+ * @param R Response type (Special types: [Unit], [HttpResponse])
+ *
+ * @param endpoint The request endpoint (not the entire url)
+ * @param method The request http method
+ * @param authenticated Whether you need to provide an authentication for this request
+ *
+ * @throws GuildedRequestException in case of failure.
+ * @return Returns an object of type [R] in case of success.
+ */
+public suspend inline fun <reified R> RestClient.sendRequest(
+    endpoint: String,
+    method: HttpMethod,
+    authenticated: Boolean = true
+): R = requestService.superviseRequest<Unit, R>(
+    request = Request(
+        method,
+        Constants.GuildedRestApi + endpoint,
+        null,
+        if (authenticated) token else null
+    )
+)
+
+/**
+ * This will fire a request to Guilded's API and throw an [GuildedRequestException] in case of failure.
  *
  * @param R Response type (Special types: [Unit], [HttpResponse])
  * @param B Body type

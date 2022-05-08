@@ -11,9 +11,9 @@ import kotlinx.serialization.encoding.Encoder
  * https://medium.com/livefront/kotlinx-serialization-de-serializing-jsons-nullable-optional-properties-442c7f0c2614
  */
 @Serializable(OptionalPropertySerializer::class)
-public sealed interface OptionalProperty<out T> {
-    public object NotPresent : OptionalProperty<Nothing>
-    public data class Present<T>(val value: T) : OptionalProperty<T>
+public sealed class OptionalProperty<out T> {
+    public object NotPresent : OptionalProperty<Nothing>()
+    public data class Present<T>(val value: T) : OptionalProperty<T>()
 }
 
 public open class OptionalPropertySerializer<T>(

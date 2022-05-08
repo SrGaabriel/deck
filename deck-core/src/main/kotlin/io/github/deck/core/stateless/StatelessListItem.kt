@@ -28,7 +28,7 @@ public interface StatelessListItem: StatelessEntity {
         DeckListItem.from(client, client.rest.channel.updateListItem(channelId, id, builder))
 
     /**
-     * Marks this list item as 'completed' within this channel.
+     * Marks this list item as 'completed' within this channel. _(not to be confused with [delete])_
      */
     public suspend fun complete(): Unit =
         client.rest.channel.completeListItem(channelId, id)
@@ -40,7 +40,7 @@ public interface StatelessListItem: StatelessEntity {
         client.rest.channel.uncompleteListItem(channelId, id)
 
     /**
-     * Deletes this item
+     * Deletes this list item. _(not to be confused with [complete])_
      */
     public suspend fun delete(): Unit =
         client.rest.channel.deleteListItem(channelId, id)

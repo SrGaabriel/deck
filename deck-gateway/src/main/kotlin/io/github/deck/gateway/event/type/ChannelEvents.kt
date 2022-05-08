@@ -2,10 +2,32 @@ package io.github.deck.gateway.event.type
 
 import io.github.deck.common.entity.RawDocumentation
 import io.github.deck.common.entity.RawListItem
+import io.github.deck.common.entity.RawServerChannel
 import io.github.deck.common.util.GenericId
 import io.github.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
+@Serializable
+@SerialName("TeamChannelCreated")
+public data class GatewayServerChannelCreatedEvent(
+    val serverId: GenericId,
+    val channel: RawServerChannel
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamChannelUpdated")
+public data class GatewayServerChannelUpdatedEvent(
+    val serverId: GenericId,
+    val channel: RawServerChannel
+): GatewayEvent()
+
+@Serializable
+@SerialName("TeamChannelDeleted")
+public data class GatewayServerChannelDeletedEvent(
+    val serverId: GenericId,
+    val channel: RawServerChannel
+): GatewayEvent()
 
 @Serializable
 @SerialName("ListItemCompleted")

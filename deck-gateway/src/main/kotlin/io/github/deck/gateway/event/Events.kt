@@ -1,8 +1,5 @@
-@file:OptIn(DeckExperimental::class)
-
 package io.github.deck.gateway.event
 
-import io.github.deck.common.util.DeckExperimental
 import io.github.deck.gateway.event.type.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
@@ -24,7 +21,6 @@ private val polymorphicJson by lazy {
         serializersModule = SerializersModule {
             polymorphic(GatewayEvent::class) {
                 subclass(GatewayHelloEvent::class)
-                subclass(GatewayServerXpAddedEvent::class)
                 subclass(GatewayTeamMemberJoinedEvent::class)
                 subclass(GatewayTeamMemberUpdatedEvent::class)
                 subclass(GatewayTeamMemberRemovedEvent::class)
@@ -33,6 +29,7 @@ private val polymorphicJson by lazy {
                 subclass(GatewayChatMessageCreatedEvent::class)
                 subclass(GatewayChatMessageUpdatedEvent::class)
                 subclass(GatewayChatMessageDeletedEvent::class)
+                subclass(GatewayServerRolesUpdatedEvent::class)
                 subclass(GatewayServerWebhookCreatedEvent::class)
                 subclass(GatewayServerWebhookUpdatedEvent::class)
                 subclass(GatewayListItemCompletedEvent::class)
@@ -40,6 +37,11 @@ private val polymorphicJson by lazy {
                 subclass(GatewayListItemUpdatedEvent::class)
                 subclass(GatewayListItemDeletedEvent::class)
                 subclass(GatewayListItemUncompletedEvent::class)
+                subclass(GatewayDocumentationCreatedEvent::class)
+                subclass(GatewayDocumentationUpdatedEvent::class)
+                subclass(GatewayDocumentationDeletedEvent::class)
+                subclass(GatewayServerChannelCreatedEvent::class)
+                subclass(GatewayServerChannelDeletedEvent::class)
             }
         }
     }

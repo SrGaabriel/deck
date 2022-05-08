@@ -44,7 +44,7 @@ public class ServerRoute(private val client: RestClient) {
         userId: GenericId,
         serverId: GenericId,
         roleId: IntGenericId
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/servers/$serverId/members/$userId/roles/$roleId",
         method = HttpMethod.Put
     )
@@ -53,7 +53,7 @@ public class ServerRoute(private val client: RestClient) {
         userId: GenericId,
         serverId: GenericId,
         roleId: IntGenericId
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/servers/$serverId/members/$userId/roles/$roleId",
         method = HttpMethod.Delete
     )
@@ -71,7 +71,7 @@ public class ServerRoute(private val client: RestClient) {
     public suspend fun removeMemberNickname(
         userId: GenericId,
         serverId: GenericId
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/servers/$serverId/members/$userId/nickname",
         method = HttpMethod.Delete
     )
@@ -96,7 +96,7 @@ public class ServerRoute(private val client: RestClient) {
     public suspend fun kickMember(
         userId: GenericId,
         serverId: GenericId
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/servers/$serverId/members/$userId",
         method = HttpMethod.Delete
     )
@@ -104,7 +104,7 @@ public class ServerRoute(private val client: RestClient) {
     public suspend fun banMember(
         userId: GenericId,
         serverId: GenericId
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/servers/$serverId/bans/$userId",
         method = HttpMethod.Post
     )
@@ -120,7 +120,7 @@ public class ServerRoute(private val client: RestClient) {
     public suspend fun unbanMember(
         userId: GenericId,
         serverId: GenericId
-    ): Unit = client.sendRequest<Unit, Unit>(
+    ): Unit = client.sendRequest(
         endpoint = "/servers/$serverId/bans/$userId",
         method = HttpMethod.Delete
     )

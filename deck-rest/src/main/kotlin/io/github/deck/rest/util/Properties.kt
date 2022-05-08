@@ -2,6 +2,9 @@ package io.github.deck.rest.util
 
 import io.github.deck.common.util.OptionalProperty
 import io.github.deck.rest.builder.RequestBuilder
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.reflect.KProperty
 
 public class RequiredRequestField<A> {
@@ -15,6 +18,13 @@ public class RequiredRequestField<A> {
     }
 }
 
+@Suppress("unused")
 public fun <A> RequestBuilder<*>.required(): RequiredRequestField<A> = RequiredRequestField()
 
-internal fun String.plusIf(text: String, condition: () -> Boolean): String = if (condition()) this + text else this
+@OptIn(ExperimentalContracts::class)
+internal fun String.plusIf(condition: Boolean, text: () -> String): String {
+    contract {
+        callsInPlace(text, InvocationKind.AT_MOST_ONCE)
+    }
+    return if (condition) this + text() else this
+}

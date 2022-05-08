@@ -5,7 +5,50 @@ import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.OptionalProperty
 import io.github.deck.common.util.UniqueId
 import kotlinx.datetime.Instant
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
+@Serializable
+public data class RawServerChannel(
+    public val id: UniqueId,
+    public val type: RawServerChannelType,
+    public val name: String,
+    public val topic: OptionalProperty<String> = OptionalProperty.NotPresent,
+    public val createdAt: Instant,
+    public val createdBy: GenericId,
+    public val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    public val serverId: GenericId,
+    public val parentId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
+    public val categoryId: OptionalProperty<IntGenericId> = OptionalProperty.NotPresent,
+    public val groupId: GenericId,
+    public val isPublic: Boolean = false,
+    public val archivedBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+    public val archivedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+)
+
+@Serializable
+public enum class RawServerChannelType {
+    @SerialName("announcements")
+    ANNOUNCEMENTS,
+    @SerialName("chat")
+    CHAT,
+    @SerialName("calendar")
+    CALENDAR,
+    @SerialName("forums")
+    FORUMS,
+    @SerialName("media")
+    MEDIA,
+    @SerialName("docs")
+    DOCS,
+    @SerialName("voice")
+    VOICE,
+    @SerialName("list")
+    LIST,
+    @SerialName("scheduling")
+    SCHEDULING,
+    @SerialName("stream")
+    STREAM
+}
 
 @Serializable
 public data class RawDocumentation(
