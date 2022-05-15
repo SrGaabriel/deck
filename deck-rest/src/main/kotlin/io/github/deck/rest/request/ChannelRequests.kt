@@ -8,6 +8,7 @@ import io.github.deck.common.util.UniqueId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 public data class CreateChannelRequest(
@@ -71,7 +72,7 @@ public data class GetDocumentationsResponse(
 @Serializable
 public data class CreateListItemRequest(
     public val message: String,
-    public val note: OptionalProperty<String> = OptionalProperty.NotPresent
+    public val note: OptionalProperty<JsonObject> = OptionalProperty.NotPresent
 )
 
 @Serializable

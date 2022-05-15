@@ -31,7 +31,8 @@ public suspend inline fun <reified R> RestClient.sendRequest(
 ): R = requestService.superviseRequest<Unit, R>(
     request = Request(
         method,
-        Constants.GuildedRestApi + endpoint,
+        Constants.GuildedRestApi,
+        endpoint,
         null,
         if (authenticated) token else null
     )
@@ -59,7 +60,8 @@ public suspend inline fun <reified R, reified B> RestClient.sendRequest(
 ): R = requestService.superviseRequest(
     request = Request(
         method,
-        Constants.GuildedRestApi + endpoint,
+        Constants.GuildedRestApi,
+        endpoint,
         body,
         if (authenticated) token else null
     )

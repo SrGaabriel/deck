@@ -7,6 +7,7 @@ import io.github.deck.common.util.*
 import io.github.deck.rest.request.*
 import io.github.deck.rest.util.required
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
 import java.util.*
@@ -99,7 +100,7 @@ public class CreateListItemRequestBuilder: RequestBuilder<CreateListItemRequest>
 
     override fun toRequest(): CreateListItemRequest = CreateListItemRequest(
         message = label,
-        note = note.nullableOptional()
+        note = note?.let { JsonObject(mapOf("content" to JsonPrimitive(note))) }.nullableOptional()
     )
 }
 

@@ -10,4 +10,5 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(project(":deck-core"))
+    implementation("com.github.ajalt.mordant:mordant:${Dependencies.MordantVersion}")
 }

@@ -1,5 +1,8 @@
 package io.github.deck.gateway
 
+import io.github.deck.common.log.DeckLogger
+import io.github.deck.common.log.error
+import io.github.deck.common.log.info
 import io.github.deck.common.util.Constants
 import io.github.deck.gateway.event.*
 import io.github.deck.gateway.event.type.GatewayHelloEvent
@@ -14,8 +17,6 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ticker
 import kotlinx.coroutines.flow.*
-import mu.KLoggable
-import mu.KLogger
 
 /**
  * Base gateway interface
@@ -23,6 +24,7 @@ import mu.KLogger
 public interface Gateway : EventSupplier {
     public val gatewayId: Int
     public val scope: CoroutineScope
+    public val logger: DeckLogger
     public val hello: GatewayHelloEvent
     public val eventSharedFlow: SharedFlow<GatewayEvent>
     public val webSocketSession: DefaultWebSocketSession
@@ -46,18 +48,17 @@ public class DefaultGateway(
     private val debugPayloads: Boolean,
     override val gatewayId: Int,
     override val scope: CoroutineScope,
+    override val logger: DeckLogger,
     override val eventSharedFlow: MutableSharedFlow<GatewayEvent>,
     private val client: HttpClient,
     private val eventDecoder: EventDecoder = DefaultEventDecoder(gatewayId),
     private val commandEncoder: CommandEncoder = DefaultCommandEncoder()
-) : Gateway, KLoggable {
+) : Gateway {
     override lateinit var hello: GatewayHelloEvent
     override lateinit var webSocketSession: DefaultWebSocketSession
 
     private lateinit var listeningJob: Job
     private lateinit var heartbeatJob: Job
-
-    override val logger: KLogger = logger("Gateway $gatewayId Logger")
 
     override val eventSupplierData: EventSupplierData by lazy {
         EventSupplierData(
@@ -87,8 +88,8 @@ public class DefaultGateway(
             if (frame.data.contentEquals(Constants.GatewayPongContent.toByteArray())) return@collect
             val data = eventDecoder.decodeDataFromPayload(frame.readText())
             val event = eventDecoder.decodeEventFromPayload(data)
-                ?: return@collect logger.info { "[DECK Gateway #${gatewayId}] Failed to parse event with body ${data.data}" }
-            logger.info { "[DECK Gateway #${gatewayId}] Received event ${data.type}".let { log -> if (debugPayloads) "$log with JSON ${data.data}" else log } }
+                ?: return@collect logger.error { "[Gateway $gatewayId] Failed to parse event with body ${data.data}" }
+            logger.info { "[Gateway $gatewayId] Received event ${data.type}".let { log -> if (debugPayloads) "$log with JSON ${data.data}" else log } }
             eventSharedFlow.emit(event)
         }
     }.also { listeningJob = it }
@@ -101,7 +102,7 @@ public class DefaultGateway(
     override suspend fun startHeartbeat(): Job = scope.launch {
         hello = await(8000, gatewayId = gatewayId) ?: return@launch logger.error { "Gateway hello payload wasn't sent in time in gateway $gatewayId." }
         val tickerChannel = ticker(hello.heartbeatIntervalMs, 5000)
-        logger.info { "[DECK Gateway #${gatewayId}] Created ticker channel, now starting to send heartbeats to guilded." }
+        logger.info { "[Gateway $gatewayId] Created ticker channel, now starting to send heartbeats to guilded." }
         tickerChannel.consumeAsFlow().collect {
             webSocketSession.send(Constants.GatewayPingContent)
         }
@@ -110,14 +111,14 @@ public class DefaultGateway(
     override suspend fun sendCommand(command: GatewayCommand): Unit = scope.launch {
         val encoded = commandEncoder.encodeCommandToString(command)
         webSocketSession.send(Frame.Text(encoded))
-        logger.info { "[DECK Gateway #${gatewayId}] Sent command $encoded" }
+        logger.info { "[Gateway $gatewayId] Sent command $encoded" }
     }.let {}
 
     override suspend fun disconnect(expectingReconnect: Boolean) {
         val code = if (expectingReconnect) CloseReason.Codes.SERVICE_RESTART else CloseReason.Codes.GOING_AWAY
         heartbeatJob.cancel("Shutdown")
         listeningJob.cancel("Shutdown")
-        logger.info { "[DECK Gateway #${gatewayId}] Disconnecting..." }
+        logger.info { "[Gateway $gatewayId] disconnecting" }
         webSocketSession.close(reason = CloseReason(code, "Shutdown"))
     }
 }

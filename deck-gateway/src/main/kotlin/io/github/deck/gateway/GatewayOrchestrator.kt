@@ -1,5 +1,7 @@
 package io.github.deck.gateway
 
+import io.github.deck.common.log.DeckLogger
+import io.github.deck.common.util.MicroutilsLogger
 import io.github.deck.gateway.event.GatewayEvent
 import io.github.deck.gateway.util.EventSupplier
 import io.github.deck.gateway.util.EventSupplierData
@@ -27,16 +29,18 @@ public class GatewayOrchestrator(private val token: String): EventSupplier, Coro
             sharedFlow = globalEventsFlow
         )
     }
+    public var logger: DeckLogger = MicroutilsLogger("Gateway Logger")
 
-    public var debugPayloads: Boolean = false
+    public var logEventBodies: Boolean = false
     public val gateways: MutableMap<Int, Gateway> = mutableMapOf()
     private val gatewayAtomicId: AtomicInteger = AtomicInteger(0)
 
     public fun openGateway(): Gateway = DefaultGateway(
         token = token,
-        debugPayloads = debugPayloads,
+        debugPayloads = logEventBodies,
         gatewayId = gatewayAtomicId.getAndIncrement(),
         scope = this,
+        logger = logger,
         client = httpClient,
         eventSharedFlow = globalEventsFlow
     ).also { gateways[it.gatewayId] = it }

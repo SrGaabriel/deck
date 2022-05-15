@@ -1,5 +1,9 @@
 package io.github.deck.rest.util
 
+import io.github.deck.common.log.debug
+import io.github.deck.common.util.Constants
+import io.github.deck.common.util.DeckInternalApi
+import io.github.deck.rest.RestClient
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -8,25 +12,38 @@ import io.ktor.http.*
 
 public data class Request<S, G>(
     val method: HttpMethod,
-    val url: String,
+    val api: String = Constants.GuildedRestApi,
+    val endpoint: String,
     val body: S? = null,
     val token: String? = null
 )
 
-public class RequestService(public val client: HttpClient) {
+public class RequestService(
+    public val client: HttpClient,
+    public val rest: RestClient
+) {
+    @OptIn(DeckInternalApi::class)
     public suspend inline fun <reified S, reified G> superviseRequest(
         request: Request<S, G>,
         failureHandler: FailureHandler = FailureHandler
     ): G {
+        if (rest.logRequests) {
+            rest.logger.debug { "Sending [${request.method.value}] ${request.endpoint}" }
+        }
         val response = scheduleRequest(request)
-        return if (response.status.isSuccess().not()) {
+        if (rest.logResponses) {
+            val requestBody = response.bodyAsText()
+            rest.logger.debug { "Received ${response.status.value} (${response.status.description}) $requestBody" }
+        }
+        return if (!response.status.isSuccess()) {
             failureHandler.onFailure(response)
         } else {
             response.body()
         }
     }
 
-    public suspend inline fun <reified S, reified G> scheduleRequest(request: Request<S, G>, ): HttpResponse = client.request(request.url) {
+    @DeckInternalApi
+    public suspend inline fun <reified S, reified G> scheduleRequest(request: Request<S, G>): HttpResponse = client.request(request.api + request.endpoint) {
         if (request.body != null)
             setBody(request.body)
         method = request.method

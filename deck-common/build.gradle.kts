@@ -24,5 +24,10 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
             }
         }
+        val jvmMain by getting {
+            dependencies {
+                implementation("io.github.microutils:kotlin-logging-jvm:${Dependencies.KotlinLoggingVersion}")
+            }
+        }
     }
 }
