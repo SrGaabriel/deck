@@ -22,7 +22,8 @@ public data class DeckMessage(
     override val createdAt: Instant,
     override val updatedAt: Instant?,
     override val repliesTo: List<UUID>,
-    override val isPrivate: Boolean
+    override val isPrivate: Boolean,
+    override val isSilent: Boolean,
 ): Message {
     public companion object {
         public fun from(client: DeckClient, raw: RawMessage): DeckMessage = DeckMessage(
@@ -36,7 +37,8 @@ public data class DeckMessage(
             createdAt = raw.createdAt,
             updatedAt = raw.updatedAt.asNullable(),
             repliesTo = raw.replyMessageIds.asNullable()?.map { it.mapToBuiltin() }.orEmpty(),
-            isPrivate = raw.isPrivate
+            isPrivate = raw.isPrivate,
+            isSilent = raw.isSilent,
         )
     }
 }

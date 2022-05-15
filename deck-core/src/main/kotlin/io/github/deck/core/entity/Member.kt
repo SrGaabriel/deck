@@ -31,6 +31,9 @@ public interface Member: StatelessMember {
     /** A list of all role ids assigned to this member */
     public val roleIds: List<IntGenericId>
 
+    /** True if this member is the server's owner */
+    public val isOwner: Boolean
+
     /** The instant the user was registered in guilded */
     public val createdAt: Instant
     /** The instant the user joined the server */

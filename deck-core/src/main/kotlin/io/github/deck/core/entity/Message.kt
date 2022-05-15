@@ -32,8 +32,10 @@ public interface Message : StatelessMessage {
 
     /** List of all message IDs this message is replying to */
     public val repliesTo: List<UUID>
-    /** Whether this message is a private reply */
+    /** Whether this message is a private reply (only mentioned and replied to users can see it) */
     public val isPrivate: Boolean
+    /** Whether this message is silent (does not notify mentioned users) */
+    public val isSilent: Boolean
 
     public suspend fun patch(builder: UpdateMessageRequestBuilder.() -> Unit): Message = update {
         content = this@Message.content

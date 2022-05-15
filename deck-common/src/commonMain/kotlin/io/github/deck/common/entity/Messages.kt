@@ -17,6 +17,7 @@ public data class RawMessage(
     public val embeds: List<RawEmbed> = emptyList(),
     public val replyMessageIds: OptionalProperty<List<UniqueId>> = OptionalProperty.NotPresent,
     public val isPrivate: Boolean = false,
+    public val isSilent: Boolean = false,
     public val createdAt: Instant,
     public val createdBy: GenericId,
     public val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,

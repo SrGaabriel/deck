@@ -21,6 +21,7 @@ public data class DeckMember(
     override val avatar: String?,
     override val banner: String?,
     override val roleIds: List<IntGenericId>,
+    override val isOwner: Boolean,
     override val createdAt: Instant,
     override val joinedAt: Instant,
 ) : Member {
@@ -35,6 +36,7 @@ public data class DeckMember(
             avatar = raw.user.avatar.asNullable(),
             banner = raw.user.banner.asNullable(),
             roleIds = raw.roleIds,
+            isOwner = raw.isOwner,
             createdAt = raw.user.createdAt,
             joinedAt = raw.joinedAt
         )

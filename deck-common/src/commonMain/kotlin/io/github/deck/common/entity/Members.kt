@@ -10,7 +10,8 @@ public data class RawServerMember(
     val user: RawUser,
     val roleIds: List<Int>,
     val nickname: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val joinedAt: Instant
+    val joinedAt: Instant,
+    val isOwner: Boolean = false
 )
 
 @Serializable
