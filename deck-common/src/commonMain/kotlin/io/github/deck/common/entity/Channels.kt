@@ -27,6 +27,9 @@ public data class RawServerChannel(
 )
 
 @Serializable
+public value class RawChannelId(public val id: UniqueId)
+
+@Serializable
 public enum class RawServerChannelType {
     @SerialName("announcements")
     ANNOUNCEMENTS,
@@ -80,6 +83,7 @@ public data class RawListItem(
 @Serializable
 public data class RawListItemNote(
     public val content: OptionalProperty<String> = OptionalProperty.NotPresent,
+    public val mentions: OptionalProperty<RawMessageMentions> = OptionalProperty.NotPresent,
     public val createdAt: Instant,
     public val createdBy: GenericId,
     public val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
@@ -96,7 +100,7 @@ public data class RawListItemNoteSummary(
 )
 
 @Serializable
-public data class RawForumThread(
+public data class RawForumTopic(
     val id: IntGenericId,
     val serverId: GenericId,
     val channelId: UniqueId,
@@ -106,4 +110,29 @@ public data class RawForumThread(
     val createdBy: GenericId,
     val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public data class RawCalendarEvent(
+    val id: IntGenericId,
+    val serverId: GenericId,
+    val channelId: UniqueId,
+    val name: String,
+    val description: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val location: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val url: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val color: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val startsAt: Instant,
+    val duration: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val isPrivate: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
+    val mentions: OptionalProperty<RawMessageMentions> = OptionalProperty.NotPresent,
+    val createdAt: Instant,
+    val createdBy: GenericId,
+    val cancellation: OptionalProperty<RawCalendarEventCancellation> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public data class RawCalendarEventCancellation(
+    val description: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val createdBy: OptionalProperty<String> = OptionalProperty.NotPresent,
 )

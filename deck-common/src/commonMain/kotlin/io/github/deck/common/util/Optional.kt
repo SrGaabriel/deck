@@ -67,3 +67,6 @@ public fun <T, F : Any> OptionalProperty<T?>.mapValueNotNull(block: (T) -> F): O
     is OptionalProperty.NotPresent -> OptionalProperty.NotPresent
     is OptionalProperty.Present<T?> -> if (value == null) OptionalProperty.NotPresent else block(value).optional()
 }
+
+public fun <T> OptionalProperty<List<T>>.orEmpty(): List<T> =
+    asNullable().orEmpty()

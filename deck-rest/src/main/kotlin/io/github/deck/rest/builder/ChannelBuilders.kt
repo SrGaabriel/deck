@@ -6,6 +6,7 @@ import io.github.deck.common.entity.RawServerChannelType
 import io.github.deck.common.util.*
 import io.github.deck.rest.request.*
 import io.github.deck.rest.util.required
+import kotlinx.datetime.Instant
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -106,12 +107,62 @@ public class CreateListItemRequestBuilder: RequestBuilder<CreateListItemRequest>
 
 public typealias UpdateListItemRequestBuilder = CreateListItemRequestBuilder
 
-public class CreateForumThreadRequestBuilder: RequestBuilder<CreateForumThreadRequest> {
+public class CreateForumTopicRequestBuilder: RequestBuilder<CreateForumTopicRequest> {
     public var title: String by required()
     public var content: String by required()
 
-    override fun toRequest(): CreateForumThreadRequest = CreateForumThreadRequest(
+    override fun toRequest(): CreateForumTopicRequest = CreateForumTopicRequest(
         title = title,
         content = content
+    )
+}
+
+public class CreateCalendarEventRequestBuilder: RequestBuilder<CreateCalendarEventRequest> {
+    public var name: String by required()
+    public var description: String? = null
+    public var location: String? = null
+    public var url: String? = null
+
+    public var startsAt: Instant? = null
+
+    public var color: Int? = null
+    public var duration: Int? = null
+
+    public var isPrivate: Boolean = false
+
+    override fun toRequest(): CreateCalendarEventRequest = CreateCalendarEventRequest(
+        name = name.optional(),
+        description = description.nullableOptional(),
+        location = location.nullableOptional(),
+        startsAt = startsAt.nullableOptional(),
+        url = url.nullableOptional(),
+        color = color.nullableOptional(),
+        duration = duration.nullableOptional(),
+        isPrivate = isPrivate
+    )
+}
+
+public class UpdateCalendarEventRequestBuilder: RequestBuilder<CreateCalendarEventRequest> {
+    public var name: String? = null
+    public var description: String? = null
+    public var location: String? = null
+    public var url: String? = null
+
+    public var startsAt: Instant? = null
+
+    public var color: Int? = null
+    public var duration: Int? = null
+
+    public var isPrivate: Boolean = false
+
+    override fun toRequest(): CreateCalendarEventRequest = CreateCalendarEventRequest(
+        name = name.nullableOptional(),
+        description = description.nullableOptional(),
+        location = location.nullableOptional(),
+        startsAt = startsAt.nullableOptional(),
+        url = url.nullableOptional(),
+        color = color.nullableOptional(),
+        duration = duration.nullableOptional(),
+        isPrivate = isPrivate
     )
 }

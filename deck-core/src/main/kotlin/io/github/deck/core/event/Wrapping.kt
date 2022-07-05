@@ -1,6 +1,9 @@
 package io.github.deck.core.event
 
 import io.github.deck.core.DeckClient
+import io.github.deck.core.event.calendar.calendarEventCreateEvent
+import io.github.deck.core.event.calendar.calendarEventDeleteEvent
+import io.github.deck.core.event.calendar.calendarEventUpdateEvent
 import io.github.deck.core.event.channel.serverChannelCreateEvent
 import io.github.deck.core.event.channel.serverChannelDeleteEvent
 import io.github.deck.core.event.channel.serverChannelUpdateEvent
@@ -70,6 +73,9 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         registerMapper(helloEvent)
         registerMapper(webhookCreateEvent)
         registerMapper(webhookUpdateEvent)
+        registerMapper(calendarEventCreateEvent)
+        registerMapper(calendarEventUpdateEvent)
+        registerMapper(calendarEventDeleteEvent)
     }
 
     override fun listen(): Job = client.gateway.on<GatewayEvent> {

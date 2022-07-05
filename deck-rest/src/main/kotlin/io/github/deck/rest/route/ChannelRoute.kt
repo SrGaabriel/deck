@@ -1,7 +1,6 @@
 package io.github.deck.rest.route
 
 import io.github.deck.common.entity.*
-import io.github.deck.common.util.DeckUnsupported
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.rest.RestClient
 import io.github.deck.rest.builder.*
@@ -11,7 +10,11 @@ import io.github.deck.rest.util.sendRequest
 import io.ktor.http.*
 import kotlinx.datetime.Instant
 import java.util.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
+@OptIn(ExperimentalContracts::class)
 public class ChannelRoute(private val client: RestClient) {
     public suspend fun createChannel(builder: CreateChannelRequestBuilder.() -> Unit): RawServerChannel = client.sendRequest<CreateChannelResponse, CreateChannelRequest>(
         endpoint = "/channels",
@@ -88,8 +91,6 @@ public class ChannelRoute(private val client: RestClient) {
         method = HttpMethod.Put
     )
 
-    @DeckUnsupported
-    // Not yet supported
     public suspend fun removeReactionFromContent(
         channelId: UUID,
         messageId: UUID,
@@ -197,12 +198,67 @@ public class ChannelRoute(private val client: RestClient) {
         method = HttpMethod.Delete
     )
 
-    public suspend fun createForumThread(
+    public suspend fun createForumTopic(
         channelId: UUID,
-        builder: CreateForumThreadRequestBuilder.() -> Unit
-    ): RawForumThread = client.sendRequest<CreateForumThreadResponse, CreateForumThreadRequest>(
-        endpoint = "/channels/$channelId/forum",
-        method = HttpMethod.Post,
-        body = CreateForumThreadRequestBuilder().apply(builder).toRequest()
-    ).forumThread
+        builder: CreateForumTopicRequestBuilder.() -> Unit
+    ): RawForumTopic {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+        return client.sendRequest<CreateForumTopicResponse, CreateForumTopicRequest>(
+            endpoint = "/channels/$channelId/topics",
+            method = HttpMethod.Post,
+            body = CreateForumTopicRequestBuilder().apply(builder).toRequest()
+        ).forumTopic
+    }
+
+    public suspend fun createCalendarEvent(
+        channelId: UUID,
+        builder: CreateCalendarEventRequestBuilder.() -> Unit
+    ): RawCalendarEvent {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+        return client.sendRequest<CreateCalendarEventResponse, CreateCalendarEventRequest>(
+            endpoint = "/channels/${channelId}/events",
+            method = HttpMethod.Post,
+            body = CreateCalendarEventRequestBuilder().apply(builder).toRequest()
+        ).calendarEvent
+    }
+
+    public suspend fun getCalendarEvent(
+        channelId: UUID,
+        calendarEventId: IntGenericId
+    ): RawCalendarEvent = client.sendRequest<CreateCalendarEventResponse>(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}",
+        method = HttpMethod.Get
+    ).calendarEvent
+
+    public suspend fun getCalendarEvents(channelId: UUID): List<RawCalendarEvent> = client.sendRequest<GetChannelCalendarEventsResponse>(
+        endpoint = "/channels/${channelId}/events",
+        method = HttpMethod.Get
+    ).calendarEvents
+
+    public suspend fun updateCalendarEvent(
+        channelId: UUID,
+        calendarEventId: IntGenericId,
+        builder: UpdateCalendarEventRequestBuilder.() -> Unit
+    ): RawCalendarEvent {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+        return client.sendRequest<CreateCalendarEventResponse, CreateCalendarEventRequest>(
+            endpoint = "/channels/${channelId}/events/${calendarEventId}",
+            method = HttpMethod.Patch,
+            body = UpdateCalendarEventRequestBuilder().apply(builder).toRequest()
+        ).calendarEvent
+    }
+
+    public suspend fun deleteCalendarEvent(
+        channelId: UUID,
+        calendarEventId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}",
+        method = HttpMethod.Delete
+    )
 }

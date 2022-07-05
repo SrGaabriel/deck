@@ -1,5 +1,6 @@
 package io.github.deck.gateway.event.type
 
+import io.github.deck.common.entity.RawCalendarEvent
 import io.github.deck.common.entity.RawDocumentation
 import io.github.deck.common.entity.RawListItem
 import io.github.deck.common.entity.RawServerChannel
@@ -86,4 +87,25 @@ public data class GatewayDocumentationDeletedEvent(
     val serverId: String,
     @SerialName("doc")
     val documentation: RawDocumentation
+): GatewayEvent()
+
+@Serializable
+@SerialName("CalendarEventCreated")
+public data class GatewayCalendarEventCreatedEvent(
+    val serverId: String,
+    val calendarEvent: RawCalendarEvent
+): GatewayEvent()
+
+@Serializable
+@SerialName("CalendarEventUpdated")
+public data class GatewayCalendarEventUpdatedEvent(
+    val serverId: String,
+    val calendarEvent: RawCalendarEvent
+): GatewayEvent()
+
+@Serializable
+@SerialName("CalendarEventUpdated")
+public data class GatewayCalendarEventDeletedEvent(
+    val serverId: String,
+    val calendarEvent: RawCalendarEvent
 ): GatewayEvent()

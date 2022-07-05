@@ -42,6 +42,11 @@ private val polymorphicJson by lazy {
                 subclass(GatewayDocumentationDeletedEvent::class)
                 subclass(GatewayServerChannelCreatedEvent::class)
                 subclass(GatewayServerChannelDeletedEvent::class)
+                subclass(GatewayChatMessageReactionCreatedEvent::class)
+                subclass(GatewayChatMessageReactionDeletedEvent::class)
+                subclass(GatewayCalendarEventCreatedEvent::class)
+                subclass(GatewayCalendarEventUpdatedEvent::class)
+                subclass(GatewayCalendarEventDeletedEvent::class)
             }
         }
     }

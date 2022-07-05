@@ -39,17 +39,13 @@ public class GatewayOrchestrator(private val token: String): EventSupplier, Coro
         token = token,
         debugPayloads = logEventBodies,
         gatewayId = gatewayAtomicId.getAndIncrement(),
-        scope = this,
+        scope = CoroutineScope(coroutineContext),
         logger = logger,
         client = httpClient,
         eventSharedFlow = globalEventsFlow
     ).also { gateways[it.gatewayId] = it }
 
     public suspend fun closeGateway(id: Int) {
-        gateways[id]?.disconnect(false)
-    }
-
-    public suspend fun ditchGateway(id: Int) {
         val gateway = gateways[id] ?: return
         gateway.disconnect()
         gateways.remove(id)

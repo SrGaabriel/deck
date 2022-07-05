@@ -1,5 +1,6 @@
 package io.github.deck.rest.route
 
+import io.github.deck.common.entity.RawServer
 import io.github.deck.common.entity.RawServerBan
 import io.github.deck.common.entity.RawServerMember
 import io.github.deck.common.entity.RawServerMemberSummary
@@ -12,20 +13,25 @@ import io.github.deck.rest.util.sendRequest
 import io.ktor.http.*
 
 public class ServerRoute(private val client: RestClient) {
+    public suspend fun getServer(serverId: GenericId): RawServer = client.sendRequest<GetServerResponse>(
+        endpoint = "/servers/${serverId}",
+        method = HttpMethod.Get
+    ).server
+
     public suspend fun getServerMember(
         userId: GenericId,
         serverId: GenericId
-    ): RawServerMember = client.sendRequest<GetServerMemberResponse, Unit>(
+    ): RawServerMember = client.sendRequest<GetServerMemberResponse>(
         endpoint = "/servers/${serverId}/members/${userId}",
         method = HttpMethod.Get
     ).member
 
-    public suspend fun getServerMembers(serverId: GenericId): List<RawServerMemberSummary> = client.sendRequest<GetServerMembersResponse, Unit>(
+    public suspend fun getServerMembers(serverId: GenericId): List<RawServerMemberSummary> = client.sendRequest<GetServerMembersResponse>(
         endpoint = "/servers/${serverId}/members",
         method = HttpMethod.Get
     ).members
 
-    public suspend fun getServerBans(serverId: GenericId): List<RawServerBan> = client.sendRequest<GetServerBansResponse, Unit>(
+    public suspend fun getServerBans(serverId: GenericId): List<RawServerBan> = client.sendRequest<GetServerBansResponse>(
         endpoint = "/servers/${serverId}/bans",
         method = HttpMethod.Get
     ).serverMemberBans
@@ -79,7 +85,7 @@ public class ServerRoute(private val client: RestClient) {
     public suspend fun getMemberRoles(
         userId: GenericId,
         serverId: GenericId
-    ): List<IntGenericId> = client.sendRequest<GetMemberRolesResponse, Unit>(
+    ): List<IntGenericId> = client.sendRequest<GetMemberRolesResponse>(
         endpoint = "/servers/$serverId/members/$userId/roles",
         method = HttpMethod.Get
     ).roleIds
@@ -88,7 +94,7 @@ public class ServerRoute(private val client: RestClient) {
         userId: GenericId,
         serverId: GenericId,
         type: SocialLinkType
-    ): GetMemberSocialLinkResponse = client.sendRequest<GetMemberSocialLinkResponse, Unit>(
+    ): GetMemberSocialLinkResponse = client.sendRequest<GetMemberSocialLinkResponse>(
         endpoint = "/servers/$serverId/members/$userId/social-links/${type.officialName}",
         method = HttpMethod.Get
     )
@@ -112,7 +118,7 @@ public class ServerRoute(private val client: RestClient) {
     public suspend fun getMemberBan(
         userId: GenericId,
         serverId: GenericId
-    ): RawServerBan = client.sendRequest<GetServerMemberBanResponse, Unit>(
+    ): RawServerBan = client.sendRequest<GetServerMemberBanResponse>(
         endpoint = "/servers/$serverId/bans/$userId",
         method = HttpMethod.Get
     ).serverMemberBan

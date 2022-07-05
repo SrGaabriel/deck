@@ -5,6 +5,7 @@ import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.OptionalProperty
 import io.github.deck.common.util.UniqueId
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -86,12 +87,34 @@ public data class GetListChannelItemsResponse(
 )
 
 @Serializable
-public data class CreateForumThreadRequest(
+public data class CreateForumTopicRequest(
     val title: String,
     val content: String
 )
 
 @Serializable
-public data class CreateForumThreadResponse(
-    val forumThread: RawForumThread
+public data class CreateForumTopicResponse(
+    val forumTopic: RawForumTopic
+)
+
+@Serializable
+public data class CreateCalendarEventRequest(
+    val name: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val description: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val location: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val startsAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    val url: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val color: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val duration: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val isPrivate: Boolean = false,
+)
+
+@Serializable
+public data class CreateCalendarEventResponse(
+    val calendarEvent: RawCalendarEvent
+)
+
+@Serializable
+public data class GetChannelCalendarEventsResponse(
+    val calendarEvents: List<RawCalendarEvent>
 )

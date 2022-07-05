@@ -49,7 +49,8 @@ public sealed interface ListItemNote {
         override val createdAt: Instant,
         override val updatedAt: Instant?,
         override val editorId: GenericId?,
-        public val content: String
+        public val content: String,
+        public val mentions: Mentions?
     ): ListItemNote
 
     public data class Summary(
@@ -89,7 +90,8 @@ public sealed interface ListItemNote {
                     createdAt = raw.createdAt,
                     updatedAt = raw.updatedAt.asNullable(),
                     editorId = raw.updatedBy.asNullable(),
-                    content = raw.content.getValue()
+                    content = raw.content.getValue(),
+                    mentions = raw.mentions.asNullable()?.let { Mentions.from(it) }
                 )
             }
         }

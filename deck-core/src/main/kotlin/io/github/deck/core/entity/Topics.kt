@@ -11,7 +11,7 @@ import io.github.deck.core.util.BlankStatelessUser
 import kotlinx.datetime.Instant
 import java.util.*
 
-public interface ForumThread {
+public interface ForumTopic {
     public val client: DeckClient
     public val id: Int
 

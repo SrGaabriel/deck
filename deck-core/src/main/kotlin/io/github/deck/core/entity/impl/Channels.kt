@@ -87,6 +87,21 @@ public class DeckServerChannel internal constructor(
                 groupId = raw.groupId,
                 isPublic = raw.isPublic,
             )
+            RawServerChannelType.CALENDAR -> DeckCalendarChannel(
+                client = client,
+                id = raw.id.mapToBuiltin(),
+                name = raw.name,
+                topic = raw.topic.asNullable(),
+                type = raw.type,
+                createdAt = raw.createdAt,
+                archivedAt = raw.archivedAt.asNullable(),
+                creatorId = raw.createdBy,
+                archiverId = raw.archivedBy.asNullable(),
+                updatedAt = raw.updatedAt.asNullable(),
+                serverId = raw.serverId,
+                groupId = raw.groupId,
+                isPublic = raw.isPublic,
+            )
             else -> DeckServerChannel(
                 client = client,
                 id = raw.id.mapToBuiltin(),
@@ -184,3 +199,19 @@ public data class DeckDocumentationChannel(
     override val groupId: GenericId,
     override val isPublic: Boolean
 ): DocumentationChannel
+
+public data class DeckCalendarChannel(
+    override val client: DeckClient,
+    override val id: UUID,
+    override val name: String,
+    override val topic: String?,
+    override val type: RawServerChannelType,
+    override val createdAt: Instant,
+    override val archivedAt: Instant?,
+    override val creatorId: GenericId,
+    override val archiverId: GenericId?,
+    override val updatedAt: Instant?,
+    override val serverId: GenericId,
+    override val groupId: GenericId,
+    override val isPublic: Boolean
+): CalendarChannel

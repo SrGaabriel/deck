@@ -1,9 +1,12 @@
 package io.github.deck.core.util
 
 import io.github.deck.common.log.warning
+import io.github.deck.common.util.GenericId
 import io.github.deck.core.DeckClient
+import io.github.deck.core.entity.Server
 import io.github.deck.core.entity.channel.Channel
 import io.github.deck.core.entity.channel.ServerChannel
+import io.github.deck.core.entity.impl.DeckServer
 import io.github.deck.core.entity.impl.DeckServerChannel
 import io.github.deck.gateway.GatewayOrchestrator
 import io.github.deck.rest.RestClient
@@ -25,6 +28,9 @@ public class ClientBuilder(private val token: String) {
         return DeckClient(rest, gateway)
     }
 }
+
+public suspend fun DeckClient.getServer(serverId: GenericId): Server =
+    DeckServer.from(this, rest.server.getServer(serverId))
 
 public suspend fun DeckClient.createChannel(builder: CreateChannelRequestBuilder.() -> Unit): Channel =
     DeckServerChannel.from(this, rest.channel.createChannel(builder))

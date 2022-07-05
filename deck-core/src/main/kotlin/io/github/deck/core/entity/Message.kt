@@ -15,7 +15,7 @@ import java.util.*
  * This interface's default implementation is [DeckMessage].
  */
 public interface Message : StatelessMessage {
-    /** This message's raw content */
+    /** This message's raw content, may be empty */
     public val content: String
 
     /** The id of this message's author */
@@ -29,6 +29,9 @@ public interface Message : StatelessMessage {
     public val createdAt: Instant
     /** The instant this message was last edited, null by default */
     public val updatedAt: Instant?
+
+    /** Message mentions, null if there aren't any */
+    public val mentions: Mentions?
 
     /** List of all message IDs this message is replying to */
     public val repliesTo: List<UUID>

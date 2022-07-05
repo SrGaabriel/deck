@@ -13,11 +13,12 @@ public data class RawMessage(
     public val type: RawMessageType,
     public val serverId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     public val channelId: UniqueId,
-    public val content: String,
+    public val content: OptionalProperty<String> = OptionalProperty.NotPresent,
     public val embeds: List<RawEmbed> = emptyList(),
     public val replyMessageIds: OptionalProperty<List<UniqueId>> = OptionalProperty.NotPresent,
     public val isPrivate: Boolean = false,
     public val isSilent: Boolean = false,
+    public val mentions: OptionalProperty<RawMessageMentions> = OptionalProperty.NotPresent,
     public val createdAt: Instant,
     public val createdBy: GenericId,
     public val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
@@ -27,10 +28,19 @@ public data class RawMessage(
 @Serializable
 public enum class RawMessageType {
     @SerialName("default")
-    DEFAULT,
+    Default,
     @SerialName("system")
-    SYSTEM
+    System
 }
+
+@Serializable
+public data class RawMessageMentions(
+    val users: List<RawUserId>,
+    val channels: List<RawChannelId>,
+    val roles: List<RawRoleId>,
+    val everyone: Boolean,
+    val here: Boolean
+)
 
 @Serializable
 public data class RawEmbed(

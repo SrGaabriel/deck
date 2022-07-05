@@ -1,16 +1,16 @@
 package io.github.deck.core.stateless.channel
 
-import io.github.deck.core.entity.ForumThread
-import io.github.deck.core.entity.impl.DeckForumThread
-import io.github.deck.rest.builder.CreateForumThreadRequestBuilder
+import io.github.deck.core.entity.ForumTopic
+import io.github.deck.core.entity.impl.DeckForumTopic
+import io.github.deck.rest.builder.CreateForumTopicRequestBuilder
 
 public interface StatelessForumChannel: StatelessServerChannel {
     /**
-     * Creates a new forum thread within this channel
+     * Creates a new forum topic within this channel
      *
-     * @param builder thread builder
-     * @return created forum thread
+     * @param builder topic builder
+     * @return created forum topic
      */
-    public suspend fun createThread(builder: CreateForumThreadRequestBuilder.() -> Unit): ForumThread =
-        DeckForumThread.from(client, client.rest.channel.createForumThread(id, builder))
+    public suspend fun createTopic(builder: CreateForumTopicRequestBuilder.() -> Unit): ForumTopic =
+        DeckForumTopic.from(client, client.rest.channel.createForumTopic(id, builder))
 }

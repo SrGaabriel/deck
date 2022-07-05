@@ -1,12 +1,10 @@
 package io.github.deck.core.util
 
 import io.github.deck.common.util.GenericId
+import io.github.deck.common.util.IntGenericId
 import io.github.deck.core.DeckClient
 import io.github.deck.core.stateless.*
-import io.github.deck.core.stateless.channel.StatelessDocumentationChannel
-import io.github.deck.core.stateless.channel.StatelessForumChannel
-import io.github.deck.core.stateless.channel.StatelessListChannel
-import io.github.deck.core.stateless.channel.StatelessMessageChannel
+import io.github.deck.core.stateless.channel.*
 import java.util.*
 
 public fun StatelessMessage(
@@ -116,3 +114,29 @@ internal data class BlankStatelessListItem(
     override val serverId: GenericId,
     override val channelId: UUID
 ): StatelessListItem
+
+public fun StatelessCalendarChannel(
+    client: DeckClient,
+    id: UUID,
+    serverId: GenericId
+): StatelessCalendarChannel = BlankStatelessCalendarChannel(client, id, serverId)
+
+internal data class BlankStatelessCalendarChannel(
+    override val client: DeckClient,
+    override val id: UUID,
+    override val serverId: GenericId
+): StatelessCalendarChannel
+
+public fun StatelessCalendarEvent(
+    client: DeckClient,
+    id: IntGenericId,
+    channelId: UUID,
+    serverId: GenericId,
+): StatelessCalendarEvent = BlankStatelessCalendarEvent(client, id, channelId, serverId)
+
+internal data class BlankStatelessCalendarEvent(
+    override val client: DeckClient,
+    override val id: IntGenericId,
+    override val channelId: UUID,
+    override val serverId: GenericId,
+): StatelessCalendarEvent

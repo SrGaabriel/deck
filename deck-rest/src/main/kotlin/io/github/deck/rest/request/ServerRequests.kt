@@ -1,9 +1,15 @@
 package io.github.deck.rest.request
 
+import io.github.deck.common.entity.RawServer
 import io.github.deck.common.entity.RawServerBan
 import io.github.deck.common.entity.RawServerMember
 import io.github.deck.common.entity.RawServerMemberSummary
 import kotlinx.serialization.Serializable
+
+@Serializable
+public data class GetServerResponse(
+    val server: RawServer,
+)
 
 @Serializable
 public data class GetServerMemberResponse(

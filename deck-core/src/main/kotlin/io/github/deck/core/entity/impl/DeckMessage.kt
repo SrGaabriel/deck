@@ -7,6 +7,7 @@ import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.asNullable
 import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
+import io.github.deck.core.entity.Mentions
 import io.github.deck.core.entity.Message
 import kotlinx.datetime.Instant
 import java.util.*
@@ -21,6 +22,7 @@ public data class DeckMessage(
     override val embeds: List<Embed>,
     override val createdAt: Instant,
     override val updatedAt: Instant?,
+    override val mentions: Mentions?,
     override val repliesTo: List<UUID>,
     override val isPrivate: Boolean,
     override val isSilent: Boolean,
@@ -29,13 +31,14 @@ public data class DeckMessage(
         public fun from(client: DeckClient, raw: RawMessage): DeckMessage = DeckMessage(
             client = client,
             id = raw.id.mapToBuiltin(),
-            content = raw.content,
+            content = raw.content.asNullable().orEmpty(),
             authorId = raw.createdBy,
             serverId = raw.serverId.asNullable(),
             channelId = raw.channelId.mapToBuiltin(),
             embeds = raw.embeds.map { Embed.from(it) },
             createdAt = raw.createdAt,
             updatedAt = raw.updatedAt.asNullable(),
+            mentions = raw.mentions.asNullable()?.let { Mentions.from(it) },
             repliesTo = raw.replyMessageIds.asNullable()?.map { it.mapToBuiltin() }.orEmpty(),
             isPrivate = raw.isPrivate,
             isSilent = raw.isSilent,

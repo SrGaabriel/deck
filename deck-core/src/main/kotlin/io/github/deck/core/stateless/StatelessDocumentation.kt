@@ -19,7 +19,7 @@ public interface StatelessDocumentation: StatelessEntity {
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 
     /**
-     * Updates **NOT PATCHES** this documentatioon with the data provided in the [builder]
+     * Updates **NOT PATCHES** this documentation with the data provided in the [builder]
      *
      * @param builder update builder
      *

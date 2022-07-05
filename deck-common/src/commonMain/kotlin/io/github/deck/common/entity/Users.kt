@@ -39,3 +39,6 @@ public enum class UserType {
     @SerialName("bot")
     BOT
 }
+
+@Serializable
+public value class RawUserId(public val id: String)
