@@ -105,6 +105,18 @@ public data class CreateCalendarEventRequest(
     val startsAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     val url: OptionalProperty<String> = OptionalProperty.NotPresent,
     val color: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val duration: Int,
+    val isPrivate: Boolean = false,
+)
+
+@Serializable
+public data class UpdateCalendarEventRequest(
+    val name: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val description: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val location: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val startsAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    val url: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val color: OptionalProperty<Int> = OptionalProperty.NotPresent,
     val duration: OptionalProperty<Int> = OptionalProperty.NotPresent,
     val isPrivate: Boolean = false,
 )

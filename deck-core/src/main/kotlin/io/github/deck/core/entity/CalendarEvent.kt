@@ -5,6 +5,8 @@ import io.github.deck.core.stateless.StatelessCalendarEvent
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessUser
 import kotlinx.datetime.Instant
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 public interface CalendarEvent: StatelessCalendarEvent {
     /** Calendar event's name */
@@ -18,8 +20,11 @@ public interface CalendarEvent: StatelessCalendarEvent {
 
     /** Calendar event's color, null if not defined */
     public val color: Int?
-    /** Calendar event's duration, null if not defined */
-    public val duration: Int?
+    /** Calendar event's duration in minutes, null if not defined */
+    public val durationInMinutes: Int?
+
+    /** Wrapper of [durationInMinutes] */
+    public val duration: Duration? get() = durationInMinutes?.minutes
 
     /** Calendar event start time */
     public val startsAt: Instant

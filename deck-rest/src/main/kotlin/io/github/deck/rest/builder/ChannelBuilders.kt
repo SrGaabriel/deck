@@ -12,6 +12,8 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
 import java.util.*
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 public class CreateChannelRequestBuilder: RequestBuilder<CreateChannelRequest> {
     public var name: String by required()
@@ -119,6 +121,12 @@ public class CreateForumTopicRequestBuilder: RequestBuilder<CreateForumTopicRequ
 
 public class CreateCalendarEventRequestBuilder: RequestBuilder<CreateCalendarEventRequest> {
     public var name: String by required()
+    public var durationInMinutes: Int = 60
+
+    public var duration: Duration
+        get() = durationInMinutes.minutes
+        set(value) { durationInMinutes = value.inWholeMinutes.coerceAtMost(Int.MAX_VALUE.toLong() - 1).toInt() }
+
     public var description: String? = null
     public var location: String? = null
     public var url: String? = null
@@ -126,7 +134,6 @@ public class CreateCalendarEventRequestBuilder: RequestBuilder<CreateCalendarEve
     public var startsAt: Instant? = null
 
     public var color: Int? = null
-    public var duration: Int? = null
 
     public var isPrivate: Boolean = false
 
@@ -137,12 +144,12 @@ public class CreateCalendarEventRequestBuilder: RequestBuilder<CreateCalendarEve
         startsAt = startsAt.nullableOptional(),
         url = url.nullableOptional(),
         color = color.nullableOptional(),
-        duration = duration.nullableOptional(),
+        duration = duration.inWholeMinutes.toInt(),
         isPrivate = isPrivate
     )
 }
 
-public class UpdateCalendarEventRequestBuilder: RequestBuilder<CreateCalendarEventRequest> {
+public class UpdateCalendarEventRequestBuilder: RequestBuilder<UpdateCalendarEventRequest> {
     public var name: String? = null
     public var description: String? = null
     public var location: String? = null
@@ -151,18 +158,22 @@ public class UpdateCalendarEventRequestBuilder: RequestBuilder<CreateCalendarEve
     public var startsAt: Instant? = null
 
     public var color: Int? = null
-    public var duration: Int? = null
+    public var durationInMinutes: Int? = null
+
+    public var duration: Duration?
+        get() = durationInMinutes?.minutes
+        set(value) { durationInMinutes = value?.inWholeMinutes?.coerceAtMost(Int.MAX_VALUE.toLong() - 1)?.toInt() }
 
     public var isPrivate: Boolean = false
 
-    override fun toRequest(): CreateCalendarEventRequest = CreateCalendarEventRequest(
+    override fun toRequest(): UpdateCalendarEventRequest = UpdateCalendarEventRequest(
         name = name.nullableOptional(),
         description = description.nullableOptional(),
         location = location.nullableOptional(),
         startsAt = startsAt.nullableOptional(),
         url = url.nullableOptional(),
         color = color.nullableOptional(),
-        duration = duration.nullableOptional(),
+        duration = durationInMinutes.nullableOptional(),
         isPrivate = isPrivate
     )
 }

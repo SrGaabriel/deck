@@ -247,7 +247,7 @@ public class ChannelRoute(private val client: RestClient) {
         contract {
             callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
         }
-        return client.sendRequest<CreateCalendarEventResponse, CreateCalendarEventRequest>(
+        return client.sendRequest<CreateCalendarEventResponse, UpdateCalendarEventRequest>(
             endpoint = "/channels/${channelId}/events/${calendarEventId}",
             method = HttpMethod.Patch,
             body = UpdateCalendarEventRequestBuilder().apply(builder).toRequest()
