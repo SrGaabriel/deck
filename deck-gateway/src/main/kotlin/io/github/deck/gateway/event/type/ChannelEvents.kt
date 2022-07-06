@@ -104,7 +104,7 @@ public data class GatewayCalendarEventUpdatedEvent(
 ): GatewayEvent()
 
 @Serializable
-@SerialName("CalendarEventUpdated")
+@SerialName("CalendarEventDeleted")
 public data class GatewayCalendarEventDeletedEvent(
     val serverId: String,
     val calendarEvent: RawCalendarEvent

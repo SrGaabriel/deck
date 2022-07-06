@@ -3,7 +3,7 @@ package io.github.deck.extras.content
 import io.github.deck.common.Embed
 import io.github.deck.common.EmbedBuilder
 import io.github.deck.common.util.DeckDelicateApi
-import io.github.deck.common.util.Emoji
+import io.github.deck.common.util.Emote
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.extras.content.node.Node
@@ -66,7 +66,7 @@ public class ContentBuilder(private val quoteContainer: Boolean = false): Markab
         nodes.add(Node.Embed(embeds = this.toList()))
     }
 
-    public operator fun Emoji.unaryPlus() {
+    public operator fun Emote.unaryPlus() {
         nodes.add(Node.Paragraph.Reaction(id))
     }
 
@@ -177,7 +177,7 @@ public class ParagraphBuilder: Markable {
         nodes.add(text(this))
     }
 
-    public operator fun Emoji.unaryPlus() {
+    public operator fun Emote.unaryPlus() {
         nodes.add(Node.Paragraph.Reaction(id))
     }
 

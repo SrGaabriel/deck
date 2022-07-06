@@ -1,6 +1,5 @@
 package io.github.deck.core.stateless
 
-import io.github.deck.common.util.DeckUnsupported
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.core.entity.Message
@@ -42,8 +41,12 @@ public interface StatelessMessage: StatelessEntity, ReactionHolder {
     override suspend fun addReaction(reactionId: IntGenericId): Unit =
         client.rest.channel.addReactionToContent(channelId, id, reactionId)
 
-    @DeckUnsupported
-    /** Not yet supported */
+    /**
+     * Removes the specified reaction to this message.
+     * For a list of all emoji ids, you can check the extras module.
+     *
+     * @param reactionId
+     */
     override suspend fun removeReaction(reactionId: IntGenericId): Unit =
         client.rest.channel.removeReactionFromContent(channelId, id, reactionId)
 

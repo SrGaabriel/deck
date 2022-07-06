@@ -11,9 +11,7 @@ import io.github.deck.core.event.documentation.documentationCreateEvent
 import io.github.deck.core.event.documentation.documentationDeleteEvent
 import io.github.deck.core.event.documentation.documentationUpdateEvent
 import io.github.deck.core.event.list.*
-import io.github.deck.core.event.message.messageCreateEvent
-import io.github.deck.core.event.message.messageDeleteEvent
-import io.github.deck.core.event.message.messageUpdateEvent
+import io.github.deck.core.event.message.*
 import io.github.deck.core.event.server.*
 import io.github.deck.core.event.user.helloEvent
 import io.github.deck.core.event.webhook.webhookCreateEvent
@@ -76,6 +74,8 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         registerMapper(calendarEventCreateEvent)
         registerMapper(calendarEventUpdateEvent)
         registerMapper(calendarEventDeleteEvent)
+        registerMapper(messageReactionAddEvent)
+        registerMapper(messageReactionRemoveEvent)
     }
 
     override fun listen(): Job = client.gateway.on<GatewayEvent> {

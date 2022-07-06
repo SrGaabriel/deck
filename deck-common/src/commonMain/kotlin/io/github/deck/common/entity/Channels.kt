@@ -7,6 +7,7 @@ import io.github.deck.common.util.UniqueId
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 
 @Serializable
 public data class RawServerChannel(
@@ -26,6 +27,7 @@ public data class RawServerChannel(
     public val archivedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
 )
 
+@JvmInline
 @Serializable
 public value class RawChannelId(public val id: UniqueId)
 
