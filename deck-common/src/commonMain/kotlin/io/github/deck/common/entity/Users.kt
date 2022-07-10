@@ -6,7 +6,6 @@ import io.github.deck.common.util.SocialLinkType
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
 
 @Serializable
 public data class RawUser(
@@ -41,6 +40,5 @@ public enum class UserType {
     BOT
 }
 
-@JvmInline
 @Serializable
-public value class RawUserId(public val id: String)
+public class RawUserId(public val id: String)

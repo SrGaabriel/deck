@@ -35,11 +35,11 @@ public enum class RawMessageType {
 
 @Serializable
 public data class RawMessageMentions(
-    val users: List<RawUserId>,
-    val channels: List<RawChannelId>,
-    val roles: List<RawRoleId>,
-    val everyone: Boolean,
-    val here: Boolean
+    val users: OptionalProperty<List<RawUserId>> = OptionalProperty.NotPresent,
+    val channels: OptionalProperty<List<RawChannelId>> = OptionalProperty.NotPresent,
+    val roles: OptionalProperty<List<RawRoleId>> = OptionalProperty.NotPresent,
+    val everyone: Boolean = false,
+    val here: Boolean = false
 )
 
 @Serializable
