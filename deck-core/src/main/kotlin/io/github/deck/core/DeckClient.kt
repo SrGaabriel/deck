@@ -7,17 +7,14 @@ import io.github.deck.core.util.WrappedEventSupplier
 import io.github.deck.core.util.WrappedEventSupplierData
 import io.github.deck.gateway.GatewayOrchestrator
 import io.github.deck.gateway.start
-import io.github.deck.gateway.util.EventSupplier
-import io.github.deck.gateway.util.EventSupplierData
 import io.github.deck.rest.RestClient
 
 public class DeckClient internal constructor(
     public val rest: RestClient,
     public val gateway: GatewayOrchestrator,
-) : EventSupplier, WrappedEventSupplier {
+) : WrappedEventSupplier {
     public var eventService: DefaultEventService = DefaultEventService(this)
 
-    override val eventSupplierData: EventSupplierData by gateway::eventSupplierData
     override val wrappedEventSupplierData: WrappedEventSupplierData by eventService::wrappedEventSupplierData
 
     // public val entityDelegator: EntityDelegator = DeckEntityDelegator()

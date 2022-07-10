@@ -4,6 +4,7 @@ import io.github.deck.core.event.DeckEvent
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlin.contracts.ExperimentalContracts
 
 public interface WrappedEventSupplier {
     public val wrappedEventSupplierData: WrappedEventSupplierData
@@ -15,6 +16,7 @@ public data class WrappedEventSupplierData(
     val listeningGatewayId: Int? = null
 )
 
+@OptIn(ExperimentalContracts::class)
 public inline fun <reified T : DeckEvent> WrappedEventSupplier.on(
     scope: CoroutineScope = wrappedEventSupplierData.scope,
     gatewayId: Int? = wrappedEventSupplierData.listeningGatewayId,
