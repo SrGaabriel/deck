@@ -17,9 +17,20 @@ public class ClientBuilder(private val token: String) {
     public var rest: RestClient = RestClient(token)
     public var gateway: GatewayOrchestrator = GatewayOrchestrator(token)
 
-    public var logEventBodies: Boolean by gateway::logEventBodies
     public var logRequests: Boolean by rest::logRequests
     public var logResponses: Boolean by rest::logResponses
+    public var logEventPayloads: Boolean by gateway::logEventPayloads
+
+    public var enableEventReplaying: Boolean by gateway::enableEventReplaying
+
+    /**
+     * Enables request, responses and event payloads logging
+     */
+    public fun debugMode() {
+        logRequests = true
+        logResponses = true
+        logEventPayloads = true
+    }
 
     public fun build(): DeckClient {
         if (!token.startsWith("gapi_")) {

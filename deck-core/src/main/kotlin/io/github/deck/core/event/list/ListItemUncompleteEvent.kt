@@ -10,11 +10,12 @@ import io.github.deck.core.event.EventService
 import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.util.BlankStatelessServer
+import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayListItemUncompletedEvent
 
 public data class ListItemUncompleteEvent(
     override val client: DeckClient,
-    override val gatewayId: Int,
+    override val payload: Payload,
     val serverId: GenericId,
     val listItem: ListItem
 ): DeckEvent {
@@ -24,7 +25,7 @@ public data class ListItemUncompleteEvent(
 public val EventService.listItemUncompleteEvent: EventMapper<GatewayListItemUncompletedEvent, ListItemUncompleteEvent> get() = mapper { client, event ->
     ListItemUncompleteEvent(
         client = client,
-        gatewayId = event.gatewayId,
+        payload = event.payload,
         serverId = event.serverId,
         listItem = DeckListItem.from(client, event.listItem)
     )

@@ -10,11 +10,12 @@ import io.github.deck.core.event.EventService
 import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.util.BlankStatelessServer
+import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayServerWebhookUpdatedEvent
 
 public data class WebhookUpdateEvent(
     override val client: DeckClient,
-    override val gatewayId: Int,
+    override val payload: Payload,
     val webhook: Webhook,
     val serverId: GenericId
 ) : DeckEvent {
@@ -24,7 +25,7 @@ public data class WebhookUpdateEvent(
 public val EventService.webhookUpdateEvent: EventMapper<GatewayServerWebhookUpdatedEvent, WebhookUpdateEvent> get() = mapper { client, event ->
     WebhookUpdateEvent(
         client = client,
-        gatewayId = event.gatewayId,
+        payload = event.payload,
         webhook = DeckWebhook.from(client, event.webhook),
         serverId = event.serverId
     )

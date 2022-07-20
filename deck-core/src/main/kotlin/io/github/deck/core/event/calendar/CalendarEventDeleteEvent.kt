@@ -10,11 +10,12 @@ import io.github.deck.core.event.EventService
 import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.util.BlankStatelessServer
+import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayCalendarEventDeletedEvent
 
 public data class CalendarEventDeleteEvent(
     override val client: DeckClient,
-    override val gatewayId: Int,
+    override val payload: Payload,
     val serverId: GenericId,
     val calendarEvent: CalendarEvent,
 ): DeckEvent {
@@ -24,7 +25,7 @@ public data class CalendarEventDeleteEvent(
 public val EventService.calendarEventDeleteEvent: EventMapper<GatewayCalendarEventDeletedEvent, CalendarEventDeleteEvent> get() = mapper { client, event ->
     CalendarEventDeleteEvent(
         client = client,
-        gatewayId = event.gatewayId,
+        payload = event.payload,
         serverId = event.serverId,
         calendarEvent = DeckCalendarEvent.from(client, event.calendarEvent)
     )

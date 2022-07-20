@@ -11,13 +11,14 @@ import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.channel.StatelessMessageChannel
 import io.github.deck.core.util.BlankStatelessMessageChannel
 import io.github.deck.core.util.BlankStatelessServer
+import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayChatMessageDeletedEvent
 import kotlinx.datetime.Instant
 import java.util.*
 
 public data class MessageDeleteEvent(
     override val client: DeckClient,
-    override val gatewayId: Int,
+    override val payload: Payload,
     public val messageId: UUID,
     public val channelId: UUID,
     public val serverId: GenericId?,
@@ -30,7 +31,7 @@ public data class MessageDeleteEvent(
 public val EventService.messageDeleteEvent: EventMapper<GatewayChatMessageDeletedEvent, MessageDeleteEvent> get() = mapper { client, event ->
     MessageDeleteEvent(
         client = client,
-        gatewayId = event.gatewayId,
+        payload = event.payload,
         messageId = event.message.id.mapToBuiltin(),
         serverId = event.serverId,
         channelId = event.message.channelId.mapToBuiltin(),

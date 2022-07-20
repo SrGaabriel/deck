@@ -1,6 +1,5 @@
 package io.github.deck.rest.util
 
-import io.github.deck.common.log.debug
 import io.github.deck.common.util.Constants
 import io.github.deck.common.util.DeckInternalApi
 import io.github.deck.rest.RestClient
@@ -27,14 +26,11 @@ public class RequestService(
         request: Request<S, G>,
         failureHandler: FailureHandler = FailureHandler
     ): G {
-        if (rest.logRequests) {
-            rest.logger.debug { "Sending [${request.method.value}] ${request.endpoint}" }
-        }
         val response = scheduleRequest(request)
-        if (rest.logResponses) {
-            val requestBody = response.bodyAsText()
-            rest.logger.debug { "Received ${response.status.value} (${response.status.description}) $requestBody" }
-        }
+//        if (rest.logResponses) {
+//            val requestBody = response.bodyAsText()
+//            rest.logger.debug { "Received ${response.status.value} (${response.status.description}) $requestBody" }
+//        }
         return if (!response.status.isSuccess()) {
             failureHandler.onFailure(response)
         } else {

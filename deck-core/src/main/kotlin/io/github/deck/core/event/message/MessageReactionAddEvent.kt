@@ -17,12 +17,13 @@ import io.github.deck.core.util.BlankStatelessMessage
 import io.github.deck.core.util.BlankStatelessMessageChannel
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.core.util.BlankStatelessUser
+import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayChatMessageReactionCreatedEvent
 import java.util.*
 
 public data class MessageReactionAddEvent(
     override val client: DeckClient,
-    override val gatewayId: Int,
+    override val payload: Payload,
     val serverId: GenericId?,
     val channelId: UUID,
     val messageId: UUID,
@@ -38,7 +39,7 @@ public data class MessageReactionAddEvent(
 public val EventService.messageReactionAddEvent: EventMapper<GatewayChatMessageReactionCreatedEvent, MessageReactionAddEvent> get() = mapper { client, event ->
     MessageReactionAddEvent(
         client = client,
-        gatewayId = event.gatewayId,
+        payload = event.payload,
         serverId = event.serverId.asNullable(),
         channelId = event.reaction.channelId.mapToBuiltin(),
         messageId = event.reaction.messageId.mapToBuiltin(),

@@ -6,6 +6,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -27,7 +28,7 @@ import kotlinx.serialization.json.Json
 public suspend inline fun <reified R> RestClient.sendRequest(
     endpoint: String,
     method: HttpMethod,
-    authenticated: Boolean = true
+    authenticated: Boolean = true,
 ): R = requestService.superviseRequest<Unit, R>(
     request = Request(
         method,
@@ -56,7 +57,7 @@ public suspend inline fun <reified R, reified B> RestClient.sendRequest(
     endpoint: String,
     method: HttpMethod,
     body: B? = null,
-    authenticated: Boolean = true
+    authenticated: Boolean = true,
 ): R = requestService.superviseRequest(
     request = Request(
         method,
@@ -67,7 +68,7 @@ public suspend inline fun <reified R, reified B> RestClient.sendRequest(
     )
 )
 
-internal val DEFAULT_HTTP_CLIENT = HttpClient(CIO.create()) {
+internal fun RestClient.createHttpClient() = HttpClient(CIO.create()) {
     install(ContentNegotiation) {
         json(Json {
             encodeDefaults = false
@@ -83,5 +84,13 @@ internal val DEFAULT_HTTP_CLIENT = HttpClient(CIO.create()) {
             8_000
         }
     }
+    install(Logging) {
+        level = LogLevel.ALL
+        logger = KtorDeckLoggerWrapper(this@createHttpClient)
+    }
+    install(UserAgent) {
+        agent = "deck-v0.3.*"
+    }
     expectSuccess = false
 }
+

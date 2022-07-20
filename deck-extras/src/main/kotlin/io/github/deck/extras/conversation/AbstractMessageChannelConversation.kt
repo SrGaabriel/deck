@@ -7,7 +7,6 @@ import io.github.deck.core.util.sendMessage
 import io.github.deck.rest.builder.SendMessageRequestBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.isActive
 import kotlin.coroutines.CoroutineContext
 
 @DeckExperimental
@@ -23,14 +22,14 @@ public abstract class AbstractMessageChannelConversation: Conversation {
         ask(messageChannel.sendMessage(message))
 
     override suspend fun ask(message: Message): ConversationMessage {
-        if (!isActive) error("You need to init the conversation before asking something.")
+        if (!active) error("You need to init the conversation before asking something.")
         return ConversationMessage(
             conversation = this,
             replyingTo = message
         )
     }
 
-    public suspend fun ask(content: String): ConversationMessage =
+    public open suspend fun ask(content: String): ConversationMessage =
         ask(messageChannel.sendMessage(content))
 
     public fun onTimeout(callback: suspend () -> Unit) {

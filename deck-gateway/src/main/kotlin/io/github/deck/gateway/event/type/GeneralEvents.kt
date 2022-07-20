@@ -13,3 +13,10 @@ public data class GatewayHelloEvent(
     @SerialName("user")
     val self: RawBot
 ) : GatewayEvent()
+
+@Serializable
+@SerialName("ResumeEvent")
+public data class GatewayResumeEvent(
+    @SerialName("s")
+    val messageId: String
+) : GatewayEvent()

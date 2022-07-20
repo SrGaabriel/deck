@@ -14,12 +14,13 @@ import io.github.deck.core.stateless.channel.StatelessMessageChannel
 import io.github.deck.core.util.BlankStatelessMessageChannel
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.core.util.BlankStatelessUser
+import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayChatMessageUpdatedEvent
 import java.util.*
 
 public data class MessageUpdateEvent(
     override val client: DeckClient,
-    override val gatewayId: Int,
+    override val payload: Payload,
     public val message: Message,
     public val channelId: UUID,
     public val authorId: GenericId,
@@ -34,7 +35,7 @@ public val EventService.messageUpdateEvent: EventMapper<GatewayChatMessageUpdate
     val message = DeckMessage.from(client, event.message)
     MessageUpdateEvent(
         client = client,
-        gatewayId = event.gatewayId,
+        payload = event.payload,
         message = message,
         channelId = message.channelId,
         serverId = message.serverId,

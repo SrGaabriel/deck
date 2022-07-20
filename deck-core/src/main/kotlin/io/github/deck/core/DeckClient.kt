@@ -3,32 +3,33 @@ package io.github.deck.core
 import io.github.deck.common.util.GenericId
 import io.github.deck.core.event.DefaultEventService
 import io.github.deck.core.util.ClientBuilder
-import io.github.deck.core.util.WrappedEventSupplier
-import io.github.deck.core.util.WrappedEventSupplierData
 import io.github.deck.gateway.GatewayOrchestrator
+import io.github.deck.gateway.event.type.GatewayHelloEvent
 import io.github.deck.gateway.start
+import io.github.deck.gateway.util.on
 import io.github.deck.rest.RestClient
 
 public class DeckClient internal constructor(
     public val rest: RestClient,
     public val gateway: GatewayOrchestrator,
-) : WrappedEventSupplier {
+) {
     public var eventService: DefaultEventService = DefaultEventService(this)
-
-    override val wrappedEventSupplierData: WrappedEventSupplierData by eventService::wrappedEventSupplierData
 
     // public val entityDelegator: EntityDelegator = DeckEntityDelegator()
 
     // workaround
-    private val masterGateway = gateway.openGateway()
-    public val selfId: GenericId get() = masterGateway.hello.self.id
+    public lateinit var selfId: GenericId
 
     public suspend fun login() {
-        masterGateway.start()
+        val masterGateway = gateway.createGateway()
         eventService.let {
             it.ready()
             it.listen()
         }
+        masterGateway.on<GatewayHelloEvent> {
+            selfId = self.id
+        }
+        masterGateway.start()
     }
 
     public companion object {

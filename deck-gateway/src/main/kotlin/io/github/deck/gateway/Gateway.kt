@@ -1,33 +1,22 @@
 package io.github.deck.gateway
 
-import io.github.deck.common.log.DeckLogger
-import io.github.deck.common.log.error
-import io.github.deck.common.log.info
-import io.github.deck.common.util.Constants
-import io.github.deck.gateway.event.*
-import io.github.deck.gateway.event.type.GatewayHelloEvent
-import io.github.deck.gateway.util.EventSupplier
-import io.github.deck.gateway.util.EventSupplierData
-import io.github.deck.gateway.util.await
-import io.ktor.client.*
-import io.ktor.client.plugins.websocket.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.websocket.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.ticker
-import kotlinx.coroutines.flow.*
+import io.github.deck.gateway.event.GatewayEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.SharedFlow
 
 /**
  * Base gateway interface
  */
-public interface Gateway : EventSupplier {
-    public val gatewayId: Int
+public interface Gateway {
+    public val id: Int
+
+    public var state: GatewayState
     public val scope: CoroutineScope
-    public val logger: DeckLogger
-    public val hello: GatewayHelloEvent
-    public val eventSharedFlow: SharedFlow<GatewayEvent>
-    public val webSocketSession: DefaultWebSocketSession
+    public val eventFlow: SharedFlow<GatewayEvent>
+
+    // Null if not yet received
+    public var lastMessageId: String?
 
     public suspend fun connect()
 
@@ -35,92 +24,7 @@ public interface Gateway : EventSupplier {
 
     public suspend fun startListening(): Job
 
-    public suspend fun sendCommand(command: GatewayCommand)
-
     public suspend fun disconnect(expectingReconnect: Boolean = false)
-}
-
-/**
- * Default implementation of [Gateway]
- */
-public class DefaultGateway(
-    private val token: String,
-    private val debugPayloads: Boolean,
-    override val gatewayId: Int,
-    override val scope: CoroutineScope,
-    override val logger: DeckLogger,
-    override val eventSharedFlow: MutableSharedFlow<GatewayEvent>,
-    private val client: HttpClient,
-    private val eventDecoder: EventDecoder = DefaultEventDecoder(gatewayId),
-    private val commandEncoder: CommandEncoder = DefaultCommandEncoder()
-) : Gateway {
-    override lateinit var hello: GatewayHelloEvent
-    override lateinit var webSocketSession: DefaultWebSocketSession
-
-    private lateinit var listeningJob: Job
-    private lateinit var heartbeatJob: Job
-
-    override val eventSupplierData: EventSupplierData by lazy {
-        EventSupplierData(
-            scope = scope,
-            sharedFlow = eventSharedFlow
-        )
-    }
-
-    /**
-     * Simply creates the websocket session.
-     *
-     * @see [startHeartbeat]
-     * @see [startListening]
-     */
-    override suspend fun connect() {
-        webSocketSession = client.webSocketSession(host = Constants.GuildedGateway, path = Constants.GuildedGatewayPath) {
-            header(HttpHeaders.Authorization, "Bearer $token")
-        }
-    }
-
-    /**
-     * Starts collecting payloads from gateway, and ignores them
-     * if they're Pong (response to heartbeats) payloads.
-     */
-    override suspend fun startListening(): Job = scope.launch {
-        webSocketSession.incoming.receiveAsFlow().filterIsInstance<Frame.Text>().collect { frame ->
-            if (frame.data.contentEquals(Constants.GatewayPongContent.toByteArray())) return@collect
-            val data = eventDecoder.decodeDataFromPayload(frame.readText())
-            val event = eventDecoder.decodeEventFromPayload(data)
-                ?: return@collect logger.error { "[Gateway $gatewayId] Failed to parse event with body ${data.data}" }
-            logger.info { "[Gateway $gatewayId] Received event ${data.type}".let { log -> if (debugPayloads) "$log with JSON ${data.data}" else log } }
-            eventSharedFlow.emit(event)
-        }
-    }.also { listeningJob = it }
-
-    /**
-     * Uses a ticker channel to schedule heartbeats/pings. Needs to be called
-     * after [startListening] so it can handle the [GatewayHelloEvent] event.
-     */
-    @OptIn(ObsoleteCoroutinesApi::class)
-    override suspend fun startHeartbeat(): Job = scope.launch {
-        hello = await(8000, gatewayId = gatewayId) ?: return@launch logger.error { "Gateway hello payload wasn't sent in time in gateway $gatewayId." }
-        val tickerChannel = ticker(hello.heartbeatIntervalMs, 5000)
-        logger.info { "[Gateway $gatewayId] Created ticker channel, now starting to send heartbeats to guilded." }
-        tickerChannel.consumeAsFlow().collect {
-            webSocketSession.send(Constants.GatewayPingContent)
-        }
-    }.also { heartbeatJob = it }
-
-    override suspend fun sendCommand(command: GatewayCommand): Unit = scope.launch {
-        val encoded = commandEncoder.encodeCommandToString(command)
-        webSocketSession.send(Frame.Text(encoded))
-        logger.info { "[Gateway $gatewayId] Sent command $encoded" }
-    }.let {}
-
-    override suspend fun disconnect(expectingReconnect: Boolean) {
-        val code = if (expectingReconnect) CloseReason.Codes.SERVICE_RESTART else CloseReason.Codes.GOING_AWAY
-        heartbeatJob.cancel("Shutdown")
-        listeningJob.cancel("Shutdown")
-        logger.info { "[Gateway $gatewayId] disconnecting" }
-        webSocketSession.close(reason = CloseReason(code, "Shutdown"))
-    }
 }
 
 /**

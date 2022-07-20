@@ -1,7 +1,9 @@
 package io.github.deck.gateway.event
 
 import io.github.deck.gateway.event.type.*
+import io.github.deck.gateway.util.GatewayOpcode
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.json.*
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -9,10 +11,9 @@ import kotlinx.serialization.modules.subclass
 
 @Serializable
 public abstract class GatewayEvent {
-    internal var _type: String? = null
-    public val type: String get() = _type ?: error("Tried to infer event's type before it has been recognized")
-    internal var _gatewayId: Int? = null
-    public val gatewayId: Int get() = _gatewayId ?: error("Tried to access event's gateway id before it has been fired")
+    @Transient
+    internal var _payload: Payload? = null
+    public val payload: Payload get() = _payload ?: error("Tried to access event's payload before it has been fired")
 }
 
 private val polymorphicJson by lazy {
@@ -21,6 +22,7 @@ private val polymorphicJson by lazy {
         serializersModule = SerializersModule {
             polymorphic(GatewayEvent::class) {
                 subclass(GatewayHelloEvent::class)
+                subclass(GatewayResumeEvent::class)
                 subclass(GatewayTeamMemberJoinedEvent::class)
                 subclass(GatewayTeamMemberUpdatedEvent::class)
                 subclass(GatewayTeamMemberRemovedEvent::class)
@@ -55,7 +57,7 @@ private val polymorphicJson by lazy {
 public interface EventDecoder {
     public fun decodeEventFromPayload(payload: Payload): GatewayEvent?
 
-    public fun decodeDataFromPayload(json: String): Payload
+    public fun decodePayloadFromData(json: String): Payload
 }
 
 public class DefaultEventDecoder(private val gatewayId: Int) : EventDecoder {
@@ -66,20 +68,35 @@ public class DefaultEventDecoder(private val gatewayId: Int) : EventDecoder {
             })
             polymorphicJson.decodeFromJsonElement<GatewayEvent>(newJsonObject)
         }.also {
-            it._type = payload.type
-            it._gatewayId = gatewayId
+            it._payload = payload
         }
     }.onFailure { it.printStackTrace() }.getOrNull()
 
-    override fun decodeDataFromPayload(json: String): Payload {
+    override fun decodePayloadFromData(json: String): Payload {
         val jsonObject = polymorphicJson.parseToJsonElement(json).jsonObject
-        val eventType = jsonObject["t"]?.jsonPrimitive?.content ?: "HelloEvent"
+        val eventOpcode = jsonObject["op"]?.jsonPrimitive?.intOrNull ?: error("Invalid event opcode")
         val eventData = jsonObject["d"]?.jsonObject ?: error("Received event without data")
+        val eventMessageId = if (eventOpcode == 0) jsonObject["s"]?.jsonPrimitive?.content else null
+        val eventType = jsonObject["t"]?.jsonPrimitive?.content ?: when (eventOpcode) {
+            GatewayOpcode.Dispatch -> error("Invalid event type")
+            GatewayOpcode.Hello -> "HelloEvent"
+            GatewayOpcode.Resume -> "ResumeEvent"
+            else -> error("Unknown opcode $eventOpcode")
+        }
         return Payload(
             type = eventType,
-            data = eventData
+            opcode = eventOpcode,
+            gatewayId = gatewayId,
+            messageId = eventMessageId,
+            data = eventData,
         )
     }
 }
 
-public data class Payload(val type: String, val data: JsonObject)
+public data class Payload(
+    val type: String,
+    val opcode: Int,
+    val gatewayId: Int,
+    val messageId: String?,
+    val data: JsonObject
+)

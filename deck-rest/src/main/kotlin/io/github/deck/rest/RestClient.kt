@@ -6,15 +6,22 @@ import io.github.deck.rest.route.ChannelRoute
 import io.github.deck.rest.route.GroupRoute
 import io.github.deck.rest.route.ServerRoute
 import io.github.deck.rest.route.WebhookRoute
-import io.github.deck.rest.util.DEFAULT_HTTP_CLIENT
 import io.github.deck.rest.util.RequestService
+import io.github.deck.rest.util.createHttpClient
 import io.ktor.client.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.logging.*
 
 public class RestClient(public val token: String) {
-    public var httpClient: HttpClient = DEFAULT_HTTP_CLIENT
+    public var logger: DeckLogger = MicroutilsLogger("Rest Client Logger")
+
+    public var httpClient: HttpClient = createHttpClient()
     public val requestService: RequestService = RequestService(httpClient, this)
 
-    public var logger: DeckLogger = MicroutilsLogger("Rest Client Logger")
+    // ALL by default
+    public var logLevel: LogLevel
+        get() = httpClient.plugin(Logging).level
+        set(value) { httpClient.plugin(Logging).level = value }
 
     public var logRequests: Boolean = false
     public var logResponses: Boolean = true
