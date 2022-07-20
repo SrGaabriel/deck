@@ -50,7 +50,7 @@ public class DefaultGateway(
     }
 
     @OptIn(ObsoleteCoroutinesApi::class)
-    override suspend fun startHeartbeat(): Job {
+    override suspend fun startPinging(): Job {
         heartbeatJob = orchestrator.launch {
             hello = await(8000)
                 ?: return@launch logger.error { "[Gateway $id] Hello payload wasn't sent in time." }
