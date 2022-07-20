@@ -27,7 +27,7 @@ suspend fun main() {
 
 To use deck in your project, you must have the `jitpack` repository added. Then, you're going to add the following dependency to your build file: `com.github.SrGaabriel.deck:deck-core:$version`.
 
-You can replace `deck-core` with the name of the module you wish to import, and for the version you may ues the latest one (`0.3.3-BOT`).
+You can replace `deck-core` with the name of the module you wish to import, and for the version you may ues the latest one (`0.4-BOT`).
 
 ```kotlin
 repositories {
