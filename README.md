@@ -1,6 +1,7 @@
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SrGaabriel/deck/Build)
-![GitHub issues](https://img.shields.io/github/issues/SrGaabriel/deck)
-![GitHub Repo stars](https://img.shields.io/github/stars/SrGaabriel/deck)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SrGaabriel/deck/Build?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/SrGaabriel/deck?color=purple&style=for-the-badge)
+![GitHub Repo stars](https://img.shields.io/github/stars/SrGaabriel/deck?color=orange&style=for-the-badge)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/SrGaabriel/deck?label=latest%20version&style=for-the-badge)
 
 # 🎲 deck [WIP]
 
@@ -27,7 +28,8 @@ suspend fun main() {
 
 To use deck in your project, you must have the `jitpack` repository added. Then, you're going to add the following dependency to your build file: `com.github.SrGaabriel.deck:deck-core:$version`.
 
-You can replace `deck-core` with the name of the module you wish to import, and for the version you may ues the latest one (`0.4.2-BOT`).
+You can replace `deck-core` with the name of the module you wish to import, and for the version you may ues the latest one:
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/SrGaabriel/deck?style=social)
 
 ```kotlin
 repositories {
