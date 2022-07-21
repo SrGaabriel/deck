@@ -1,6 +1,7 @@
 package io.github.deck.rest.route
 
 import io.github.deck.common.entity.*
+import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.rest.RestClient
 import io.github.deck.rest.builder.*
@@ -259,6 +260,43 @@ public class ChannelRoute(private val client: RestClient) {
         calendarEventId: IntGenericId
     ): Unit = client.sendRequest(
         endpoint = "/channels/${channelId}/events/${calendarEventId}",
+        method = HttpMethod.Delete
+    )
+
+    public suspend fun putCalendarEventRsvp(
+        channelId: UUID,
+        calendarEventId: IntGenericId,
+        userId: GenericId,
+        status: CalendarEventRsvpStatus,
+    ): RawCalendarEventRsvp = client.sendRequest<PutCalendarEventRsvpResponse, PutCalendarEventRsvpRequest>(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/rsvps/${userId}",
+        method = HttpMethod.Put,
+        body = PutCalendarEventRsvpRequest(status)
+    ).calendarEventRsvp
+
+    public suspend fun getCalendarEventRsvp(
+        channelId: UUID,
+        calendarEventId: IntGenericId,
+        userId: GenericId
+    ): RawCalendarEventRsvp = client.sendRequest<PutCalendarEventRsvpResponse>(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/rsvps/${userId}",
+        method = HttpMethod.Get
+    ).calendarEventRsvp
+
+    public suspend fun getCalendarEventRsvps(
+        channelId: UUID,
+        calendarEventId: IntGenericId
+    ): List<RawCalendarEventRsvp> = client.sendRequest<GetCalendarEventRsvpsResponse>(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/rsvps",
+        method = HttpMethod.Get
+    ).calendarEventRsvps
+
+    public suspend fun deleteCalendarEventRsvp(
+        channelId: UUID,
+        calendarEventId: IntGenericId,
+        userId: GenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/rsvps/${userId}",
         method = HttpMethod.Delete
     )
 }

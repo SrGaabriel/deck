@@ -122,6 +122,7 @@ public data class RawCalendarEvent(
     val location: OptionalProperty<String> = OptionalProperty.NotPresent,
     val url: OptionalProperty<String> = OptionalProperty.NotPresent,
     val color: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val rsvpLimit: OptionalProperty<Int> = OptionalProperty.NotPresent,
     val startsAt: Instant,
     val duration: OptionalProperty<Int> = OptionalProperty.NotPresent,
     val isPrivate: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
@@ -136,3 +137,30 @@ public data class RawCalendarEventCancellation(
     val description: OptionalProperty<String> = OptionalProperty.NotPresent,
     val createdBy: OptionalProperty<String> = OptionalProperty.NotPresent,
 )
+
+@Serializable
+public data class RawCalendarEventRsvp(
+    val calendarEventId: IntGenericId,
+    val channelId: UniqueId,
+    val serverId: GenericId,
+    val userId: GenericId,
+    val status: CalendarEventRsvpStatus,
+    val createdBy: GenericId,
+    val createdAt: Instant,
+    val updatedBy: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public enum class CalendarEventRsvpStatus {
+    @SerialName("going")
+    Going,
+    @SerialName("maybe")
+    Maybe,
+    @SerialName("declined")
+    Declined,
+    @SerialName("invited")
+    Invited,
+    @SerialName("waitlisted")
+    Waitlisted;
+}

@@ -1,9 +1,6 @@
 package io.github.deck.gateway.event.type
 
-import io.github.deck.common.entity.RawCalendarEvent
-import io.github.deck.common.entity.RawDocumentation
-import io.github.deck.common.entity.RawListItem
-import io.github.deck.common.entity.RawServerChannel
+import io.github.deck.common.entity.*
 import io.github.deck.common.util.GenericId
 import io.github.deck.gateway.event.GatewayEvent
 import kotlinx.serialization.SerialName
@@ -68,7 +65,7 @@ public data class GatewayListItemUncompletedEvent(
 @Serializable
 @SerialName("DocCreated")
 public data class GatewayDocumentationCreatedEvent(
-    val serverId: String,
+    val serverId: GenericId,
     @SerialName("doc")
     val documentation: RawDocumentation
 ): GatewayEvent()
@@ -76,7 +73,7 @@ public data class GatewayDocumentationCreatedEvent(
 @Serializable
 @SerialName("DocUpdateed")
 public data class GatewayDocumentationUpdatedEvent(
-    val serverId: String,
+    val serverId: GenericId,
     @SerialName("doc")
     val documentation: RawDocumentation
 ): GatewayEvent()
@@ -84,7 +81,7 @@ public data class GatewayDocumentationUpdatedEvent(
 @Serializable
 @SerialName("DocDeleted")
 public data class GatewayDocumentationDeletedEvent(
-    val serverId: String,
+    val serverId: GenericId,
     @SerialName("doc")
     val documentation: RawDocumentation
 ): GatewayEvent()
@@ -92,20 +89,41 @@ public data class GatewayDocumentationDeletedEvent(
 @Serializable
 @SerialName("CalendarEventCreated")
 public data class GatewayCalendarEventCreatedEvent(
-    val serverId: String,
+    val serverId: GenericId,
     val calendarEvent: RawCalendarEvent
 ): GatewayEvent()
 
 @Serializable
 @SerialName("CalendarEventUpdated")
 public data class GatewayCalendarEventUpdatedEvent(
-    val serverId: String,
+    val serverId: GenericId,
     val calendarEvent: RawCalendarEvent
 ): GatewayEvent()
 
 @Serializable
 @SerialName("CalendarEventDeleted")
 public data class GatewayCalendarEventDeletedEvent(
-    val serverId: String,
+    val serverId: GenericId,
     val calendarEvent: RawCalendarEvent
+): GatewayEvent()
+
+@Serializable
+@SerialName("CalendarEventRsvpUpdated")
+public data class GatewayCalendarEventRsvpUpdatedEvent(
+    val serverId: GenericId,
+    val calendarEventRsvp: RawCalendarEventRsvp
+): GatewayEvent()
+
+@Serializable
+@SerialName("CalendarEventRsvpManyUpdated")
+public data class GatewayCalendarEventRsvpManyUpdatedEvent(
+    val serverId: GenericId,
+    val calendarEventRsvps: List<RawCalendarEventRsvp>
+): GatewayEvent()
+
+@Serializable
+@SerialName("CalendarEventRsvpDeleted")
+public data class GatewayCalendarEventRsvpDeletedEvent(
+    val serverId: GenericId,
+    val calendarEventRsvp: RawCalendarEventRsvp
 ): GatewayEvent()

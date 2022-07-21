@@ -140,3 +140,19 @@ internal data class BlankStatelessCalendarEvent(
     override val channelId: UUID,
     override val serverId: GenericId,
 ): StatelessCalendarEvent
+
+public fun StatelessCalendarEventRsvp(
+    client: DeckClient,
+    userId: GenericId,
+    calendarEventId: IntGenericId,
+    channelId: UUID,
+    serverId: GenericId,
+): StatelessCalendarEventRsvp = BlankStatelessCalendarEventRsvp(client, userId, calendarEventId, channelId, serverId)
+
+internal data class BlankStatelessCalendarEventRsvp(
+    override val client: DeckClient,
+    override val userId: GenericId,
+    override val calendarEventId: IntGenericId,
+    override val channelId: UUID,
+    override val serverId: GenericId
+): StatelessCalendarEventRsvp

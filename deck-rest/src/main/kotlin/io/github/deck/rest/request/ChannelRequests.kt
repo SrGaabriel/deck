@@ -105,6 +105,7 @@ public data class CreateCalendarEventRequest(
     val startsAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     val url: OptionalProperty<String> = OptionalProperty.NotPresent,
     val color: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val rsvpLimit: OptionalProperty<Int> = OptionalProperty.NotPresent,
     val duration: Int,
     val isPrivate: Boolean = false,
 )
@@ -117,6 +118,7 @@ public data class UpdateCalendarEventRequest(
     val startsAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     val url: OptionalProperty<String> = OptionalProperty.NotPresent,
     val color: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val rsvpLimit: OptionalProperty<Int> = OptionalProperty.NotPresent,
     val duration: OptionalProperty<Int> = OptionalProperty.NotPresent,
     val isPrivate: Boolean = false,
 )
@@ -129,4 +131,19 @@ public data class CreateCalendarEventResponse(
 @Serializable
 public data class GetChannelCalendarEventsResponse(
     val calendarEvents: List<RawCalendarEvent>
+)
+
+@Serializable
+public data class PutCalendarEventRsvpRequest(
+    val status: CalendarEventRsvpStatus
+)
+
+@Serializable
+public data class PutCalendarEventRsvpResponse(
+    val calendarEventRsvp: RawCalendarEventRsvp
+)
+
+@Serializable
+public data class GetCalendarEventRsvpsResponse(
+    val calendarEventRsvps: List<RawCalendarEventRsvp>
 )

@@ -18,6 +18,9 @@ public interface CalendarEvent: StatelessCalendarEvent {
     /** Url associated with calendar event, null if not defined */
     public val url: String?
 
+    /** Max attendance, null if none */
+    public val rsvpLimit: Int?
+
     /** Calendar event's color, null if not defined */
     public val color: Int?
     /** Calendar event's duration in minutes, null if not defined */
