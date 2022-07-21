@@ -24,7 +24,6 @@ public class RestClient(public val token: String) {
         set(value) { httpClient.plugin(Logging).level = value }
 
     public var logRequests: Boolean = false
-    public var logResponses: Boolean = true
 
     public val channel: ChannelRoute = ChannelRoute(this)
     public val group: GroupRoute = GroupRoute(this)

@@ -18,17 +18,15 @@ public class ClientBuilder(private val token: String) {
     public var gateway: GatewayOrchestrator = GatewayOrchestrator(token)
 
     public var logRequests: Boolean by rest::logRequests
-    public var logResponses: Boolean by rest::logResponses
     public var logEventPayloads: Boolean by gateway::logEventPayloads
 
     public var enableEventReplaying: Boolean by gateway::enableEventReplaying
 
     /**
-     * Enables request, responses and event payloads logging
+     * Enables request (including responses) and event payloads logging
      */
     public fun debugMode() {
         logRequests = true
-        logResponses = true
         logEventPayloads = true
     }
 

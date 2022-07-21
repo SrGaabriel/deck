@@ -27,10 +27,6 @@ public class RequestService(
         failureHandler: FailureHandler = FailureHandler
     ): G {
         val response = scheduleRequest(request)
-//        if (rest.logResponses) {
-//            val requestBody = response.bodyAsText()
-//            rest.logger.debug { "Received ${response.status.value} (${response.status.description}) $requestBody" }
-//        }
         return if (!response.status.isSuccess()) {
             failureHandler.onFailure(response)
         } else {
