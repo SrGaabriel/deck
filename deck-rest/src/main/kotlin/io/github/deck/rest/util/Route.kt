@@ -89,7 +89,7 @@ internal fun RestClient.createHttpClient() = HttpClient(CIO.create()) {
         logger = KtorDeckLoggerWrapper(this@createHttpClient)
     }
     install(UserAgent) {
-        agent = "deck-v0.4.1"
+        agent = "deck-v0.4.2"
     }
     expectSuccess = false
 }
