@@ -2,6 +2,7 @@ package io.github.deck.core.event.server
 
 import io.github.deck.common.util.GenericId
 import io.github.deck.core.DeckClient
+import io.github.deck.core.entity.Member
 import io.github.deck.core.event.DeckEvent
 import io.github.deck.core.event.EventMapper
 import io.github.deck.core.event.EventService
@@ -13,6 +14,10 @@ import io.github.deck.core.util.BlankStatelessUser
 import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayTeamMemberRemovedEvent
 
+/**
+ * Called when a [Member] leaves a server
+ * (even if it's because of a kick or a ban)
+ */
 public data class MemberLeaveEvent(
     override val client: DeckClient,
     override val payload: Payload,
@@ -25,7 +30,7 @@ public data class MemberLeaveEvent(
     public val user: StatelessUser get() = BlankStatelessUser(client, userId)
 }
 
-public val EventService.memberLeaveEvent: EventMapper<GatewayTeamMemberRemovedEvent, MemberLeaveEvent> get() = mapper { client, event ->
+internal val EventService.memberLeaveEvent: EventMapper<GatewayTeamMemberRemovedEvent, MemberLeaveEvent> get() = mapper { client, event ->
     MemberLeaveEvent(
         client = client,
         payload = event.payload,

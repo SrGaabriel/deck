@@ -52,9 +52,6 @@ public data class DeckMemberSummary(
     override val avatar: String?,
     override val roleIds: List<IntGenericId>,
 ): MemberSummary {
-    override suspend fun getMember(): Member =
-        DeckMember.from(client, serverId, client.rest.server.getServerMember(id, serverId))
-
     public companion object {
         public fun from(client: DeckClient, serverId: GenericId, raw: RawServerMemberSummary): DeckMemberSummary = DeckMemberSummary(
             client = client,

@@ -1,6 +1,7 @@
 package io.github.deck.core.entity
 
 import io.github.deck.common.util.GenericId
+import io.github.deck.core.entity.channel.CalendarChannel
 import io.github.deck.core.stateless.StatelessCalendarEvent
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessUser
@@ -8,6 +9,9 @@ import kotlinx.datetime.Instant
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
+/**
+ * Represents an event scheduled in a [CalendarChannel]
+ */
 public interface CalendarEvent: StatelessCalendarEvent {
     /** Calendar event's name */
     public val name: String

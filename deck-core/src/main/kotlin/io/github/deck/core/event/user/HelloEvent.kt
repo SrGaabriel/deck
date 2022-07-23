@@ -8,6 +8,9 @@ import io.github.deck.core.event.mapper
 import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayHelloEvent
 
+/**
+ * Called when a gateway connects to guilded
+ */
 public data class HelloEvent(
     override val client: DeckClient,
     override val payload: Payload,
@@ -15,7 +18,7 @@ public data class HelloEvent(
     public val lastMessageId: String
 ) : DeckEvent
 
-public val EventService.helloEvent: EventMapper<GatewayHelloEvent, HelloEvent> get() = mapper { client, event ->
+internal val EventService.helloEvent: EventMapper<GatewayHelloEvent, HelloEvent> get() = mapper { client, event ->
     HelloEvent(
         client = client,
         payload = event.payload,

@@ -3,25 +3,43 @@ package io.github.deck.core.entity
 import io.github.deck.common.entity.RawListItemNote
 import io.github.deck.common.util.*
 import io.github.deck.core.DeckClient
+import io.github.deck.core.entity.channel.ListChannel
 import io.github.deck.core.stateless.StatelessListItem
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessUser
 import io.github.deck.rest.builder.UpdateListItemRequestBuilder
 import kotlinx.datetime.Instant
 
+/**
+ * A list item from a [ListChannel], depending on the context
+ * the [note] might be incomplete, missing its content
+ */
 public interface ListItem: StatelessListItem {
+    /** Id of the user who created this list item */
     public val authorId: GenericId
     public val author: StatelessUser get() = BlankStatelessUser(client, authorId)
 
+    /** The list item label */
     public val label: String
+    /** Null if inexistent, incomplete/complete (whether the content is there) depending on the query context */
     public val note: ListItemNote?
 
+    /** When this list item was created */
     public val createdAt: Instant
+    /** When this list item was last updated */
     public val updatedAt: Instant?
 
+    /** The id of the user who last updated this list item */
     public val editorId: GenericId?
     public val editor: StatelessUser? get() = editorId?.let { BlankStatelessUser(client, it) }
 
+    /**
+     * Patches **(NOT UPDATES)** this list item
+     *
+     * @param builder patch builder
+     *
+     * @return the updated list item
+     */
     @DeckDelicateApi
     @Deprecated("This does not infer this list item's note unless it (the note) is complete")
     public suspend fun patch(builder: UpdateListItemRequestBuilder.() -> Unit): ListItem = update {

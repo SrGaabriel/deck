@@ -8,6 +8,9 @@ import io.github.deck.common.log.LoggingLevel
 import io.github.deck.common.log.LoggingMessage
 import io.github.deck.core.util.ClientBuilder
 
+/**
+ * Enables colored logging
+ */
 public fun ClientBuilder.coloredLogging() {
     val logger = MordantLogger()
     rest.logger = logger

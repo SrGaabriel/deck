@@ -7,6 +7,9 @@ import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessUser
 import kotlinx.datetime.Instant
 
+/**
+ * Represents an RSVP (invite) to a [CalendarEvent]
+ */
 public interface CalendarEventRsvp: StatelessCalendarEventRsvp {
     /** RSVP status */
     public val status: CalendarEventRsvpStatus

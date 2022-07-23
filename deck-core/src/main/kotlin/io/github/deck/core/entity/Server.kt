@@ -8,6 +8,9 @@ import io.github.deck.core.util.BlankStatelessUser
 import kotlinx.datetime.Instant
 import java.util.*
 
+/**
+ * Symbolizes a server (not a group) in Guilded
+ */
 public interface Server: StatelessServer {
     /** Server owner's id */
     public val ownerId: GenericId

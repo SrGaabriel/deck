@@ -21,6 +21,18 @@ internal data class BlankStatelessMessage(
     override val serverId: GenericId?
 ): StatelessMessage
 
+public fun StatelessServerChannel(
+    client: DeckClient,
+    id: UUID,
+    serverId: GenericId
+): StatelessServerChannel = BlankStatelessServerChannel(client, id, serverId)
+
+internal data class BlankStatelessServerChannel(
+    override val client: DeckClient,
+    override val id: UUID,
+    override val serverId: GenericId
+): StatelessServerChannel
+
 public fun StatelessMessageChannel(
     client: DeckClient,
     id: UUID,

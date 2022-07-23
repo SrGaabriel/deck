@@ -13,6 +13,9 @@ import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayTeamMemberJoinedEvent
 
+/**
+ * Called when a new [Member] joins a server
+ */
 public data class MemberJoinEvent(
     override val client: DeckClient,
     override val payload: Payload,
@@ -22,7 +25,7 @@ public data class MemberJoinEvent(
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 }
 
-public val EventService.memberJoinEvent: EventMapper<GatewayTeamMemberJoinedEvent, MemberJoinEvent> get() = mapper { client, event ->
+internal val EventService.memberJoinEvent: EventMapper<GatewayTeamMemberJoinedEvent, MemberJoinEvent> get() = mapper { client, event ->
     MemberJoinEvent(
         client = client,
         payload = event.payload,

@@ -13,6 +13,9 @@ import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayServerChannelDeletedEvent
 
+/**
+ * Called when a [ServerChannel] is deleted
+ */
 public data class ServerChannelDeleteEvent(
     override val client: DeckClient,
     override val payload: Payload,
@@ -22,7 +25,7 @@ public data class ServerChannelDeleteEvent(
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 }
 
-public val EventService.serverChannelDeleteEvent: EventMapper<GatewayServerChannelDeletedEvent, ServerChannelDeleteEvent> get() = mapper { client, event ->
+internal val EventService.serverChannelDeleteEvent: EventMapper<GatewayServerChannelDeletedEvent, ServerChannelDeleteEvent> get() = mapper { client, event ->
     ServerChannelDeleteEvent(
         client = client,
         payload = event.payload,

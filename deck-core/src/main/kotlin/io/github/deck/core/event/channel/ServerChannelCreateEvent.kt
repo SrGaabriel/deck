@@ -13,6 +13,9 @@ import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayServerChannelCreatedEvent
 
+/**
+ * Called when a [ServerChannel] is created
+ */
 public data class ServerChannelCreateEvent(
     override val client: DeckClient,
     override val payload: Payload,
@@ -22,7 +25,7 @@ public data class ServerChannelCreateEvent(
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 }
 
-public val EventService.serverChannelCreateEvent: EventMapper<GatewayServerChannelCreatedEvent, ServerChannelCreateEvent> get() = mapper { client, event ->
+internal val EventService.serverChannelCreateEvent: EventMapper<GatewayServerChannelCreatedEvent, ServerChannelCreateEvent> get() = mapper { client, event ->
     ServerChannelCreateEvent(
         client = client,
         payload = event.payload,

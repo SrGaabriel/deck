@@ -13,6 +13,9 @@ import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayServerWebhookUpdatedEvent
 
+/**
+ * Called when a [Webhook] is updated
+ */
 public data class WebhookUpdateEvent(
     override val client: DeckClient,
     override val payload: Payload,
@@ -22,7 +25,7 @@ public data class WebhookUpdateEvent(
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 }
 
-public val EventService.webhookUpdateEvent: EventMapper<GatewayServerWebhookUpdatedEvent, WebhookUpdateEvent> get() = mapper { client, event ->
+internal val EventService.webhookUpdateEvent: EventMapper<GatewayServerWebhookUpdatedEvent, WebhookUpdateEvent> get() = mapper { client, event ->
     WebhookUpdateEvent(
         client = client,
         payload = event.payload,

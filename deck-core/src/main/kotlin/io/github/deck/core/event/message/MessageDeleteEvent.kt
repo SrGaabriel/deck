@@ -3,6 +3,7 @@ package io.github.deck.core.event.message
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
+import io.github.deck.core.entity.Message
 import io.github.deck.core.event.DeckEvent
 import io.github.deck.core.event.EventMapper
 import io.github.deck.core.event.EventService
@@ -16,6 +17,10 @@ import io.github.deck.gateway.event.type.GatewayChatMessageDeletedEvent
 import kotlinx.datetime.Instant
 import java.util.*
 
+/**
+ * Called when a [Message] is deleted, be it on a private channel (DM)
+ * or in a server channel
+ */
 public data class MessageDeleteEvent(
     override val client: DeckClient,
     override val payload: Payload,
@@ -28,7 +33,7 @@ public data class MessageDeleteEvent(
     public val server: StatelessServer? get() = serverId?.let { BlankStatelessServer(client, it) }
 }
 
-public val EventService.messageDeleteEvent: EventMapper<GatewayChatMessageDeletedEvent, MessageDeleteEvent> get() = mapper { client, event ->
+internal val EventService.messageDeleteEvent: EventMapper<GatewayChatMessageDeletedEvent, MessageDeleteEvent> get() = mapper { client, event ->
     MessageDeleteEvent(
         client = client,
         payload = event.payload,

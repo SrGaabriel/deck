@@ -1,6 +1,5 @@
 package io.github.deck.core.util
 
-import io.github.deck.common.log.warning
 import io.github.deck.common.util.GenericId
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.Server
@@ -13,7 +12,10 @@ import io.github.deck.rest.RestClient
 import io.github.deck.rest.builder.CreateChannelRequestBuilder
 import java.util.*
 
-public class ClientBuilder(private val token: String) {
+/**
+ * A builder for a [DeckClient]
+ */
+public class ClientBuilder(token: String) {
     public var rest: RestClient = RestClient(token)
     public var gateway: GatewayOrchestrator = GatewayOrchestrator(token)
 
@@ -30,12 +32,8 @@ public class ClientBuilder(private val token: String) {
         logEventPayloads = true
     }
 
-    public fun build(): DeckClient {
-        if (!token.startsWith("gapi_")) {
-            rest.logger.warning { "Your token does not start with 'gapi_', meaning it is either invalid or outdated." }
-        }
-        return DeckClient(rest, gateway)
-    }
+    public fun build(): DeckClient =
+        DeckClient(rest, gateway)
 }
 
 public suspend fun DeckClient.getServer(serverId: GenericId): Server =

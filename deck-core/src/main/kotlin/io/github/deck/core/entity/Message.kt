@@ -40,6 +40,13 @@ public interface Message : StatelessMessage {
     /** Whether this message is silent (does not notify mentioned users) */
     public val isSilent: Boolean
 
+    /**
+     * Patches **(NOT UPDATES)** this message
+     *
+     * @param builder patch builder
+     *
+     * @return the updated message
+     */
     public suspend fun patch(builder: UpdateMessageRequestBuilder.() -> Unit): Message = update {
         content = this@Message.content
         embeds = this@Message.embeds

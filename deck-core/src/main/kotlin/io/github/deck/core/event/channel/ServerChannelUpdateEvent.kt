@@ -13,6 +13,9 @@ import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayServerChannelUpdatedEvent
 
+/**
+ * Called when a [ServerChannel] is edited
+ */
 public data class ServerChannelUpdateEvent(
     override val client: DeckClient,
     override val payload: Payload,
@@ -22,7 +25,7 @@ public data class ServerChannelUpdateEvent(
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 }
 
-public val EventService.serverChannelUpdateEvent: EventMapper<GatewayServerChannelUpdatedEvent, ServerChannelUpdateEvent> get() = mapper { client, event ->
+internal val EventService.serverChannelUpdateEvent: EventMapper<GatewayServerChannelUpdatedEvent, ServerChannelUpdateEvent> get() = mapper { client, event ->
     ServerChannelUpdateEvent(
         client = client,
         payload = event.payload,

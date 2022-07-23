@@ -5,6 +5,7 @@ import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.asNullable
 import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
+import io.github.deck.core.entity.Message
 import io.github.deck.core.event.DeckEvent
 import io.github.deck.core.event.EventMapper
 import io.github.deck.core.event.EventService
@@ -21,6 +22,10 @@ import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayChatMessageReactionDeletedEvent
 import java.util.*
 
+/**
+ * Called when someone removes a reaction from a [Message]
+ * (not only when a reaction emote is removed completely from a message)
+ */
 public data class MessageReactionRemoveEvent(
     override val client: DeckClient,
     override val payload: Payload,
@@ -36,7 +41,7 @@ public data class MessageReactionRemoveEvent(
     val user: StatelessUser get() = BlankStatelessUser(client, userId)
 }
 
-public val EventService.messageReactionRemoveEvent: EventMapper<GatewayChatMessageReactionDeletedEvent, MessageReactionRemoveEvent> get() = mapper { client, event ->
+internal val EventService.messageReactionRemoveEvent: EventMapper<GatewayChatMessageReactionDeletedEvent, MessageReactionRemoveEvent> get() = mapper { client, event ->
     MessageReactionRemoveEvent(
         client = client,
         payload = event.payload,

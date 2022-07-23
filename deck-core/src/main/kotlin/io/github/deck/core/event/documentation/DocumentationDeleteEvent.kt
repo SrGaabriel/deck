@@ -9,10 +9,14 @@ import io.github.deck.core.event.EventMapper
 import io.github.deck.core.event.EventService
 import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
+import io.github.deck.core.stateless.channel.StatelessDocumentationChannel
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayDocumentationDeletedEvent
 
+/**
+ * Called when a [Documentation] is deleted in a server channel
+ */
 public data class DocumentationDeleteEvent(
     override val client: DeckClient,
     override val payload: Payload,
@@ -20,9 +24,10 @@ public data class DocumentationDeleteEvent(
     val documentation: Documentation
 ): DeckEvent {
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
+    public val channel: StatelessDocumentationChannel get() = documentation.channel
 }
 
-public val EventService.documentationDeleteEvent: EventMapper<GatewayDocumentationDeletedEvent, DocumentationDeleteEvent>
+internal val EventService.documentationDeleteEvent: EventMapper<GatewayDocumentationDeletedEvent, DocumentationDeleteEvent>
     get() = mapper { client, event ->
         DocumentationDeleteEvent(
             client = client,

@@ -3,16 +3,22 @@ package io.github.deck.core.entity
 import io.github.deck.common.util.GenericId
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.stateless.StatelessWebhook
+import io.github.deck.core.stateless.channel.StatelessServerChannel
+import io.github.deck.core.util.BlankStatelessServerChannel
 import io.github.deck.core.util.BlankStatelessUser
 import io.github.deck.rest.builder.UpdateWebhookRequestBuilder
 import kotlinx.datetime.Instant
 import java.util.*
 
+/**
+ * Represents a Webhook from a Guilded server channel
+ */
 public interface Webhook: StatelessWebhook {
     /**  The webhook's name */
     public val name: String
     /** The id of the channel this webhook was created in */
     public val channelId: UUID
+    public val channel: StatelessServerChannel get() = BlankStatelessServerChannel(client, id, serverId)
 
     /** The instant this webhook was created */
     public val createdAt: Instant
@@ -26,6 +32,13 @@ public interface Webhook: StatelessWebhook {
     /** This webhook's token */
     public val token: String?
 
+    /**
+     * Patches **(NOT UPDATES)** this webhook
+     *
+     * @param builder patch builder
+     *
+     * @return the updated webhook
+     */
     public suspend fun patch(builder: UpdateWebhookRequestBuilder.() -> Unit): Webhook = update {
         name = this@Webhook.name
         channelId = this@Webhook.channelId

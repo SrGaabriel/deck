@@ -2,9 +2,9 @@ package io.github.deck.core.stateless
 
 import io.github.deck.common.util.DeckLackingDocumentation
 import io.github.deck.common.util.GenericId
+import io.github.deck.core.entity.Ban
 import io.github.deck.core.entity.Member
 import io.github.deck.core.entity.MemberSummary
-import io.github.deck.core.entity.ServerBan
 import io.github.deck.core.entity.Webhook
 import io.github.deck.core.entity.channel.ServerChannel
 import io.github.deck.core.entity.impl.DeckMember
@@ -87,16 +87,16 @@ public interface StatelessServer: StatelessEntity {
      * @throws [GuildedRequestException] if not found, to be fixed in the future
      * @return user's punishment data
      */
-    public suspend fun getBan(memberId: GenericId): ServerBan =
-        ServerBan.from(client, client.rest.server.getMemberBan(memberId, id))
+    public suspend fun getBan(memberId: GenericId): Ban =
+        Ban.from(client, client.rest.server.getMemberBan(memberId, id))
 
     /**
      * Retrieves all bans in the server with their data.
      *
      * @return all active bans in the server
      */
-    public suspend fun getBans(): List<ServerBan> =
-        client.rest.server.getServerBans(id).map { ServerBan.from(client, it) }
+    public suspend fun getBans(): List<Ban> =
+        client.rest.server.getServerBans(id).map { Ban.from(client, it) }
 
     /**
      * Removes the ban from the specified member.

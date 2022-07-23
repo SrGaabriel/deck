@@ -57,7 +57,7 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         registerMapper(listItemCreateEvent)
         registerMapper(listItemUpdateEvent)
         registerMapper(listItemDeleteEvent)
-        registerMapper(listItemUncompleteEvent)
+        registerMapper(listItemIncompleteEvent)
         registerMapper(documentationCreateEvent)
         registerMapper(documentationUpdateEvent)
         registerMapper(documentationDeleteEvent)

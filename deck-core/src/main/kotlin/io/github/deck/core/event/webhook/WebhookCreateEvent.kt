@@ -13,6 +13,9 @@ import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayServerWebhookCreatedEvent
 
+/**
+ * Called when a [Webhook] is created
+ */
 public data class WebhookCreateEvent(
     override val client: DeckClient,
     override val payload: Payload,
@@ -22,7 +25,7 @@ public data class WebhookCreateEvent(
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 }
 
-public val EventService.webhookCreateEvent: EventMapper<GatewayServerWebhookCreatedEvent, WebhookCreateEvent> get() = mapper { client, event ->
+internal val EventService.webhookCreateEvent: EventMapper<GatewayServerWebhookCreatedEvent, WebhookCreateEvent> get() = mapper { client, event ->
     WebhookCreateEvent(
         client = client,
         payload = event.payload,

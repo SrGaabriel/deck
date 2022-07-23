@@ -2,6 +2,7 @@ package io.github.deck.core.entity
 
 import io.github.deck.common.util.GenericId
 import io.github.deck.core.DeckClient
+import io.github.deck.core.entity.channel.ForumChannel
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.stateless.channel.StatelessForumChannel
@@ -11,6 +12,9 @@ import io.github.deck.core.util.BlankStatelessUser
 import kotlinx.datetime.Instant
 import java.util.*
 
+/**
+ * A topic (previously called ForumThread) from a [ForumChannel]
+ */
 public interface ForumTopic {
     public val client: DeckClient
     public val id: Int

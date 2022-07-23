@@ -3,7 +3,7 @@ package io.github.deck.core.stateless.channel
 import io.github.deck.core.entity.ListItem
 import io.github.deck.core.entity.impl.DeckListItem
 import io.github.deck.core.event.list.ListItemCompleteEvent
-import io.github.deck.core.event.list.ListItemUncompleteEvent
+import io.github.deck.core.event.list.ListItemIncompleteEvent
 import io.github.deck.rest.builder.CreateListItemRequestBuilder
 import io.github.deck.rest.builder.UpdateListItemRequestBuilder
 import java.util.*
@@ -33,7 +33,7 @@ public interface StatelessListChannel: StatelessServerChannel {
      * Marks the list item associated with the provided [itemId] as uncompleted.
      *
      * If this is called in an already uncomplete list item, it'll not throw any errors but instead
-     * fire a new [ListItemUncompleteEvent] event.
+     * fire a new [ListItemIncompleteEvent] event.
      *
      * @param itemId list item id
      */

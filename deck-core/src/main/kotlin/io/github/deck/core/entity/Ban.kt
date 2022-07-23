@@ -9,7 +9,10 @@ import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessUser
 import kotlinx.datetime.Instant
 
-public data class ServerBan(
+/**
+ * Represents a user ban from a server
+ */
+public data class Ban(
     val client: DeckClient,
     val userData: ServerBannedUser,
     val reason: String?,
@@ -20,7 +23,7 @@ public data class ServerBan(
     public val author: StatelessUser get() = BlankStatelessUser(client, authorId)
 
     public companion object {
-        public fun from(client: DeckClient, raw: RawServerBan): ServerBan = ServerBan(
+        public fun from(client: DeckClient, raw: RawServerBan): Ban = Ban(
             client = client,
             userData = ServerBannedUser(raw.user.id, raw.user.type, raw.user.name),
             reason = raw.reason.asNullable(),

@@ -14,6 +14,9 @@ public data class Mentions(
     val here: Boolean,
     val everyone: Boolean,
 ) {
+    public fun isEmpty(): Boolean =
+        !everyone && !here && users.isEmpty() && channels.isEmpty() && roles.isEmpty()
+
     public companion object {
         public fun from(raw: RawMessageMentions): Mentions = Mentions(
             users = raw.users.asNullable().orEmpty().map { it.id },

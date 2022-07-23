@@ -2,7 +2,8 @@ package io.github.deck.core.event.server
 
 import io.github.deck.common.util.GenericId
 import io.github.deck.core.DeckClient
-import io.github.deck.core.entity.ServerBan
+import io.github.deck.core.entity.Ban
+import io.github.deck.core.entity.Member
 import io.github.deck.core.event.DeckEvent
 import io.github.deck.core.event.EventMapper
 import io.github.deck.core.event.EventService
@@ -13,21 +14,24 @@ import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.event.type.GatewayTeamMemberUnbannedEvent
 
+/**
+ * Called when a [Member] is pardoned (unbanned)
+ */
 public data class MemberUnbanEvent(
     override val client: DeckClient,
     override val payload: Payload,
     public val serverId: GenericId,
-    public val serverBan: ServerBan
+    public val ban: Ban
 ): DeckEvent {
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
-    public val user: StatelessUser get() = serverBan.user
+    public val user: StatelessUser get() = ban.user
 }
 
-public val EventService.memberUnbanEvent: EventMapper<GatewayTeamMemberUnbannedEvent, MemberUnbanEvent> get() = mapper { client, event ->
+internal val EventService.memberUnbanEvent: EventMapper<GatewayTeamMemberUnbannedEvent, MemberUnbanEvent> get() = mapper { client, event ->
     MemberUnbanEvent(
         client = client,
         payload = event.payload,
         serverId = event.serverId,
-        serverBan = ServerBan.from(client, event.serverMemberBan)
+        ban = Ban.from(client, event.serverMemberBan)
     )
 }

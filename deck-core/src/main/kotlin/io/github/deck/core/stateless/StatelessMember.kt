@@ -3,7 +3,7 @@ package io.github.deck.core.stateless
 import io.github.deck.common.util.DeckDelicateApi
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
-import io.github.deck.core.entity.ServerBan
+import io.github.deck.core.entity.Ban
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.rest.util.GuildedRequestException
 
@@ -64,8 +64,8 @@ public interface StatelessMember: StatelessEntity {
 
     @DeckDelicateApi
     /** @throws [GuildedRequestException] if not found */
-    public suspend fun getBan(): ServerBan =
-        ServerBan.from(client, client.rest.server.getMemberBan(id, serverId))
+    public suspend fun getBan(): Ban =
+        Ban.from(client, client.rest.server.getMemberBan(id, serverId))
 
     /**
      * Unbans this member from the server.
