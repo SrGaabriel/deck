@@ -11,7 +11,7 @@ import io.github.deck.core.event.EventService
 import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.util.BlankStatelessServer
-import io.github.deck.gateway.event.Payload
+import io.github.deck.gateway.event.GatewayEvent
 import io.github.deck.gateway.event.type.GatewayCalendarEventRsvpManyUpdatedEvent
 
 /**
@@ -19,7 +19,7 @@ import io.github.deck.gateway.event.type.GatewayCalendarEventRsvpManyUpdatedEven
  */
 public data class CalendarEventRsvpBulkUpdateEvent(
     override val client: DeckClient,
-    override val payload: Payload,
+    override val barebones: GatewayEvent,
     val serverId: GenericId,
     val calendarEventRsvps: List<CalendarEventRsvp>,
 ): DeckEvent {
@@ -30,7 +30,7 @@ internal val EventService.calendarEventRsvpBulkUpdateEvent: EventMapper<GatewayC
     get() = mapper { client, event ->
         CalendarEventRsvpBulkUpdateEvent(
             client = client,
-            payload = event.payload,
+            barebones = event,
             serverId = event.serverId,
             calendarEventRsvps = event.calendarEventRsvps.map { DeckCalendarEventRsvp.from(client, it) }
         )

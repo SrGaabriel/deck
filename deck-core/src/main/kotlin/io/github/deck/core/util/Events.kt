@@ -5,14 +5,13 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
-// TODO: remove boilerplate
 public inline fun <reified T : DeckEvent> on(
     gatewayId: Int?,
     scope: CoroutineScope,
     eventsFlow: SharedFlow<DeckEvent>,
     noinline callback: suspend T.() -> Unit
 ): Job = eventsFlow.buffer(Channel.UNLIMITED).filterIsInstance<T>()
-    .filter { it.payload.gatewayId == (gatewayId ?: return@filter true) }.onEach(callback).launchIn(scope)
+    .filter { it.barebones.info.gatewayId == (gatewayId ?: return@filter true) }.onEach(callback).launchIn(scope)
 
 @OptIn(ExperimentalCoroutinesApi::class)
 public suspend inline fun <reified T : DeckEvent> await(
@@ -24,7 +23,7 @@ public suspend inline fun <reified T : DeckEvent> await(
     suspendCancellableCoroutine<T> { continuation ->
         scope.launch {
             val event = eventsFlow.buffer(Channel.UNLIMITED).filterIsInstance<T>()
-                .filter { it.payload.gatewayId == (gatewayId ?: return@filter true) }.first()
+                .filter { it.barebones.info.gatewayId == (gatewayId ?: return@filter true) }.first()
             continuation.resume(event) {}
         }
     }

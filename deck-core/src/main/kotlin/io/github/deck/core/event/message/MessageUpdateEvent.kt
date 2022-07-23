@@ -10,7 +10,7 @@ import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.stateless.channel.StatelessMessageChannel
-import io.github.deck.gateway.event.Payload
+import io.github.deck.gateway.event.GatewayEvent
 import io.github.deck.gateway.event.type.GatewayChatMessageUpdatedEvent
 
 /**
@@ -19,7 +19,7 @@ import io.github.deck.gateway.event.type.GatewayChatMessageUpdatedEvent
  */
 public data class MessageUpdateEvent(
     override val client: DeckClient,
-    override val payload: Payload,
+    override val barebones: GatewayEvent,
     public val message: Message
 ) : DeckEvent {
     val channel: StatelessMessageChannel get() = message.channel
@@ -31,7 +31,7 @@ internal val EventService.messageUpdateEvent: EventMapper<GatewayChatMessageUpda
     val message = DeckMessage.from(client, event.message)
     MessageUpdateEvent(
         client = client,
-        payload = event.payload,
+        barebones = event,
         message = message
     )
 }

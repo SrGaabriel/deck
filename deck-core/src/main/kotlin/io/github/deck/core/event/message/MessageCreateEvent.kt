@@ -10,7 +10,7 @@ import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.stateless.channel.StatelessMessageChannel
-import io.github.deck.gateway.event.Payload
+import io.github.deck.gateway.event.GatewayEvent
 import io.github.deck.gateway.event.type.GatewayChatMessageCreatedEvent
 
 /**
@@ -19,7 +19,7 @@ import io.github.deck.gateway.event.type.GatewayChatMessageCreatedEvent
  */
 public data class MessageCreateEvent(
     override val client: DeckClient,
-    override val payload: Payload,
+    override val barebones: GatewayEvent,
     public val message: Message
 ) : DeckEvent {
     val channel: StatelessMessageChannel get() = message.channel
@@ -30,7 +30,7 @@ public data class MessageCreateEvent(
 internal val EventService.messageCreateEvent: EventMapper<GatewayChatMessageCreatedEvent, MessageCreateEvent> get() = mapper { client, event ->
     MessageCreateEvent(
         client = client,
-        payload = event.payload,
+        barebones = event,
         message = DeckMessage.from(client, event.message)
     )
 }

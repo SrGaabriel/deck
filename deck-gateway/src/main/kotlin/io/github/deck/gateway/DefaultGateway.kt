@@ -71,17 +71,16 @@ public class DefaultGateway(
                 if (frame !is Frame.Text || frame.data.contentEquals(Constants.GatewayPongContent.toByteArray()))
                     continue
 
-                val text = frame.readText()
-                val payload = eventDecoder.decodePayloadFromData(text)
+                val payload = frame.readText()
                 val event = eventDecoder.decodeEventFromPayload(payload)
 
                 if (event == null) {
-                    logger.error { "[Gateway $id] Failed to parse event with data $text" }
+                    logger.error { "[Gateway $id] Failed to parse event with data $payload" }
                     continue
                 }
 
-                logger.info { "[Gateway $id] Received event ${payload.type}".let { log -> if (orchestrator.logEventPayloads) "$log from payload $text" else log } }
-                lastMessageId = event.payload.messageId
+                logger.info { "[Gateway $id] Received event ${event.info.type}".let { log -> if (orchestrator.logEventPayloads) "$log from payload $payload" else log } }
+                lastMessageId = event.info.lastMessageId
                 eventFlow.emit(event)
             }
         }

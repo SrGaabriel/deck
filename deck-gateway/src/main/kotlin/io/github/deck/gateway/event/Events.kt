@@ -1,10 +1,13 @@
 package io.github.deck.gateway.event
 
+import io.github.deck.common.util.OptionalProperty
+import io.github.deck.common.util.asNullable
 import io.github.deck.gateway.event.type.*
 import io.github.deck.gateway.util.GatewayOpcode
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
-import kotlinx.serialization.json.*
+import kotlinx.serialization.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
@@ -12,8 +15,9 @@ import kotlinx.serialization.modules.subclass
 @Serializable
 public abstract class GatewayEvent {
     @Transient
-    internal var _payload: Payload? = null
-    public val payload: Payload get() = _payload ?: error("Tried to access event's payload before it has been fired")
+    internal var _info: EventInfo? = null
+    public val info: EventInfo get() = _info ?: error("Tried to access event's information before it was fired")
+
 }
 
 private val polymorphicJson by lazy {
@@ -52,54 +56,59 @@ private val polymorphicJson by lazy {
                 subclass(GatewayCalendarEventRsvpUpdatedEvent::class)
                 subclass(GatewayCalendarEventRsvpManyUpdatedEvent::class)
                 subclass(GatewayCalendarEventRsvpDeletedEvent::class)
+                subclass(GatewayForumTopicCreatedEvent::class)
+                subclass(GatewayForumTopicUpdatedEvent::class)
+                subclass(GatewayForumTopicDeletedEvent::class)
             }
         }
     }
 }
 
 public interface EventDecoder {
-    public fun decodeEventFromPayload(payload: Payload): GatewayEvent?
-
-    public fun decodePayloadFromData(json: String): Payload
+    public fun decodeEventFromPayload(payload: String): GatewayEvent?
 }
 
 public class DefaultEventDecoder(private val gatewayId: Int) : EventDecoder {
-    override fun decodeEventFromPayload(payload: Payload): GatewayEvent? = runCatching {
-        return run {
-            val newJsonObject = JsonObject(payload.data.toMutableMap().apply {
-                put("type", JsonPrimitive(payload.type))
-            })
-            polymorphicJson.decodeFromJsonElement<GatewayEvent>(newJsonObject)
-        }.also {
-            it._payload = payload
-        }
-    }.onFailure { it.printStackTrace() }.getOrNull()
-
-    override fun decodePayloadFromData(json: String): Payload {
-        val jsonObject = polymorphicJson.parseToJsonElement(json).jsonObject
-        val eventOpcode = jsonObject["op"]?.jsonPrimitive?.intOrNull ?: error("Invalid event opcode")
-        val eventData = jsonObject["d"]?.jsonObject ?: error("Received event without data")
-        val eventMessageId = if (eventOpcode == 0) jsonObject["s"]?.jsonPrimitive?.content else null
-        val eventType = jsonObject["t"]?.jsonPrimitive?.content ?: when (eventOpcode) {
+    @Suppress("UNCHECKED_CAST")
+    @OptIn(ExperimentalSerializationApi::class)
+    override fun decodeEventFromPayload(payload: String): GatewayEvent? = runCatching {
+        val barebones = Json.decodeFromString<BarebonesEvent>(payload)
+        val eventData = barebones.data.asNullable() ?: buildJsonObject {}
+        val eventType = barebones.type.asNullable() ?: when (barebones.opcode) {
             GatewayOpcode.Dispatch -> error("Invalid event type")
             GatewayOpcode.Hello -> "HelloEvent"
             GatewayOpcode.Resume -> "ResumeEvent"
-            else -> error("Unknown opcode $eventOpcode")
+            else -> error("Unknown opcode ${barebones.opcode}")
         }
-        return Payload(
-            type = eventType,
-            opcode = eventOpcode,
-            gatewayId = gatewayId,
-            messageId = eventMessageId,
+        val deserializationStrategy = polymorphicJson.serializersModule.getPolymorphic(GatewayEvent::class, eventType)
+        val event = polymorphicJson.decodeFromJsonElement(deserializationStrategy as DeserializationStrategy<GatewayEvent>, eventData)
+        event._info = EventInfo(
+            opcode = barebones.opcode,
             data = eventData,
+            lastMessageId = barebones.messageId.asNullable(),
+            type = eventType,
+            gatewayId = gatewayId
         )
-    }
+        return@runCatching event
+    }.onFailure { it.printStackTrace() }.getOrNull()
 }
 
-public data class Payload(
-    val type: String,
+public data class EventInfo(
     val opcode: Int,
-    val gatewayId: Int,
-    val messageId: String?,
-    val data: JsonObject
+    val data: JsonObject,
+    val lastMessageId: String?,
+    val type: String,
+    val gatewayId: Int
+)
+
+@Serializable
+private data class BarebonesEvent(
+    @SerialName("op")
+    val opcode: Int,
+    @SerialName("d")
+    val data: OptionalProperty<JsonObject> = OptionalProperty.NotPresent,
+    @SerialName("s")
+    val messageId: OptionalProperty<String> = OptionalProperty.NotPresent,
+    @SerialName("t")
+    val type: OptionalProperty<String> = OptionalProperty.NotPresent
 )

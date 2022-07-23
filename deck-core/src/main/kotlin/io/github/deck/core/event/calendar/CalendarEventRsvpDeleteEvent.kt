@@ -12,7 +12,7 @@ import io.github.deck.core.stateless.StatelessCalendarEvent
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.channel.StatelessCalendarChannel
 import io.github.deck.core.util.BlankStatelessServer
-import io.github.deck.gateway.event.Payload
+import io.github.deck.gateway.event.GatewayEvent
 import io.github.deck.gateway.event.type.GatewayCalendarEventRsvpDeletedEvent
 
 /**
@@ -20,7 +20,7 @@ import io.github.deck.gateway.event.type.GatewayCalendarEventRsvpDeletedEvent
  */
 public data class CalendarEventRsvpDeleteEvent(
     override val client: DeckClient,
-    override val payload: Payload,
+    override val barebones: GatewayEvent,
     val serverId: GenericId,
     val calendarEventRsvp: CalendarEventRsvp,
 ): DeckEvent {
@@ -33,7 +33,7 @@ internal val EventService.calendarEventRsvpDeleteEvent: EventMapper<GatewayCalen
     get() = mapper { client, event ->
         CalendarEventRsvpDeleteEvent(
             client = client,
-            payload = event.payload,
+            barebones = event,
             serverId = event.serverId,
             calendarEventRsvp = DeckCalendarEventRsvp.from(client, event.calendarEventRsvp)
         )

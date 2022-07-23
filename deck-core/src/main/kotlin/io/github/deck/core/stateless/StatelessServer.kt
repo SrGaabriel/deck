@@ -8,7 +8,6 @@ import io.github.deck.core.entity.MemberSummary
 import io.github.deck.core.entity.Webhook
 import io.github.deck.core.entity.channel.ServerChannel
 import io.github.deck.core.entity.impl.DeckMember
-import io.github.deck.core.entity.impl.DeckMemberSummary
 import io.github.deck.core.entity.impl.DeckServerChannel
 import io.github.deck.core.entity.impl.DeckWebhook
 import io.github.deck.rest.builder.CreateChannelRequestBuilder
@@ -59,7 +58,7 @@ public interface StatelessServer: StatelessEntity {
      * @return all found members
      */
     public suspend fun getMembers(): List<MemberSummary> =
-        client.rest.server.getServerMembers(id).map { rawServerMemberSummary -> DeckMemberSummary.from(client, this.id, rawServerMemberSummary) }
+        client.rest.server.getServerMembers(id).map { rawServerMemberSummary -> MemberSummary.from(client, this.id, rawServerMemberSummary) }
 
     /**
      * Kicks the member from this server, meaning that they'll leave

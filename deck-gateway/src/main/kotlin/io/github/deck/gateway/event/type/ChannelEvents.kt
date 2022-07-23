@@ -127,3 +127,24 @@ public data class GatewayCalendarEventRsvpDeletedEvent(
     val serverId: GenericId,
     val calendarEventRsvp: RawCalendarEventRsvp
 ): GatewayEvent()
+
+@Serializable
+@SerialName("ForumTopicCreated")
+public data class GatewayForumTopicCreatedEvent(
+    val serverId: GenericId,
+    val forumTopic: RawForumTopic
+): GatewayEvent()
+
+@Serializable
+@SerialName("ForumTopicUpdated")
+public data class GatewayForumTopicUpdatedEvent(
+    val serverId: GenericId,
+    val forumTopic: RawForumTopic
+): GatewayEvent()
+
+@Serializable
+@SerialName("ForumTopicDeleted")
+public data class GatewayForumTopicDeletedEvent(
+    val serverId: GenericId,
+    val forumTopic: RawForumTopic
+): GatewayEvent()

@@ -213,6 +213,42 @@ public class ChannelRoute(private val client: RestClient) {
         ).forumTopic
     }
 
+    public suspend fun getForumTopic(
+        channelId: UUID,
+        forumTopicId: IntGenericId
+    ): RawForumTopic = client.sendRequest<CreateForumTopicResponse>(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}",
+        method = HttpMethod.Get
+    ).forumTopic
+
+    public suspend fun getForumTopic(channelId: UUID): List<RawForumTopicSummary> = client.sendRequest<GetForumTopicsResponse>(
+        endpoint = "/channels/${channelId}/topics",
+        method = HttpMethod.Get
+    ).forumTopics
+
+    public suspend fun updateForumTopic(
+        channelId: UUID,
+        forumTopicId: IntGenericId,
+        builder: UpdateForumTopicRequestBuilder.() -> Unit
+    ): RawForumTopic {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+        return client.sendRequest<CreateForumTopicResponse, UpdateForumTopicRequest>(
+            endpoint = "/channels/${channelId}/topics/${forumTopicId}",
+            method = HttpMethod.Patch,
+            body = UpdateForumTopicRequestBuilder().apply(builder).toRequest()
+        ).forumTopic
+    }
+
+    public suspend fun deleteForumTopic(
+        channelId: UUID,
+        forumTopicId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}",
+        method = HttpMethod.Delete
+    )
+
     public suspend fun createCalendarEvent(
         channelId: UUID,
         builder: CreateCalendarEventRequestBuilder.() -> Unit

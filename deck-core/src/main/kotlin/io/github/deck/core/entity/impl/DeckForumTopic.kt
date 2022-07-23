@@ -18,7 +18,8 @@ public data class DeckForumTopic(
     override val title: String,
     override val content: String,
     override val createdAt: Instant,
-    override val updatedAt: Instant?
+    override val updatedAt: Instant?,
+    override val bumpedAt: Instant?
 ): ForumTopic {
     public companion object {
         public fun from(client: DeckClient, raw: RawForumTopic): DeckForumTopic = DeckForumTopic(
@@ -27,10 +28,11 @@ public data class DeckForumTopic(
             authorId = raw.createdBy,
             serverId = raw.serverId,
             channelId = raw.channelId.mapToBuiltin(),
-            title = raw.title.asNullable()!!,
-            content = raw.content.asNullable()!!,
+            title = raw.title,
+            content = raw.content,
             createdAt = raw.createdAt,
-            updatedAt = raw.updatedAt.asNullable()
+            updatedAt = raw.updatedAt.asNullable(),
+            bumpedAt = raw.bumpedAt.asNullable()
         )
     }
 }

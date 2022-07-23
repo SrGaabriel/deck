@@ -13,7 +13,9 @@ import kotlinx.serialization.encoding.Encoder
 @Serializable(OptionalPropertySerializer::class)
 public sealed class OptionalProperty<out T> {
     public object NotPresent : OptionalProperty<Nothing>()
-    public data class Present<T>(val value: T) : OptionalProperty<T>()
+    public data class Present<T>(val value: T) : OptionalProperty<T>() {
+        override fun toString(): String = value.toString()
+    }
 }
 
 public open class OptionalPropertySerializer<T>(

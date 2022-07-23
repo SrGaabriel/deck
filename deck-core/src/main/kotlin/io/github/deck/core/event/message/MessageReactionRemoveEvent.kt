@@ -18,7 +18,7 @@ import io.github.deck.core.util.BlankStatelessMessage
 import io.github.deck.core.util.BlankStatelessMessageChannel
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.core.util.BlankStatelessUser
-import io.github.deck.gateway.event.Payload
+import io.github.deck.gateway.event.GatewayEvent
 import io.github.deck.gateway.event.type.GatewayChatMessageReactionDeletedEvent
 import java.util.*
 
@@ -28,7 +28,7 @@ import java.util.*
  */
 public data class MessageReactionRemoveEvent(
     override val client: DeckClient,
-    override val payload: Payload,
+    override val barebones: GatewayEvent,
     val serverId: GenericId?,
     val channelId: UUID,
     val messageId: UUID,
@@ -44,7 +44,7 @@ public data class MessageReactionRemoveEvent(
 internal val EventService.messageReactionRemoveEvent: EventMapper<GatewayChatMessageReactionDeletedEvent, MessageReactionRemoveEvent> get() = mapper { client, event ->
     MessageReactionRemoveEvent(
         client = client,
-        payload = event.payload,
+        barebones = event,
         serverId = event.serverId.asNullable(),
         channelId = event.reaction.channelId.mapToBuiltin(),
         messageId = event.reaction.messageId.mapToBuiltin(),

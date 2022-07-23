@@ -1,14 +1,12 @@
 package io.github.deck.core.entity.impl
 
 import io.github.deck.common.entity.RawServerMember
-import io.github.deck.common.entity.RawServerMemberSummary
 import io.github.deck.common.entity.UserType
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.asNullable
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.Member
-import io.github.deck.core.entity.MemberSummary
 import kotlinx.datetime.Instant
 
 public data class DeckMember(
@@ -39,28 +37,6 @@ public data class DeckMember(
             isOwner = raw.isOwner,
             createdAt = raw.user.createdAt,
             joinedAt = raw.joinedAt
-        )
-    }
-}
-
-public data class DeckMemberSummary(
-    override val client: DeckClient,
-    override val id: GenericId,
-    override val serverId: GenericId,
-    override val name: String,
-    override val type: UserType,
-    override val avatar: String?,
-    override val roleIds: List<IntGenericId>,
-): MemberSummary {
-    public companion object {
-        public fun from(client: DeckClient, serverId: GenericId, raw: RawServerMemberSummary): DeckMemberSummary = DeckMemberSummary(
-            client = client,
-            id = raw.user.id,
-            name = raw.user.name,
-            type = raw.user.type,
-            avatar = raw.user.avatar.asNullable(),
-            serverId = serverId,
-            roleIds = raw.roleIds
         )
     }
 }

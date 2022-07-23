@@ -11,7 +11,7 @@ import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.core.util.BlankStatelessUser
-import io.github.deck.gateway.event.Payload
+import io.github.deck.gateway.event.GatewayEvent
 import io.github.deck.gateway.event.type.GatewayTeamMemberRemovedEvent
 
 /**
@@ -20,7 +20,7 @@ import io.github.deck.gateway.event.type.GatewayTeamMemberRemovedEvent
  */
 public data class MemberLeaveEvent(
     override val client: DeckClient,
-    override val payload: Payload,
+    override val barebones: GatewayEvent,
     public val serverId: GenericId,
     public val userId: GenericId,
     public val isKick: Boolean,
@@ -33,7 +33,7 @@ public data class MemberLeaveEvent(
 internal val EventService.memberLeaveEvent: EventMapper<GatewayTeamMemberRemovedEvent, MemberLeaveEvent> get() = mapper { client, event ->
     MemberLeaveEvent(
         client = client,
-        payload = event.payload,
+        barebones = event,
         serverId = event.serverId,
         userId = event.userId,
         isKick = event.isKick,

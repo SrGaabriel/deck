@@ -8,6 +8,9 @@ import io.github.deck.core.event.channel.serverChannelUpdateEvent
 import io.github.deck.core.event.documentation.documentationCreateEvent
 import io.github.deck.core.event.documentation.documentationDeleteEvent
 import io.github.deck.core.event.documentation.documentationUpdateEvent
+import io.github.deck.core.event.forum.forumTopicCreateEvent
+import io.github.deck.core.event.forum.forumTopicDeleteEvent
+import io.github.deck.core.event.forum.forumTopicUpdateEvent
 import io.github.deck.core.event.list.*
 import io.github.deck.core.event.message.*
 import io.github.deck.core.event.server.*
@@ -16,7 +19,6 @@ import io.github.deck.core.event.webhook.webhookCreateEvent
 import io.github.deck.core.event.webhook.webhookUpdateEvent
 import io.github.deck.gateway.Gateway
 import io.github.deck.gateway.event.GatewayEvent
-import io.github.deck.gateway.event.Payload
 import io.github.deck.gateway.util.on
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,9 +30,9 @@ import kotlin.reflect.KClass
 
 public interface DeckEvent {
     public val client: DeckClient
-    public val payload: Payload
+    public val barebones: GatewayEvent
 
-    public val gatewayOrNull: Gateway? get() = client.gateway.gateways[payload.gatewayId]
+    public val gatewayOrNull: Gateway? get() = client.gateway.gateways[barebones.info.gatewayId]
     public val gateway: Gateway get() = gatewayOrNull ?: error("Gateway was probably closed and can't be accessed anymore.")
 }
 
@@ -80,6 +82,9 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         registerMapper(calendarEventRsvpUpdateEvent)
         registerMapper(calendarEventRsvpBulkUpdateEvent)
         registerMapper(calendarEventRsvpDeleteEvent)
+        registerMapper(forumTopicCreateEvent)
+        registerMapper(forumTopicUpdateEvent)
+        registerMapper(forumTopicDeleteEvent)
     }
 
     override fun listen(): Job = client.gateway.on<GatewayEvent> {

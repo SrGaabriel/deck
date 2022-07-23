@@ -119,6 +119,16 @@ public class CreateForumTopicRequestBuilder: RequestBuilder<CreateForumTopicRequ
     )
 }
 
+public class UpdateForumTopicRequestBuilder: RequestBuilder<UpdateForumTopicRequest> {
+    public var title: String? = null
+    public var content: String? = null
+
+    override fun toRequest(): UpdateForumTopicRequest = UpdateForumTopicRequest(
+        title = title.nullableOptional(),
+        content = content.nullableOptional()
+    )
+}
+
 public class CreateCalendarEventRequestBuilder: RequestBuilder<CreateCalendarEventRequest> {
     public var name: String by required()
     public var durationInMinutes: Int = 60

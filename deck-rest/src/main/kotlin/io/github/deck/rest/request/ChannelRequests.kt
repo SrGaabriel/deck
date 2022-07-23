@@ -93,8 +93,19 @@ public data class CreateForumTopicRequest(
 )
 
 @Serializable
+public data class UpdateForumTopicRequest(
+    val title: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val content: OptionalProperty<String> = OptionalProperty.NotPresent
+)
+
+@Serializable
 public data class CreateForumTopicResponse(
     val forumTopic: RawForumTopic
+)
+
+@Serializable
+public data class GetForumTopicsResponse(
+    val forumTopics: List<RawForumTopicSummary>
 )
 
 @Serializable

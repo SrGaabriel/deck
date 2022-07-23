@@ -10,7 +10,7 @@ import io.github.deck.core.event.EventService
 import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.util.BlankStatelessServer
-import io.github.deck.gateway.event.Payload
+import io.github.deck.gateway.event.GatewayEvent
 import io.github.deck.gateway.event.type.GatewayServerChannelUpdatedEvent
 
 /**
@@ -18,7 +18,7 @@ import io.github.deck.gateway.event.type.GatewayServerChannelUpdatedEvent
  */
 public data class ServerChannelUpdateEvent(
     override val client: DeckClient,
-    override val payload: Payload,
+    override val barebones: GatewayEvent,
     val serverId: GenericId,
     val channel: ServerChannel
 ): DeckEvent {
@@ -28,7 +28,7 @@ public data class ServerChannelUpdateEvent(
 internal val EventService.serverChannelUpdateEvent: EventMapper<GatewayServerChannelUpdatedEvent, ServerChannelUpdateEvent> get() = mapper { client, event ->
     ServerChannelUpdateEvent(
         client = client,
-        payload = event.payload,
+        barebones = event,
         serverId = event.serverId,
         channel = DeckServerChannel.from(client, event.channel)
     )

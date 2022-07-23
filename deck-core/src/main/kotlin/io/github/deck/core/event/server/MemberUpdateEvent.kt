@@ -11,7 +11,7 @@ import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessUser
 import io.github.deck.core.util.Patch
 import io.github.deck.core.util.asPatch
-import io.github.deck.gateway.event.Payload
+import io.github.deck.gateway.event.GatewayEvent
 import io.github.deck.gateway.event.type.GatewayTeamMemberUpdatedEvent
 
 /**
@@ -19,7 +19,7 @@ import io.github.deck.gateway.event.type.GatewayTeamMemberUpdatedEvent
  */
 public data class MemberUpdateEvent(
     override val client: DeckClient,
-    override val payload: Payload,
+    override val barebones: GatewayEvent,
     val serverId: GenericId,
     val userId: GenericId,
     val memberData: MemberData
@@ -34,7 +34,7 @@ public data class MemberUpdateEvent(
 internal val EventService.memberUpdateEvent: EventMapper<GatewayTeamMemberUpdatedEvent, MemberUpdateEvent> get() = mapper { client, event ->
     MemberUpdateEvent(
         client = client,
-        payload = event.payload,
+        barebones = event,
         serverId = event.serverId,
         userId = event.userInfo.id,
         memberData = MemberUpdateEvent.MemberData(

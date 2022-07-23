@@ -104,12 +104,26 @@ public data class RawForumTopic(
     val id: IntGenericId,
     val serverId: GenericId,
     val channelId: UniqueId,
-    val title: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val content: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val title: String,
+    val content: String,
     val createdAt: Instant,
     val createdBy: GenericId,
     val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
-    val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent
+    val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    val bumpedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public data class RawForumTopicSummary(
+    val id: IntGenericId,
+    val serverId: GenericId,
+    val channelId: UniqueId,
+    val title: String,
+    val createdAt: Instant,
+    val createdBy: GenericId,
+    val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+    val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    val bumpedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent
 )
 
 @Serializable
