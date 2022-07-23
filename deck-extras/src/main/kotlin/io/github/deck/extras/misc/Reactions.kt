@@ -4,20 +4,21 @@ import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.core.event.message.MessageReactionAddEvent
 import io.github.deck.core.stateless.StatelessMessage
-import io.github.deck.core.util.on
 import kotlinx.coroutines.Job
 
 /**
  * @param scope Where you'll handle the reaction event, return true to continue listening
  * to [MessageReactionAddEvent] or false to cancel the job.
  */
-public suspend fun StatelessMessage.onReaction(scope: suspend MessageReactionAddEvent.() -> Boolean): Job = Job().apply {
-    client.on<MessageReactionAddEvent> {
+public suspend fun StatelessMessage.onReaction(scope: suspend MessageReactionAddEvent.() -> Boolean): Job {
+    var job: Job? = null
+    job = client.on<MessageReactionAddEvent> {
         if (messageId != this@onReaction.id)
             return@on
         if (!scope())
-            cancel()
+            job?.cancel()
     }
+    return job
 }
 
 /**
@@ -34,10 +35,10 @@ public suspend fun StatelessMessage.onReaction(
     userId: GenericId? = null,
     reactionId: IntGenericId? = null,
     scope: suspend MessageReactionAddEvent.() -> Boolean
-): Job = onReaction {
+): Job = onReaction onUncheckedReaction@ {
     if (userId != null && userId != this.userId)
-        return@onReaction true
+        return@onUncheckedReaction true
     else if (reactionId != null && reactionId != emote.id)
-        return@onReaction true
+        return@onUncheckedReaction true
     scope()
 }
