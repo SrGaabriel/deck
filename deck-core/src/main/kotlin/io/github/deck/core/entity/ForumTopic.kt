@@ -34,6 +34,9 @@ public interface ForumTopic: StatelessForumTopic {
     /** Post's last activity time */
     public val bumpedAt: Instant?
 
+    /** This forum topic's mentions, null if none */
+    public val mentions: Mentions?
+
     /**
      * Creates a [ForumTopicSummary] from this [ForumTopic]
      */

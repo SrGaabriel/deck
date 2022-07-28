@@ -1,5 +1,6 @@
 package io.github.deck.core.event.message
 
+import io.github.deck.common.util.GenericId
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.Message
 import io.github.deck.core.entity.impl.DeckMessage
@@ -12,6 +13,7 @@ import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.stateless.channel.StatelessMessageChannel
 import io.github.deck.gateway.event.GatewayEvent
 import io.github.deck.gateway.event.type.GatewayChatMessageCreatedEvent
+import java.util.*
 
 /**
  * Called when a [Message] is sent, be it on a private channel (DM)
@@ -22,6 +24,10 @@ public data class MessageCreateEvent(
     override val barebones: GatewayEvent,
     public val message: Message
 ) : DeckEvent {
+    val authorId: GenericId get() = message.authorId
+    val channelId: UUID get() = message.channelId
+    val serverId: GenericId? get() = message.serverId
+
     val channel: StatelessMessageChannel get() = message.channel
     val author: StatelessUser get() = message.author
     val server: StatelessServer? get() = message.server

@@ -81,7 +81,7 @@ internal fun RestClient.createHttpClient() = HttpClient(CIO.create()) {
             response.status == HttpStatusCode.TooManyRequests
         }
         delayMillis(respectRetryAfterHeader = true) {
-            8_000
+            response?.headers?.get(HttpHeaders.RetryAfter)?.toLongOrNull() ?: 10_000
         }
     }
     install(Logging) {

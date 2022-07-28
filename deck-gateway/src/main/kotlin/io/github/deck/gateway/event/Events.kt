@@ -47,6 +47,7 @@ private val polymorphicJson by lazy {
                 subclass(GatewayDocumentationUpdatedEvent::class)
                 subclass(GatewayDocumentationDeletedEvent::class)
                 subclass(GatewayServerChannelCreatedEvent::class)
+                subclass(GatewayServerChannelUpdatedEvent::class)
                 subclass(GatewayServerChannelDeletedEvent::class)
                 subclass(GatewayChatMessageReactionCreatedEvent::class)
                 subclass(GatewayChatMessageReactionDeletedEvent::class)
@@ -81,6 +82,7 @@ public class DefaultEventDecoder(private val gatewayId: Int) : EventDecoder {
             else -> error("Unknown opcode ${barebones.opcode}")
         }
         val deserializationStrategy = polymorphicJson.serializersModule.getPolymorphic(GatewayEvent::class, eventType)
+            ?: error("received unknown event: $eventType")
         val event = polymorphicJson.decodeFromJsonElement(deserializationStrategy as DeserializationStrategy<GatewayEvent>, eventData)
         event._info = EventInfo(
             opcode = barebones.opcode,

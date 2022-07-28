@@ -110,7 +110,8 @@ public data class RawForumTopic(
     val createdBy: GenericId,
     val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
-    val bumpedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent
+    val bumpedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    val mentions: OptionalProperty<RawMessageMentions> = OptionalProperty.NotPresent
 )
 
 @Serializable
