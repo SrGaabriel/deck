@@ -6,7 +6,6 @@ import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.asNullable
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.channel.ForumChannel
-import io.github.deck.core.entity.impl.DeckForumTopic
 import io.github.deck.core.stateless.StatelessForumTopic
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessUser
@@ -58,9 +57,6 @@ public data class ForumTopicSummary(
     val bumpedAt: Instant?,
     val updatedAt: Instant?
 ) : StatelessForumTopic {
-    public suspend fun getForumTopic(): ForumTopic =
-        DeckForumTopic.from(client, client.rest.channel.getForumTopic(channelId, id))
-
     public companion object {
         public fun from(client: DeckClient, raw: RawForumTopicSummary): ForumTopicSummary =
             ForumTopicSummary(

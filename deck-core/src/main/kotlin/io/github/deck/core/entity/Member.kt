@@ -48,14 +48,14 @@ public interface Member: StatelessMember {
 }
 
 public data class MemberSummary(
-    val client: DeckClient,
-    val id: GenericId,
-    val serverId: GenericId,
+    override val client: DeckClient,
+    override val id: GenericId,
+    override val serverId: GenericId,
     val name: String,
     val type: UserType,
     val avatar: String?,
     val roleIds: List<IntGenericId>,
-) {
+): StatelessMember {
     public companion object {
         public fun from(client: DeckClient, serverId: GenericId, raw: RawServerMemberSummary): MemberSummary = MemberSummary(
             client = client,
@@ -67,7 +67,4 @@ public data class MemberSummary(
             roleIds = raw.roleIds
         )
     }
-
-    public suspend fun getMember(): Member =
-        DeckMember.from(client, serverId, client.rest.server.getServerMember(serverId, id))
 }
