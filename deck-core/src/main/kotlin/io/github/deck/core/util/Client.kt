@@ -43,11 +43,11 @@ public suspend fun DeckClient.createChannel(builder: CreateChannelRequestBuilder
     DeckServerChannel.from(this, rest.channel.createChannel(builder))
 
 public suspend fun DeckClient.getChannel(channelId: UUID): Channel =
-    DeckServerChannel.from(this, rest.channel.retrieveChannel(channelId))
+    DeckServerChannel.from(this, rest.channel.getChannel(channelId))
 
 @Suppress("unchecked_cast")
 public suspend fun <T : ServerChannel> DeckClient.getChannelOf(channelId: UUID): T =
-    (DeckServerChannel.from(this, rest.channel.retrieveChannel(channelId)) as? T) ?: error("Called 'getChannelOf' with the wrong channel type")
+    (DeckServerChannel.from(this, rest.channel.getChannel(channelId)) as? T) ?: error("Called 'getChannelOf' with the wrong channel type")
 
 public suspend fun DeckClient.deleteChannel(channelId: UUID): Unit =
     rest.channel.deleteChannel(channelId)

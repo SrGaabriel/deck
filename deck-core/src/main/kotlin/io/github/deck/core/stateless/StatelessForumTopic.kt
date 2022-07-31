@@ -33,4 +33,7 @@ public interface StatelessForumTopic: StatelessEntity {
      */
     public suspend fun delete(): Unit =
         client.rest.channel.deleteForumTopic(channelId, id)
+
+    public suspend fun getForumTopic(): ForumTopic =
+        DeckForumTopic.from(client, client.rest.channel.getForumTopic(channelId, id))
 }

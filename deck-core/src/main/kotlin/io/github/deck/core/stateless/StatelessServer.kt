@@ -50,7 +50,7 @@ public interface StatelessServer: StatelessEntity {
      * @return found member
      */
     public suspend fun getMember(memberId: GenericId): Member =
-        DeckMember.from(client, id, client.rest.server.getServerMember(memberId, id))
+        DeckMember.from(client, id, client.rest.server.getServerMember(id, memberId))
 
     /**
      * Retrieves all members from this server.
@@ -122,7 +122,7 @@ public interface StatelessServer: StatelessEntity {
      * @return found webhook
      */
     public suspend fun getWebhook(webhookId: UUID): Webhook =
-        DeckWebhook.from(client, client.rest.webhook.retrieveWebhook(webhookId, id))
+        DeckWebhook.from(client, client.rest.webhook.getWebhook(id, webhookId))
 
     /**
      * Retrieves all registered webhooks in this server. If the [channelId] parameter
@@ -132,7 +132,7 @@ public interface StatelessServer: StatelessEntity {
      * @return list of all found webhooks
      */
     public suspend fun getWebhooks(channelId: UUID? = null): List<Webhook> =
-        client.rest.webhook.retrieveServerWebhooks(id, channelId).map { DeckWebhook.from(client, it) }
+        client.rest.webhook.getServerWebhooks(id, channelId).map { DeckWebhook.from(client, it) }
 
     /**
      * Overwrites the specified webhook with the new data provided
@@ -144,7 +144,7 @@ public interface StatelessServer: StatelessEntity {
      * @return updated webhook containing new data
      */
     public suspend fun updateWebhook(webhookId: UUID, builder: UpdateWebhookRequestBuilder.() -> Unit): Webhook =
-        DeckWebhook.from(client, client.rest.webhook.updateWebhook(webhookId, id, builder))
+        DeckWebhook.from(client, client.rest.webhook.updateWebhook(id, webhookId, builder))
 
     /**
      * Deletes the webhook with the associated [webhookId] id.
@@ -152,5 +152,5 @@ public interface StatelessServer: StatelessEntity {
      * @param webhookId webhook to be deleted.
      */
     public suspend fun deleteWebhook(webhookId: UUID): Unit =
-        client.rest.webhook.deleteWebhook(webhookId, id)
+        client.rest.webhook.deleteWebhook(id, webhookId)
 }

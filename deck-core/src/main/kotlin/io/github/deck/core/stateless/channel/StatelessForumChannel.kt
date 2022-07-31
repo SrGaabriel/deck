@@ -2,7 +2,9 @@ package io.github.deck.core.stateless.channel
 
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.core.entity.ForumTopic
+import io.github.deck.core.entity.channel.ForumChannel
 import io.github.deck.core.entity.impl.DeckForumTopic
+import io.github.deck.core.util.getChannelOf
 import io.github.deck.rest.builder.CreateForumTopicRequestBuilder
 import io.github.deck.rest.builder.UpdateForumTopicRequestBuilder
 
@@ -34,4 +36,7 @@ public interface StatelessForumChannel: StatelessServerChannel {
      */
     public suspend fun deleteTopic(forumTopicId: IntGenericId): Unit =
         client.rest.channel.deleteForumTopic(id, forumTopicId)
+
+    override suspend fun getChannel(): ForumChannel =
+        client.getChannelOf(id)
 }

@@ -69,5 +69,5 @@ public data class MemberSummary(
     }
 
     public suspend fun getMember(): Member =
-        DeckMember.from(client, serverId, client.rest.server.getServerMember(id, serverId))
+        DeckMember.from(client, serverId, client.rest.server.getServerMember(serverId, id))
 }

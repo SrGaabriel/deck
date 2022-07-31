@@ -2,7 +2,9 @@ package io.github.deck.core.stateless.channel
 
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.core.entity.CalendarEvent
+import io.github.deck.core.entity.channel.CalendarChannel
 import io.github.deck.core.entity.impl.DeckCalendarEvent
+import io.github.deck.core.util.getChannelOf
 import io.github.deck.rest.builder.CreateCalendarEventRequestBuilder
 import io.github.deck.rest.builder.UpdateCalendarEventRequestBuilder
 
@@ -51,4 +53,7 @@ public interface StatelessCalendarChannel: StatelessServerChannel {
      */
     public suspend fun deleteCalendarEvent(calendarEventId: IntGenericId): Unit =
         client.rest.channel.deleteCalendarEvent(id, calendarEventId)
+
+    override suspend fun getChannel(): CalendarChannel =
+        client.getChannelOf(id)
 }

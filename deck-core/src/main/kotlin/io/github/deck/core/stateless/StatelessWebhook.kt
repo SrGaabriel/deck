@@ -21,11 +21,14 @@ public interface StatelessWebhook: StatelessEntity {
      * @return updated webhook containing new data
      */
     public suspend fun update(builder: UpdateWebhookRequestBuilder.() -> Unit): Webhook =
-        DeckWebhook.from(client, client.rest.webhook.updateWebhook(id, serverId, builder))
+        DeckWebhook.from(client, client.rest.webhook.updateWebhook(serverId, id, builder))
 
     /**
      * Deletes this webhook
      */
     public suspend fun delete(): Unit =
-        client.rest.webhook.deleteWebhook(id, serverId)
+        client.rest.webhook.deleteWebhook(serverId, id)
+
+    public suspend fun getWebhook(): Webhook =
+        DeckWebhook.from(client, client.rest.webhook.getWebhook(serverId, id))
 }

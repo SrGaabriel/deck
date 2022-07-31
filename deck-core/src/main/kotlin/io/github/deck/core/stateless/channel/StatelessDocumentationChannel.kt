@@ -2,7 +2,9 @@ package io.github.deck.core.stateless.channel
 
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.core.entity.Documentation
+import io.github.deck.core.entity.channel.DocumentationChannel
 import io.github.deck.core.entity.impl.DeckDocumentation
+import io.github.deck.core.util.getChannelOf
 import io.github.deck.rest.builder.CreateDocumentationRequestBuilder
 
 public interface StatelessDocumentationChannel: StatelessServerChannel {
@@ -50,4 +52,7 @@ public interface StatelessDocumentationChannel: StatelessServerChannel {
      */
     public suspend fun deleteDocumentation(documentationId: IntGenericId): Unit =
         client.rest.channel.deleteDocumentation(id, documentationId)
+
+    override suspend fun getChannel(): DocumentationChannel =
+        client.getChannelOf(id)
 }

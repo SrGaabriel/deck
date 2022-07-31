@@ -33,4 +33,7 @@ public interface StatelessDocumentation: StatelessEntity {
      */
     public suspend fun delete(): Unit =
         client.rest.channel.deleteDocumentation(channelId, id)
+
+    public suspend fun getDocumentation(): Documentation =
+        DeckDocumentation.from(client, client.rest.channel.getDocumentation(channelId, id))
 }

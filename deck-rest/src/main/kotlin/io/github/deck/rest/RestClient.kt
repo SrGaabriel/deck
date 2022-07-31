@@ -2,10 +2,10 @@ package io.github.deck.rest
 
 import io.github.deck.common.log.DeckLogger
 import io.github.deck.common.log.MicroutilsLogger
-import io.github.deck.rest.route.ChannelRoute
-import io.github.deck.rest.route.GroupRoute
-import io.github.deck.rest.route.ServerRoute
-import io.github.deck.rest.route.WebhookRoute
+import io.github.deck.rest.route.ChannelRoutes
+import io.github.deck.rest.route.GroupRoutes
+import io.github.deck.rest.route.ServerRoutes
+import io.github.deck.rest.route.WebhookRoutes
 import io.github.deck.rest.util.RequestService
 import io.github.deck.rest.util.createHttpClient
 import io.ktor.client.*
@@ -25,8 +25,8 @@ public class RestClient(public val token: String) {
 
     public var logRequests: Boolean = false
 
-    public val channel: ChannelRoute = ChannelRoute(this)
-    public val group: GroupRoute = GroupRoute(this)
-    public val server: ServerRoute = ServerRoute(this)
-    public val webhook: WebhookRoute = WebhookRoute(this)
+    public val channel: ChannelRoutes = ChannelRoutes(this)
+    public val group: GroupRoutes = GroupRoutes(this)
+    public val server: ServerRoutes = ServerRoutes(this)
+    public val webhook: WebhookRoutes = WebhookRoutes(this)
 }

@@ -5,7 +5,7 @@ import io.github.deck.rest.RestClient
 import io.github.deck.rest.util.sendRequest
 import io.ktor.http.*
 
-public class GroupRoute(private val client: RestClient) {
+public class GroupRoutes(private val client: RestClient) {
     public suspend fun addMember(
         userId: GenericId,
         groupId: GenericId

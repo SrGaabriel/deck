@@ -38,4 +38,7 @@ public interface StatelessCalendarEventRsvp: StatelessEntity {
      */
     public suspend fun delete(): Unit =
         client.rest.channel.deleteCalendarEventRsvp(channelId, calendarEventId, userId)
+
+    public suspend fun getCalendarEvent(): CalendarEventRsvp =
+        DeckCalendarEventRsvp.from(client, client.rest.channel.getCalendarEventRsvp(channelId, calendarEventId, userId))
 }

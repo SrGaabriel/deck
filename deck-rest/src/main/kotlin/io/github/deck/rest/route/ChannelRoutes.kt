@@ -16,14 +16,19 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 @OptIn(ExperimentalContracts::class)
-public class ChannelRoute(private val client: RestClient) {
-    public suspend fun createChannel(builder: CreateChannelRequestBuilder.() -> Unit): RawServerChannel = client.sendRequest<CreateChannelResponse, CreateChannelRequest>(
-        endpoint = "/channels",
-        method = HttpMethod.Post,
-        body = CreateChannelRequestBuilder().apply(builder).toRequest()
-    ).channel
+public class ChannelRoutes(private val client: RestClient) {
+    public suspend fun createChannel(builder: CreateChannelRequestBuilder.() -> Unit): RawServerChannel {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+        return client.sendRequest<CreateChannelResponse, CreateChannelRequest>(
+            endpoint = "/channels",
+            method = HttpMethod.Post,
+            body = CreateChannelRequestBuilder().apply(builder).toRequest()
+        ).channel
+    }
 
-    public suspend fun retrieveChannel(channelId: UUID): RawServerChannel = client.sendRequest<CreateChannelResponse>(
+    public suspend fun getChannel(channelId: UUID): RawServerChannel = client.sendRequest<CreateChannelResponse>(
         endpoint = "/channels/${channelId}",
         method = HttpMethod.Get,
     ).channel
@@ -36,11 +41,16 @@ public class ChannelRoute(private val client: RestClient) {
     public suspend fun sendMessage(
         channelId: UUID,
         builder: SendMessageRequestBuilder.() -> Unit
-    ): RawMessage = client.sendRequest<SendMessageResponse, SendMessageRequest>(
-        endpoint = "/channels/$channelId/messages",
-        method = HttpMethod.Post,
-        body = SendMessageRequestBuilder().apply(builder).toRequest()
-    ).message
+    ): RawMessage {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+        return client.sendRequest<SendMessageResponse, SendMessageRequest>(
+            endpoint = "/channels/$channelId/messages",
+            method = HttpMethod.Post,
+            body = SendMessageRequestBuilder().apply(builder).toRequest()
+        ).message
+    }
 
     public suspend fun updateMessage(
         channelId: UUID,
@@ -104,11 +114,16 @@ public class ChannelRoute(private val client: RestClient) {
     public suspend fun createDocumentation(
         channelId: UUID,
         builder: CreateDocumentationRequestBuilder.() -> Unit
-    ): RawDocumentation = client.sendRequest<CreateDocumentationResponse, CreateDocumentationRequest>(
-        endpoint = "/channels/$channelId/docs",
-        method = HttpMethod.Post,
-        body = CreateDocumentationRequestBuilder().apply(builder).toRequest()
-    ).documentation
+    ): RawDocumentation {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+        return client.sendRequest<CreateDocumentationResponse, CreateDocumentationRequest>(
+            endpoint = "/channels/$channelId/docs",
+            method = HttpMethod.Post,
+            body = CreateDocumentationRequestBuilder().apply(builder).toRequest()
+        ).documentation
+    }
 
     public suspend fun getDocumentation(
         channelId: UUID,
@@ -129,11 +144,16 @@ public class ChannelRoute(private val client: RestClient) {
         channelId: UUID,
         documentationId: IntGenericId,
         builder: CreateDocumentationRequestBuilder.() -> Unit
-    ): RawDocumentation = client.sendRequest<CreateDocumentationResponse, CreateDocumentationRequest>(
-        endpoint = "/channels/$channelId/docs/$documentationId",
-        method = HttpMethod.Put,
-        body = CreateDocumentationRequestBuilder().apply(builder).toRequest()
-    ).documentation
+    ): RawDocumentation {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+        return client.sendRequest<CreateDocumentationResponse, CreateDocumentationRequest>(
+            endpoint = "/channels/$channelId/docs/$documentationId",
+            method = HttpMethod.Put,
+            body = CreateDocumentationRequestBuilder().apply(builder).toRequest()
+        ).documentation
+    }
 
     public suspend fun deleteDocumentation(
         channelId: UUID,
@@ -146,11 +166,16 @@ public class ChannelRoute(private val client: RestClient) {
     public suspend fun createListItem(
         channelId: UUID,
         builder: CreateListItemRequestBuilder.() -> Unit
-    ): RawListItem = client.sendRequest<CreateListItemResponse, CreateListItemRequest>(
-        endpoint = "/channels/$channelId/items",
-        method = HttpMethod.Post,
-        body = CreateListItemRequestBuilder().apply(builder).toRequest()
-    ).listItem
+    ): RawListItem {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+        return client.sendRequest<CreateListItemResponse, CreateListItemRequest>(
+            endpoint = "/channels/$channelId/items",
+            method = HttpMethod.Post,
+            body = CreateListItemRequestBuilder().apply(builder).toRequest()
+        ).listItem
+    }
 
     public suspend fun completeListItem(
         channelId: UUID,
@@ -168,7 +193,7 @@ public class ChannelRoute(private val client: RestClient) {
         method = HttpMethod.Delete
     )
 
-    public suspend fun retrieveListItem(
+    public suspend fun getListItem(
         channelId: UUID,
         listItemId: UUID,
     ): RawListItem = client.sendRequest<CreateListItemResponse, Unit>(
@@ -176,7 +201,7 @@ public class ChannelRoute(private val client: RestClient) {
         method = HttpMethod.Get
     ).listItem
 
-    public suspend fun retrieveListChannelItems(channelId: UUID): List<RawListItem> = client.sendRequest<GetListChannelItemsResponse, Unit>(
+    public suspend fun getListChannelItems(channelId: UUID): List<RawListItem> = client.sendRequest<GetListChannelItemsResponse, Unit>(
         endpoint = "/channels/$channelId/items",
         method = HttpMethod.Get
     ).listItems
@@ -185,11 +210,16 @@ public class ChannelRoute(private val client: RestClient) {
         channelId: UUID,
         listItemId: UUID,
         builder: UpdateListItemRequestBuilder.() -> Unit
-    ): RawListItem = client.sendRequest<CreateListItemResponse, CreateListItemRequest>(
-        endpoint = "/channels/$channelId/items/$listItemId",
-        method = HttpMethod.Put,
-        body = UpdateListItemRequestBuilder().apply(builder).toRequest()
-    ).listItem
+    ): RawListItem {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+        return client.sendRequest<CreateListItemResponse, CreateListItemRequest>(
+            endpoint = "/channels/$channelId/items/$listItemId",
+            method = HttpMethod.Put,
+            body = UpdateListItemRequestBuilder().apply(builder).toRequest()
+        ).listItem
+    }
 
     public suspend fun deleteListItem(
         channelId: UUID,

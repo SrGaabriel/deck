@@ -44,4 +44,7 @@ public interface StatelessListItem: StatelessEntity {
      */
     public suspend fun delete(): Unit =
         client.rest.channel.deleteListItem(channelId, id)
+
+    public suspend fun getListItem(): ListItem =
+        DeckListItem.from(client, client.rest.channel.getListItem(channelId, id))
 }

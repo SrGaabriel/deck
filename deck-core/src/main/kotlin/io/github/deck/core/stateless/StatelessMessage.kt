@@ -64,4 +64,7 @@ public interface StatelessMessage: StatelessEntity, ReactionHolder {
      */
     public suspend fun delete(): Unit =
         client.rest.channel.deleteMessage(channelId, id)
+
+    public suspend fun getMessage(): Message =
+        DeckMessage.from(client, client.rest.channel.getMessage(channelId, id))
 }

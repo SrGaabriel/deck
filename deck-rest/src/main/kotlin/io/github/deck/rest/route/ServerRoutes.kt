@@ -1,26 +1,22 @@
 package io.github.deck.rest.route
 
-import io.github.deck.common.entity.RawServer
-import io.github.deck.common.entity.RawServerBan
-import io.github.deck.common.entity.RawServerMember
-import io.github.deck.common.entity.RawServerMemberSummary
+import io.github.deck.common.entity.*
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
-import io.github.deck.common.util.SocialLinkType
 import io.github.deck.rest.RestClient
 import io.github.deck.rest.request.*
 import io.github.deck.rest.util.sendRequest
 import io.ktor.http.*
 
-public class ServerRoute(private val client: RestClient) {
+public class ServerRoutes(private val client: RestClient) {
     public suspend fun getServer(serverId: GenericId): RawServer = client.sendRequest<GetServerResponse>(
         endpoint = "/servers/${serverId}",
         method = HttpMethod.Get
     ).server
 
     public suspend fun getServerMember(
-        userId: GenericId,
-        serverId: GenericId
+        serverId: GenericId,
+        userId: GenericId
     ): RawServerMember = client.sendRequest<GetServerMemberResponse>(
         endpoint = "/servers/${serverId}/members/${userId}",
         method = HttpMethod.Get
@@ -37,8 +33,8 @@ public class ServerRoute(private val client: RestClient) {
     ).serverMemberBans
 
     public suspend fun awardXpToMember(
-        userId: GenericId,
         serverId: GenericId,
+        userId: GenericId,
         amount: Int
     ): Int = client.sendRequest<MemberAwardXpRequest, MemberAwardXpRequest>(
         endpoint = "/servers/$serverId/members/$userId/xp",
@@ -47,8 +43,8 @@ public class ServerRoute(private val client: RestClient) {
     ).amount
 
     public suspend fun assignRoleToMember(
-        userId: GenericId,
         serverId: GenericId,
+        userId: GenericId,
         roleId: IntGenericId
     ): Unit = client.sendRequest(
         endpoint = "/servers/$serverId/members/$userId/roles/$roleId",
@@ -56,8 +52,8 @@ public class ServerRoute(private val client: RestClient) {
     )
 
     public suspend fun removeRoleFromMember(
-        userId: GenericId,
         serverId: GenericId,
+        userId: GenericId,
         roleId: IntGenericId
     ): Unit = client.sendRequest(
         endpoint = "/servers/$serverId/members/$userId/roles/$roleId",
@@ -94,8 +90,8 @@ public class ServerRoute(private val client: RestClient) {
         userId: GenericId,
         serverId: GenericId,
         type: SocialLinkType
-    ): GetMemberSocialLinkResponse = client.sendRequest<GetMemberSocialLinkResponse>(
-        endpoint = "/servers/$serverId/members/$userId/social-links/${type.officialName}",
+    ): GetMemberSocialLinkResponse = client.sendRequest(
+        endpoint = "/servers/$serverId/members/$userId/social-links/${type.id}",
         method = HttpMethod.Get
     )
 

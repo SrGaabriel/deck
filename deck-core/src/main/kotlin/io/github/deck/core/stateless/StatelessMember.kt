@@ -4,6 +4,8 @@ import io.github.deck.common.util.DeckDelicateApi
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.core.entity.Ban
+import io.github.deck.core.entity.Member
+import io.github.deck.core.entity.impl.DeckMember
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.rest.util.GuildedRequestException
 
@@ -32,7 +34,7 @@ public interface StatelessMember: StatelessEntity {
      * @param roleId role to be assigned to this member
      */
     public suspend fun addRole(roleId: IntGenericId): Unit =
-        client.rest.server.assignRoleToMember(id, serverId, roleId)
+        client.rest.server.assignRoleToMember(serverId, id, roleId)
 
     /**
      * Retrieves a list of all the ids of the roles this member is assigned to
@@ -48,7 +50,7 @@ public interface StatelessMember: StatelessEntity {
      * @param roleId role to be removed from this member
      */
     public suspend fun removeRole(roleId: IntGenericId): Unit =
-        client.rest.server.removeRoleFromMember(id, serverId, roleId)
+        client.rest.server.removeRoleFromMember(serverId, id, roleId)
 
     /**
      * Kicks this member from the server
@@ -80,5 +82,8 @@ public interface StatelessMember: StatelessEntity {
      * @return user's new xp
      */
     public suspend fun awardXp(amount: Int): Int =
-        client.rest.server.awardXpToMember(id, serverId, amount)
+        client.rest.server.awardXpToMember(serverId, id, amount)
+
+    public suspend fun getMember(): Member =
+        DeckMember.from(client, serverId, client.rest.server.getServerMember(serverId, id))
 }

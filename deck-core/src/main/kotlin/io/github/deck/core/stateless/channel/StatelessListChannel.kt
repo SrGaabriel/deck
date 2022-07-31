@@ -1,9 +1,11 @@
 package io.github.deck.core.stateless.channel
 
 import io.github.deck.core.entity.ListItem
+import io.github.deck.core.entity.channel.ListChannel
 import io.github.deck.core.entity.impl.DeckListItem
 import io.github.deck.core.event.list.ListItemCompleteEvent
 import io.github.deck.core.event.list.ListItemIncompleteEvent
+import io.github.deck.core.util.getChannelOf
 import io.github.deck.rest.builder.CreateListItemRequestBuilder
 import io.github.deck.rest.builder.UpdateListItemRequestBuilder
 import java.util.*
@@ -47,7 +49,7 @@ public interface StatelessListChannel: StatelessServerChannel {
      * @return found list item
      */
     public suspend fun getItem(itemId: UUID): ListItem =
-        DeckListItem.from(client, client.rest.channel.retrieveListItem(id, itemId))
+        DeckListItem.from(client, client.rest.channel.getListItem(id, itemId))
 
     /**
      * Retrieves all list items within this list channel
@@ -55,7 +57,7 @@ public interface StatelessListChannel: StatelessServerChannel {
      * @return found list items
      */
     public suspend fun getItems(): List<ListItem> =
-        client.rest.channel.retrieveListChannelItems(id).map { DeckListItem.from(client, it) }
+        client.rest.channel.getListChannelItems(id).map { DeckListItem.from(client, it) }
 
     /**
      * Updates **(NOT PATCHES)** the list item associated with the provided [itemId].
@@ -75,4 +77,7 @@ public interface StatelessListChannel: StatelessServerChannel {
      */
     public suspend fun deleteItem(itemId: UUID): Unit =
         client.rest.channel.deleteListItem(id, itemId)
+
+    override suspend fun getChannel(): ListChannel =
+        client.getChannelOf(id)
 }

@@ -2,7 +2,6 @@ package io.github.deck.common.entity
 
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.OptionalProperty
-import io.github.deck.common.util.SocialLinkType
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -42,3 +41,31 @@ public enum class UserType {
 
 @Serializable
 public class RawUserId(public val id: String)
+
+@Serializable
+public enum class SocialLinkType(public val id: String) {
+    @SerialName("twitch")
+    Twitch("twitch"),
+    @SerialName("bnet")
+    BattleNet("bnet"),
+    @SerialName("psn")
+    PlaystationNetwork("psn"),
+    @SerialName("xbox")
+    Xbox("xbox"),
+    @SerialName("steam")
+    Steam("steam"),
+    @SerialName("origin")
+    Origin("origin"),
+    @SerialName("youtube")
+    Youtube("youtube"),
+    @SerialName("twitter")
+    Twitter("twitter"),
+    @SerialName("facebook")
+    Facebook("facebook"),
+    @SerialName("switch")
+    Switch("switch"),
+    @SerialName("patreon")
+    Patreon("patreon"),
+    @SerialName("roblox")
+    Roblox("roblox");
+}
