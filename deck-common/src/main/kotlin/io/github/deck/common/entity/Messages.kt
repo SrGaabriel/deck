@@ -1,21 +1,25 @@
+@file:UseSerializers(UUIDSerializer::class)
+
 package io.github.deck.common.entity
 
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.OptionalProperty
-import io.github.deck.common.util.UniqueId
+import io.github.deck.common.util.UUIDSerializer
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+import java.util.*
 
 @Serializable
 public data class RawMessage(
-    public val id: UniqueId,
+    public val id: UUID,
     public val type: RawMessageType,
     public val serverId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
-    public val channelId: UniqueId,
+    public val channelId: UUID,
     public val content: OptionalProperty<String> = OptionalProperty.NotPresent,
     public val embeds: List<RawEmbed> = emptyList(),
-    public val replyMessageIds: OptionalProperty<List<UniqueId>> = OptionalProperty.NotPresent,
+    public val replyMessageIds: OptionalProperty<List<UUID>> = OptionalProperty.NotPresent,
     public val isPrivate: Boolean = false,
     public val isSilent: Boolean = false,
     public val mentions: OptionalProperty<RawMessageMentions> = OptionalProperty.NotPresent,

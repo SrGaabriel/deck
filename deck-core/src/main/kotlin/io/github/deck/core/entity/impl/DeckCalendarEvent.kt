@@ -4,7 +4,6 @@ import io.github.deck.common.entity.RawCalendarEvent
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.asNullable
-import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.CalendarEvent
 import kotlinx.datetime.Instant
@@ -33,7 +32,7 @@ public data class DeckCalendarEvent(
         public fun from(client: DeckClient, raw: RawCalendarEvent): DeckCalendarEvent = DeckCalendarEvent(
             client = client,
             id = raw.id,
-            channelId = raw.channelId.mapToBuiltin(),
+            channelId = raw.channelId,
             serverId = raw.serverId,
             name = raw.name,
             description = raw.description.asNullable(),

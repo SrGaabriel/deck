@@ -4,7 +4,6 @@ import io.github.deck.common.entity.RawListItem
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.asNullable
 import io.github.deck.common.util.map
-import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.ListItem
 import io.github.deck.core.entity.ListItemNote
@@ -26,9 +25,9 @@ public data class DeckListItem(
     public companion object {
         public fun from(client: DeckClient, raw: RawListItem): DeckListItem = DeckListItem(
             client = client,
-            id = raw.id.mapToBuiltin(),
+            id = raw.id,
             serverId = raw.serverId,
-            channelId = raw.channelId.mapToBuiltin(),
+            channelId = raw.channelId,
             label = raw.message,
             note = raw.note.map { ListItemNote.from(client, it) }.asNullable(),
             authorId = raw.createdBy,

@@ -5,7 +5,6 @@ import io.github.deck.common.entity.RawCalendarEventRsvp
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.asNullable
-import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.CalendarEventRsvp
 import kotlinx.datetime.Instant
@@ -29,7 +28,7 @@ public class DeckCalendarEventRsvp(
                 client = client,
                 userId = raw.userId,
                 calendarEventId = raw.calendarEventId,
-                channelId = raw.channelId.mapToBuiltin(),
+                channelId = raw.channelId,
                 serverId = raw.serverId,
                 status = raw.status,
                 creatorId = raw.createdBy,

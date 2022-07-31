@@ -2,7 +2,9 @@ package io.github.deck.extras.content.node
 
 import io.github.deck.common.Embed
 import io.github.deck.common.from
-import io.github.deck.common.util.*
+import io.github.deck.common.util.OptionalProperty
+import io.github.deck.common.util.asNullable
+import io.github.deck.common.util.optional
 import io.github.deck.extras.content.*
 
 public fun Content.encode(): RawMessageContent = RawMessageContent(
@@ -29,7 +31,7 @@ public fun Node.encode(): RawMessageContentNode {
         is Node.Lists.Bulleted -> RawMessageContentData(isList = true.optional())
         is Node.Lists.Numbered -> RawMessageContentData(isList = true.optional())
         is Node.Mention -> RawMessageContentData(mention = RawMentionData(id = id, type = mentionType, name = "MentionTest".optional(), matcher = "@MentionTest".optional()).optional())
-        is Node.Mention.Channel -> RawMessageContentData(channel = RawMentionedChannel(id = id.mapToModel()).optional())
+        is Node.Mention.Channel -> RawMessageContentData(channel = RawMentionedChannel(id = id).optional())
     }
     val leaves = this.data.leaves?.map {
         RawMessageContentNodeLeaves(
@@ -98,6 +100,6 @@ public fun RawMessageContentNode.decode(): Node? {
         RawMessageContentNodeType.MENTION ->
             data.mention.asNullable()?.let { Node.Mention(it.id, it.type) }!!
         RawMessageContentNodeType.MENTION_CHANNEL ->
-            Node.Mention.Channel(data.channel.asNullable()!!.id.mapToBuiltin())
+            Node.Mention.Channel(data.channel.asNullable()!!.id)
     }
 }

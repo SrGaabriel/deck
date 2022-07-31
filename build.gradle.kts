@@ -1,15 +1,15 @@
 import org.jetbrains.dokka.gradle.DokkaPlugin
 
 plugins {
-    kotlin("jvm") version Dependencies.KotlinVersion
-    kotlin("plugin.serialization") version Dependencies.KotlinVersion
-    id("org.jetbrains.dokka") version Dependencies.DokkaVersion
+    kotlin("jvm") version "1.7.10"
+    kotlin("plugin.serialization") version "1.7.10"
+    id("org.jetbrains.dokka") version "1.7.10"
     `maven-publish`
 }
 
 subprojects {
     group = "io.github.deck"
-    version = Dependencies.Version
+    version = Library.Version
     plugins.apply("org.jetbrains.kotlin.plugin.serialization")
     apply<MavenPublishPlugin>()
     apply<DokkaPlugin>()

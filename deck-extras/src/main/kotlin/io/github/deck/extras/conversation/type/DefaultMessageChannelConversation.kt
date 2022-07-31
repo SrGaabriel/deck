@@ -5,7 +5,6 @@ import io.github.deck.core.entity.Message
 import io.github.deck.core.event.message.MessageCreateEvent
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.stateless.channel.StatelessMessageChannel
-import io.github.deck.core.util.on
 import io.github.deck.core.util.sendMessage
 import io.github.deck.core.util.update
 import io.github.deck.extras.conversation.AbstractMessageChannelConversation

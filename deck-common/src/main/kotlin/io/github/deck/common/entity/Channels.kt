@@ -1,16 +1,20 @@
+@file:UseSerializers(UUIDSerializer::class)
+
 package io.github.deck.common.entity
 
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.OptionalProperty
-import io.github.deck.common.util.UniqueId
+import io.github.deck.common.util.UUIDSerializer
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+import java.util.*
 
 @Serializable
 public data class RawServerChannel(
-    public val id: UniqueId,
+    public val id: UUID,
     public val type: RawServerChannelType,
     public val name: String,
     public val topic: OptionalProperty<String> = OptionalProperty.NotPresent,
@@ -18,7 +22,7 @@ public data class RawServerChannel(
     public val createdBy: GenericId,
     public val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     public val serverId: GenericId,
-    public val parentId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
+    public val parentId: OptionalProperty<UUID> = OptionalProperty.NotPresent,
     public val categoryId: OptionalProperty<IntGenericId> = OptionalProperty.NotPresent,
     public val groupId: GenericId,
     public val isPublic: Boolean = false,
@@ -27,7 +31,7 @@ public data class RawServerChannel(
 )
 
 @Serializable
-public class RawChannelId(public val id: UniqueId)
+public class RawChannelId(public val id: UUID)
 
 @Serializable
 public enum class RawServerChannelType {
@@ -57,7 +61,7 @@ public enum class RawServerChannelType {
 public data class RawDocumentation(
     public val id: IntGenericId,
     public val serverId: GenericId,
-    public val channelId: UniqueId,
+    public val channelId: UUID,
     public val title: String,
     public val content: String,
     public val createdAt: Instant,
@@ -68,9 +72,9 @@ public data class RawDocumentation(
 
 @Serializable
 public data class RawListItem(
-    public val id: UniqueId,
+    public val id: UUID,
     public val serverId: GenericId,
-    public val channelId: UniqueId,
+    public val channelId: UUID,
     public val message: String,
     public val note: OptionalProperty<RawListItemNote> = OptionalProperty.NotPresent,
     public val createdAt: Instant,
@@ -103,7 +107,7 @@ public data class RawListItemNoteSummary(
 public data class RawForumTopic(
     val id: IntGenericId,
     val serverId: GenericId,
-    val channelId: UniqueId,
+    val channelId: UUID,
     val title: String,
     val content: String,
     val createdAt: Instant,
@@ -118,7 +122,7 @@ public data class RawForumTopic(
 public data class RawForumTopicSummary(
     val id: IntGenericId,
     val serverId: GenericId,
-    val channelId: UniqueId,
+    val channelId: UUID,
     val title: String,
     val createdAt: Instant,
     val createdBy: GenericId,
@@ -131,7 +135,7 @@ public data class RawForumTopicSummary(
 public data class RawCalendarEvent(
     val id: IntGenericId,
     val serverId: GenericId,
-    val channelId: UniqueId,
+    val channelId: UUID,
     val name: String,
     val description: OptionalProperty<String> = OptionalProperty.NotPresent,
     val location: OptionalProperty<String> = OptionalProperty.NotPresent,
@@ -156,7 +160,7 @@ public data class RawCalendarEventCancellation(
 @Serializable
 public data class RawCalendarEventRsvp(
     val calendarEventId: IntGenericId,
-    val channelId: UniqueId,
+    val channelId: UUID,
     val serverId: GenericId,
     val userId: GenericId,
     val status: CalendarEventRsvpStatus,

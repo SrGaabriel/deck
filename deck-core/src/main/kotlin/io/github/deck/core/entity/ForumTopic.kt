@@ -4,7 +4,6 @@ import io.github.deck.common.entity.RawForumTopicSummary
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.asNullable
-import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.channel.ForumChannel
 import io.github.deck.core.entity.impl.DeckForumTopic
@@ -67,7 +66,7 @@ public data class ForumTopicSummary(
             ForumTopicSummary(
                 client = client,
                 id = raw.id,
-                channelId = raw.channelId.mapToBuiltin(),
+                channelId = raw.channelId,
                 serverId = raw.serverId,
                 title = raw.title,
                 authorId = raw.createdBy,

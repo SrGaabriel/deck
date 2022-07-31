@@ -1,15 +1,19 @@
+@file:UseSerializers(UUIDSerializer::class)
+
 package io.github.deck.rest.request
 
 import io.github.deck.common.entity.*
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.OptionalProperty
-import io.github.deck.common.util.UniqueId
+import io.github.deck.common.util.UUIDSerializer
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
+import java.util.*
 
 @Serializable
 public data class CreateChannelRequest(
@@ -33,7 +37,7 @@ public data class SendMessageRequest(
     public val embeds: List<RawEmbed> = emptyList(),
     public val isPrivate: Boolean,
     public val isSilent: Boolean,
-    public val replyMessageIds: List<UniqueId> = emptyList(),
+    public val replyMessageIds: List<UUID> = emptyList(),
 )
 
 @Serializable

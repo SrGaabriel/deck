@@ -3,7 +3,6 @@ package io.github.deck.core.entity.impl
 import io.github.deck.common.entity.RawForumTopic
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.asNullable
-import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.ForumTopic
 import io.github.deck.core.entity.Mentions
@@ -29,7 +28,7 @@ public data class DeckForumTopic(
             id = raw.id,
             authorId = raw.createdBy,
             serverId = raw.serverId,
-            channelId = raw.channelId.mapToBuiltin(),
+            channelId = raw.channelId,
             title = raw.title,
             content = raw.content,
             createdAt = raw.createdAt,

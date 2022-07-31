@@ -1,14 +1,18 @@
+@file:UseSerializers(UUIDSerializer::class)
+
 package io.github.deck.rest.request
 
 import io.github.deck.common.entity.RawWebhook
 import io.github.deck.common.util.OptionalProperty
-import io.github.deck.common.util.UniqueId
+import io.github.deck.common.util.UUIDSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+import java.util.*
 
 @Serializable
 public data class CreateWebhookRequest(
     public val name: String,
-    public val channelId: UniqueId
+    public val channelId: UUID
 )
 
 @Serializable
@@ -19,7 +23,7 @@ public data class CreateWebhookResponse(
 @Serializable
 public data class UpdateWebhookRequest(
     public val name: String,
-    public val channelId: OptionalProperty<UniqueId>
+    public val channelId: OptionalProperty<UUID>
 )
 
 @Serializable

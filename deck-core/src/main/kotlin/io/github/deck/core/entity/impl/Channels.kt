@@ -4,7 +4,6 @@ import io.github.deck.common.entity.RawServerChannel
 import io.github.deck.common.entity.RawServerChannelType
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.asNullable
-import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.channel.*
 import kotlinx.datetime.Instant
@@ -29,7 +28,7 @@ public class DeckServerChannel internal constructor(
         public fun from(client: DeckClient, raw: RawServerChannel): ServerChannel = when (raw.type) {
             RawServerChannelType.CHAT -> DeckServerMessageChannel(
                 client = client,
-                id = raw.id.mapToBuiltin(),
+                id = raw.id,
                 name = raw.name,
                 topic = raw.topic.asNullable(),
                 type = raw.type,
@@ -44,7 +43,7 @@ public class DeckServerChannel internal constructor(
             )
             RawServerChannelType.FORUMS -> DeckForumChannel(
                 client = client,
-                id = raw.id.mapToBuiltin(),
+                id = raw.id,
                 name = raw.name,
                 topic = raw.topic.asNullable(),
                 type = raw.type,
@@ -59,7 +58,7 @@ public class DeckServerChannel internal constructor(
             )
             RawServerChannelType.LIST -> DeckListChannel(
                 client = client,
-                id = raw.id.mapToBuiltin(),
+                id = raw.id,
                 name = raw.name,
                 topic = raw.topic.asNullable(),
                 type = raw.type,
@@ -74,7 +73,7 @@ public class DeckServerChannel internal constructor(
             )
             RawServerChannelType.DOCS -> DeckDocumentationChannel(
                 client = client,
-                id = raw.id.mapToBuiltin(),
+                id = raw.id,
                 name = raw.name,
                 topic = raw.topic.asNullable(),
                 type = raw.type,
@@ -89,7 +88,7 @@ public class DeckServerChannel internal constructor(
             )
             RawServerChannelType.CALENDAR -> DeckCalendarChannel(
                 client = client,
-                id = raw.id.mapToBuiltin(),
+                id = raw.id,
                 name = raw.name,
                 topic = raw.topic.asNullable(),
                 type = raw.type,
@@ -104,7 +103,7 @@ public class DeckServerChannel internal constructor(
             )
             else -> DeckServerChannel(
                 client = client,
-                id = raw.id.mapToBuiltin(),
+                id = raw.id,
                 name = raw.name,
                 topic = raw.topic.asNullable(),
                 type = raw.type,

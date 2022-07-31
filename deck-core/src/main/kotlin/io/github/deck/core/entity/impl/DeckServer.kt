@@ -4,7 +4,6 @@ import io.github.deck.common.entity.RawServer
 import io.github.deck.common.entity.ServerType
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.asNullable
-import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.Server
 import kotlinx.datetime.Instant
@@ -34,7 +33,7 @@ public data class DeckServer(
             avatar = raw.avatar.asNullable(),
             banner = raw.banner.asNullable(),
             timezone = raw.timezone.asNullable(),
-            defaultChannelId = raw.defaultChannelId.asNullable()?.mapToBuiltin(),
+            defaultChannelId = raw.defaultChannelId.asNullable(),
             createdAt = raw.createdAt
         )
     }

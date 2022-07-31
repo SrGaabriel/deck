@@ -1,6 +1,5 @@
 package io.github.deck.rest.builder
 
-import io.github.deck.common.util.mapToModel
 import io.github.deck.common.util.nullableOptional
 import io.github.deck.rest.request.CreateWebhookRequest
 import io.github.deck.rest.request.UpdateWebhookRequest
@@ -13,7 +12,7 @@ public class CreateWebhookRequestBuilder: RequestBuilder<CreateWebhookRequest> {
 
     override fun toRequest(): CreateWebhookRequest = CreateWebhookRequest(
         name = name,
-        channelId = channelId.mapToModel()
+        channelId = channelId
     )
 }
 
@@ -23,6 +22,6 @@ public class UpdateWebhookRequestBuilder: RequestBuilder<UpdateWebhookRequest> {
 
     override fun toRequest(): UpdateWebhookRequest = UpdateWebhookRequest(
         name = name,
-        channelId = channelId?.mapToModel().nullableOptional()
+        channelId = channelId.nullableOptional()
     )
 }

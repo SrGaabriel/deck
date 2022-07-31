@@ -3,7 +3,10 @@ package io.github.deck.rest.builder
 import io.github.deck.common.Embed
 import io.github.deck.common.EmbedBuilder
 import io.github.deck.common.entity.RawServerChannelType
-import io.github.deck.common.util.*
+import io.github.deck.common.util.GenericId
+import io.github.deck.common.util.IntGenericId
+import io.github.deck.common.util.nullableOptional
+import io.github.deck.common.util.optional
 import io.github.deck.rest.request.*
 import io.github.deck.rest.util.required
 import kotlinx.datetime.Instant
@@ -64,7 +67,7 @@ public class SendMessageRequestBuilder: RequestBuilder<SendMessageRequest> {
         embeds = embeds.map { it.toSerializable() },
         isPrivate = isPrivate,
         isSilent = silent,
-        replyMessageIds = repliesTo.toList().map(UUID::mapToModel)
+        replyMessageIds = repliesTo
     )
 }
 

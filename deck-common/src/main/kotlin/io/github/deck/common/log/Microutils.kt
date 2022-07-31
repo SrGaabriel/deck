@@ -1,8 +1,5 @@
-package io.github.deck.common.util
+package io.github.deck.common.log
 
-import io.github.deck.common.log.DeckLogger
-import io.github.deck.common.log.LoggingLevel
-import io.github.deck.common.log.LoggingMessage
 import mu.KLoggable
 import mu.KLogger
 

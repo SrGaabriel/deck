@@ -1,7 +1,6 @@
 package io.github.deck.core.event.message
 
 import io.github.deck.common.util.GenericId
-import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.Message
 import io.github.deck.core.event.DeckEvent
@@ -37,9 +36,9 @@ internal val EventService.messageDeleteEvent: EventMapper<GatewayChatMessageDele
     MessageDeleteEvent(
         client = client,
         barebones = event,
-        messageId = event.message.id.mapToBuiltin(),
+        messageId = event.message.id,
         serverId = event.serverId,
-        channelId = event.message.channelId.mapToBuiltin(),
+        channelId = event.message.channelId,
         deletedAt = event.message.deletedAt
     )
 }

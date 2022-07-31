@@ -1,7 +1,7 @@
 package io.github.deck.gateway
 
 import io.github.deck.common.log.DeckLogger
-import io.github.deck.common.util.MicroutilsLogger
+import io.github.deck.common.log.MicroutilsLogger
 import io.github.deck.gateway.event.GatewayEvent
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*

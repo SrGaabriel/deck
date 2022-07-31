@@ -1,13 +1,17 @@
+@file:UseSerializers(UUIDSerializer::class)
+
 package io.github.deck.extras.content
 
 import io.github.deck.common.entity.RawEmbed
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.OptionalProperty
-import io.github.deck.common.util.UniqueId
+import io.github.deck.common.util.UUIDSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.json.JsonPrimitive
+import java.util.*
 
 @Serializable
 public data class RawMessageContent(
@@ -61,7 +65,7 @@ public enum class RawMessageContentNodeType {
 
 @Serializable
 public data class RawMessageContentData(
-    val githubDeliveryId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
+    val githubDeliveryId: OptionalProperty<UUID> = OptionalProperty.NotPresent,
     val embeds: OptionalProperty<List<RawEmbed>> = OptionalProperty.NotPresent,
     val src: OptionalProperty<String> = OptionalProperty.NotPresent,
     val href: OptionalProperty<String> = OptionalProperty.NotPresent,
@@ -88,7 +92,7 @@ public data class RawMentionData(
 
 @Serializable
 public data class RawMentionedChannel(
-    public val id: UniqueId
+    public val id: UUID
 )
 
 @Serializable

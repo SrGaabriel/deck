@@ -4,7 +4,6 @@ import io.github.deck.common.entity.RawDocumentation
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.asNullable
-import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.Documentation
 import kotlinx.datetime.Instant
@@ -29,7 +28,7 @@ public data class DeckDocumentation(
             title = raw.title,
             content = raw.content,
             serverId = raw.serverId,
-            channelId = raw.channelId.mapToBuiltin(),
+            channelId = raw.channelId,
             createdAt = raw.createdAt,
             updatedAt = raw.updatedAt.asNullable(),
             authorId = raw.createdBy,

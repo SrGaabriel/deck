@@ -3,7 +3,6 @@ package io.github.deck.core.event.message
 import io.github.deck.common.util.Emote
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.asNullable
-import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.Message
 import io.github.deck.core.event.DeckEvent
@@ -46,8 +45,8 @@ internal val EventService.messageReactionRemoveEvent: EventMapper<GatewayChatMes
         client = client,
         barebones = event,
         serverId = event.serverId.asNullable(),
-        channelId = event.reaction.channelId.mapToBuiltin(),
-        messageId = event.reaction.messageId.mapToBuiltin(),
+        channelId = event.reaction.channelId,
+        messageId = event.reaction.messageId,
         userId = event.reaction.createdBy,
         emote = Emote.from(event.reaction.emote)
     )

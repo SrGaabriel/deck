@@ -5,7 +5,6 @@ import io.github.deck.common.entity.RawMessage
 import io.github.deck.common.from
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.asNullable
-import io.github.deck.common.util.mapToBuiltin
 import io.github.deck.core.DeckClient
 import io.github.deck.core.entity.Mentions
 import io.github.deck.core.entity.Message
@@ -30,16 +29,16 @@ public data class DeckMessage(
     public companion object {
         public fun from(client: DeckClient, raw: RawMessage): DeckMessage = DeckMessage(
             client = client,
-            id = raw.id.mapToBuiltin(),
+            id = raw.id,
             content = raw.content.asNullable().orEmpty(),
             authorId = raw.createdBy,
             serverId = raw.serverId.asNullable(),
-            channelId = raw.channelId.mapToBuiltin(),
+            channelId = raw.channelId,
             embeds = raw.embeds.map { Embed.from(it) },
             createdAt = raw.createdAt,
             updatedAt = raw.updatedAt.asNullable(),
             mentions = raw.mentions.asNullable()?.let { Mentions.from(it) },
-            repliesTo = raw.replyMessageIds.asNullable()?.map { it.mapToBuiltin() }.orEmpty(),
+            repliesTo = raw.replyMessageIds.asNullable()?.map { it }.orEmpty(),
             isPrivate = raw.isPrivate,
             isSilent = raw.isSilent,
         )

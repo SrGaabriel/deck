@@ -1,11 +1,15 @@
+@file:UseSerializers(UUIDSerializer::class)
+
 package io.github.deck.common.entity
 
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.OptionalProperty
-import io.github.deck.common.util.UniqueId
+import io.github.deck.common.util.UUIDSerializer
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+import java.util.*
 
 @Serializable
 public data class RawServer(
@@ -19,7 +23,7 @@ public data class RawServer(
     val banner: OptionalProperty<String> = OptionalProperty.NotPresent,
     val timezone: OptionalProperty<String> = OptionalProperty.NotPresent,
     val isVerified: Boolean = false,
-    val defaultChannelId: OptionalProperty<UniqueId> = OptionalProperty.NotPresent,
+    val defaultChannelId: OptionalProperty<UUID> = OptionalProperty.NotPresent,
     val createdAt: Instant
 )
 

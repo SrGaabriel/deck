@@ -1,7 +1,7 @@
 package io.github.deck.rest
 
 import io.github.deck.common.log.DeckLogger
-import io.github.deck.common.util.MicroutilsLogger
+import io.github.deck.common.log.MicroutilsLogger
 import io.github.deck.rest.route.ChannelRoute
 import io.github.deck.rest.route.GroupRoute
 import io.github.deck.rest.route.ServerRoute
