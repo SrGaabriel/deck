@@ -57,7 +57,7 @@ public data class RawEmbed(
     val image: OptionalProperty<RawEmbedImage> = OptionalProperty.NotPresent,
     val thumbnail: OptionalProperty<RawEmbedImage> = OptionalProperty.NotPresent,
     val author: OptionalProperty<RawEmbedAuthor> = OptionalProperty.NotPresent,
-    val fields: OptionalProperty<List<RawEmbedField>> = OptionalProperty.NotPresent
+    val fields: OptionalProperty<List<RawEmbedField>> = OptionalProperty.Present(emptyList())
 )
 
 @Serializable
