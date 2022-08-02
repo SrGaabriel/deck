@@ -19,13 +19,11 @@ import io.github.deck.core.event.webhook.webhookCreateEvent
 import io.github.deck.core.event.webhook.webhookUpdateEvent
 import io.github.deck.gateway.Gateway
 import io.github.deck.gateway.event.GatewayEvent
+import io.github.deck.gateway.event.type.GatewayHelloEvent
 import io.github.deck.gateway.util.on
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
 public interface DeckEvent {
@@ -36,7 +34,7 @@ public interface DeckEvent {
     public val gateway: Gateway get() = gatewayOrNull ?: error("Gateway was probably closed and can't be accessed anymore.")
 }
 
-public interface EventService : CoroutineScope {
+public interface EventService {
     public val eventWrappingFlow: SharedFlow<DeckEvent>
 
     public fun ready()
@@ -46,7 +44,6 @@ public interface EventService : CoroutineScope {
 
 public class DefaultEventService(private val client: DeckClient) : EventService {
     override val eventWrappingFlow: MutableSharedFlow<DeckEvent> = MutableSharedFlow()
-    override val coroutineContext: CoroutineContext = Dispatchers.Default
 
     @PublishedApi
     internal val mappers: MutableMap<KClass<out GatewayEvent>, EventMapper<GatewayEvent, DeckEvent>> = mutableMapOf()
@@ -88,6 +85,9 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
     }
 
     override fun listen(): Job = client.gateway.on<GatewayEvent> {
+        if (this is GatewayHelloEvent) {
+            client._selfId = self.id
+        }
         val event: DeckEvent = mappers[this::class]?.map(client, this) ?: return@on
         eventWrappingFlow.emit(event)
     }

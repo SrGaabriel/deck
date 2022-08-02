@@ -35,7 +35,9 @@ public inline fun <reified T : GatewayEvent> on(
     eventsFlow: SharedFlow<GatewayEvent>,
     noinline callback: suspend T.() -> Unit
 ): Job = eventsFlow.buffer(Channel.UNLIMITED).filterIsInstance<T>()
-    .filter { it.info.gatewayId == (gatewayId ?: return@filter true) }.onEach(callback).launchIn(scope)
+    .filter { it.info.gatewayId == (gatewayId ?: return@filter true) }
+    .onEachHandlingErrors(callback)
+    .launchIn(scope)
 
 @OptIn(ExperimentalCoroutinesApi::class)
 public suspend inline fun <reified T : GatewayEvent> await(
@@ -52,3 +54,14 @@ public suspend inline fun <reified T : GatewayEvent> await(
         }
     }
 }
+
+public inline fun <T> Flow<T>.onEachHandlingErrors(crossinline callback: suspend T.() -> Unit): Flow<T> =
+    onEach {
+        try {
+            callback(it)
+        } catch (exception: CancellationException) {
+            throw exception
+        } catch (throwable: Throwable) {
+            throwable.printStackTrace()
+        }
+    }

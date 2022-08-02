@@ -23,7 +23,7 @@ public class DeckClient internal constructor(
 ) {
     public var eventService: DefaultEventService = DefaultEventService(this)
 
-    private var _selfId: GenericId? = null
+    internal var _selfId: GenericId? = null
     public val selfId: GenericId get() = _selfId ?: error("Tried to access self id before client was connected")
 
     /**
@@ -54,14 +54,14 @@ public class DeckClient internal constructor(
     }
 
     public inline fun <reified T : DeckEvent> on(
-        scope: CoroutineScope = eventService,
+        scope: CoroutineScope = gateway,
         gatewayId: Int? = null,
         noinline callback: suspend T.() -> Unit
     ): Job = io.github.deck.core.util.on(gatewayId, scope, eventService.eventWrappingFlow, callback)
 
     public suspend inline fun <reified T : DeckEvent> await(
         timeout: Long = 4000,
-        scope: CoroutineScope = eventService,
+        scope: CoroutineScope = gateway,
         gatewayId: Int? = null
     ): T? = io.github.deck.core.util.await(gatewayId, scope, eventService.eventWrappingFlow, timeout)
 }
