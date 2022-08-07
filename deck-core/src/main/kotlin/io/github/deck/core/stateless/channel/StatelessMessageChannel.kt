@@ -30,8 +30,8 @@ public interface StatelessMessageChannel: StatelessEntity, StatelessChannel {
     /**
      * Retrieves a number of [limit] messages sent in this channel
      *
-     * @param before filters messages sent after the specified instant, null by default
-     * @param after filters messages sent before the specified instant, null by default
+     * @param before filters out messages sent after the specified instant, null by default
+     * @param after filters out messages sent before the specified instant, null by default
      * @param limit specifies how many messages to be retrieved **(min 1 max 100)**
      * @param includePrivate whether to include private messages between all users
      */

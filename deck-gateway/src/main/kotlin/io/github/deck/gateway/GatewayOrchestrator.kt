@@ -17,7 +17,7 @@ public class GatewayOrchestrator(internal val token: String): CoroutineScope {
     override val coroutineContext: CoroutineContext = Executors
         .newFixedThreadPool(8)
         .asCoroutineDispatcher()
-    internal val httpClient = HttpClient(CIO.create()) {
+    internal val httpClient = HttpClient(CIO) {
         install(WebSockets)
     }
     public val globalEventsFlow: MutableSharedFlow<GatewayEvent> = MutableSharedFlow()
@@ -37,7 +37,7 @@ public class GatewayOrchestrator(internal val token: String): CoroutineScope {
      */
     public fun createGateway(): Gateway {
         val gateway = DefaultGateway(
-            id = gatewayIds.getAndIncrement(),
+            id = gatewayIds.incrementAndGet(),
             orchestrator = this
         )
         gateways[gateway.id] = gateway

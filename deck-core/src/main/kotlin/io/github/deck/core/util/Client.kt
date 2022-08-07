@@ -23,6 +23,7 @@ public class ClientBuilder(token: String) {
     public var logEventPayloads: Boolean by gateway::logEventPayloads
 
     public var enableEventReplaying: Boolean by gateway::enableEventReplaying
+    public var automaticPrivateRepliesToPrivateMessages: Boolean? = null
 
     /**
      * Enables request (including responses) and event payloads logging
@@ -32,8 +33,12 @@ public class ClientBuilder(token: String) {
         logEventPayloads = true
     }
 
-    public fun build(): DeckClient =
-        DeckClient(rest, gateway)
+    public fun build(): DeckClient {
+        val client = DeckClient(rest, gateway)
+        if (automaticPrivateRepliesToPrivateMessages != null)
+            client.automaticPrivateRepliesToPrivateMessages = automaticPrivateRepliesToPrivateMessages!!
+        return client
+    }
 }
 
 public suspend fun DeckClient.getServer(serverId: GenericId): Server =

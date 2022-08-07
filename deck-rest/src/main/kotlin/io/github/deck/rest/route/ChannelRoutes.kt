@@ -85,11 +85,10 @@ public class ChannelRoutes(private val client: RestClient) {
         limit: Int = 50,
         includePrivate: Boolean = false
     ): List<RawMessage> = client.sendRequest<GetChannelMessagesResponse>(
-        endpoint = "/channels/$channelId/messages"
-            .plusIf(includePrivate) { "?includePrivate=true" }
-            .plusIf(before != null) { "?before=$before" }
-            .plusIf(after != null) { "?after=$before" }
-            .plusIf(limit != 50) { "?limit=$limit" },
+        endpoint = "/channels/$channelId/messages?includePrivate=$includePrivate"
+            .plusIf(before != null) { "&before=$before" }
+            .plusIf(after != null) { "&after=$after" }
+            .plusIf(limit != 50) { "&limit=$limit" },
         method = HttpMethod.Get,
     ).messages
 

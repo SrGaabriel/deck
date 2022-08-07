@@ -28,8 +28,8 @@ public interface StatelessMessage: StatelessEntity, ReactionHolder {
      */
     public suspend fun sendReply(builder: SendMessageRequestBuilder.() -> Unit): Message =
         DeckMessage.from(client, client.rest.channel.sendMessage(channelId) {
-            builder(this)
             replyTo(this@StatelessMessage.id)
+            builder(this)
         })
 
     /**

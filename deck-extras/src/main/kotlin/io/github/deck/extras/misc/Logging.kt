@@ -23,7 +23,7 @@ public class MordantLogger: DeckLogger {
     override fun log(level: LoggingLevel, message: LoggingMessage, exception: Throwable?) {
         val (prefix, color) = when(level) {
             LoggingLevel.Debug -> "\uD83E\uDDEA debug" to TextColors.brightBlue
-            LoggingLevel.Info -> "\uD83D\uDCE8 info" to TextColors.yellow
+            LoggingLevel.Info -> "\uD83D\uDCE8 info" to TextColors.brightGreen
             LoggingLevel.Warning -> "⚠️ warning" to TextColors.brightYellow
             LoggingLevel.Error -> "❌ error" to TextColors.brightRed
         }
@@ -37,7 +37,7 @@ public class MordantLogger: DeckLogger {
                 (if (message is Throwable)
                     message.stackTraceToString()
                 else
-                    terminal.render(message).replaceFirstChar(Char::lowercase))
+                    terminal.render(message))
                 .asFormattedText()
             )
             if (exception != null) {

@@ -10,6 +10,7 @@ import kotlinx.coroutines.Job
  * @param scope Where you'll handle the reaction event, return true to continue listening
  * to [MessageReactionAddEvent] or false to cancel the job.
  */
+
 public suspend fun StatelessMessage.onReaction(scope: suspend MessageReactionAddEvent.() -> Boolean): Job {
     var job: Job? = null
     job = client.on<MessageReactionAddEvent> {

@@ -6,7 +6,6 @@ import io.github.deck.core.event.DeckEvent
 import io.github.deck.core.event.DefaultEventService
 import io.github.deck.core.util.ClientBuilder
 import io.github.deck.gateway.GatewayOrchestrator
-import io.github.deck.gateway.start
 import io.github.deck.rest.RestClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -52,6 +51,8 @@ public class DeckClient internal constructor(
         public operator fun invoke(token: String, builder: ClientBuilder.() -> Unit = {}): DeckClient =
             ClientBuilder(token).apply(builder).build()
     }
+
+    public var automaticPrivateRepliesToPrivateMessages: Boolean = true
 
     public inline fun <reified T : DeckEvent> on(
         scope: CoroutineScope = gateway,
