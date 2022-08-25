@@ -27,7 +27,7 @@ public object UUIDSerializer: KSerializer<UUID> {
 
 /**
  * From Jackson (https://github.com/FasterXML/jackson-databind/blob/2.14/src/main/java/com/fasterxml/jackson/databind/deser/std/UUIDDeserializer.java)
- * with adjusts
+ * with modifications
  */
 private object UUIDDeserializer {
     private val HEX_DIGITS = IntArray(127)
@@ -81,18 +81,16 @@ private object UUIDDeserializer {
                 return hex
             }
         }
-        return if (c1.code > 127 || HEX_DIGITS[c1.code] < 0) {
+        if (c1.code > 127 || HEX_DIGITS[c1.code] < 0) {
             throwBadCharSerializationException(str, index, c1)
         } else throwBadCharSerializationException(str, index + 1, c2)
     }
 
-    private fun throwBadCharSerializationException(uuidAsString: String?, index: Int, invalidChar: Char): Int {
+    private fun throwBadCharSerializationException(uuidAsString: String?, index: Int, invalidChar: Char): Nothing =
         throw SerializationException(
             "Non-hex character '$invalidChar' at position $index not valid for UUID deserialization of $uuidAsString"
         )
-    }
 
-    private fun throwBadFormatSerializationException(uuidAsString: String): UUID? {
+    private fun throwBadFormatSerializationException(uuidAsString: String): Nothing =
         throw SerializationException("Invalid UUID format: $uuidAsString")
-    }
 }

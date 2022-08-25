@@ -6,7 +6,6 @@ import io.github.deck.extras.misc.coloredLogging
 public suspend fun main() {
     val client = DeckClient("gapi_CC31UTtcqZS6ugYkQqP7hyS0jRvENNi24xvvW+SxT04jkwdX5/o2nCSdfU8JDVlyEwpkQ/AAUxblE8HQRYkfdw==") {
         coloredLogging()
-        debugMode()
     }
     client.on<MessageCreateEvent> {
         if (message.author.id == client.selfId)
