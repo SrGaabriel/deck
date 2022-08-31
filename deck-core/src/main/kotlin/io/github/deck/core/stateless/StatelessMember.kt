@@ -78,11 +78,24 @@ public interface StatelessMember: StatelessEntity {
     /**
      * Adds (not sets) xp to this member.
      *
+     * @see setXp
+     *
      * @param amount the amount of xp to be added
      * @return user's new xp
      */
     public suspend fun awardXp(amount: Int): Int =
         client.rest.server.awardXpToMember(serverId, id, amount)
+
+    /**
+     * Sets this member's xp.
+     *
+     * @see awardXp
+     *
+     * @param total the member's new xp
+     * @return user's new xp
+     */
+    public suspend fun setXp(total: Int): Int =
+        client.rest.server.setMemberXp(serverId, id, total)
 
     public suspend fun getMember(): Member =
         DeckMember.from(client, serverId, client.rest.server.getServerMember(serverId, id))

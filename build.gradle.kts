@@ -1,18 +1,20 @@
 import org.jetbrains.dokka.gradle.DokkaPlugin
 
+@Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 plugins {
-    kotlin("jvm") version "1.7.10"
-    kotlin("plugin.serialization") version "1.7.10"
-    id("org.jetbrains.dokka") version "1.7.10"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.dokka)
     `maven-publish`
 }
 
 subprojects {
     group = "io.github.deck"
     version = Library.Version
-    plugins.apply("org.jetbrains.kotlin.plugin.serialization")
     apply<MavenPublishPlugin>()
     apply<DokkaPlugin>()
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
     tasks {
         withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class) {

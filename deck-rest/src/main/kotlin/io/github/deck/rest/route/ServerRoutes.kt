@@ -36,11 +36,21 @@ public class ServerRoutes(private val client: RestClient) {
         serverId: GenericId,
         userId: GenericId,
         amount: Int
-    ): Int = client.sendRequest<MemberAwardXpRequest, MemberAwardXpRequest>(
+    ): Int = client.sendRequest<MemberModifyXpTotalDAO, MemberModifyXpAmountDAO>(
         endpoint = "/servers/$serverId/members/$userId/xp",
         method = HttpMethod.Post,
-        body = MemberAwardXpRequest(amount)
-    ).amount
+        body = MemberModifyXpAmountDAO(amount)
+    ).total
+
+    public suspend fun setMemberXp(
+        serverId: GenericId,
+        userId: GenericId,
+        total: Int
+    ): Int = client.sendRequest<MemberModifyXpTotalDAO, MemberModifyXpTotalDAO>(
+        endpoint = "/servers/$serverId/members/$userId/xp",
+        method = HttpMethod.Put,
+        body = MemberModifyXpTotalDAO(total)
+    ).total
 
     public suspend fun assignRoleToMember(
         serverId: GenericId,
@@ -134,6 +144,6 @@ public class ServerRoutes(private val client: RestClient) {
     ): Unit = client.sendRequest(
         endpoint = "/servers/$serverId/roles/$roleId/xp",
         method = HttpMethod.Post,
-        body = MemberAwardXpRequest(amount)
+        body = MemberModifyXpAmountDAO(amount)
     )
 }

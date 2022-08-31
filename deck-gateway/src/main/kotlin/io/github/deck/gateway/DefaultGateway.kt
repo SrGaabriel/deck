@@ -50,7 +50,8 @@ public class DefaultGateway(
     }
 
     override suspend fun connect() {
-        websocketSession = orchestrator.httpClient.webSocketSession(host = Constants.GuildedGateway, path = Constants.GuildedGatewayPath) {
+        websocketSession = orchestrator.httpClient.webSocketSession {
+            url("wss://${Constants.GuildedDomain}${Constants.GuildedGatewayPath}")
             header(HttpHeaders.Authorization, "Bearer ${orchestrator.token}")
             if (lastMessageId != null)
                 header("guilded-last-message-id", lastMessageId)
