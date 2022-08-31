@@ -24,6 +24,8 @@ suspend fun main() {
 }
 ```
 
+For tutorials and documentation, check out our [wiki](https://github.com/SrGaabriel/deck/wiki).
+
 ## Using
 
 To use deck in your project, you **must** have the `jitpack` repository registered. And lastly, you're going to add the following dependency: `com.github.SrGaabriel.deck:deck-core:$version`.
