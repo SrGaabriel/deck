@@ -26,9 +26,9 @@ suspend fun main() {
 
 ## Using
 
-To use deck in your project, you must have the `jitpack` repository added. Then, you're going to add the following dependency to your build file: `com.github.SrGaabriel.deck:deck-core:$version`.
+To use deck in your project, you **must** have the `jitpack` repository registered. And lastly, you're going to add the following dependency: `com.github.SrGaabriel.deck:deck-core:$version`.
 
-You can replace `deck-core` with the name of the module you wish to import, and for the version you may ues the latest one:
+You can replace `deck-core` with the name of the module you wish to import, and for the version you may use the latest one:
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/SrGaabriel/deck?style=social)
 
 ```kotlin
