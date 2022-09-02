@@ -148,3 +148,17 @@ public data class GatewayForumTopicDeletedEvent(
     val serverId: GenericId,
     val forumTopic: RawForumTopic
 ): GatewayEvent()
+
+@Serializable
+@SerialName("ForumTopicPinned")
+public data class GatewayForumTopicPinnedEvent(
+    val serverId: GenericId,
+    val forumTopic: RawForumTopic
+): GatewayEvent()
+
+@Serializable
+@SerialName("ForumTopicUnpinned")
+public data class GatewayForumTopicUnpinnedEvent(
+    val serverId: GenericId,
+    val forumTopic: RawForumTopic
+): GatewayEvent()

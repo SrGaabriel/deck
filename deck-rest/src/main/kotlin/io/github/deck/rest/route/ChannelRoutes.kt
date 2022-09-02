@@ -278,6 +278,22 @@ public class ChannelRoutes(private val client: RestClient) {
         method = HttpMethod.Delete
     )
 
+    public suspend fun pinForumTopic(
+        channelId: UUID,
+        forumTopicId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/pin",
+        method = HttpMethod.Put
+    )
+
+    public suspend fun unpinForumTopic(
+        channelId: UUID,
+        forumTopicId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/pin",
+        method = HttpMethod.Delete
+    )
+
     public suspend fun createCalendarEvent(
         channelId: UUID,
         builder: CreateCalendarEventRequestBuilder.() -> Unit

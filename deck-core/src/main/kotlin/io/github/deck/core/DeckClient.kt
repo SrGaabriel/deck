@@ -32,10 +32,7 @@ public class DeckClient internal constructor(
         if (!rest.token.startsWith("gapi_"))
             rest.logger.warning { "Your token does not start with 'gapi_', meaning it is either invalid or outdated." }
         val masterGateway = gateway.createGateway()
-        eventService.let {
-            it.ready()
-            it.listen()
-        }
+        eventService.listen()
         masterGateway.start()
     }
 

@@ -8,9 +8,7 @@ import io.github.deck.core.event.channel.serverChannelUpdateEvent
 import io.github.deck.core.event.documentation.documentationCreateEvent
 import io.github.deck.core.event.documentation.documentationDeleteEvent
 import io.github.deck.core.event.documentation.documentationUpdateEvent
-import io.github.deck.core.event.forum.forumTopicCreateEvent
-import io.github.deck.core.event.forum.forumTopicDeleteEvent
-import io.github.deck.core.event.forum.forumTopicUpdateEvent
+import io.github.deck.core.event.forum.*
 import io.github.deck.core.event.list.*
 import io.github.deck.core.event.message.*
 import io.github.deck.core.event.server.*
@@ -37,18 +35,15 @@ public interface DeckEvent {
 public interface EventService {
     public val eventWrappingFlow: SharedFlow<DeckEvent>
 
-    public fun ready()
-
     public fun listen(): Job
 }
 
 public class DefaultEventService(private val client: DeckClient) : EventService {
     override val eventWrappingFlow: MutableSharedFlow<DeckEvent> = MutableSharedFlow()
 
-    @PublishedApi
-    internal val mappers: MutableMap<KClass<out GatewayEvent>, EventMapper<GatewayEvent, DeckEvent>> = mutableMapOf()
+    private val mappers: MutableMap<KClass<out GatewayEvent>, EventMapper<GatewayEvent, DeckEvent>> = mutableMapOf()
 
-    override fun ready() {
+    init {
         registerMapper(serverChannelCreateEvent)
         registerMapper(serverChannelUpdateEvent)
         registerMapper(serverChannelDeleteEvent)
@@ -82,6 +77,8 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         registerMapper(forumTopicCreateEvent)
         registerMapper(forumTopicUpdateEvent)
         registerMapper(forumTopicDeleteEvent)
+        registerMapper(forumTopicPinEvent)
+        registerMapper(forumTopicUnpinEvent)
     }
 
     override fun listen(): Job = client.gateway.on<GatewayEvent> {

@@ -12,12 +12,12 @@ import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.channel.StatelessForumChannel
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.GatewayEvent
-import io.github.deck.gateway.event.type.GatewayForumTopicUpdatedEvent
+import io.github.deck.gateway.event.type.GatewayForumTopicUnpinnedEvent
 
 /**
- * Called when a new [ForumTopic] is updated
+ * Called when a new [ForumTopic] is unpinned
  */
-public data class ForumTopicUpdateEvent(
+public data class ForumTopicUnpinEvent(
     override val client: DeckClient,
     override val barebones: GatewayEvent,
     val serverId: GenericId,
@@ -27,9 +27,9 @@ public data class ForumTopicUpdateEvent(
     val channel: StatelessForumChannel get() = forumTopic.channel
 }
 
-internal val EventService.forumTopicUpdateEvent: EventMapper<GatewayForumTopicUpdatedEvent, ForumTopicUpdateEvent>
+internal val EventService.forumTopicUnpinEvent: EventMapper<GatewayForumTopicUnpinnedEvent, ForumTopicUnpinEvent>
     get() = mapper { client, event ->
-        ForumTopicUpdateEvent(
+        ForumTopicUnpinEvent(
             client = client,
             barebones = event,
             serverId = event.serverId,
