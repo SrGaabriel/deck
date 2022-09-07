@@ -18,10 +18,10 @@ public inline fun <reified T : DeckEvent> on(
 
 @OptIn(ExperimentalCoroutinesApi::class)
 public suspend inline fun <reified T : DeckEvent> await(
+    timeout: Long,
     gatewayId: Int?,
     scope: CoroutineScope,
     eventsFlow: SharedFlow<DeckEvent>,
-    timeout: Long = 4000
 ): T? = withTimeoutOrNull(timeout) {
     suspendCancellableCoroutine<T> { continuation ->
         scope.launch {

@@ -22,10 +22,10 @@ public class CreateChannelRequestBuilder: RequestBuilder<CreateChannelRequest> {
     public var name: String by required()
     public var topic: String? = null
 
-    public var type: RawServerChannelType by required()
+    public var type: RawServerChannelType = RawServerChannelType.CHAT
     public var isPublic: Boolean = false
 
-    // You must choose at least one of those to provide
+    // You must provide at least one of these
     public var serverId: GenericId? = null
     public var groupId: GenericId? = null
     public var categoryId: IntGenericId? = null

@@ -14,7 +14,8 @@ public data class Request<S, G>(
     val api: String = Constants.GuildedRestApi,
     val endpoint: String,
     val body: S? = null,
-    val token: String? = null
+    val token: String? = null,
+    val address: GuildedAddress = GuildedAddress.API
 )
 
 public class RequestService(
@@ -35,7 +36,7 @@ public class RequestService(
     }
 
     @DeckInternalApi
-    public suspend inline fun <reified S, reified G> scheduleRequest(request: Request<S, G>): HttpResponse = client.request(request.api + request.endpoint) {
+    public suspend inline fun <reified S, reified G> scheduleRequest(request: Request<S, G>): HttpResponse = client.request(request.address.uri + request.endpoint) {
         if (request.body != null)
             setBody(request.body)
         method = request.method
@@ -54,4 +55,9 @@ public interface FailureHandler {
             throw response.body<RawGuildedRequestException>().toException()
         }
     }
+}
+
+public enum class GuildedAddress(public val uri: String) {
+    MEDIA(Constants.GuildedMedia),
+    API(Constants.GuildedRestApi)
 }

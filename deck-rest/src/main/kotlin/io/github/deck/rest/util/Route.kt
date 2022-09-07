@@ -29,13 +29,15 @@ public suspend inline fun <reified R> RestClient.sendRequest(
     endpoint: String,
     method: HttpMethod,
     authenticated: Boolean = true,
+    address: GuildedAddress = GuildedAddress.API
 ): R = requestService.superviseRequest<Unit, R>(
     request = Request(
         method,
         Constants.GuildedRestApi,
         endpoint,
         null,
-        if (authenticated) token else null
+        if (authenticated) token else null,
+        address
     )
 )
 
@@ -58,13 +60,15 @@ public suspend inline fun <reified R, reified B> RestClient.sendRequest(
     method: HttpMethod,
     body: B? = null,
     authenticated: Boolean = true,
+    address: GuildedAddress = GuildedAddress.API
 ): R = requestService.superviseRequest(
     request = Request(
         method,
         Constants.GuildedRestApi,
         endpoint,
         body,
-        if (authenticated) token else null
+        if (authenticated) token else null,
+        address
     )
 )
 

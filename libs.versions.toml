@@ -11,6 +11,9 @@ kotlin-logging = "2.1.23"
 mordant = "2.0.0-beta6"
 logback = "1.2.11"
 
+mockk = "1.12.5"
+valiktor = "0.12.0"
+
 [libraries]
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
@@ -29,6 +32,12 @@ kotlin-logging-jvm = { module = "io.github.microutils:kotlin-logging-jvm", versi
 
 mordant = { module = "com.github.ajalt.mordant:mordant", version.ref = "mordant" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+valiktor-core = { module = "org.valiktor:valiktor-core", version.ref = "valiktor" }
+
+[bundles]
+ktor-client-essentials = ["ktor-client-core", "ktor-client-cio", "ktor-serialization-json"]
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

@@ -27,8 +27,8 @@ public interface StatelessServer: StatelessEntity {
      */
     public suspend fun createChannel(builder: CreateChannelRequestBuilder.() -> Unit): ServerChannel =
         DeckServerChannel.from(client, client.rest.channel.createChannel {
-            builder()
             this.serverId = this@StatelessServer.id
+            builder()
         })
 
     /**
@@ -40,7 +40,7 @@ public interface StatelessServer: StatelessEntity {
      */
     @Suppress("unchecked_cast")
     public suspend fun <T : ServerChannel> createChannelCasting(builder: CreateChannelRequestBuilder.() -> Unit): T =
-        (createChannel(builder) as? T) ?: error("Reported type and actual channel type didn't match when calling method 'createdChannelOf'")
+        (createChannel(builder) as? T) ?: error("Reported type and actual channel type didn't match when calling 'createChannelCasting'")  
 
     /**
      * Retrieves a member from this server, throws exception

@@ -6,7 +6,9 @@ import io.github.deck.core.stateless.StatelessWebhook
 import io.github.deck.core.stateless.channel.StatelessServerChannel
 import io.github.deck.core.util.BlankStatelessServerChannel
 import io.github.deck.core.util.BlankStatelessUser
+import io.github.deck.rest.builder.ExecuteWebhookRequestBuilder
 import io.github.deck.rest.builder.UpdateWebhookRequestBuilder
+import io.github.deck.rest.request.ExecuteWebhookResponse
 import kotlinx.datetime.Instant
 import java.util.*
 
@@ -43,4 +45,13 @@ public interface Webhook: StatelessWebhook {
         name = this@Webhook.name
         channelId = this@Webhook.channelId
     }
+
+    /**
+     * Executes this webhook using its known [token], sending a message with the details provided in the [builder]
+     *
+     * @param builder message builder
+     * @return response, null if token not known
+     */
+    public suspend fun execute(builder: ExecuteWebhookRequestBuilder.() -> Unit): ExecuteWebhookResponse? =
+        token?.let { execute(it, builder) }
 }

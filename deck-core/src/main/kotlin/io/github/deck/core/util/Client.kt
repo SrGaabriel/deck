@@ -36,7 +36,7 @@ public class ClientBuilder(token: String) {
     public fun build(): DeckClient {
         val client = DeckClient(rest, gateway)
         if (automaticPrivateRepliesToPrivateMessages != null)
-            client.automaticPrivateRepliesToPrivateMessages = automaticPrivateRepliesToPrivateMessages!!
+            client.privateRepliesToPrivateMessagesByDefault = automaticPrivateRepliesToPrivateMessages!!
         return client
     }
 }

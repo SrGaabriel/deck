@@ -48,7 +48,7 @@ public data class Embed(
         image = image.nullableOptional().map { RawEmbedImage(url = it.optional()) },
         thumbnail = thumbnail.nullableOptional().map { RawEmbedImage(url = it.optional()) },
         author = author.nullableOptional().map { RawEmbedAuthor(it.title.nullableOptional(), it.url.nullableOptional(), it.iconUrl.nullableOptional()) },
-        fields = fields.map { RawEmbedField(it.name, it.value, it.inline) }.optional()
+        fields = fields.map { RawEmbedField(it.name, it.value, it.inline) }
     )
 
     public companion object
@@ -137,5 +137,5 @@ public fun Embed.Companion.from(raw: RawEmbed): Embed = Embed(
     image = raw.image.asNullable()?.url?.asNullable(),
     thumbnail = raw.thumbnail.asNullable()?.url?.asNullable(),
     author = raw.author.asNullable()?.let { Embed.Author(it.name.asNullable(), it.url.asNullable(), it.iconUrl.asNullable()) },
-    fields = raw.fields.asNullable()?.map { Embed.Field(it.name, it.value, it.inline) }.orEmpty()
+    fields = raw.fields.map { Embed.Field(it.name, it.value, it.inline) }
 )

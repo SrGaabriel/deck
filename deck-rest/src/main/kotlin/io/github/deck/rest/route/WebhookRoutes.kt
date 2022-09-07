@@ -4,11 +4,10 @@ import io.github.deck.common.entity.RawWebhook
 import io.github.deck.common.util.GenericId
 import io.github.deck.rest.RestClient
 import io.github.deck.rest.builder.CreateWebhookRequestBuilder
+import io.github.deck.rest.builder.ExecuteWebhookRequestBuilder
 import io.github.deck.rest.builder.UpdateWebhookRequestBuilder
-import io.github.deck.rest.request.CreateWebhookRequest
-import io.github.deck.rest.request.CreateWebhookResponse
-import io.github.deck.rest.request.GetServerWebhooksResponse
-import io.github.deck.rest.request.UpdateWebhookRequest
+import io.github.deck.rest.request.*
+import io.github.deck.rest.util.GuildedAddress
 import io.github.deck.rest.util.plusIf
 import io.github.deck.rest.util.sendRequest
 import io.ktor.http.*
@@ -31,6 +30,22 @@ public class WebhookRoutes(private val client: RestClient) {
             method = HttpMethod.Post,
             body = CreateWebhookRequestBuilder().apply(builder).toRequest()
         ).webhook
+    }
+
+    public suspend fun executeWebhook(
+        webhookId: UUID,
+        token: String,
+        builder: ExecuteWebhookRequestBuilder.() -> Unit
+    ): ExecuteWebhookResponse {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+        return client.sendRequest(
+            endpoint = "/webhooks/${webhookId}/${token}",
+            method = HttpMethod.Post,
+            body = ExecuteWebhookRequestBuilder().apply(builder).toRequest(),
+            address = GuildedAddress.MEDIA
+        )
     }
 
     public suspend fun getWebhook(

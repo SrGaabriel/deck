@@ -55,7 +55,7 @@ public interface Message : StatelessMessage {
     }
 
     override suspend fun sendReply(builder: SendMessageRequestBuilder.() -> Unit): Message = super.sendReply {
-        isPrivate = client.automaticPrivateRepliesToPrivateMessages && this@Message.isPrivate
+        isPrivate = client.privateRepliesToPrivateMessagesByDefault && this@Message.isPrivate
         builder()
     }
 }

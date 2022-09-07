@@ -36,6 +36,8 @@ public interface EventService {
     public val eventWrappingFlow: SharedFlow<DeckEvent>
 
     public fun listen(): Job
+
+    public suspend fun dispatch(event: DeckEvent)
 }
 
 public class DefaultEventService(private val client: DeckClient) : EventService {
@@ -85,7 +87,11 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         if (this is GatewayHelloEvent) {
             client._selfId = self.id
         }
-        val event: DeckEvent = mappers[this::class]?.map(client, this) ?: return@on
+        val mapped = mappers[this::class]?.map(client, this) ?: return@on
+        dispatch(mapped)
+    }
+
+    override suspend fun dispatch(event: DeckEvent) {
         eventWrappingFlow.emit(event)
     }
 

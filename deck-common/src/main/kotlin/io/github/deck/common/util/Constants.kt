@@ -6,4 +6,6 @@ public object Constants {
 
     public const val GuildedRestApiRoute: String = "/api/v1"
     public const val GuildedRestApi: String = "https://$GuildedDomain$GuildedRestApiRoute"
+
+    public const val GuildedMedia: String = "https://media.guilded.gg"
 }

@@ -7,7 +7,6 @@ import io.github.deck.gateway.util.GatewayOpcode
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
@@ -76,7 +75,7 @@ public class DefaultEventDecoder(private val gatewayId: Int) : EventDecoder {
     @OptIn(ExperimentalSerializationApi::class)
     override fun decodeEventFromPayload(payload: String): GatewayEvent? = runCatching {
         val barebones = Json.decodeFromString<BarebonesEvent>(payload)
-        val eventData = barebones.data.asNullable() ?: buildJsonObject {}
+        val eventData = barebones.data.asNullable() ?: JsonObject(emptyMap())
         val eventType = barebones.type.asNullable() ?: when (barebones.opcode) {
             GatewayOpcode.Dispatch -> error("Invalid event type")
             GatewayOpcode.Hello -> "HelloEvent"

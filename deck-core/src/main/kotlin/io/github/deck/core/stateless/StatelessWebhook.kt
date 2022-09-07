@@ -4,7 +4,9 @@ import io.github.deck.common.util.GenericId
 import io.github.deck.core.entity.Webhook
 import io.github.deck.core.entity.impl.DeckWebhook
 import io.github.deck.core.util.BlankStatelessServer
+import io.github.deck.rest.builder.ExecuteWebhookRequestBuilder
 import io.github.deck.rest.builder.UpdateWebhookRequestBuilder
+import io.github.deck.rest.request.ExecuteWebhookResponse
 import java.util.*
 
 public interface StatelessWebhook: StatelessEntity {
@@ -12,6 +14,17 @@ public interface StatelessWebhook: StatelessEntity {
     public val serverId: GenericId
 
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
+
+    /**
+     * Executes this webhook using the provided webhook [token], sending a message with the details provided in the [builder]
+     *
+     * @param token webhook's token
+     * @param builder message builder
+     *
+     * @return response
+     */
+    public suspend fun execute(token: String, builder: ExecuteWebhookRequestBuilder.() -> Unit): ExecuteWebhookResponse =
+        client.executeWebhook(id, token, builder)
 
     /**
      * Overwrites this webhook with the new data provided

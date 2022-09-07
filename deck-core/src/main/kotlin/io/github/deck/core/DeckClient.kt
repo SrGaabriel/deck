@@ -7,8 +7,14 @@ import io.github.deck.core.event.DefaultEventService
 import io.github.deck.core.util.ClientBuilder
 import io.github.deck.gateway.GatewayOrchestrator
 import io.github.deck.rest.RestClient
+import io.github.deck.rest.builder.ExecuteWebhookRequestBuilder
+import io.github.deck.rest.request.ExecuteWebhookResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import java.util.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Symbolizes a bot as a whole, with a [gateway] and a [rest] client
@@ -49,17 +55,34 @@ public class DeckClient internal constructor(
             ClientBuilder(token).apply(builder).build()
     }
 
-    public var automaticPrivateRepliesToPrivateMessages: Boolean = true
+    public var privateRepliesToPrivateMessagesByDefault: Boolean = true
+
+    /**
+     * Executes the webhook with the provided [webhookId] and [webhookToken], sending a message according to the [builder] values
+     *
+     * @param webhookId webhook's id
+     * @param webhookToken webhook's token
+     * @param builder message builder
+     *
+     * @return response
+     */
+    @OptIn(ExperimentalContracts::class)
+    public suspend fun executeWebhook(webhookId: UUID, webhookToken: String, builder: ExecuteWebhookRequestBuilder.() -> Unit): ExecuteWebhookResponse {
+        contract {
+            callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+        }
+        return rest.webhook.executeWebhook(webhookId, webhookToken, builder)
+    }
 
     public inline fun <reified T : DeckEvent> on(
-        scope: CoroutineScope = gateway,
         gatewayId: Int? = null,
+        scope: CoroutineScope = gateway,
         noinline callback: suspend T.() -> Unit
     ): Job = io.github.deck.core.util.on(gatewayId, scope, eventService.eventWrappingFlow, callback)
 
     public suspend inline fun <reified T : DeckEvent> await(
-        timeout: Long = 4000,
+        timeout: Long,
+        gatewayId: Int? = null,
         scope: CoroutineScope = gateway,
-        gatewayId: Int? = null
-    ): T? = io.github.deck.core.util.await(gatewayId, scope, eventService.eventWrappingFlow, timeout)
+    ): T? = io.github.deck.core.util.await(timeout, gatewayId, scope, eventService.eventWrappingFlow)
 }

@@ -18,6 +18,6 @@ public data class RawWebhook(
     val channelId: UUID,
     val createdAt: Instant,
     val createdBy: GenericId,
-    val deletedAt: OptionalProperty<Instant>,
-    val token: OptionalProperty<String>
+    val deletedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    val token: OptionalProperty<String> = OptionalProperty.NotPresent
 )
