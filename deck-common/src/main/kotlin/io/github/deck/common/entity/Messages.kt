@@ -25,7 +25,7 @@ public data class RawMessage(
     public val mentions: OptionalProperty<RawMessageMentions> = OptionalProperty.NotPresent,
     public val createdAt: Instant,
     public val createdBy: GenericId,
-    public val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
+    public val createdByWebhookId: OptionalProperty<UUID> = OptionalProperty.NotPresent,
     public val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent
 )
 

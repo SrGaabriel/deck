@@ -5,7 +5,9 @@ import io.github.deck.common.util.GenericId
 import io.github.deck.core.entity.impl.DeckMessage
 import io.github.deck.core.stateless.StatelessMessage
 import io.github.deck.core.stateless.StatelessUser
+import io.github.deck.core.stateless.StatelessWebhook
 import io.github.deck.core.util.BlankStatelessUser
+import io.github.deck.core.util.BlankStatelessWebhook
 import io.github.deck.rest.builder.SendMessageRequestBuilder
 import io.github.deck.rest.builder.UpdateMessageRequestBuilder
 import kotlinx.datetime.Instant
@@ -40,6 +42,10 @@ public interface Message : StatelessMessage {
     public val isPrivate: Boolean
     /** Whether this message is silent (does not notify mentioned users) */
     public val isSilent: Boolean
+
+    /** The id of the webhook that created this message, if one */
+    public val createdByWebhookId: UUID?
+    public val createdByWebhook: StatelessWebhook? get() = createdByWebhookId?.let { BlankStatelessWebhook(client, it, serverId ?: error("Message was created by a webhook but not in a server")) }
 
     /**
      * Patches **(NOT UPDATES)** this message

@@ -25,6 +25,7 @@ public data class DeckMessage(
     override val repliesTo: List<UUID>,
     override val isPrivate: Boolean,
     override val isSilent: Boolean,
+    override val createdByWebhookId: UUID?
 ): Message {
     public companion object {
         public fun from(client: DeckClient, raw: RawMessage): DeckMessage = DeckMessage(
@@ -41,6 +42,7 @@ public data class DeckMessage(
             repliesTo = raw.replyMessageIds.asNullable()?.map { it }.orEmpty(),
             isPrivate = raw.isPrivate,
             isSilent = raw.isSilent,
+            createdByWebhookId = raw.createdByWebhookId.asNullable()
         )
     }
 }

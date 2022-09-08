@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.dokka)
     `maven-publish`
+    idea
 }
 
 subprojects {
@@ -13,6 +14,7 @@ subprojects {
     version = Library.Version
     apply<MavenPublishPlugin>()
     apply<DokkaPlugin>()
+    apply<IdeaPlugin>()
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
@@ -32,4 +34,16 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+}
+
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+
+        excludeDirs = excludeDirs + layout.files(
+            ".idea",
+            "gradle/wrapper"
+        )
+    }
 }
