@@ -143,6 +143,20 @@ public data class GatewayForumTopicUpdatedEvent(
 ): GatewayEvent()
 
 @Serializable
+@SerialName("ForumTopicLocked")
+public data class GatewayForumTopicLockedEvent(
+    val serverId: GenericId,
+    val forumTopic: RawForumTopic
+): GatewayEvent()
+
+@Serializable
+@SerialName("ForumTopicUnlocked")
+public data class GatewayForumTopicUnlockedEvent(
+    val serverId: GenericId,
+    val forumTopic: RawForumTopic
+): GatewayEvent()
+
+@Serializable
 @SerialName("ForumTopicDeleted")
 public data class GatewayForumTopicDeletedEvent(
     val serverId: GenericId,

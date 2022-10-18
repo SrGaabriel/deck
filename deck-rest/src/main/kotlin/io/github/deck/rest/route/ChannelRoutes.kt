@@ -270,6 +270,22 @@ public class ChannelRoutes(private val client: RestClient) {
         ).forumTopic
     }
 
+    public suspend fun lockForumTopic(
+        channelId: UUID,
+        forumTopicId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/lock",
+        method = HttpMethod.Put
+    )
+
+    public suspend fun unlockForumTopic(
+        channelId: UUID,
+        forumTopicId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/lock",
+        method = HttpMethod.Delete
+    )
+
     public suspend fun deleteForumTopic(
         channelId: UUID,
         forumTopicId: IntGenericId

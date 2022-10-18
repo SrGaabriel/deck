@@ -46,6 +46,18 @@ public interface StatelessForumTopic: StatelessEntity {
     public suspend fun unpin(): Unit =
         client.rest.channel.unpinForumTopic(channelId, id)
 
+    /**
+     * Locks this forum topic
+     */
+    public suspend fun lock(): Unit =
+        client.rest.channel.lockForumTopic(channelId, id)
+
+    /**
+     * Unlocks this forum topic
+     */
+    public suspend fun unlock(): Unit =
+        client.rest.channel.unlockForumTopic(channelId, id)
+
     public suspend fun getForumTopic(): ForumTopic =
         DeckForumTopic.from(client, client.rest.channel.getForumTopic(channelId, id))
 }

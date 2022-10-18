@@ -61,6 +61,8 @@ private val polymorphicJson by lazy {
                 subclass(GatewayForumTopicDeletedEvent::class)
                 subclass(GatewayForumTopicPinnedEvent::class)
                 subclass(GatewayForumTopicUnpinnedEvent::class)
+                subclass(GatewayForumTopicLockedEvent::class)
+                subclass(GatewayForumTopicUnlockedEvent::class)
             }
         }
     }
