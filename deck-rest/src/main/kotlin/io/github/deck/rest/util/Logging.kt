@@ -8,6 +8,9 @@ public class KtorDeckLoggerWrapper(public val client: RestClient): Logger {
     override fun log(message: String) {
         if (!client.logRequests)
             return
-        client.logger.debug { " ${message.replace(client.token, "*".repeat(client.token.length))}" }
+        val messageToBeLogged = message
+            .replace(client.token, "<masked>") // Hide token
+            .replace(client.token.drop(5), "<masked>") // Hide token in case it is logged without the default prefix (`gapi_`)
+        client.logger.debug { messageToBeLogged }
     }
 }
