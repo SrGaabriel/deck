@@ -83,9 +83,9 @@ public sealed interface ListItemNote {
      * Returns the note's content if it is present (was handed out by guilded), otherwise
      * returns null.
      *
-     * **Note: returning null does NOT mean that this note does not exist or it doesn't have a content**
+     * **Note: returning null does NOT mean that this note does not exist, nor that it doesn't have a content**
      *
-     * @return null if we don't have this note' s content, otherwise returns the value
+     * @return null if we don't have this note's content, otherwise returns the value
      */
     @DeckDelicateApi
     public fun content(): String? =

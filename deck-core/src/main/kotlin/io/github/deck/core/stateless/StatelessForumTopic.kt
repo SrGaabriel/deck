@@ -3,7 +3,9 @@ package io.github.deck.core.stateless
 import io.github.deck.common.util.GenericId
 import io.github.deck.common.util.IntGenericId
 import io.github.deck.core.entity.ForumTopic
+import io.github.deck.core.entity.ForumTopicComment
 import io.github.deck.core.entity.impl.DeckForumTopic
+import io.github.deck.core.entity.impl.DeckForumTopicComment
 import io.github.deck.core.stateless.channel.StatelessForumChannel
 import io.github.deck.core.util.BlankStatelessForumChannel
 import io.github.deck.core.util.BlankStatelessServer
@@ -57,6 +59,42 @@ public interface StatelessForumTopic: StatelessEntity {
      */
     public suspend fun unlock(): Unit =
         client.rest.channel.unlockForumTopic(channelId, id)
+
+    /**
+     * Posts a comment under this topic
+     *
+     * @param content comment's content
+     *
+     * @return the created comment
+     */
+    public suspend fun createComment(content: String): ForumTopicComment =
+        DeckForumTopicComment.from(client, serverId, client.rest.channel.createForumTopicComment(channelId, id, content))
+
+    /**
+     * Retrieves the comment associated with the provided [commentId]
+     *
+     * @param commentId comment id
+     *
+     * @return the found comment
+     */
+    public suspend fun getComment(commentId: IntGenericId): ForumTopicComment =
+        DeckForumTopicComment.from(client, serverId, client.rest.channel.getForumTopicComment(channelId, id, commentId))
+
+    /**
+     * Retrieves all comments posted under this topic
+     *
+     * @return all comments in this topic
+     */
+    public suspend fun getComments(): List<ForumTopicComment> =
+        client.rest.channel.getForumTopicComments(channelId, id).map { DeckForumTopicComment.from(client, serverId, it) }
+
+    /**
+     * Deletes the comment associated with the provided [commentId]
+     *
+     * @param commentId comment id
+     */
+    public suspend fun deleteComment(commentId: IntGenericId): Unit =
+        client.rest.channel.deleteForumTopicComment(channelId, id, commentId)
 
     public suspend fun getForumTopic(): ForumTopic =
         DeckForumTopic.from(client, client.rest.channel.getForumTopic(channelId, id))

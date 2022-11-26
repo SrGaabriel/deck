@@ -132,6 +132,18 @@ public data class RawForumTopicSummary(
 )
 
 @Serializable
+public data class RawForumTopicComment(
+    val id: IntGenericId,
+    val content: String,
+    val createdAt: Instant,
+    val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    val channelId: UUID,
+    val forumTopicId: IntGenericId,
+    val createdBy: GenericId,
+    val mentions: OptionalProperty<RawMessageMentions> = OptionalProperty.NotPresent
+)
+
+@Serializable
 public data class RawCalendarEvent(
     val id: IntGenericId,
     val serverId: GenericId,

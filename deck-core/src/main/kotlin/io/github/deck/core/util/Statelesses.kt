@@ -81,6 +81,36 @@ internal class BlankStatelessForumChannel(
     override val serverId: GenericId
 ): StatelessForumChannel
 
+public fun StatelessForumTopic(
+    client: DeckClient,
+    id: IntGenericId,
+    channelId: UUID,
+    serverId: GenericId
+): StatelessForumTopic = BlankStatelessForumTopic(client, id, channelId, serverId)
+
+internal class BlankStatelessForumTopic(
+    override val client: DeckClient,
+    override val id: IntGenericId,
+    override val channelId: UUID,
+    override val serverId: GenericId
+): StatelessForumTopic
+
+public fun StatelessForumTopicComment(
+    client: DeckClient,
+    id: IntGenericId,
+    forumTopicId: IntGenericId,
+    channelId: UUID,
+    serverId: GenericId
+): StatelessForumTopicComment = BlankStatelessForumTopicComment(client, id, forumTopicId, channelId, serverId)
+
+internal class BlankStatelessForumTopicComment(
+    override val client: DeckClient,
+    override val id: IntGenericId,
+    override val forumTopicId: IntGenericId,
+    override val channelId: UUID,
+    override val serverId: GenericId
+): StatelessForumTopicComment
+
 public fun StatelessServer(
     client: DeckClient,
     id: GenericId,

@@ -113,6 +113,16 @@ public data class GetForumTopicsResponse(
 )
 
 @Serializable
+public data class CreateForumTopicCommentResponse(
+    val forumTopicComment: RawForumTopicComment
+)
+
+@Serializable
+public data class GetForumTopicCommentsResponse(
+    val forumTopicComments: List<RawForumTopicComment>
+)
+
+@Serializable
 public data class CreateCalendarEventRequest(
     val name: OptionalProperty<String> = OptionalProperty.NotPresent,
     val description: OptionalProperty<String> = OptionalProperty.NotPresent,

@@ -1,5 +1,6 @@
 package io.github.deck.core.event
 
+import io.github.deck.common.log.warning
 import io.github.deck.core.DeckClient
 import io.github.deck.core.event.calendar.*
 import io.github.deck.core.event.channel.serverChannelCreateEvent
@@ -83,6 +84,9 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         registerMapper(forumTopicUnpinEvent)
         registerMapper(forumTopicLockedEvent)
         registerMapper(forumTopicUnlockedEvent)
+        registerMapper(forumTopicCommentCreateEvent)
+        registerMapper(forumTopicCommentUpdateEvent)
+        registerMapper(forumTopicCommentDeleteEvent)
     }
 
     override fun listen(): Job = client.gateway.on<GatewayEvent> {
@@ -100,8 +104,11 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
     @Suppress("unchecked_cast")
     private inline fun <reified T : GatewayEvent> registerMapper(mapper: EventMapper<out T, out DeckEvent>) {
         val castedMapper = mapper as EventMapper<GatewayEvent, DeckEvent>
-        if (mappers.containsKey(T::class) || mappers.containsValue(castedMapper))
-            error("Tried to register duplicate event mapper for event '${T::class::simpleName}'. If you wish to override an event, try creating your own implementation of the EventService interface")
+        if (mappers.containsKey(T::class) || mappers.containsValue(castedMapper)) {
+            client.gateway.logger.warning {
+                "There were two or more attempts to register an event mapper for event `${T::class.simpleName}`. Deck is now overwriting the previous mapper for the new one."
+            }
+        }
         mappers[T::class] = castedMapper
     }
 }

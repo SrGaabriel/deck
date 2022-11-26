@@ -18,10 +18,10 @@ public interface StatelessServerChannel: StatelessChannel {
         client.rest.channel.deleteChannel(id)
 
     /**
-     * Retrieves a [ServerChannel] from this [StatelessServerChannel]
+     * Retrieves a [ServerChannel] that the bot has access to
      *
-     * @return the [ServerChannel] matching this [StatelessServerChannel]'s id
+     * @return the [ServerChannel] matching this channel's id
      */
-    public suspend fun getChannel(): ServerChannel =
+    override suspend fun getChannel(): ServerChannel =
         DeckServerChannel.from(client, client.rest.channel.getChannel(id))
 }

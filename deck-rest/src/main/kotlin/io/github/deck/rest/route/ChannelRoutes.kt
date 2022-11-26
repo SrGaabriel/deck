@@ -286,14 +286,6 @@ public class ChannelRoutes(private val client: RestClient) {
         method = HttpMethod.Delete
     )
 
-    public suspend fun deleteForumTopic(
-        channelId: UUID,
-        forumTopicId: IntGenericId
-    ): Unit = client.sendRequest(
-        endpoint = "/channels/${channelId}/topics/${forumTopicId}",
-        method = HttpMethod.Delete
-    )
-
     public suspend fun pinForumTopic(
         channelId: UUID,
         forumTopicId: IntGenericId
@@ -307,6 +299,61 @@ public class ChannelRoutes(private val client: RestClient) {
         forumTopicId: IntGenericId
     ): Unit = client.sendRequest(
         endpoint = "/channels/${channelId}/topics/${forumTopicId}/pin",
+        method = HttpMethod.Delete
+    )
+
+    public suspend fun deleteForumTopic(
+        channelId: UUID,
+        forumTopicId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}",
+        method = HttpMethod.Delete
+    )
+
+    public suspend fun createForumTopicComment(
+        channelId: UUID,
+        forumTopicId: IntGenericId,
+        content: String
+    ): RawForumTopicComment = client.sendRequest<CreateForumTopicCommentResponse, Map<String, String>>(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/comments",
+        method = HttpMethod.Post,
+        body = mapOf("content" to content)
+    ).forumTopicComment
+
+    public suspend fun getForumTopicComment(
+        channelId: UUID,
+        forumTopicId: IntGenericId,
+        forumTopicCommentId: IntGenericId
+    ): RawForumTopicComment = client.sendRequest<CreateForumTopicCommentResponse>(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/comments/${forumTopicCommentId}",
+        method = HttpMethod.Get
+    ).forumTopicComment
+
+    public suspend fun getForumTopicComments(
+        channelId: UUID,
+        forumTopicId: IntGenericId
+    ): List<RawForumTopicComment> = client.sendRequest<GetForumTopicCommentsResponse>(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/comments",
+        method = HttpMethod.Get
+    ).forumTopicComments
+
+    public suspend fun updateForumTopicComment(
+        channelId: UUID,
+        forumTopicId: IntGenericId,
+        forumTopicCommentId: IntGenericId,
+        content: String
+    ): RawForumTopicComment = client.sendRequest<CreateForumTopicCommentResponse, Map<String, String>>(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/comments/${forumTopicCommentId}",
+        method = HttpMethod.Patch,
+        body = mapOf("content" to content)
+    ).forumTopicComment
+
+    public suspend fun deleteForumTopicComment(
+        channelId: UUID,
+        forumTopicId: IntGenericId,
+        forumTopicCommentId: IntGenericId,
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/comments/${forumTopicCommentId}",
         method = HttpMethod.Delete
     )
 

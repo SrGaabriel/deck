@@ -176,3 +176,24 @@ public data class GatewayForumTopicUnpinnedEvent(
     val serverId: GenericId,
     val forumTopic: RawForumTopic
 ): GatewayEvent()
+
+@Serializable
+@SerialName("ForumTopicCommentCreated")
+public data class GatewayForumTopicCommentCreatedEvent(
+    val serverId: GenericId,
+    val forumTopicComment: RawForumTopicComment
+): GatewayEvent()
+
+@Serializable
+@SerialName("ForumTopicCommentUpdated")
+public data class GatewayForumTopicCommentUpdatedEvent(
+    val serverId: GenericId,
+    val forumTopicComment: RawForumTopicComment
+): GatewayEvent()
+
+@Serializable
+@SerialName("ForumTopicCommentDeleted")
+public data class GatewayForumTopicCommentDeletedEvent(
+    val serverId: GenericId,
+    val forumTopicComment: RawForumTopicComment
+): GatewayEvent()
