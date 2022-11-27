@@ -22,7 +22,7 @@ public data class BotMembershipCreateEvent(
     val server: Server,
     val createdBy: GenericId
 ): DeckEvent {
-    val creator: StatelessUser get() = BlankStatelessUser(client, createdBy)
+    val creator: StatelessUser by lazy { BlankStatelessUser(client, createdBy) }
 }
 
 internal val EventService.botMembershipCreated: EventMapper<GatewayBotServerMembershipCreatedEvent, BotMembershipCreateEvent> get() =

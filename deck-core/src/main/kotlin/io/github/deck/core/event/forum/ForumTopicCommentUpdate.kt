@@ -21,12 +21,12 @@ public data class ForumTopicCommentUpdateEvent(
     override val barebones: GatewayEvent,
     val forumTopicComment: ForumTopicComment
 ): DeckEvent {
-    inline val server: StatelessServer get() = forumTopicComment.server
-    inline val channel: StatelessForumChannel get() = forumTopicComment.channel
-    inline val topic: StatelessForumTopic get() = forumTopicComment.forumTopic
+    public val server: StatelessServer by lazy { forumTopicComment.server }
+    public val channel: StatelessForumChannel by lazy { forumTopicComment.channel }
+    public val topic: StatelessForumTopic by lazy { forumTopicComment.forumTopic }
 }
 
-internal val EventService.forumTopicCommentUpdateEvent: EventMapper<GatewayForumTopicCommentUpdatedEvent, ForumTopicCommentUpdateEvent>
+internal val EventService.forumTopicCommentUpdate: EventMapper<GatewayForumTopicCommentUpdatedEvent, ForumTopicCommentUpdateEvent>
     get() = mapper { client, event ->
         ForumTopicCommentUpdateEvent(
             client = client,

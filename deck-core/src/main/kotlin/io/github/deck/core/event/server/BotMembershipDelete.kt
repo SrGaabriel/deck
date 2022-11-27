@@ -22,7 +22,7 @@ public data class BotMembershipDeleteEvent(
     val server: Server,
     val deletedBy: GenericId
 ): DeckEvent {
-    val deleter: StatelessUser get() = BlankStatelessUser(client, deletedBy)
+    val deleter: StatelessUser by lazy { BlankStatelessUser(client, deletedBy) }
 }
 
 internal val EventService.botMembershipDelete: EventMapper<GatewayBotServerMembershipDeletedEvent, BotMembershipDeleteEvent> get() =
