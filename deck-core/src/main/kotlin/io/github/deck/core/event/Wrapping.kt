@@ -87,6 +87,9 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         registerMapper(forumTopicCommentCreateEvent)
         registerMapper(forumTopicCommentUpdateEvent)
         registerMapper(forumTopicCommentDeleteEvent)
+        registerMapper(botMembershipCreated)
+        registerMapper(botMembershipDelete)
+        registerMapper(serverRolesUpdate)
     }
 
     override fun listen(): Job = client.gateway.on<GatewayEvent> {

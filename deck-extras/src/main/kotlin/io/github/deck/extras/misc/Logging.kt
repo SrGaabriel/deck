@@ -24,7 +24,7 @@ public class MordantLogger: DeckLogger {
         val (prefix, color) = when(level) {
             LoggingLevel.Debug -> "\uD83E\uDDEA debug" to TextColors.brightBlue
             LoggingLevel.Info -> "\uD83D\uDCE8 info" to TextColors.brightGreen
-            LoggingLevel.Warning -> "⚠️ warning" to TextColors.brightYellow
+            LoggingLevel.Warning -> "⚠ warning" to TextColors.brightYellow
             LoggingLevel.Error -> "❌ error" to TextColors.brightRed
         }
         fun String.asFormattedText() = replace("\n", "\n${" ".repeat(prefix.length)}  ")

@@ -40,7 +40,7 @@ public class DefaultGateway(
 
     override var maxRetries: Int = 5
     override val retryCounter: AtomicInteger = AtomicInteger(0)
-    public var eventDecoder: EventDecoder = DefaultEventDecoder(id)
+    public var eventDecoder: EventDecoder = DefaultEventDecoder(id, orchestrator.logger)
 
     override suspend fun start() {
         connect()
@@ -103,7 +103,8 @@ public class DefaultGateway(
                 val event = eventDecoder.decodeEventFromPayload(payload)
 
                 if (event == null) {
-                    orchestrator.logger.error { "[Gateway $id] Failed to parse event with data $payload" }
+//                    TODO: turn this back on when duplicate events are fixed
+//                    orchestrator.logger.warning { "[Gateway $id] Failed to parse event with data $payload" }
                     continue
                 }
 

@@ -11,7 +11,7 @@ import io.github.deck.core.event.mapper
 import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.GatewayEvent
-import io.github.deck.gateway.event.type.GatewayTeamMemberJoinedEvent
+import io.github.deck.gateway.event.type.GatewayServerMemberJoinedEvent
 
 /**
  * Called when a new [Member] joins a server
@@ -25,7 +25,7 @@ public data class MemberJoinEvent(
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
 }
 
-internal val EventService.memberJoinEvent: EventMapper<GatewayTeamMemberJoinedEvent, MemberJoinEvent> get() = mapper { client, event ->
+internal val EventService.memberJoinEvent: EventMapper<GatewayServerMemberJoinedEvent, MemberJoinEvent> get() = mapper { client, event ->
     MemberJoinEvent(
         client = client,
         barebones = event,

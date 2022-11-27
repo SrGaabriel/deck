@@ -12,7 +12,7 @@ import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.core.util.BlankStatelessUser
 import io.github.deck.gateway.event.GatewayEvent
-import io.github.deck.gateway.event.type.GatewayTeamMemberRemovedEvent
+import io.github.deck.gateway.event.type.GatewayServerMemberRemovedEvent
 
 /**
  * Called when a [Member] leaves a server
@@ -30,7 +30,7 @@ public data class MemberLeaveEvent(
     public val user: StatelessUser get() = BlankStatelessUser(client, userId)
 }
 
-internal val EventService.memberLeaveEvent: EventMapper<GatewayTeamMemberRemovedEvent, MemberLeaveEvent> get() = mapper { client, event ->
+internal val EventService.memberLeaveEvent: EventMapper<GatewayServerMemberRemovedEvent, MemberLeaveEvent> get() = mapper { client, event ->
     MemberLeaveEvent(
         client = client,
         barebones = event,

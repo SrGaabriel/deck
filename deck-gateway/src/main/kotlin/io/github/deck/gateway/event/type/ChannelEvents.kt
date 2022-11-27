@@ -7,21 +7,21 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("TeamChannelCreated")
+@SerialName("ServerChannelCreated")
 public data class GatewayServerChannelCreatedEvent(
     val serverId: GenericId,
     val channel: RawServerChannel
 ): GatewayEvent()
 
 @Serializable
-@SerialName("TeamChannelUpdated")
+@SerialName("ServerChannelUpdated")
 public data class GatewayServerChannelUpdatedEvent(
     val serverId: GenericId,
     val channel: RawServerChannel
 ): GatewayEvent()
 
 @Serializable
-@SerialName("TeamChannelDeleted")
+@SerialName("ServerChannelDeleted")
 public data class GatewayServerChannelDeletedEvent(
     val serverId: GenericId,
     val channel: RawServerChannel

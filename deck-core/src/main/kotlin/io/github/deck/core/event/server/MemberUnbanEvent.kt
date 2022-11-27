@@ -12,7 +12,7 @@ import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.GatewayEvent
-import io.github.deck.gateway.event.type.GatewayTeamMemberUnbannedEvent
+import io.github.deck.gateway.event.type.GatewayServerMemberUnbannedEvent
 
 /**
  * Called when a [Member] is pardoned (unbanned)
@@ -27,7 +27,7 @@ public data class MemberUnbanEvent(
     public val user: StatelessUser get() = ban.user
 }
 
-internal val EventService.memberUnbanEvent: EventMapper<GatewayTeamMemberUnbannedEvent, MemberUnbanEvent> get() = mapper { client, event ->
+internal val EventService.memberUnbanEvent: EventMapper<GatewayServerMemberUnbannedEvent, MemberUnbanEvent> get() = mapper { client, event ->
     MemberUnbanEvent(
         client = client,
         barebones = event,

@@ -1,5 +1,6 @@
 package io.github.deck.gateway.event
 
+import io.github.deck.common.log.DeckLogger
 import io.github.deck.common.util.OptionalProperty
 import io.github.deck.common.util.asNullable
 import io.github.deck.gateway.event.type.*
@@ -26,11 +27,11 @@ private val polymorphicJson by lazy {
             polymorphic(GatewayEvent::class) {
                 subclass(GatewayHelloEvent::class)
                 subclass(GatewayResumeEvent::class)
-                subclass(GatewayTeamMemberJoinedEvent::class)
-                subclass(GatewayTeamMemberUpdatedEvent::class)
-                subclass(GatewayTeamMemberRemovedEvent::class)
-                subclass(GatewayTeamMemberBannedEvent::class)
-                subclass(GatewayTeamMemberUnbannedEvent::class)
+                subclass(GatewayServerMemberJoinedEvent::class)
+                subclass(GatewayServerMemberUpdatedEvent::class)
+                subclass(GatewayServerMemberRemovedEvent::class)
+                subclass(GatewayServerMemberBannedEvent::class)
+                subclass(GatewayServerMemberUnbannedEvent::class)
                 subclass(GatewayChatMessageCreatedEvent::class)
                 subclass(GatewayChatMessageUpdatedEvent::class)
                 subclass(GatewayChatMessageDeletedEvent::class)
@@ -66,6 +67,8 @@ private val polymorphicJson by lazy {
                 subclass(GatewayForumTopicCommentCreatedEvent::class)
                 subclass(GatewayForumTopicCommentUpdatedEvent::class)
                 subclass(GatewayForumTopicCommentDeletedEvent::class)
+                subclass(GatewayBotServerMembershipCreatedEvent::class)
+                subclass(GatewayBotServerMembershipDeletedEvent::class)
             }
         }
     }
@@ -75,7 +78,7 @@ public interface EventDecoder {
     public fun decodeEventFromPayload(payload: String): GatewayEvent?
 }
 
-public class DefaultEventDecoder(private val gatewayId: Int) : EventDecoder {
+public class DefaultEventDecoder(private val gatewayId: Int, public val logger: DeckLogger?) : EventDecoder {
     @Suppress("UNCHECKED_CAST")
     @OptIn(ExperimentalSerializationApi::class)
     override fun decodeEventFromPayload(payload: String): GatewayEvent? = runCatching {
@@ -88,7 +91,11 @@ public class DefaultEventDecoder(private val gatewayId: Int) : EventDecoder {
             else -> error("Unknown opcode ${barebones.opcode}")
         }
         val deserializationStrategy = polymorphicJson.serializersModule.getPolymorphic(GatewayEvent::class, eventType)
-            ?: error("received unknown event: $eventType")
+            ?: return run {
+//                TODO: turn this back on when duplicate events are fixed
+//                logger?.error { "Unknown event type `$eventType`" }
+                null
+            }
         val event = polymorphicJson.decodeFromJsonElement(deserializationStrategy as DeserializationStrategy<GatewayEvent>, eventData)
         event._info = EventInfo(
             opcode = barebones.opcode,

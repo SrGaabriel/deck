@@ -12,7 +12,7 @@ import io.github.deck.core.stateless.StatelessServer
 import io.github.deck.core.stateless.StatelessUser
 import io.github.deck.core.util.BlankStatelessServer
 import io.github.deck.gateway.event.GatewayEvent
-import io.github.deck.gateway.event.type.GatewayTeamMemberBannedEvent
+import io.github.deck.gateway.event.type.GatewayServerMemberBannedEvent
 
 /**
  * Called when a [Member] is banned from a server
@@ -28,7 +28,7 @@ public data class MemberBanEvent(
     public val author: StatelessUser get() = ban.author
 }
 
-internal val EventService.memberBanEvent: EventMapper<GatewayTeamMemberBannedEvent, MemberBanEvent> get() = mapper { client, event ->
+internal val EventService.memberBanEvent: EventMapper<GatewayServerMemberBannedEvent, MemberBanEvent> get() = mapper { client, event ->
     MemberBanEvent(
         client = client,
         barebones = event,

@@ -12,7 +12,7 @@ import io.github.deck.core.util.BlankStatelessUser
 import io.github.deck.core.util.Patch
 import io.github.deck.core.util.asPatch
 import io.github.deck.gateway.event.GatewayEvent
-import io.github.deck.gateway.event.type.GatewayTeamMemberUpdatedEvent
+import io.github.deck.gateway.event.type.GatewayServerMemberUpdatedEvent
 
 /**
  * Called when a [Member]'s attributes are updated
@@ -31,7 +31,7 @@ public data class MemberUpdateEvent(
     )
 }
 
-internal val EventService.memberUpdateEvent: EventMapper<GatewayTeamMemberUpdatedEvent, MemberUpdateEvent> get() = mapper { client, event ->
+internal val EventService.memberUpdateEvent: EventMapper<GatewayServerMemberUpdatedEvent, MemberUpdateEvent> get() = mapper { client, event ->
     MemberUpdateEvent(
         client = client,
         barebones = event,

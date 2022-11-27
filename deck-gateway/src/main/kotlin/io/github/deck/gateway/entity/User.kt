@@ -3,6 +3,7 @@
 package io.github.deck.gateway.entity
 
 import io.github.deck.common.util.GenericId
+import io.github.deck.common.util.IntGenericId
 import io.github.deck.common.util.OptionalProperty
 import io.github.deck.common.util.UUIDSerializer
 import kotlinx.datetime.Instant
@@ -20,7 +21,13 @@ public data class RawBot(
 )
 
 @Serializable
-public data class RawTeamMemberInfo(
+public data class RawServerMemberInfo(
     val id: GenericId,
     val nickname: OptionalProperty<String> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public data class RawServerRoleUpdate(
+    val userId: GenericId,
+    val roleIds: List<IntGenericId>
 )
