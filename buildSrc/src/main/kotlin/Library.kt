@@ -1,6 +1,6 @@
 object Library {
     const val Group = "io.github.srgaabriel.deck"
-    const val Version = "0.7.2"
+    const val Version = "0.7.21"
     const val Url = "https://srgaabriel.github.io/deck/"
 
     const val Release = true
