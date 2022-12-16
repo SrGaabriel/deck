@@ -28,17 +28,13 @@ For tutorials and documentation, check out our [wiki](https://github.com/SrGaabr
 
 ## Using
 
-To use deck in your project, you **must** register the `jitpack` repository. Then, you're going to add the following dependency: `com.github.SrGaabriel.deck:deck-core:$version`.
+To use deck in your project, you just need to add the dependency `com.github.SrGaabriel.deck:deck-core:$version` and make sure you have `mavenCentral` registered as a repository.
 
 You can replace `deck-core` with the name of the module you wish to import, and for the version you may use the latest one:
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/SrGaabriel/deck?style=social)
 
 ```kotlin
-repositories {
-    maven("https://jitpack.io")
-}
-
 dependencies {
-    implementation("com.github.SrGaabriel.deck:deck-core:$version")
+    implementation("io.github.srgaabriel.deck:deck-core:$version")
 }
 ```
