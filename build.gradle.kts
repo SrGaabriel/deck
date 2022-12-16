@@ -2,7 +2,7 @@ import org.jetbrains.dokka.gradle.DokkaPlugin
 
 @Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 plugins {
-    alias(libs.plugins.kotlin.jvm)
+    kotlin("jvm")
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.dokka)
     `maven-publish`
@@ -10,7 +10,7 @@ plugins {
 }
 
 subprojects {
-    group = "io.github.deck"
+    group = Library.Group
     version = Library.Version
     apply<MavenPublishPlugin>()
     apply<DokkaPlugin>()

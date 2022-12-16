@@ -1,0 +1,58 @@
+package io.github.srgaabriel.deck.core.stateless.channel
+
+import io.github.srgaabriel.deck.common.util.IntGenericId
+import io.github.srgaabriel.deck.core.entity.Documentation
+import io.github.srgaabriel.deck.core.entity.channel.DocumentationChannel
+import io.github.srgaabriel.deck.core.entity.impl.DeckDocumentation
+import io.github.srgaabriel.deck.core.util.getChannelOf
+import io.github.srgaabriel.deck.rest.builder.CreateDocumentationRequestBuilder
+
+public interface StatelessDocumentationChannel: StatelessServerChannel {
+    /**
+     * Creates a [Documentation] within this documentation channel.
+     *
+     * @param builder documentation builder
+     * @return the created documentation
+     */
+    public suspend fun createDocumentation(builder: CreateDocumentationRequestBuilder.() -> Unit): Documentation =
+        DeckDocumentation.from(client, client.rest.channel.createDocumentation(id, builder))
+
+    /**
+     * Retrieves the [Documentation] associated with the specified [documentationId]
+     *
+     * @param documentationId documentation's id
+     * @return found documentation
+     */
+    public suspend fun getDocumentation(documentationId: IntGenericId): Documentation =
+        DeckDocumentation.from(client, client.rest.channel.getDocumentation(id, documentationId))
+
+    /**
+     * Retrieves all [Documentation]s within this documentation channel
+     *
+     * @return list of [Documentation]
+     */
+    public suspend fun getDocumentations(): List<Documentation> =
+        client.rest.channel.getDocumentations(id).map { DeckDocumentation.from(client, it) }
+
+    /**
+     * Updates **(NOT PATCHES)** the documentation associated with the provided [documentationId]
+     *
+     * @param documentationId documentation's id
+     * @param builder update builder
+     *
+     * @return updated documentation
+     */
+    public suspend fun updateDocumentation(documentationId: IntGenericId, builder: CreateDocumentationRequestBuilder.() -> Unit): Documentation =
+        DeckDocumentation.from(client, client.rest.channel.updateDocumentation(id, documentationId, builder))
+
+    /**
+     * Deletes the documentation associated with the provided [documentationId]
+     *
+     * @param documentationId documentation's id
+     */
+    public suspend fun deleteDocumentation(documentationId: IntGenericId): Unit =
+        client.rest.channel.deleteDocumentation(id, documentationId)
+
+    override suspend fun getChannel(): DocumentationChannel =
+        client.getChannelOf(id)
+}
