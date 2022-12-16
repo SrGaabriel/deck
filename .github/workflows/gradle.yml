@@ -61,6 +61,7 @@ jobs:
       NEXUS_USER: ${{ secrets.NEXUS_USER }}
       NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
       ORG_GRADLE_PROJECT_signingKey : ${{ secrets.SIGNING_KEY }}
+      ORG_GRADLE_PROJECT_signingKeyId : ${{ secrets.SIGNING_KEY_ID }}
       ORG_GRADLE_PROJECT_signingPassword : ${{ secrets.SIGNING_SECRET }}
 
     steps:
