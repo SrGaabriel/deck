@@ -4,7 +4,6 @@ import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.core.entity.CalendarEvent
 import io.github.srgaabriel.deck.core.entity.channel.CalendarChannel
 import io.github.srgaabriel.deck.core.entity.impl.DeckCalendarEvent
-import io.github.srgaabriel.deck.core.util.getChannelOf
 import io.github.srgaabriel.deck.rest.builder.CreateCalendarEventRequestBuilder
 import io.github.srgaabriel.deck.rest.builder.UpdateCalendarEventRequestBuilder
 

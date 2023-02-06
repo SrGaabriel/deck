@@ -2,10 +2,7 @@ package io.github.srgaabriel.deck.rest
 
 import io.github.srgaabriel.deck.common.log.DeckLogger
 import io.github.srgaabriel.deck.common.log.MicroutilsLogger
-import io.github.srgaabriel.deck.rest.route.ChannelRoutes
-import io.github.srgaabriel.deck.rest.route.GroupRoutes
-import io.github.srgaabriel.deck.rest.route.ServerRoutes
-import io.github.srgaabriel.deck.rest.route.WebhookRoutes
+import io.github.srgaabriel.deck.rest.route.*
 import io.github.srgaabriel.deck.rest.util.RequestService
 import io.github.srgaabriel.deck.rest.util.createHttpClient
 import io.ktor.client.*
@@ -28,5 +25,6 @@ public class RestClient(public val token: String) {
     public val channel: ChannelRoutes = ChannelRoutes(this)
     public val group: GroupRoutes = GroupRoutes(this)
     public val server: ServerRoutes = ServerRoutes(this)
+    public val user: UserRoutes = UserRoutes(this)
     public val webhook: WebhookRoutes = WebhookRoutes(this)
 }

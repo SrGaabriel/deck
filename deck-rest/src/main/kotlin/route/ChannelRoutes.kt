@@ -310,6 +310,24 @@ public class ChannelRoutes(private val client: RestClient) {
         method = HttpMethod.Delete
     )
 
+    public suspend fun addReactionToForumTopic(
+        channelId: UUID,
+        forumTopicId: IntGenericId,
+        emoteId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/emotes/${emoteId}",
+        method = HttpMethod.Put
+    )
+
+    public suspend fun removeReactionFromForumTopic(
+        channelId: UUID,
+        forumTopicId: IntGenericId,
+        emoteId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/emotes/${emoteId}",
+        method = HttpMethod.Delete
+    )
+
     public suspend fun createForumTopicComment(
         channelId: UUID,
         forumTopicId: IntGenericId,
@@ -354,6 +372,26 @@ public class ChannelRoutes(private val client: RestClient) {
         forumTopicCommentId: IntGenericId,
     ): Unit = client.sendRequest(
         endpoint = "/channels/${channelId}/topics/${forumTopicId}/comments/${forumTopicCommentId}",
+        method = HttpMethod.Delete
+    )
+
+    public suspend fun addReactionToForumTopicComment(
+        channelId: UUID,
+        forumTopicId: IntGenericId,
+        forumTopicCommentId: IntGenericId,
+        emoteId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/comments/${forumTopicCommentId}/emotes/${emoteId}",
+        method = HttpMethod.Put
+    )
+
+    public suspend fun removeReactionFromForumTopicComment(
+        channelId: UUID,
+        forumTopicId: IntGenericId,
+        forumTopicCommentId: IntGenericId,
+        emoteId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/topics/${forumTopicId}/comments/${forumTopicCommentId}/emotes/${emoteId}",
         method = HttpMethod.Delete
     )
 
@@ -404,6 +442,91 @@ public class ChannelRoutes(private val client: RestClient) {
         calendarEventId: IntGenericId
     ): Unit = client.sendRequest(
         endpoint = "/channels/${channelId}/events/${calendarEventId}",
+        method = HttpMethod.Delete
+    )
+
+    public suspend fun addReactionToCalendarEvent(
+        channelId: UUID,
+        calendarEventId: IntGenericId,
+        emoteId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/emotes/${emoteId}",
+        method = HttpMethod.Put
+    )
+
+    public suspend fun removeReactionFromCalendarEvent(
+        channelId: UUID,
+        calendarEventId: IntGenericId,
+        emoteId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/emotes/${emoteId}",
+        method = HttpMethod.Delete
+    )
+
+    public suspend fun createCalendarEventComment(
+        channelId: UUID,
+        calendarEventId: IntGenericId,
+        content: String
+    ): RawCalendarEventComment = client.sendRequest<CreateCalendarEventCommentResponse, Map<String, String>>(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/comments",
+        method = HttpMethod.Post,
+        body = mapOf("content" to content)
+    ).calendarEventComment
+
+    public suspend fun getCalendarEventComment(
+        channelId: UUID,
+        calendarEventId: IntGenericId,
+        calendarEventCommentId: IntGenericId
+    ): RawCalendarEventComment = client.sendRequest<CreateCalendarEventCommentResponse>(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/comments/${calendarEventCommentId}",
+        method = HttpMethod.Get
+    ).calendarEventComment
+
+    public suspend fun getCalendarEventComments(
+        channelId: UUID,
+        calendarEventId: IntGenericId
+    ): List<RawCalendarEventComment> = client.sendRequest<GetCalendarEventCommentsResponse>(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/comments",
+        method = HttpMethod.Get
+    ).calendarEventComments
+
+    public suspend fun updateCalendarEventComment(
+        channelId: UUID,
+        calendarEventId: IntGenericId,
+        calendarEventCommentId: IntGenericId,
+        content: String
+    ): RawCalendarEventComment = client.sendRequest<CreateCalendarEventCommentResponse, Map<String, String>>(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/comments/${calendarEventCommentId}",
+        method = HttpMethod.Patch,
+        body = mapOf("content" to content)
+    ).calendarEventComment
+
+    public suspend fun deleteCalendarEventComment(
+        channelId: UUID,
+        calendarEventId: IntGenericId,
+        calendarEventCommentId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/comments/${calendarEventCommentId}",
+        method = HttpMethod.Delete
+    )
+
+    public suspend fun addReactionToCalendarEventComment(
+        channelId: UUID,
+        calendarEventId: IntGenericId,
+        calendarEventCommentId: IntGenericId,
+        emoteId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/comments/${calendarEventCommentId}/emotes/${emoteId}",
+        method = HttpMethod.Put
+    )
+
+    public suspend fun removeReactionFromCalendarEventComment(
+        channelId: UUID,
+        calendarEventId: IntGenericId,
+        calendarEventCommentId: IntGenericId,
+        emoteId: IntGenericId
+    ): Unit = client.sendRequest(
+        endpoint = "/channels/${channelId}/events/${calendarEventId}/comments/${calendarEventCommentId}/emotes/${emoteId}",
         method = HttpMethod.Delete
     )
 

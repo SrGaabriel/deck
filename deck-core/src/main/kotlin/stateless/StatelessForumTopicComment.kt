@@ -8,9 +8,10 @@ import io.github.srgaabriel.deck.core.stateless.channel.StatelessForumChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessForumChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessForumTopic
 import io.github.srgaabriel.deck.core.util.BlankStatelessServer
+import io.github.srgaabriel.deck.core.util.ReactionHolder
 import java.util.*
 
-public interface StatelessForumTopicComment: StatelessEntity {
+public interface StatelessForumTopicComment: StatelessEntity, ReactionHolder {
     public val id: IntGenericId
     public val forumTopicId: IntGenericId
     public val channelId: UUID
@@ -25,7 +26,7 @@ public interface StatelessForumTopicComment: StatelessEntity {
      *
      * @param content new content
      *
-     * @return updated forum topic
+     * @return updated forum topic comment
      */
     public suspend fun update(content: String): ForumTopicComment =
         DeckForumTopicComment.from(client, serverId, client.rest.channel.updateForumTopicComment(channelId, forumTopicId, id, content))
@@ -35,6 +36,12 @@ public interface StatelessForumTopicComment: StatelessEntity {
      */
     public suspend fun delete(): Unit =
         client.rest.channel.deleteForumTopicComment(channelId, forumTopicId, id)
+
+    override suspend fun addReaction(reactionId: IntGenericId): Unit =
+        client.rest.channel.addReactionToForumTopicComment(channelId, forumTopicId, id, reactionId)
+
+    override suspend fun removeReaction(reactionId: IntGenericId): Unit =
+        client.rest.channel.removeReactionFromForumTopicComment(channelId, forumTopicId, id, reactionId)
 
     public suspend fun getForumTopicComment(): ForumTopicComment =
         DeckForumTopicComment.from(client, serverId, client.rest.channel.getForumTopicComment(channelId, forumTopicId, id))

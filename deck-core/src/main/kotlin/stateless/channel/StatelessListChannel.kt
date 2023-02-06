@@ -5,7 +5,6 @@ import io.github.srgaabriel.deck.core.entity.channel.ListChannel
 import io.github.srgaabriel.deck.core.entity.impl.DeckListItem
 import io.github.srgaabriel.deck.core.event.list.ListItemCompleteEvent
 import io.github.srgaabriel.deck.core.event.list.ListItemIncompleteEvent
-import io.github.srgaabriel.deck.core.util.getChannelOf
 import io.github.srgaabriel.deck.rest.builder.CreateListItemRequestBuilder
 import io.github.srgaabriel.deck.rest.builder.UpdateListItemRequestBuilder
 import java.util.*

@@ -2,7 +2,6 @@
 
 package io.github.srgaabriel.deck.gateway.entity
 
-import io.github.srgaabriel.deck.common.entity.RawEmote
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.common.util.UUIDSerializer
 import kotlinx.datetime.Instant
@@ -16,12 +15,4 @@ public data class RawPartialDeletedMessage(
     public val serverId: GenericId,
     public val channelId: UUID,
     public val deletedAt: Instant
-)
-
-@Serializable
-public data class RawUpdatedMessageReaction(
-    val channelId: UUID,
-    val messageId: UUID,
-    val createdBy: GenericId,
-    val emote: RawEmote
 )

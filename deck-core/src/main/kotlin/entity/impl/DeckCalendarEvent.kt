@@ -46,7 +46,7 @@ public data class DeckCalendarEvent(
             createdAt = raw.createdAt,
             createdBy = raw.createdBy,
             cancellationDescription = raw.cancellation.asNullable()?.description?.asNullable(),
-            cancelledBy = raw.cancellation.asNullable()?.createdBy?.asNullable()
+            cancelledBy = raw.cancellation.asNullable()?.createdBy
         )
     }
 }

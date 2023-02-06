@@ -1,5 +1,6 @@
 package io.github.srgaabriel.deck.core.stateless
 
+import io.github.srgaabriel.deck.common.util.Emote
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.core.entity.ForumTopic
@@ -9,10 +10,11 @@ import io.github.srgaabriel.deck.core.entity.impl.DeckForumTopicComment
 import io.github.srgaabriel.deck.core.stateless.channel.StatelessForumChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessForumChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessServer
+import io.github.srgaabriel.deck.core.util.ReactionHolder
 import io.github.srgaabriel.deck.rest.builder.UpdateForumTopicRequestBuilder
 import java.util.*
 
-public interface StatelessForumTopic: StatelessEntity {
+public interface StatelessForumTopic: StatelessEntity, ReactionHolder {
     public val id: IntGenericId
     public val channelId: UUID
     public val serverId: GenericId
@@ -95,6 +97,24 @@ public interface StatelessForumTopic: StatelessEntity {
      */
     public suspend fun deleteComment(commentId: IntGenericId): Unit =
         client.rest.channel.deleteForumTopicComment(channelId, id, commentId)
+
+    override suspend fun addReaction(reactionId: IntGenericId): Unit =
+        client.rest.channel.addReactionToForumTopic(channelId, id, reactionId)
+
+    override suspend fun removeReaction(reactionId: IntGenericId): Unit =
+        client.rest.channel.removeReactionFromForumTopic(channelId, id, reactionId)
+
+    public suspend fun addReactionToComment(commentId: IntGenericId, reactionId: IntGenericId): Unit =
+        client.rest.channel.addReactionToForumTopicComment(channelId, id, commentId, reactionId)
+
+    public suspend fun addReactionToComment(commentId: IntGenericId, emote: Emote): Unit =
+        addReactionToComment(commentId, emote.id)
+
+    public suspend fun removeReactionFromComment(commentId: IntGenericId, emote: Emote): Unit =
+        addReactionToComment(commentId, emote.id)
+
+    public suspend fun removeReactionFromComment(commentId: IntGenericId, reactionId: IntGenericId): Unit =
+        client.rest.channel.removeReactionFromForumTopicComment(channelId, id, commentId, reactionId)
 
     public suspend fun getForumTopic(): ForumTopic =
         DeckForumTopic.from(client, client.rest.channel.getForumTopic(channelId, id))

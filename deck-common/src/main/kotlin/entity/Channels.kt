@@ -112,7 +112,6 @@ public data class RawForumTopic(
     val content: String,
     val createdAt: Instant,
     val createdBy: GenericId,
-    val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     val bumpedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     val mentions: OptionalProperty<RawMessageMentions> = OptionalProperty.NotPresent
@@ -166,7 +165,7 @@ public data class RawCalendarEvent(
 @Serializable
 public data class RawCalendarEventCancellation(
     val description: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val createdBy: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val createdBy: String,
 )
 
 @Serializable
@@ -195,3 +194,14 @@ public enum class CalendarEventRsvpStatus {
     @SerialName("waitlisted")
     Waitlisted;
 }
+
+@Serializable
+public data class RawCalendarEventComment(
+    val id: IntGenericId,
+    val content: String,
+    val createdAt: Instant,
+    val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    val calendarEventId: IntGenericId,
+    val channelId: UUID,
+    val createdBy: GenericId
+)

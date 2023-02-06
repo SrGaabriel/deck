@@ -172,3 +172,13 @@ public data class PutCalendarEventRsvpResponse(
 public data class GetCalendarEventRsvpsResponse(
     val calendarEventRsvps: List<RawCalendarEventRsvp>
 )
+
+@Serializable
+public data class CreateCalendarEventCommentResponse(
+    val calendarEventComment: RawCalendarEventComment
+)
+
+@Serializable
+public data class GetCalendarEventCommentsResponse(
+    val calendarEventComments: List<RawCalendarEventComment>
+)

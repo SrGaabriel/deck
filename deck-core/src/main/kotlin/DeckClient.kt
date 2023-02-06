@@ -2,11 +2,21 @@ package io.github.srgaabriel.deck.core
 
 import io.github.srgaabriel.deck.common.log.warning
 import io.github.srgaabriel.deck.common.util.GenericId
+import io.github.srgaabriel.deck.core.entity.Server
+import io.github.srgaabriel.deck.core.entity.User
+import io.github.srgaabriel.deck.core.entity.channel.Channel
+import io.github.srgaabriel.deck.core.entity.channel.ServerChannel
+import io.github.srgaabriel.deck.core.entity.impl.DeckServer
+import io.github.srgaabriel.deck.core.entity.impl.DeckServerChannel
+import io.github.srgaabriel.deck.core.entity.impl.DeckUser
 import io.github.srgaabriel.deck.core.event.DeckEvent
 import io.github.srgaabriel.deck.core.event.DefaultEventService
+import io.github.srgaabriel.deck.core.stateless.StatelessUser
+import io.github.srgaabriel.deck.core.util.BlankStatelessUser
 import io.github.srgaabriel.deck.core.util.ClientBuilder
 import io.github.srgaabriel.deck.gateway.GatewayOrchestrator
 import io.github.srgaabriel.deck.rest.RestClient
+import io.github.srgaabriel.deck.rest.builder.CreateChannelRequestBuilder
 import io.github.srgaabriel.deck.rest.builder.ExecuteWebhookRequestBuilder
 import io.github.srgaabriel.deck.rest.request.ExecuteWebhookResponse
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +40,7 @@ public class DeckClient internal constructor(
 
     internal var _selfId: GenericId? = null
     public val selfId: GenericId get() = _selfId ?: error("Tried to access self id before client was connected")
+    public val self: StatelessUser by lazy { BlankStatelessUser(this, selfId) }
 
     /**
      * Starts the gateway
@@ -41,6 +52,28 @@ public class DeckClient internal constructor(
         eventService.listen()
         masterGateway.start()
     }
+
+    public suspend fun getSelf(): User =
+        getUser("@me")
+
+    public suspend fun getUser(userId: GenericId): User =
+        DeckUser.from(this, rest.user.getUser(userId))
+
+    public suspend fun getServer(serverId: GenericId): Server =
+        DeckServer.from(this, rest.server.getServer(serverId))
+
+    public suspend fun createChannel(builder: CreateChannelRequestBuilder.() -> Unit): Channel =
+        DeckServerChannel.from(this, rest.channel.createChannel(builder))
+
+    public suspend fun getChannel(channelId: UUID): Channel =
+        DeckServerChannel.from(this, rest.channel.getChannel(channelId))
+
+    @Suppress("unchecked_cast")
+    public suspend fun <T : ServerChannel> getChannelOf(channelId: UUID): T =
+        (DeckServerChannel.from(this, rest.channel.getChannel(channelId)) as? T) ?: error("Called 'getChannelOf' with the wrong channel type")
+
+    public suspend fun deleteChannel(channelId: UUID): Unit =
+        rest.channel.deleteChannel(channelId)
 
     public companion object {
         /**

@@ -4,7 +4,6 @@ import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.core.entity.Documentation
 import io.github.srgaabriel.deck.core.entity.channel.DocumentationChannel
 import io.github.srgaabriel.deck.core.entity.impl.DeckDocumentation
-import io.github.srgaabriel.deck.core.util.getChannelOf
 import io.github.srgaabriel.deck.rest.builder.CreateDocumentationRequestBuilder
 
 public interface StatelessDocumentationChannel: StatelessServerChannel {

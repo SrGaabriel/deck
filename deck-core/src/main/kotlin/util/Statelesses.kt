@@ -199,6 +199,22 @@ internal data class BlankStatelessCalendarEventRsvp(
     override val serverId: GenericId
 ): StatelessCalendarEventRsvp
 
+public fun StatelessCalendarEventComment(
+    client: DeckClient,
+    id: IntGenericId,
+    calendarEventId: IntGenericId,
+    channelId: UUID,
+    serverId: GenericId
+): StatelessCalendarEventComment = BlankStatelessCalendarEventComment(client, id, calendarEventId, channelId, serverId)
+
+internal class BlankStatelessCalendarEventComment(
+    override val client: DeckClient,
+    override val id: IntGenericId,
+    override val calendarEventId: IntGenericId,
+    override val channelId: UUID,
+    override val serverId: GenericId
+): StatelessCalendarEventComment
+
 public fun StatelessWebhook(
     client: DeckClient,
     id: UUID,

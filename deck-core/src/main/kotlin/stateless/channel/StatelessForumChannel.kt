@@ -6,7 +6,6 @@ import io.github.srgaabriel.deck.core.entity.ForumTopicComment
 import io.github.srgaabriel.deck.core.entity.channel.ForumChannel
 import io.github.srgaabriel.deck.core.entity.impl.DeckForumTopic
 import io.github.srgaabriel.deck.core.entity.impl.DeckForumTopicComment
-import io.github.srgaabriel.deck.core.util.getChannelOf
 import io.github.srgaabriel.deck.rest.builder.CreateForumTopicRequestBuilder
 import io.github.srgaabriel.deck.rest.builder.UpdateForumTopicRequestBuilder
 
