@@ -1,7 +1,8 @@
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/SrGaabriel/deck/build.yml?branch=development&style=for-the-badge)
-![GitHub issues](https://img.shields.io/github/issues/SrGaabriel/deck?color=purple&style=for-the-badge)
-![GitHub Repo stars](https://img.shields.io/github/stars/SrGaabriel/deck?color=orange&style=for-the-badge)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/SrGaabriel/deck?label=latest%20version&style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/SrGaabriel/deck?color=orange&style=for-the-badge)
+![GitHub Repo stars](https://img.shields.io/github/stars/SrGaabriel/deck?color=yellow&style=for-the-badge)
+![Nexus badge](https://img.shields.io/nexus/r/io.github.srgaabriel.deck/deck-core?color=%2329B472&server=https%3A%2F%2Fs01.oss.sonatype.org&style=for-the-badge)
+
 
 # 🎲 deck [WIP]
 
