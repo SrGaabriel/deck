@@ -61,11 +61,11 @@ public interface StatelessMember: StatelessEntity {
     /**
      * Bans this member from the server
      *
-     * @param reason ban reason
+     * @param reason ban reason, null if none
      *
      * @return the ban
      */
-    public suspend fun ban(reason: String): Ban =
+    public suspend fun ban(reason: String? = null): Ban =
         Ban.from(client, client.rest.server.banMember(id, serverId, reason))
 
     @DeckDelicateApi

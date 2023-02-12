@@ -5,6 +5,7 @@ import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.rest.RestClient
 import io.github.srgaabriel.deck.rest.request.*
+import io.github.srgaabriel.deck.rest.util.sendEmptyJsonBodyRequest
 import io.github.srgaabriel.deck.rest.util.sendRequest
 import io.ktor.http.*
 
@@ -116,12 +117,21 @@ public class ServerRoutes(private val client: RestClient) {
     public suspend fun banMember(
         userId: GenericId,
         serverId: GenericId,
-        reason: String
-    ): RawServerBan = client.sendRequest<GetServerMemberBanResponse, Map<String, String>>(
-        endpoint = "/servers/$serverId/bans/$userId",
-        method = HttpMethod.Post,
-        body = mapOf("reason" to reason)
-    ).serverMemberBan
+        reason: String?
+    ): RawServerBan {
+        return if (reason == null) {
+            client.sendEmptyJsonBodyRequest<GetServerMemberBanResponse>(
+                endpoint = "/servers/$serverId/bans/$userId",
+                method = HttpMethod.Post
+            )
+        } else {
+            client.sendRequest(
+                endpoint = "/servers/$serverId/bans/$userId",
+                method = HttpMethod.Post,
+                body = mapOf("reason" to reason)
+            )
+        }.serverMemberBan
+    }
 
     public suspend fun getMemberBan(
         userId: GenericId,

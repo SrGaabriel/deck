@@ -74,11 +74,11 @@ public interface StatelessServer: StatelessEntity {
      * and won't come back, unless you unban ([unbanMember]) them.
      *
      * @param memberId member's id
-     * @param reason ban reason
+     * @param reason ban reason, null if none
      *
      * @return the ban
      */
-    public suspend fun banMember(memberId: GenericId, reason: String): Ban =
+    public suspend fun banMember(memberId: GenericId, reason: String? = null): Ban =
         Ban.from(client, client.rest.server.banMember(memberId, id, reason))
 
     /**

@@ -11,6 +11,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
 
 /**
  * This will fire a request to Guilded's API and throw an [GuildedRequestException] in case of failure.
@@ -67,6 +68,37 @@ public suspend inline fun <reified R, reified B> RestClient.sendRequest(
         Constants.GuildedRestApi,
         endpoint,
         body,
+        if (authenticated) token else null,
+        address
+    )
+)
+
+/**
+ * This will fire a request to Guilded's API with an empty JSON body and
+ * throw an [GuildedRequestException] in case of failure.
+ *
+ * This method sends a request with an empty JSON body expecting [R] as a response.
+ *
+ * @param R Response type (Special types: [Unit], [HttpResponse])
+ *
+ * @param endpoint The request endpoint (not the entire url)
+ * @param method The request http method
+ * @param authenticated Whether you need to provide an authentication for this request
+ *
+ * @throws GuildedRequestException in case of failure.
+ * @return Returns an object of type [R] in case of success.
+ */
+public suspend inline fun <reified R> RestClient.sendEmptyJsonBodyRequest(
+    endpoint: String,
+    method: HttpMethod,
+    authenticated: Boolean = true,
+    address: GuildedAddress = GuildedAddress.API
+): R = requestService.superviseRequest(
+    request = Request(
+        method,
+        Constants.GuildedRestApi,
+        endpoint,
+        buildJsonObject {  },
         if (authenticated) token else null,
         address
     )
