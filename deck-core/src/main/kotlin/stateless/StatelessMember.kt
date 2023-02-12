@@ -60,9 +60,13 @@ public interface StatelessMember: StatelessEntity {
 
     /**
      * Bans this member from the server
+     *
+     * @param reason ban reason
+     *
+     * @return the ban
      */
-    public suspend fun ban(): Unit =
-        client.rest.server.banMember(id, serverId)
+    public suspend fun ban(reason: String): Ban =
+        Ban.from(client, client.rest.server.banMember(id, serverId, reason))
 
     @DeckDelicateApi
     /** @throws [GuildedRequestException] if not found */

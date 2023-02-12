@@ -115,11 +115,13 @@ public class ServerRoutes(private val client: RestClient) {
 
     public suspend fun banMember(
         userId: GenericId,
-        serverId: GenericId
-    ): Unit = client.sendRequest(
+        serverId: GenericId,
+        reason: String
+    ): RawServerBan = client.sendRequest<GetServerMemberBanResponse, Map<String, String>>(
         endpoint = "/servers/$serverId/bans/$userId",
-        method = HttpMethod.Post
-    )
+        method = HttpMethod.Post,
+        body = mapOf("reason" to reason)
+    ).serverMemberBan
 
     public suspend fun getMemberBan(
         userId: GenericId,
