@@ -51,3 +51,20 @@ public data class RawCalendarEventCommentReaction(
     val calendarEventId: IntGenericId,
     val calendarEventCommentId: IntGenericId
 )
+
+@Serializable
+public data class RawDocumentationReaction(
+    val channelId: UUID,
+    val createdBy: GenericId,
+    val emote: RawEmote,
+    val docId: IntGenericId
+)
+
+@Serializable
+public data class RawDocumentationCommentReaction(
+    val channelId: UUID,
+    val createdBy: GenericId,
+    val emote: RawEmote,
+    val docId: IntGenericId,
+    val docCommentId: IntGenericId
+)

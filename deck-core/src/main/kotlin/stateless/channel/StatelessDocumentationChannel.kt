@@ -1,5 +1,6 @@
 package io.github.srgaabriel.deck.core.stateless.channel
 
+import io.github.srgaabriel.deck.common.entity.ServerChannelType
 import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.core.entity.Documentation
 import io.github.srgaabriel.deck.core.entity.channel.DocumentationChannel
@@ -7,6 +8,8 @@ import io.github.srgaabriel.deck.core.entity.impl.DeckDocumentation
 import io.github.srgaabriel.deck.rest.builder.CreateDocumentationRequestBuilder
 
 public interface StatelessDocumentationChannel: StatelessServerChannel {
+    override val type: ServerChannelType get() = ServerChannelType.Documentation
+
     /**
      * Creates a [Documentation] within this documentation channel.
      *

@@ -1,7 +1,7 @@
 package io.github.srgaabriel.deck.core.entity.impl
 
 import io.github.srgaabriel.deck.common.entity.RawServerChannel
-import io.github.srgaabriel.deck.common.entity.RawServerChannelType
+import io.github.srgaabriel.deck.common.entity.ServerChannelType
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.common.util.asNullable
 import io.github.srgaabriel.deck.core.DeckClient
@@ -14,7 +14,7 @@ public class DeckServerChannel internal constructor(
     override val id: UUID,
     override val name: String,
     override val topic: String?,
-    override val type: RawServerChannelType,
+    override val type: ServerChannelType,
     override val createdAt: Instant,
     override val archivedAt: Instant?,
     override val creatorId: GenericId,
@@ -26,12 +26,11 @@ public class DeckServerChannel internal constructor(
 ): ServerChannel {
     public companion object {
         public fun from(client: DeckClient, raw: RawServerChannel): ServerChannel = when (raw.type) {
-            RawServerChannelType.CHAT -> DeckServerMessageChannel(
+            ServerChannelType.Chat -> DeckServerMessageChannel(
                 client = client,
                 id = raw.id,
                 name = raw.name,
                 topic = raw.topic.asNullable(),
-                type = raw.type,
                 createdAt = raw.createdAt,
                 archivedAt = raw.archivedAt.asNullable(),
                 creatorId = raw.createdBy,
@@ -41,12 +40,11 @@ public class DeckServerChannel internal constructor(
                 groupId = raw.groupId,
                 isPublic = raw.isPublic,
             )
-            RawServerChannelType.FORUMS -> DeckForumChannel(
+            ServerChannelType.Forums -> DeckForumChannel(
                 client = client,
                 id = raw.id,
                 name = raw.name,
                 topic = raw.topic.asNullable(),
-                type = raw.type,
                 createdAt = raw.createdAt,
                 archivedAt = raw.archivedAt.asNullable(),
                 creatorId = raw.createdBy,
@@ -56,12 +54,11 @@ public class DeckServerChannel internal constructor(
                 groupId = raw.groupId,
                 isPublic = raw.isPublic,
             )
-            RawServerChannelType.LIST -> DeckListChannel(
+            ServerChannelType.List -> DeckListChannel(
                 client = client,
                 id = raw.id,
                 name = raw.name,
                 topic = raw.topic.asNullable(),
-                type = raw.type,
                 createdAt = raw.createdAt,
                 archivedAt = raw.archivedAt.asNullable(),
                 creatorId = raw.createdBy,
@@ -71,12 +68,11 @@ public class DeckServerChannel internal constructor(
                 groupId = raw.groupId,
                 isPublic = raw.isPublic,
             )
-            RawServerChannelType.DOCS -> DeckDocumentationChannel(
+            ServerChannelType.Documentation -> DeckDocumentationChannel(
                 client = client,
                 id = raw.id,
                 name = raw.name,
                 topic = raw.topic.asNullable(),
-                type = raw.type,
                 createdAt = raw.createdAt,
                 archivedAt = raw.archivedAt.asNullable(),
                 creatorId = raw.createdBy,
@@ -86,12 +82,11 @@ public class DeckServerChannel internal constructor(
                 groupId = raw.groupId,
                 isPublic = raw.isPublic,
             )
-            RawServerChannelType.CALENDAR -> DeckCalendarChannel(
+            ServerChannelType.Calendar -> DeckCalendarChannel(
                 client = client,
                 id = raw.id,
                 name = raw.name,
                 topic = raw.topic.asNullable(),
-                type = raw.type,
                 createdAt = raw.createdAt,
                 archivedAt = raw.archivedAt.asNullable(),
                 creatorId = raw.createdBy,
@@ -125,7 +120,6 @@ public data class DeckMessageChannel(
     override val id: UUID,
     override val name: String,
     override val topic: String?,
-    override val type: RawServerChannelType,
     override val createdAt: Instant,
     override val archivedAt: Instant?,
     override val creatorId: GenericId,
@@ -140,7 +134,6 @@ public data class DeckServerMessageChannel(
     override val id: UUID,
     override val name: String,
     override val topic: String?,
-    override val type: RawServerChannelType,
     override val createdAt: Instant,
     override val archivedAt: Instant?,
     override val creatorId: GenericId,
@@ -156,7 +149,6 @@ public data class DeckForumChannel(
     override val id: UUID,
     override val name: String,
     override val topic: String?,
-    override val type: RawServerChannelType,
     override val createdAt: Instant,
     override val archivedAt: Instant?,
     override val creatorId: GenericId,
@@ -172,7 +164,6 @@ public data class DeckListChannel(
     override val id: UUID,
     override val name: String,
     override val topic: String?,
-    override val type: RawServerChannelType,
     override val createdAt: Instant,
     override val archivedAt: Instant?,
     override val creatorId: GenericId,
@@ -188,7 +179,6 @@ public data class DeckDocumentationChannel(
     override val id: UUID,
     override val name: String,
     override val topic: String?,
-    override val type: RawServerChannelType,
     override val createdAt: Instant,
     override val archivedAt: Instant?,
     override val creatorId: GenericId,
@@ -204,7 +194,6 @@ public data class DeckCalendarChannel(
     override val id: UUID,
     override val name: String,
     override val topic: String?,
-    override val type: RawServerChannelType,
     override val createdAt: Instant,
     override val archivedAt: Instant?,
     override val creatorId: GenericId,

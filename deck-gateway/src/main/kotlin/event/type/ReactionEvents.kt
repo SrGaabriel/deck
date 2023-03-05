@@ -75,3 +75,31 @@ public data class GatewayCalendarEventCommentReactionDeletedEvent(
     val serverId: OptionalProperty<String> = OptionalProperty.NotPresent,
     val reaction: RawCalendarEventCommentReaction
 ): GatewayEvent()
+
+@Serializable
+@SerialName("DocReactionCreated")
+public data class GatewayDocumentationReactionCreatedEvent(
+    val serverId: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val reaction: RawDocumentationReaction
+): GatewayEvent()
+
+@Serializable
+@SerialName("DocReactionDeleted")
+public data class GatewayDocumentationReactionDeletedEvent(
+    val serverId: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val reaction: RawDocumentationReaction
+): GatewayEvent()
+
+@Serializable
+@SerialName("DocCommentReactionCreated")
+public data class GatewayDocumentationCommentReactionCreatedEvent(
+    val serverId: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val reaction: RawDocumentationCommentReaction
+): GatewayEvent()
+
+@Serializable
+@SerialName("DocCommentReactionDeleted")
+public data class GatewayDocumentationCommentReactionDeletedEvent(
+    val serverId: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val reaction: RawDocumentationCommentReaction
+): GatewayEvent()

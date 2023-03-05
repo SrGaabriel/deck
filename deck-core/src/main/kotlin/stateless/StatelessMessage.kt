@@ -1,5 +1,6 @@
 package io.github.srgaabriel.deck.core.stateless
 
+import io.github.srgaabriel.deck.common.entity.ServerChannelType
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.core.entity.Message
@@ -34,21 +35,21 @@ public interface StatelessMessage: StatelessEntity, ReactionHolder {
 
     /**
      * Adds the specified reaction to this message.
-     * For a list of all emoji ids, you can check the extras module.
+     * For a list of all emoji ids, you can check the 'extras' module.
      *
      * @param reactionId
      */
     override suspend fun addReaction(reactionId: IntGenericId): Unit =
-        client.rest.channel.addReactionToContent(channelId, id, reactionId)
+        client.rest.channel.addReactionToContent(channelId, ServerChannelType.Chat, id, reactionId)
 
     /**
      * Removes the specified reaction to this message.
-     * For a list of all emoji ids, you can check the extras module.
+     * For a list of all emoji ids, you can check the 'extras' module.
      *
      * @param reactionId
      */
     override suspend fun removeReaction(reactionId: IntGenericId): Unit =
-        client.rest.channel.removeReactionFromContent(channelId, id, reactionId)
+        client.rest.channel.removeReactionFromContent(channelId, ServerChannelType.Chat, id, reactionId)
 
     /**
      * Overwrites this message's content

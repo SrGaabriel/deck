@@ -2,8 +2,8 @@ package io.github.srgaabriel.deck.core.entity
 
 import io.github.srgaabriel.deck.common.entity.CalendarEventRsvpStatus
 import io.github.srgaabriel.deck.common.util.GenericId
-import io.github.srgaabriel.deck.core.stateless.StatelessCalendarEventRsvp
 import io.github.srgaabriel.deck.core.stateless.StatelessUser
+import io.github.srgaabriel.deck.core.stateless.channel.content.StatelessCalendarEventRsvp
 import io.github.srgaabriel.deck.core.util.BlankStatelessUser
 import kotlinx.datetime.Instant
 

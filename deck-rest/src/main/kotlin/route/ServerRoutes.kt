@@ -101,10 +101,10 @@ public class ServerRoutes(private val client: RestClient) {
         userId: GenericId,
         serverId: GenericId,
         type: SocialLinkType
-    ): GetMemberSocialLinkResponse = client.sendRequest(
+    ): RawUserSocialLink = client.sendRequest<GetMemberSocialLinkResponse>(
         endpoint = "/servers/$serverId/members/$userId/social-links/${type.id}",
         method = HttpMethod.Get
-    )
+    ).socialLink
 
     public suspend fun kickMember(
         userId: GenericId,

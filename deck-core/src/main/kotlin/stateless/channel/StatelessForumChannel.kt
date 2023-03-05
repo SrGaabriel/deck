@@ -1,5 +1,6 @@
 package io.github.srgaabriel.deck.core.stateless.channel
 
+import io.github.srgaabriel.deck.common.entity.ServerChannelType
 import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.core.entity.ForumTopic
 import io.github.srgaabriel.deck.core.entity.ForumTopicComment
@@ -10,6 +11,8 @@ import io.github.srgaabriel.deck.rest.builder.CreateForumTopicRequestBuilder
 import io.github.srgaabriel.deck.rest.builder.UpdateForumTopicRequestBuilder
 
 public interface StatelessForumChannel: StatelessServerChannel {
+    override val type: ServerChannelType get() = ServerChannelType.Forums
+
     /**
      * Creates a new forum topic within this channel
      *

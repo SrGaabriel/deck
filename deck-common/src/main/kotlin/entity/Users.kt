@@ -28,7 +28,9 @@ public data class RawUserSummary(
 public data class RawUserSocialLink(
     val handle: OptionalProperty<String> = OptionalProperty.NotPresent,
     val serviceId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
-    val type: SocialLinkType
+    val type: SocialLinkType,
+    val userId: GenericId,
+    val createdAt: Instant
 )
 
 @Serializable

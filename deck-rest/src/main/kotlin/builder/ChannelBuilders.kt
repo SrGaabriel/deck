@@ -2,7 +2,7 @@ package io.github.srgaabriel.deck.rest.builder
 
 import io.github.srgaabriel.deck.common.Embed
 import io.github.srgaabriel.deck.common.EmbedBuilder
-import io.github.srgaabriel.deck.common.entity.RawServerChannelType
+import io.github.srgaabriel.deck.common.entity.*
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.common.util.nullableOptional
@@ -22,7 +22,7 @@ public class CreateChannelRequestBuilder: RequestBuilder<CreateChannelRequest> {
     public var name: String by required()
     public var topic: String? = null
 
-    public var type: RawServerChannelType = RawServerChannelType.CHAT
+    public var type: ServerChannelType = ServerChannelType.Chat
     public var isPublic: Boolean = false
 
     // You must provide at least one of these
@@ -132,37 +132,7 @@ public class UpdateForumTopicRequestBuilder: RequestBuilder<UpdateForumTopicRequ
     )
 }
 
-public class CreateCalendarEventRequestBuilder: RequestBuilder<CreateCalendarEventRequest> {
-    public var name: String by required()
-    public var durationInMinutes: Int = 60
-
-    public var duration: Duration
-        get() = durationInMinutes.minutes
-        set(value) { durationInMinutes = value.inWholeMinutes.coerceAtMost(Int.MAX_VALUE.toLong() - 1).toInt() }
-
-    public var description: String? = null
-    public var location: String? = null
-    public var url: String? = null
-
-    public var startsAt: Instant? = null
-
-    public var color: Int? = null
-
-    public var isPrivate: Boolean = false
-
-    override fun toRequest(): CreateCalendarEventRequest = CreateCalendarEventRequest(
-        name = name.optional(),
-        description = description.nullableOptional(),
-        location = location.nullableOptional(),
-        startsAt = startsAt.nullableOptional(),
-        url = url.nullableOptional(),
-        color = color.nullableOptional(),
-        duration = duration.inWholeMinutes.toInt(),
-        isPrivate = isPrivate
-    )
-}
-
-public class UpdateCalendarEventRequestBuilder: RequestBuilder<UpdateCalendarEventRequest> {
+public class UpdateCalendarEventRequestBuilder(): RequestBuilder<UpdateCalendarEventRequest> {
     public var name: String? = null
     public var description: String? = null
     public var location: String? = null
@@ -179,6 +149,78 @@ public class UpdateCalendarEventRequestBuilder: RequestBuilder<UpdateCalendarEve
 
     public var isPrivate: Boolean = false
 
+    public var isAllDay: Boolean? = null
+    public var rsvpLimit: Int? = null
+
+    public var roleIds: List<IntGenericId>? = null
+    public var repeatInfo: Repeat? = null
+
+    public sealed interface Repeat {
+        public sealed class Fixed(internal val type: RawCalendarEventRepeatInfoType): Repeat {
+            public object Once: Fixed(RawCalendarEventRepeatInfoType.Once)
+            public object EveryDay: Fixed(RawCalendarEventRepeatInfoType.EveryDay)
+            public object EveryWeek: Fixed(RawCalendarEventRepeatInfoType.EveryWeek)
+            public object EveryMonth: Fixed(RawCalendarEventRepeatInfoType.EveryMonth)
+
+            override fun toSerializable(): RawCalendarEventRepeatInfo =
+                RawCalendarEventRepeatInfo(type = type)
+        }
+
+        public sealed class Custom(
+            internal val type: CalendarEventCustomIntervalType,
+            private val count: Int,
+            private val endsAfterOccurrences: Int?,
+            private val endDate: Instant?,
+            private val on: List<CalendarEventWeekDay>?
+        ): Repeat {
+            public class Days(count: Int, endsAfterOccurrences: Int?, endDate: Instant?  = null): Custom(
+                type = CalendarEventCustomIntervalType.Day,
+                count = count,
+                endsAfterOccurrences = endsAfterOccurrences,
+                endDate = endDate,
+                on = null,
+            )
+
+            public class Week(count: Int, endsAfterOccurrences: Int? = null, endDate: Instant? = null, on: List<CalendarEventWeekDay>?  = null): Custom(
+                type = CalendarEventCustomIntervalType.Week,
+                count = count,
+                endsAfterOccurrences = endsAfterOccurrences,
+                endDate = endDate,
+                on = on
+            )
+
+            public class Month(count: Int, endsAfterOccurrences: Int? = null, endDate: Instant? = null): Custom(
+                type = CalendarEventCustomIntervalType.Month,
+                count = count,
+                endsAfterOccurrences = endsAfterOccurrences,
+                endDate = endDate,
+                on = null,
+            )
+
+            public class Year(count: Int, endsAfterOccurrences: Int? = null, endDate: Instant? = null): Custom(
+                type = CalendarEventCustomIntervalType.Year,
+                count = count,
+                endsAfterOccurrences = endsAfterOccurrences,
+                endDate = endDate,
+                on = null,
+            )
+
+            override fun toSerializable(): RawCalendarEventRepeatInfo =
+                RawCalendarEventRepeatInfo(
+                    type = RawCalendarEventRepeatInfoType.Custom,
+                    every = RawCalendarEventRepeatInfoCustom(
+                        count = count,
+                        interval = type
+                    ).optional(),
+                    endAfterOccurrences = endsAfterOccurrences.nullableOptional(),
+                    endDate = endDate.nullableOptional(),
+                    on = on.nullableOptional()
+                )
+        }
+
+        public fun toSerializable(): RawCalendarEventRepeatInfo
+    }
+
     override fun toRequest(): UpdateCalendarEventRequest = UpdateCalendarEventRequest(
         name = name.nullableOptional(),
         description = description.nullableOptional(),
@@ -186,7 +228,11 @@ public class UpdateCalendarEventRequestBuilder: RequestBuilder<UpdateCalendarEve
         startsAt = startsAt.nullableOptional(),
         url = url.nullableOptional(),
         color = color.nullableOptional(),
+        isAllDay = isAllDay.nullableOptional(),
+        rsvpLimit = rsvpLimit.nullableOptional(),
         duration = durationInMinutes.nullableOptional(),
-        isPrivate = isPrivate
+        roleIds = roleIds.nullableOptional(),
+        isPrivate = isPrivate,
+        repeatInfo = repeatInfo?.toSerializable().nullableOptional()
     )
 }

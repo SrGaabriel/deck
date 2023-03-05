@@ -1,5 +1,6 @@
 package io.github.srgaabriel.deck.core.stateless.channel
 
+import io.github.srgaabriel.deck.common.entity.ServerChannelType
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.core.entity.channel.Channel
 import io.github.srgaabriel.deck.core.entity.impl.DeckServerChannel
@@ -13,6 +14,7 @@ public interface StatelessChannel: StatelessEntity {
     public val serverId: GenericId?
 
     public val server: StatelessServer? get() = serverId?.let { BlankStatelessServer(client, it) }
+    public val type: ServerChannelType
 
     /**
      * Retrieves a [Channel] that the bot has access to

@@ -20,7 +20,7 @@ public data class CreateChannelRequest(
     public val name: OptionalProperty<String> = OptionalProperty.NotPresent,
     public val topic: OptionalProperty<String> = OptionalProperty.NotPresent,
     public val isPublic: Boolean = false,
-    public val type: OptionalProperty<RawServerChannelType> = OptionalProperty.NotPresent,
+    public val type: OptionalProperty<ServerChannelType> = OptionalProperty.NotPresent,
     public val serverId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     public val groupId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     public val categoryId: OptionalProperty<IntGenericId> = OptionalProperty.NotPresent
@@ -123,19 +123,6 @@ public data class GetForumTopicCommentsResponse(
 )
 
 @Serializable
-public data class CreateCalendarEventRequest(
-    val name: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val description: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val location: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val startsAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
-    val url: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val color: OptionalProperty<Int> = OptionalProperty.NotPresent,
-    val rsvpLimit: OptionalProperty<Int> = OptionalProperty.NotPresent,
-    val duration: Int,
-    val isPrivate: Boolean = false,
-)
-
-@Serializable
 public data class UpdateCalendarEventRequest(
     val name: OptionalProperty<String> = OptionalProperty.NotPresent,
     val description: OptionalProperty<String> = OptionalProperty.NotPresent,
@@ -143,9 +130,12 @@ public data class UpdateCalendarEventRequest(
     val startsAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     val url: OptionalProperty<String> = OptionalProperty.NotPresent,
     val color: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val isAllDay: OptionalProperty<Boolean> = OptionalProperty.NotPresent,
     val rsvpLimit: OptionalProperty<Int> = OptionalProperty.NotPresent,
     val duration: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val roleIds: OptionalProperty<List<Int>> = OptionalProperty.NotPresent,
     val isPrivate: Boolean = false,
+    val repeatInfo: OptionalProperty<RawCalendarEventRepeatInfo> = OptionalProperty.NotPresent,
 )
 
 @Serializable
@@ -181,4 +171,14 @@ public data class CreateCalendarEventCommentResponse(
 @Serializable
 public data class GetCalendarEventCommentsResponse(
     val calendarEventComments: List<RawCalendarEventComment>
+)
+
+@Serializable
+public data class CreateDocumentationCommentResponse(
+    val docComment: RawDocumentationComment
+)
+
+@Serializable
+public data class GetDocumentationCommentsResponse(
+    val docComments: List<RawDocumentationComment>
 )

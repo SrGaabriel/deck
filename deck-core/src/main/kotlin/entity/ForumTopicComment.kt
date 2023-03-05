@@ -1,6 +1,6 @@
 package io.github.srgaabriel.deck.core.entity
 
-import io.github.srgaabriel.deck.core.stateless.StatelessForumTopicComment
+import io.github.srgaabriel.deck.core.stateless.channel.content.StatelessForumTopicComment
 import kotlinx.datetime.Instant
 
 /**

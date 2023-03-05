@@ -1,6 +1,5 @@
 package io.github.srgaabriel.deck.core.entity.channel
 
-import io.github.srgaabriel.deck.common.entity.RawServerChannelType
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.core.stateless.StatelessUser
 import io.github.srgaabriel.deck.core.stateless.channel.StatelessChannel
@@ -11,7 +10,6 @@ public interface Channel: StatelessChannel {
     public val name: String
     public val topic: String?
 
-    public val type: RawServerChannelType
     public val isPublic: Boolean
 
     public val createdAt: Instant

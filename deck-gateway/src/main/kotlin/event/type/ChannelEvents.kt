@@ -197,3 +197,4 @@ public data class GatewayForumTopicCommentDeletedEvent(
     val serverId: GenericId,
     val forumTopicComment: RawForumTopicComment
 ): GatewayEvent()
+

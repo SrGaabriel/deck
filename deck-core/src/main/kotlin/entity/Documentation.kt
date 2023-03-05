@@ -2,8 +2,8 @@ package io.github.srgaabriel.deck.core.entity
 
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.core.entity.channel.DocumentationChannel
-import io.github.srgaabriel.deck.core.stateless.StatelessDocumentation
 import io.github.srgaabriel.deck.core.stateless.StatelessUser
+import io.github.srgaabriel.deck.core.stateless.channel.content.StatelessDocumentation
 import io.github.srgaabriel.deck.core.util.BlankStatelessUser
 import io.github.srgaabriel.deck.rest.builder.CreateDocumentationRequestBuilder
 import kotlinx.datetime.Instant

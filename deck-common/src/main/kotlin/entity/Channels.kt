@@ -15,7 +15,7 @@ import java.util.*
 @Serializable
 public data class RawServerChannel(
     public val id: UUID,
-    public val type: RawServerChannelType,
+    public val type: ServerChannelType,
     public val name: String,
     public val topic: OptionalProperty<String> = OptionalProperty.NotPresent,
     public val createdAt: Instant,
@@ -34,27 +34,36 @@ public data class RawServerChannel(
 public class RawChannelId(public val id: UUID)
 
 @Serializable
-public enum class RawServerChannelType {
+public enum class ServerChannelType(public val contentName: String) {
     @SerialName("announcements")
-    ANNOUNCEMENTS,
+    Announcements("announcements"),
+
     @SerialName("chat")
-    CHAT,
+    Chat("content"),
+
     @SerialName("calendar")
-    CALENDAR,
+    Calendar("events"),
+
     @SerialName("forums")
-    FORUMS,
+    Forums("topics"),
+
     @SerialName("media")
-    MEDIA,
+    Media("media"),
+
     @SerialName("docs")
-    DOCS,
+    Documentation("docs"),
+
     @SerialName("voice")
-    VOICE,
+    Voice("voice"),
+
     @SerialName("list")
-    LIST,
+    List("items"),
+
     @SerialName("scheduling")
-    SCHEDULING,
+    Scheduling("scheduling"),
+
     @SerialName("stream")
-    STREAM
+    Streaming("stream");
 }
 
 @Serializable
@@ -68,6 +77,18 @@ public data class RawDocumentation(
     public val createdBy: GenericId,
     public val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     public val updatedBy: OptionalProperty<GenericId> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public data class RawDocumentationComment(
+    public val id: IntGenericId,
+    public val content: String,
+    public val createdAt: Instant,
+    public val createdBy: GenericId,
+    public val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    public val channelId: UUID,
+    public val docId: IntGenericId,
+    public val mentions: OptionalProperty<RawMessageMentions> = OptionalProperty.NotPresent
 )
 
 @Serializable
@@ -125,7 +146,6 @@ public data class RawForumTopicSummary(
     val title: String,
     val createdAt: Instant,
     val createdBy: GenericId,
-    val createdByWebhookId: OptionalProperty<GenericId> = OptionalProperty.NotPresent,
     val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     val bumpedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent
 )
@@ -152,6 +172,10 @@ public data class RawCalendarEvent(
     val location: OptionalProperty<String> = OptionalProperty.NotPresent,
     val url: OptionalProperty<String> = OptionalProperty.NotPresent,
     val color: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val repeats: Boolean = false,
+    val seriesId: OptionalProperty<UUID> = OptionalProperty.NotPresent,
+    val roleIds: OptionalProperty<List<Int>> = OptionalProperty.NotPresent,
+    val isAllDay: Boolean = false,
     val rsvpLimit: OptionalProperty<Int> = OptionalProperty.NotPresent,
     val startsAt: Instant,
     val duration: OptionalProperty<Int> = OptionalProperty.NotPresent,
@@ -165,7 +189,7 @@ public data class RawCalendarEvent(
 @Serializable
 public data class RawCalendarEventCancellation(
     val description: OptionalProperty<String> = OptionalProperty.NotPresent,
-    val createdBy: String,
+    val createdBy: GenericId,
 )
 
 @Serializable
@@ -195,6 +219,66 @@ public enum class CalendarEventRsvpStatus {
     Waitlisted;
 }
 
+
+@Serializable
+public data class RawCalendarEventRepeatInfo(
+    val type: RawCalendarEventRepeatInfoType,
+    val every: OptionalProperty<RawCalendarEventRepeatInfoCustom> = OptionalProperty.NotPresent,
+    val endAfterOccurrences: OptionalProperty<Int> = OptionalProperty.NotPresent,
+    val endDate: OptionalProperty<Instant> = OptionalProperty.NotPresent,
+    val on: OptionalProperty<List<CalendarEventWeekDay>> = OptionalProperty.NotPresent
+)
+
+@Serializable
+public data class RawCalendarEventRepeatInfoCustom(
+    val count: Int,
+    val interval: CalendarEventCustomIntervalType
+)
+
+@Serializable
+public enum class RawCalendarEventRepeatInfoType {
+    @SerialName("once")
+    Once,
+    @SerialName("everyDay")
+    EveryDay,
+    @SerialName("everyWeek")
+    EveryWeek,
+    @SerialName("everyMonth")
+    EveryMonth,
+    @SerialName("custom")
+    Custom;
+}
+
+@Serializable
+public enum class CalendarEventCustomIntervalType {
+    @SerialName("once")
+    Day,
+    @SerialName("everyDay")
+    Month,
+    @SerialName("everyWeek")
+    Year,
+    @SerialName("everyMonth")
+    Week,
+}
+
+@Serializable
+public enum class CalendarEventWeekDay {
+    @SerialName("sunday")
+    Sunday,
+    @SerialName("monday")
+    Monday,
+    @SerialName("tuesday")
+    Tuesday,
+    @SerialName("wednesday")
+    Wednesday,
+    @SerialName("thursday")
+    Thursday,
+    @SerialName("friday")
+    Friday,
+    @SerialName("saturday")
+    Saturday
+}
+
 @Serializable
 public data class RawCalendarEventComment(
     val id: IntGenericId,
@@ -203,5 +287,6 @@ public data class RawCalendarEventComment(
     val updatedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
     val calendarEventId: IntGenericId,
     val channelId: UUID,
-    val createdBy: GenericId
+    val createdBy: GenericId,
+    val mentions: OptionalProperty<RawMessageMentions> = OptionalProperty.NotPresent
 )

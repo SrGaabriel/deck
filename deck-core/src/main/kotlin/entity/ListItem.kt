@@ -4,8 +4,8 @@ import io.github.srgaabriel.deck.common.entity.RawListItemNote
 import io.github.srgaabriel.deck.common.util.*
 import io.github.srgaabriel.deck.core.DeckClient
 import io.github.srgaabriel.deck.core.entity.channel.ListChannel
-import io.github.srgaabriel.deck.core.stateless.StatelessListItem
 import io.github.srgaabriel.deck.core.stateless.StatelessUser
+import io.github.srgaabriel.deck.core.stateless.channel.content.StatelessListItem
 import io.github.srgaabriel.deck.core.util.BlankStatelessUser
 import io.github.srgaabriel.deck.rest.builder.UpdateListItemRequestBuilder
 import kotlinx.datetime.Instant

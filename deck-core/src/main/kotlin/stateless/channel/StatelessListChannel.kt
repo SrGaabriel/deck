@@ -1,5 +1,6 @@
 package io.github.srgaabriel.deck.core.stateless.channel
 
+import io.github.srgaabriel.deck.common.entity.ServerChannelType
 import io.github.srgaabriel.deck.core.entity.ListItem
 import io.github.srgaabriel.deck.core.entity.channel.ListChannel
 import io.github.srgaabriel.deck.core.entity.impl.DeckListItem
@@ -10,6 +11,8 @@ import io.github.srgaabriel.deck.rest.builder.UpdateListItemRequestBuilder
 import java.util.*
 
 public interface StatelessListChannel: StatelessServerChannel {
+    override val type: ServerChannelType get() = ServerChannelType.List
+
     /**
      * Creates a new [ListItem] within this list channel.
      *

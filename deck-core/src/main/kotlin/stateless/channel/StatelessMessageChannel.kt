@@ -1,5 +1,6 @@
 package io.github.srgaabriel.deck.core.stateless.channel
 
+import io.github.srgaabriel.deck.common.entity.ServerChannelType
 import io.github.srgaabriel.deck.core.entity.Message
 import io.github.srgaabriel.deck.core.entity.impl.DeckMessage
 import io.github.srgaabriel.deck.core.stateless.StatelessEntity
@@ -9,6 +10,8 @@ import kotlinx.datetime.Instant
 import java.util.*
 
 public interface StatelessMessageChannel: StatelessEntity, StatelessChannel {
+    override val type: ServerChannelType get() = ServerChannelType.Chat
+
     /**
      * Creates a new message within this message channel
      *

@@ -1,11 +1,9 @@
 package io.github.srgaabriel.deck.core.stateless
 
+import io.github.srgaabriel.deck.common.entity.SocialLinkType
 import io.github.srgaabriel.deck.common.util.DeckLackingDocumentation
 import io.github.srgaabriel.deck.common.util.GenericId
-import io.github.srgaabriel.deck.core.entity.Ban
-import io.github.srgaabriel.deck.core.entity.Member
-import io.github.srgaabriel.deck.core.entity.MemberSummary
-import io.github.srgaabriel.deck.core.entity.Webhook
+import io.github.srgaabriel.deck.core.entity.*
 import io.github.srgaabriel.deck.core.entity.channel.ServerChannel
 import io.github.srgaabriel.deck.core.entity.impl.DeckMember
 import io.github.srgaabriel.deck.core.entity.impl.DeckServerChannel
@@ -108,6 +106,17 @@ public interface StatelessServer: StatelessEntity {
     @DeckLackingDocumentation
     public suspend fun unbanMember(memberId: GenericId): Unit =
         client.rest.server.unbanMember(memberId, id)
+
+    /**
+     * Retrieves member's public social link of the provided type
+     *
+     * @param memberId member's id
+     * @param socialLinkType social link type
+     *
+     * @return found social link
+     */
+    public suspend fun getMemberSocialLink(memberId: GenericId, socialLinkType: SocialLinkType): SocialLink =
+        SocialLink.from(client, client.rest.server.getMemberSocialLinks(memberId, id, socialLinkType))
 
     /**
      * Creates a webhook in this server. The channel id is specified in the [builder].

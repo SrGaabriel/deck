@@ -1,10 +1,12 @@
 package io.github.srgaabriel.deck.core.stateless
 
+import io.github.srgaabriel.deck.common.entity.SocialLinkType
 import io.github.srgaabriel.deck.common.util.DeckDelicateApi
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.core.entity.Ban
 import io.github.srgaabriel.deck.core.entity.Member
+import io.github.srgaabriel.deck.core.entity.SocialLink
 import io.github.srgaabriel.deck.core.entity.impl.DeckMember
 import io.github.srgaabriel.deck.core.util.BlankStatelessServer
 import io.github.srgaabriel.deck.rest.util.GuildedRequestException
@@ -78,6 +80,16 @@ public interface StatelessMember: StatelessEntity {
      */
     public suspend fun unban(): Unit =
         client.rest.server.unbanMember(id, serverId)
+
+    /**
+     * Retrieves member's public social link of the provided type
+     *
+     * @param socialLinkType social link type
+     *
+     * @return found social link
+     */
+    public suspend fun getSocialLink(socialLinkType: SocialLinkType): SocialLink =
+        SocialLink.from(client, client.rest.server.getMemberSocialLinks(id, serverId, socialLinkType))
 
     /**
      * Adds (not sets) xp to this member.

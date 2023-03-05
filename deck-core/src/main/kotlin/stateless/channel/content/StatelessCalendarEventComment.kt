@@ -1,9 +1,12 @@
-package io.github.srgaabriel.deck.core.stateless
+package io.github.srgaabriel.deck.core.stateless.channel.content
 
+import io.github.srgaabriel.deck.common.entity.ServerChannelType
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.core.entity.CalendarEventComment
 import io.github.srgaabriel.deck.core.entity.impl.DeckCalendarEventComment
+import io.github.srgaabriel.deck.core.stateless.StatelessEntity
+import io.github.srgaabriel.deck.core.stateless.StatelessServer
 import io.github.srgaabriel.deck.core.stateless.channel.StatelessCalendarChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessCalendarChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessCalendarEvent
@@ -38,10 +41,22 @@ public interface StatelessCalendarEventComment: StatelessEntity, ReactionHolder 
         client.rest.channel.deleteCalendarEventComment(channelId, calendarEventId, id)
 
     override suspend fun addReaction(reactionId: IntGenericId): Unit =
-        client.rest.channel.addReactionToCalendarEventComment(channelId, calendarEventId, id, reactionId)
+        client.rest.channel.addReactionToComment(
+            channelId,
+            ServerChannelType.Calendar,
+            calendarEventId,
+            id,
+            reactionId
+        )
 
     override suspend fun removeReaction(reactionId: IntGenericId): Unit =
-        client.rest.channel.removeReactionFromCalendarEventComment(channelId, calendarEventId, id, reactionId)
+        client.rest.channel.removeReactionFromComment(
+            channelId,
+            ServerChannelType.Calendar,
+            calendarEventId,
+            id,
+            reactionId
+        )
 
     public suspend fun getForumTopicComment(): CalendarEventComment =
         DeckCalendarEventComment.from(client, serverId, client.rest.channel.getCalendarEventComment(channelId, calendarEventId, id))

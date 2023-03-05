@@ -47,7 +47,7 @@ public class DeckClient internal constructor(
      */
     public suspend fun login() {
         if (!rest.token.startsWith("gapi_"))
-            rest.logger.warning { "Your token does not start with 'gapi_', meaning it is either invalid or outdated." }
+            rest.logger.warning { "Your token does not start with 'gapi_', meaning this token is either invalid or outdated." }
         val masterGateway = gateway.createGateway()
         eventService.listen()
         masterGateway.start()

@@ -1,10 +1,12 @@
 package io.github.srgaabriel.deck.core.util
 
+import io.github.srgaabriel.deck.common.entity.ServerChannelType
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.core.DeckClient
 import io.github.srgaabriel.deck.core.stateless.*
 import io.github.srgaabriel.deck.core.stateless.channel.*
+import io.github.srgaabriel.deck.core.stateless.channel.content.*
 import java.util.*
 
 public fun StatelessMessage(
@@ -31,7 +33,10 @@ internal data class BlankStatelessServerChannel(
     override val client: DeckClient,
     override val id: UUID,
     override val serverId: GenericId
-): StatelessServerChannel
+): StatelessServerChannel {
+    override val type: ServerChannelType
+        get() = error("Tried to get a stateless generic server channel's type. Try fetching the channel with `.getChannel` and then accessing its type.")
+}
 
 public fun StatelessMessageChannel(
     client: DeckClient,
@@ -56,6 +61,36 @@ internal data class BlankStatelessDocumentationChannel(
     override val id: UUID,
     override val serverId: GenericId
 ): StatelessDocumentationChannel
+
+public fun StatelessDocumentation(
+    client: DeckClient,
+    id: IntGenericId,
+    channelId: UUID,
+    serverId: GenericId
+): StatelessDocumentation = BlankStatelessDocumentation(client, id, channelId, serverId)
+
+internal data class BlankStatelessDocumentation(
+    override val client: DeckClient,
+    override val id: IntGenericId,
+    override val channelId: UUID,
+    override val serverId: GenericId
+): StatelessDocumentation
+
+public fun StatelessDocumentationComment(
+    client: DeckClient,
+    id: IntGenericId,
+    documentationId: IntGenericId,
+    channelId: UUID,
+    serverId: GenericId
+): StatelessDocumentationComment = BlankStatelessDocumentationComment(client, id, documentationId, channelId, serverId)
+
+internal data class BlankStatelessDocumentationComment(
+    override val client: DeckClient,
+    override val id: IntGenericId,
+    override val documentationId: IntGenericId,
+    override val channelId: UUID,
+    override val serverId: GenericId
+): StatelessDocumentationComment
 
 public fun StatelessListChannel(
     client: DeckClient,
@@ -183,6 +218,20 @@ internal data class BlankStatelessCalendarEvent(
     override val serverId: GenericId,
 ): StatelessCalendarEvent
 
+public fun StatelessCalendarEventSeries(
+    client: DeckClient,
+    id: UUID,
+    channelId: UUID,
+    serverId: GenericId,
+): StatelessCalendarEventSeries = BlankStatelessCalendarEventSeries(client, id, channelId, serverId)
+
+internal data class BlankStatelessCalendarEventSeries(
+    override val client: DeckClient,
+    override val id: UUID,
+    override val channelId: UUID,
+    override val serverId: GenericId,
+): StatelessCalendarEventSeries
+
 public fun StatelessCalendarEventRsvp(
     client: DeckClient,
     userId: GenericId,
@@ -226,3 +275,15 @@ internal data class BlankStatelessWebhook(
     override val id: UUID,
     override val serverId: GenericId
 ): StatelessWebhook
+
+public fun StatelessRole(
+    client: DeckClient,
+    id: IntGenericId,
+    serverId: GenericId
+): StatelessRole = BlankStatelessRole(client, id, serverId)
+
+internal data class BlankStatelessRole(
+    override val client: DeckClient,
+    override val id: IntGenericId,
+    override val serverId: GenericId
+): StatelessRole

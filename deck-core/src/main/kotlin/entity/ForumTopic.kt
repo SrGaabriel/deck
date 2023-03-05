@@ -6,8 +6,8 @@ import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.common.util.asNullable
 import io.github.srgaabriel.deck.core.DeckClient
 import io.github.srgaabriel.deck.core.entity.channel.ForumChannel
-import io.github.srgaabriel.deck.core.stateless.StatelessForumTopic
 import io.github.srgaabriel.deck.core.stateless.StatelessUser
+import io.github.srgaabriel.deck.core.stateless.channel.content.StatelessForumTopic
 import io.github.srgaabriel.deck.core.util.BlankStatelessUser
 import kotlinx.datetime.Instant
 import java.util.*

@@ -2,14 +2,14 @@ package io.github.srgaabriel.deck.core.entity
 
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.core.stateless.StatelessUser
-import io.github.srgaabriel.deck.core.stateless.channel.content.StatelessCalendarEventComment
+import io.github.srgaabriel.deck.core.stateless.channel.content.StatelessDocumentationComment
 import io.github.srgaabriel.deck.core.util.BlankStatelessUser
 import kotlinx.datetime.Instant
 
 /**
- * Represents a comment posted in a [CalendarEvent]
+ * Represents a comment posted in a [Documentation]
  */
-public interface CalendarEventComment: StatelessCalendarEventComment {
+public interface DocumentationComment: StatelessDocumentationComment {
     /** The comment's content */
     public val content: String
 

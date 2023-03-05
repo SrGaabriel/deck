@@ -1,7 +1,7 @@
-package io.github.srgaabriel.deck.core.stateless
+package io.github.srgaabriel.deck.core.stateless.channel.content
 
 import io.github.srgaabriel.deck.common.entity.CalendarEventRsvpStatus
-import io.github.srgaabriel.deck.common.util.Emote
+import io.github.srgaabriel.deck.common.entity.ServerChannelType
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.core.entity.CalendarEvent
@@ -10,17 +10,15 @@ import io.github.srgaabriel.deck.core.entity.CalendarEventRsvp
 import io.github.srgaabriel.deck.core.entity.impl.DeckCalendarEvent
 import io.github.srgaabriel.deck.core.entity.impl.DeckCalendarEventComment
 import io.github.srgaabriel.deck.core.entity.impl.DeckCalendarEventRsvp
+import io.github.srgaabriel.deck.core.stateless.StatelessServer
 import io.github.srgaabriel.deck.core.stateless.channel.StatelessCalendarChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessCalendarChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessServer
-import io.github.srgaabriel.deck.core.util.ReactionHolder
 import io.github.srgaabriel.deck.rest.builder.UpdateCalendarEventRequestBuilder
-import java.util.*
 
-public interface StatelessCalendarEvent: StatelessEntity, ReactionHolder {
-    public val id: IntGenericId
-    public val channelId: UUID
+public interface StatelessCalendarEvent: StatelessChannelContent {
     public val serverId: GenericId
+    override val channelType: ServerChannelType get() = ServerChannelType.Calendar
 
     public val channel: StatelessCalendarChannel get() = BlankStatelessCalendarChannel(client, channelId, serverId)
     public val server: StatelessServer get() = BlankStatelessServer(client, serverId)
@@ -110,24 +108,6 @@ public interface StatelessCalendarEvent: StatelessEntity, ReactionHolder {
      */
     public suspend fun deleteComment(commentId: IntGenericId): Unit =
         client.rest.channel.deleteCalendarEventComment(channelId, id, commentId)
-
-    override suspend fun addReaction(reactionId: IntGenericId): Unit =
-        client.rest.channel.addReactionToCalendarEvent(channelId, id, reactionId)
-
-    override suspend fun removeReaction(reactionId: IntGenericId): Unit =
-        client.rest.channel.removeReactionFromCalendarEvent(channelId, id, reactionId)
-
-    public suspend fun addReactionToComment(commentId: IntGenericId, reactionId: IntGenericId): Unit =
-        client.rest.channel.addReactionToCalendarEventComment(channelId, id, commentId, reactionId)
-
-    public suspend fun addReactionToComment(commentId: IntGenericId, emote: Emote): Unit =
-        addReactionToComment(commentId, emote.id)
-
-    public suspend fun removeReactionFromComment(commentId: IntGenericId, emote: Emote): Unit =
-        addReactionToComment(commentId, emote.id)
-
-    public suspend fun removeReactionFromComment(commentId: IntGenericId, reactionId: IntGenericId): Unit =
-        client.rest.channel.removeReactionFromCalendarEventComment(channelId, id, commentId, reactionId)
 
     public suspend fun getCalendarEvent(): CalendarEvent =
         DeckCalendarEvent.from(client, client.rest.channel.getCalendarEvent(channelId, id))

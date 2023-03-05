@@ -1,8 +1,10 @@
-package io.github.srgaabriel.deck.core.stateless
+package io.github.srgaabriel.deck.core.stateless.channel.content
 
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.core.entity.ListItem
 import io.github.srgaabriel.deck.core.entity.impl.DeckListItem
+import io.github.srgaabriel.deck.core.stateless.StatelessEntity
+import io.github.srgaabriel.deck.core.stateless.StatelessServer
 import io.github.srgaabriel.deck.core.stateless.channel.StatelessListChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessListChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessServer

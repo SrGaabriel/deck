@@ -10,11 +10,11 @@ import io.github.srgaabriel.deck.core.event.DeckEvent
 import io.github.srgaabriel.deck.core.event.EventMapper
 import io.github.srgaabriel.deck.core.event.EventService
 import io.github.srgaabriel.deck.core.event.mapper
-import io.github.srgaabriel.deck.core.stateless.StatelessCalendarEvent
-import io.github.srgaabriel.deck.core.stateless.StatelessCalendarEventComment
 import io.github.srgaabriel.deck.core.stateless.StatelessServer
 import io.github.srgaabriel.deck.core.stateless.StatelessUser
 import io.github.srgaabriel.deck.core.stateless.channel.StatelessMessageChannel
+import io.github.srgaabriel.deck.core.stateless.channel.content.StatelessCalendarEvent
+import io.github.srgaabriel.deck.core.stateless.channel.content.StatelessCalendarEventComment
 import io.github.srgaabriel.deck.core.util.*
 import io.github.srgaabriel.deck.gateway.event.GatewayEvent
 import io.github.srgaabriel.deck.gateway.event.type.GatewayCalendarEventCommentReactionDeletedEvent

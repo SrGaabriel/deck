@@ -6,9 +6,7 @@ import io.github.srgaabriel.deck.core.event.calendar.*
 import io.github.srgaabriel.deck.core.event.channel.serverChannelCreate
 import io.github.srgaabriel.deck.core.event.channel.serverChannelDelete
 import io.github.srgaabriel.deck.core.event.channel.serverChannelUpdate
-import io.github.srgaabriel.deck.core.event.documentation.documentationCreate
-import io.github.srgaabriel.deck.core.event.documentation.documentationDelete
-import io.github.srgaabriel.deck.core.event.documentation.documentationUpdate
+import io.github.srgaabriel.deck.core.event.documentation.*
 import io.github.srgaabriel.deck.core.event.forum.*
 import io.github.srgaabriel.deck.core.event.list.*
 import io.github.srgaabriel.deck.core.event.message.*
@@ -99,6 +97,13 @@ public class DefaultEventService(private val client: DeckClient) : EventService 
         registerMapper(calendarEventReactionRemove)
         registerMapper(calendarEventCommentReactionAdd)
         registerMapper(calendarEventCommentReactionRemove)
+        registerMapper(documentationReactionAdd)
+        registerMapper(documentationReactionRemove)
+        registerMapper(documentationCommentReactionAdd)
+        registerMapper(documentationCommentReactionRemove)
+        registerMapper(memberSocialLinkCreate)
+        registerMapper(memberSocialLinkUpdate)
+        registerMapper(memberSocialLinkDelete)
     }
 
     override fun listen(): Job = client.gateway.on<GatewayEvent> {

@@ -19,5 +19,6 @@ public data class RawWebhook(
     val createdAt: Instant,
     val createdBy: GenericId,
     val deletedAt: OptionalProperty<Instant> = OptionalProperty.NotPresent,
-    val token: OptionalProperty<String> = OptionalProperty.NotPresent
+    val token: OptionalProperty<String> = OptionalProperty.NotPresent,
+    val avatar: OptionalProperty<String> = OptionalProperty.NotPresent
 )

@@ -1,9 +1,12 @@
-package io.github.srgaabriel.deck.core.stateless
+package io.github.srgaabriel.deck.core.stateless.channel.content
 
+import io.github.srgaabriel.deck.common.entity.ServerChannelType
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.core.entity.ForumTopicComment
 import io.github.srgaabriel.deck.core.entity.impl.DeckForumTopicComment
+import io.github.srgaabriel.deck.core.stateless.StatelessEntity
+import io.github.srgaabriel.deck.core.stateless.StatelessServer
 import io.github.srgaabriel.deck.core.stateless.channel.StatelessForumChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessForumChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessForumTopic
@@ -38,10 +41,22 @@ public interface StatelessForumTopicComment: StatelessEntity, ReactionHolder {
         client.rest.channel.deleteForumTopicComment(channelId, forumTopicId, id)
 
     override suspend fun addReaction(reactionId: IntGenericId): Unit =
-        client.rest.channel.addReactionToForumTopicComment(channelId, forumTopicId, id, reactionId)
+        client.rest.channel.addReactionToComment(
+            channelId,
+            ServerChannelType.Forums,
+            forumTopicId,
+            id,
+            reactionId
+        )
 
     override suspend fun removeReaction(reactionId: IntGenericId): Unit =
-        client.rest.channel.removeReactionFromForumTopicComment(channelId, forumTopicId, id, reactionId)
+        client.rest.channel.removeReactionFromComment(
+            channelId,
+            ServerChannelType.Forums,
+            forumTopicId,
+            id,
+            reactionId
+        )
 
     public suspend fun getForumTopicComment(): ForumTopicComment =
         DeckForumTopicComment.from(client, serverId, client.rest.channel.getForumTopicComment(channelId, forumTopicId, id))

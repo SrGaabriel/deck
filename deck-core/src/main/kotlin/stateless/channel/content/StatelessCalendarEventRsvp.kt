@@ -1,10 +1,13 @@
-package io.github.srgaabriel.deck.core.stateless
+package io.github.srgaabriel.deck.core.stateless.channel.content
 
 import io.github.srgaabriel.deck.common.entity.CalendarEventRsvpStatus
 import io.github.srgaabriel.deck.common.util.GenericId
 import io.github.srgaabriel.deck.common.util.IntGenericId
 import io.github.srgaabriel.deck.core.entity.CalendarEventRsvp
 import io.github.srgaabriel.deck.core.entity.impl.DeckCalendarEventRsvp
+import io.github.srgaabriel.deck.core.stateless.StatelessEntity
+import io.github.srgaabriel.deck.core.stateless.StatelessServer
+import io.github.srgaabriel.deck.core.stateless.StatelessUser
 import io.github.srgaabriel.deck.core.stateless.channel.StatelessCalendarChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessCalendarChannel
 import io.github.srgaabriel.deck.core.util.BlankStatelessCalendarEvent
